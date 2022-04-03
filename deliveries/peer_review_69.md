@@ -30,10 +30,10 @@ Si può conservare la carta corrente (giocata in questo turno) in una variabile 
 
 ## Lati negativi
 
-### Implementazione Personaggi
+### Implementazione personaggi
 Consigliamo di creare classi differenti per ogni singolo Character che implementano una stessa classe astratta, invece di una sola classe con 12 metodi.
 
-### Metodi Mancanti
+### Metodi mancanti
 Nella classe Bucket non è presente alcun metodo per estrarre gli studenti.
 Manca un metodo in Island per calcolare l'influenza. 
 Manca un metodo in PlayerClient per giocare una carta.

@@ -207,3 +207,5 @@ $RECYCLE.BIN/
 # SonarLint working directories, configuration files (including credentials)
 .sonarlint/
 
+# UML by other group
+deliveries/peer_reviews/given/UML/uml_69.pdf

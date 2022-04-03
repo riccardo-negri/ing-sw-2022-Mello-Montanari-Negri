@@ -8,7 +8,7 @@ Valutazione del diagramma UML delle classi del gruppo 69
 
 ## Lati positivi
 
-### Numero di monete nel gioco:
+### Numero di monete nel gioco
 Visto che nel manuale è specificato, è una buona idea tenere conto del numero totale di monete.
 Se non ci sono più monete disponibili i giocatori non possono più ottenerle riempiendo la dining room.
 In questo modo si considera il numero di monete non solo un limite fisico del gioco da tavolo, ma un elemento del gameplay. 
@@ -22,7 +22,7 @@ Possibili fasi:
 - Planning phase
 - Action phase
 
-### Eliminare carte dal mazzo:
+### Eliminare carte dal mazzo
 È utile rimuovere completamente le carte che sono state giocate dal mazzo invece che utilizzare una variabile per tenere conto di quali carte sono state giocate e quali no. 
 In questo modo quando si cicla la lista di carte nel mazzo non c'è bisogno di preoccuparsi del flag booleano. 
 La rimozione non è un problema perché i dati di quella carta non sono più necessari in alcun modo una volta che il turno in cui è stata giocata è passato.

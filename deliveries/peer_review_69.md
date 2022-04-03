@@ -59,11 +59,11 @@ Si suggerisce di prestare attenzione alla visibilità di metodi e soprattutto at
 La prima differenza che abbiamo trovato tra i due diagrammi è la gestione delle isole e in particolare la gestione della loro unione quando nel gioco due isole vengono unite.
 Abbiamo deciso di raggruppare le singole isole in group (arcipelaghi): all'inizio del gioco c'è una corrispondenza uno ad uno tra le isole e i gruppi (12 gruppi contengono ognuno una singola isola). 
 Andando avanti nel gioco questo approccio permette di limitare la copiatura di dati, quando due isole adiacenti si uniscono, uno dei due gruppi viene eliminato e l'isola contenuta in esso viene spostata nel gruppo a cui si sta unendo.
-Questo metodo permette allo stesso tempo considerare il colore delle torri nel gruppo, quindi impedendo che due isole dello stesso arcipelago abbiamo torre di colore diverso, ma di mantenere visivamente il numero di studenti nelle singole isole, cosa che semplifica la visualizzazione della mappa e rende il gioco più simile alla versione fisica.
+Tramite questo metodo teniamo traccia del colore delle torri a livello di gruppo impedendo quindi che due isole dello stesso arcipelago abbiamo torri di colore diverso e riusciamo a mantenere il numero di studenti contenuti nelle singole isole, cosa che semplifica la visualizzazione della mappa e rende il gioco più simile alla versione fisica.
 
 ### Gestione di madre natura
-Un'altra differenza che abbiamo notato è quella di gestione di madre natura, noi abbiamo scelto di considerare madre natura come una classe con un attributo che punta all'arcipelago in cui si trova e che viene modificato quando si muove. 
-Tuttavia il considerare madre natura come attributo boolenano della classe isola, può essere utile per velocizzare il processo di spostamento, e potrebbe rendere più semplice l'evitare l'eliminazione dell'arcipelago su cui è presente madre natura in caso di unione di due gruppi e quindi di eliminazione di uno di essi.
+Un'altra differenza che abbiamo notato è nella gestione di madre natura. Noi abbiamo scelto di considerare madre natura come una classe con un attributo che punta all'arcipelago in cui si trova e che viene modificato quando si muove. 
+Tuttavia considerare madre natura come attributo boolenano della classe isola può essere utile per velocizzare il processo di spostamento e potrebbe rendere più semplice l'eliminazione dell'arcipelago su cui è presente madre natura in caso di unione di due gruppi (arcipelaghi).
 
 ### Gestione delle fasi di gioco
-Un ultimo punto di confronto è la gestione delle fasi di gioco, noi non abbiamo separato le classi Game e GamePhase, inserendo entrambe dentro a una unica classe Game, tuttavia può avere senso effettuare tale separazione in quanto permette di dividere il model in sé dalla gestione dei singoli turni.
+Un ultimo punto di confronto è la gestione delle fasi di gioco: noi non abbiamo separato le classi Game e GamePhase inserendo entrambe dentro a una unica classe Game, tuttavia può avere senso effettuare tale separazione in quanto permette di dividere il model in sé dalla gestione dei singoli turni.

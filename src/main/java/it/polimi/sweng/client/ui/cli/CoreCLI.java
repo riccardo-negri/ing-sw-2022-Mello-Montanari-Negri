@@ -1,13 +1,12 @@
-package it.polimi.sweng.client.cli;
-
-import java.io.*;
-import java.util.*;
+package it.polimi.sweng.client.ui.cli;
 
 import static org.fusesource.jansi.Ansi.*;
 import static org.fusesource.jansi.Ansi.Color.*;
+
+import it.polimi.sweng.client.ui.UI;
 import org.fusesource.jansi.AnsiConsole;
 
-public class CoreCLI {
+public class CoreCLI implements UI {
     public static final String ANSI_CLS = "\u001b[2J";
     public static final String ANSI_HOME = "\u001b[H";
     public static final String ANSI_BOLD = "\u001b[1m";

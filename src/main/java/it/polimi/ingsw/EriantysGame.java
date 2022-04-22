@@ -1,6 +1,6 @@
-package it.polimi.sweng;
+package it.polimi.ingsw;
 
-import it.polimi.sweng.client.Client;
+import it.polimi.ingsw.client.Client;
 
 public class EriantysGame {
     public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package it.polimi.sweng.client.ui.cli;
+package it.polimi.ingsw.client.ui.cli;
 
 public class UtilsCLI {
     public static void test() {

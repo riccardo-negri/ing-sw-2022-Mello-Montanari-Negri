@@ -1,14 +1,16 @@
-package it.polimi.sweng.client;
+package it.polimi.ingsw.client;
 
-import it.polimi.sweng.client.states.ClientState;
-import it.polimi.sweng.client.ui.UI;
-import it.polimi.sweng.client.ui.cli.CoreCLI;
-import it.polimi.sweng.client.ui.cli.UtilsCLI;
+import it.polimi.ingsw.client.states.ClientState;
+import it.polimi.ingsw.client.ui.UI;
+import it.polimi.ingsw.client.ui.cli.CoreCLI;
+import it.polimi.ingsw.client.ui.cli.UtilsCLI;
+import it.polimi.ingsw.client.ui.cli.WelcomePageClientStateCLI;
 
 public class Client {
     private final UI ui;
     private ClientState nextState;
     private boolean newState;
+    private WelcomePageClientStateCLI temp;
 
     public Client(boolean hasGUI) {
         if(hasGUI) {
@@ -22,6 +24,8 @@ public class Client {
     }
 
     public void start() {
+        temp = new WelcomePageClientStateCLI();
+        temp.draw();
         UtilsCLI.test();
     }
 

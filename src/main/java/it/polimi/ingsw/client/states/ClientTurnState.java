@@ -1,4 +1,4 @@
-package it.polimi.sweng.client.states;
+package it.polimi.ingsw.client.states;
 
 public enum ClientTurnState {
     WAITING,

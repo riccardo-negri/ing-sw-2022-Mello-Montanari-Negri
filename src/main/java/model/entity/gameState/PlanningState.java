@@ -49,9 +49,7 @@ public class PlanningState extends GameState {
 
         if (player != order.get(currentlyPlaying)) throw new Exception("Wrong player");
 
-        try {
-            order.get(currentlyPlaying).getCardDeck().playCard(selected);
-        } catch (Exception e) { throw e; }
+        order.get(currentlyPlaying).getCardDeck().playCard(selected);
 
         currentlyPlaying++;
 
@@ -64,7 +62,7 @@ public class PlanningState extends GameState {
                 else return 0;
             });
 
-            game.updateGameState(new ActionState(this));
+            game.updateGameState(new MoveStudentActionState(this));
         }
     }
 }

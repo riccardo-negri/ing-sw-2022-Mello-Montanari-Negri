@@ -21,7 +21,9 @@ public abstract class GameState {
     }
 
     public GameState (GameState oldGameState) {
-        this.currentlyPlaying = 0;
+        if (oldGameState instanceof PlanningState) this.currentlyPlaying = 0;
+        else this.currentlyPlaying = oldGameState.currentlyPlaying;
+
         this.game = oldGameState.game;
         this.order = oldGameState.order;
     }

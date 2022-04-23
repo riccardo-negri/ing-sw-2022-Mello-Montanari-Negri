@@ -145,7 +145,7 @@ public class Game {
     }
 
     public Wizard getWizard(Tower tower) {
-        return wizardList.stream().filter(w -> w.getTowerColor() == tower).collect(Collectors.toList()).get(0);
+        return wizardList.stream().filter(w -> w.getTowerColor() == tower).findFirst().get();
     }
 
     public IslandGroup getFistIslandGroup () { return islandGroupList.get(0); }

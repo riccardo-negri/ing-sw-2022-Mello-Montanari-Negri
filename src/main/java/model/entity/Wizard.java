@@ -38,9 +38,9 @@ public class Wizard {
 
     public boolean takeEntranceStudent (StudentColor studentColor) { return entranceStudents.remove(studentColor); }
 
-    public void putDiningStudent (StudentColor studentColor) {
-        if(++diningStudents[studentColor.getValue()] % 3 == 0) money++;
-    }
+    public void putDiningStudent (StudentColor studentColor) { if(++diningStudents[studentColor.getValue()] % 3 == 0) money++; }
+
+    public void takeDiningStudent (StudentColor studentColor) { diningStudents[studentColor.getValue()] -= diningStudents[studentColor.getValue()]>0 ? 1 : 0; }
 
     public void changeTowerNumber(Integer difference) {
         towerNumber += difference;

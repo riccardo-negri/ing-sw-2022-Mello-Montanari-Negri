@@ -18,7 +18,7 @@ public class MoveMotherNatureActionState extends ActionState {
         if (player != order.get(currentlyPlaying)) throw new Exception("Wrong player");
         if (steps > player.getCardDeck().getCurrentCard().getSteps()) throw new Exception("Too many steps");
         game.doMotherNatureSteps(steps);
-        game.getFistIslandGroup().updateTower(game);
+        game.getFistIslandGroup().updateTower(game, activatedEffectTwo, activatorTwo);
         game.unifyIslands();
         game.updateGameState(new ChooseCloudActionState(this));
     }

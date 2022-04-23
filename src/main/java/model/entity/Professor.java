@@ -23,5 +23,9 @@ public class Professor {
         if (contestant.getDiningStudents(color) > master.getDiningStudents(color)) master = contestant;
     }
 
-    public Wizard getMaster() { return master; }
+    public Wizard getMaster(boolean activatorEffectTwo, Wizard activator) {
+        if (activatorEffectTwo && activator.getDiningStudents(color) >= master.getDiningStudents(color)) return activator;
+        return master;
+    }
+
 }

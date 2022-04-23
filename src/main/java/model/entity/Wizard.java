@@ -49,6 +49,11 @@ public class Wizard {
         }
     }
 
+    public void payEffect(Integer price) throws Exception{
+        if (price > money) throw new Exception("Not enough money to activate the effect");
+        money -= price;
+    }
+
     public Integer getDiningStudents (StudentColor studentColor) { return diningStudents[studentColor.getValue()]; }
 
     public Tower getTowerColor() { return towerColor; }

@@ -26,7 +26,7 @@ public class IslandGroup {
      * updates the color of the tower on the island, to be called after a move of mother nature to calculate the new owner of the island
      * @param game the game, used to change the other classes
      */
-    public void updateTower (Game game) {
+    public void updateTower (Game game, boolean activatedEffectTwo, Wizard activatorEffectTwo) {
         Integer[] values = new Integer[game.getPlayerNumber().getWizardNumber()];
         for (int i = 0; i < game.getPlayerNumber().getWizardNumber(); i++) {
             values[i] = 0;
@@ -35,10 +35,11 @@ public class IslandGroup {
         if (tower != null) values[tower.getValue()] += islandList.size();
 
         for (StudentColor color : StudentColor.values()) {
-            if(game.getProfessor(color).getMaster() != null) {
-                values[game.getProfessor(color).getMaster().getTowerColor().getValue()] += islandList.stream()
-                        .flatMap(x -> x.getStudentColorList().stream())
-                        .filter(x -> x == color).collect(Collectors.toList()).size();
+            Wizard w;
+            if((w = game.getProfessor(color).getMaster(activatedEffectTwo, activatorEffectTwo)) != null) {
+                values[w.getTowerColor().getValue()] += islandList.stream()
+                    .flatMap(x -> x.getStudentColorList().stream())
+                    .filter(x -> x == color).collect(Collectors.toList()).size();
             }
         }
 

@@ -1,5 +1,6 @@
 package model.entity;
 
+import model.entity.characters.Character;
 import model.entity.gameState.GameState;
 import model.entity.gameState.PlanningState;
 import model.enums.GameMode;
@@ -25,9 +26,9 @@ public class Game {
     private final PlayerNumber playerNumber;
     private final List<Wizard> wizardList;
     private final Professor[] professors;
-    private final Bag bag;
     private final List<IslandGroup> islandGroupList;
     private final List<Cloud> cloudList;
+    private final Character[] characters;
 
     private GameState gameState;
 
@@ -42,7 +43,24 @@ public class Game {
         this.gameMode = gameMode;
         this.playerNumber = playerNumber;
         Random randomGenerator = new Random();
-        this.bag = new Bag(randomGenerator);
+        Bag bag = new Bag(randomGenerator);
+
+        if(gameMode == GameMode.COMPLETE) {
+            characters = new Character[3];
+            for(int i=0; i<3; i++) {
+                boolean flag = true;
+                while(flag) {
+                    flag = false;
+                    characters[i] = Character.generateCharacter(randomGenerator.nextInt(12), bag);
+                    for(int j=0; j<i; j++) if (characters[i].equals(characters[j])) {
+                        flag = true;
+                        break;
+                    }
+                }
+            }
+        } else {
+            characters = null;
+        }
 
         this.professors = new Professor[5];
         for (int i=0; i<5; i++) {
@@ -144,4 +162,5 @@ public class Game {
 
     private boolean isGameId(Integer id) { return id.equals(this.id); }
 
+    public GameState getGameState() { return gameState; }
 }

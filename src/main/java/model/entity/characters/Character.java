@@ -19,9 +19,9 @@ public abstract class Character {
             case 3: return new CharacterFour();
             case 4: return new CharacterFive();
             case 5: return new CharacterSix();
-            case 6: return null;
-            case 7: return null;
-            case 8: return null;
+            case 6: return new CharacterSeven(bag);
+            case 7: return new CharacterEight();
+            case 8: return new CharacterNine();
             case 9: return null;
             case 10: return null;
             case 11: return null;

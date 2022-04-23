@@ -1,6 +1,8 @@
 package model.entity;
 
 import model.entity.characters.Character;
+import model.entity.characters.CharacterEight;
+import model.entity.characters.CharacterNine;
 import model.entity.characters.CharacterSix;
 import model.enums.StudentColor;
 import model.enums.Tower;
@@ -38,11 +40,14 @@ public class IslandGroup {
                 values[i] = 0;
             }
 
+            if (activatedCharacter instanceof CharacterEight) values[activatedCharacter.getActivator().getTowerColor().getValue()] += 2;
+
             if (tower != null && !(activatedCharacter instanceof CharacterSix)) values[tower.getValue()] += islandList.size();
 
             for (StudentColor color : StudentColor.values()) {
                 Wizard w;
-                if((w = game.getProfessor(color).getMaster(activatedCharacter)) != null) {
+                if ((!(activatedCharacter instanceof CharacterNine) || ((CharacterNine) activatedCharacter).getStudentColor() != color)
+                        && (w = game.getProfessor(color).getMaster(activatedCharacter)) != null) {
                     values[w.getTowerColor().getValue()] += islandList.stream()
                         .flatMap(x -> x.getStudentColorList().stream())
                         .filter(x -> x == color).collect(Collectors.toList()).size();

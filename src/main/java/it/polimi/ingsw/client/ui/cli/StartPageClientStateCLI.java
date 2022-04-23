@@ -20,15 +20,14 @@ public class StartPageClientStateCLI extends AbstractStartPageClientState {
 
     @Override
     public void draw (Client client) {
-        Integer temp;
         cli = (CoreCLI) client.getUI();
         cli.printTerminalCenteredText(CONTENT);
-        temp = cli.readNumber();
+        Integer temp = cli.readNumber();
         while(temp<0 || temp>3) {
             cli.printTerminalCenteredText(CONTENT);
             cli.printTopErrorBanner("Please type a correct option!");
             temp = cli.readNumber();
         }
-        onEnd();
+        onEnd(temp);
     }
 }

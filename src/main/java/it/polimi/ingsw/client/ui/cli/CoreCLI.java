@@ -28,13 +28,14 @@ public class CoreCLI implements UI {
         switch(nextState) {
             case WELCOME_PAGE: return new WelcomePageClientStateCLI(client);
             case START_PAGE: return new StartPageClientStateCLI(client);
+            case BOARD_PAGE: return new BoardPageClientStateCLI(client);
         }
         return null;
     }
 
 
     public Integer getTerminalWidth () {
-        Integer terminalWidth;
+        int terminalWidth;
         try {
             terminalWidth = org.jline.terminal.TerminalBuilder.terminal().getWidth();
             return terminalWidth;
@@ -43,7 +44,7 @@ public class CoreCLI implements UI {
         }
     }
     public Integer getTerminalHeight () {
-        Integer terminalHeight;
+        int terminalHeight;
         try {
             terminalHeight = org.jline.terminal.TerminalBuilder.terminal().getHeight();
             return terminalHeight;
@@ -63,7 +64,7 @@ public class CoreCLI implements UI {
         List<String> list = Arrays.asList(arr);
 
         //Integer width = Arrays.stream(arr).mapToInt(String::length).max().orElse(50);
-        Integer startH = getTerminalHeight()/2 - list.size()/2;
+        int startH = getTerminalHeight()/2 - list.size()/2;
 
         IntStream.range(0, list.size()).forEach(ind ->
                 AnsiConsole.out().println(
@@ -89,9 +90,9 @@ public class CoreCLI implements UI {
     }
 
     public Integer readNumber() {
-        Integer num;
+        int num;
         try {
-            num = Integer.valueOf(scanner.nextLine());
+            num = Integer.parseInt(scanner.nextLine());
             return num;
         } catch (NumberFormatException e) {
             return -1;

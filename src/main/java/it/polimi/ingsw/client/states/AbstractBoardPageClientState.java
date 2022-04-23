@@ -4,9 +4,9 @@ import it.polimi.ingsw.client.Client;
 
 import static it.polimi.ingsw.client.states.ClientState.START_PAGE;
 
-public abstract class AbstractWelcomePageClientState extends AbstractClientState {
+public abstract class AbstractBoardPageClientState extends AbstractClientState {
 
-    public AbstractWelcomePageClientState (Client client) {
+    public AbstractBoardPageClientState (Client client) {
         super(client);
     }
 

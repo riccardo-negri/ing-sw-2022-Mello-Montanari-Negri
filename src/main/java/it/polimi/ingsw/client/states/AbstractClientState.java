@@ -11,5 +11,4 @@ public abstract class AbstractClientState {
 
     public abstract void draw(Client client);
 
-    public abstract void onEnd();
 }

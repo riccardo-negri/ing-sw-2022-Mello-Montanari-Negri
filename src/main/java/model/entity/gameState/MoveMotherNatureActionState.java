@@ -1,6 +1,7 @@
 package model.entity.gameState;
 
 import model.entity.Wizard;
+import model.entity.characters.CharacterFour;
 
 public class MoveMotherNatureActionState extends ActionState {
 
@@ -16,9 +17,13 @@ public class MoveMotherNatureActionState extends ActionState {
      */
     void moveMotherNature(Wizard player, Integer steps) throws Exception {
         if (player != order.get(currentlyPlaying)) throw new Exception("Wrong player");
-        if (steps > player.getCardDeck().getCurrentCard().getSteps()) throw new Exception("Too many steps");
+
+        int maximumSteps = player.getCardDeck().getCurrentCard().getSteps();
+        maximumSteps += activatedCharacter instanceof CharacterFour ? 2 : 0;
+        if (steps > maximumSteps) throw new Exception("Too many steps");
+
         game.doMotherNatureSteps(steps);
-        game.getFistIslandGroup().updateTower(game, activatedEffectTwo, activatorTwo);
+        game.getFistIslandGroup().updateTower(game, activatedCharacter);
         game.unifyIslands();
         game.updateGameState(new ChooseCloudActionState(this));
     }

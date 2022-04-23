@@ -1,5 +1,7 @@
 package model.entity;
 
+import model.entity.characters.Character;
+import model.entity.characters.CharacterSix;
 import model.enums.StudentColor;
 import model.enums.Tower;
 
@@ -26,34 +28,39 @@ public class IslandGroup {
      * updates the color of the tower on the island, to be called after a move of mother nature to calculate the new owner of the island
      * @param game the game, used to change the other classes
      */
-    public void updateTower (Game game, boolean activatedEffectTwo, Wizard activatorEffectTwo) {
-        Integer[] values = new Integer[game.getPlayerNumber().getWizardNumber()];
-        for (int i = 0; i < game.getPlayerNumber().getWizardNumber(); i++) {
-            values[i] = 0;
-        }
+    public void updateTower (Game game, Character activatedCharacter) {
 
-        if (tower != null) values[tower.getValue()] += islandList.size();
-
-        for (StudentColor color : StudentColor.values()) {
-            Wizard w;
-            if((w = game.getProfessor(color).getMaster(activatedEffectTwo, activatorEffectTwo)) != null) {
-                values[w.getTowerColor().getValue()] += islandList.stream()
-                    .flatMap(x -> x.getStudentColorList().stream())
-                    .filter(x -> x == color).collect(Collectors.toList()).size();
+        if (getIslandList().stream().anyMatch(Island::isStopCard))
+            getIslandList().stream().filter(Island::isStopCard).findFirst().get().removeStopCard();
+        else {
+            Integer[] values = new Integer[game.getPlayerNumber().getWizardNumber()];
+            for (int i = 0; i < game.getPlayerNumber().getWizardNumber(); i++) {
+                values[i] = 0;
             }
-        }
 
-        for (int i = 0; i < values.length; i++) {
-            boolean max = true;
-            for (int j = 0; j < values.length; j++) {
-                if (i != j && values[i] <= values[j]) {
-                    max = false;
-                    break;
+            if (tower != null && !(activatedCharacter instanceof CharacterSix)) values[tower.getValue()] += islandList.size();
+
+            for (StudentColor color : StudentColor.values()) {
+                Wizard w;
+                if((w = game.getProfessor(color).getMaster(activatedCharacter)) != null) {
+                    values[w.getTowerColor().getValue()] += islandList.stream()
+                        .flatMap(x -> x.getStudentColorList().stream())
+                        .filter(x -> x == color).collect(Collectors.toList()).size();
                 }
             }
-            if (max) {
-                changeTower(Tower.fromNumber(i), game);
-                break;
+
+            for (int i = 0; i < values.length; i++) {
+                boolean max = true;
+                for (int j = 0; j < values.length; j++) {
+                    if (i != j && values[i] <= values[j]) {
+                        max = false;
+                        break;
+                    }
+                }
+                if (max) {
+                    changeTower(Tower.fromNumber(i), game);
+                    break;
+                }
             }
         }
     }

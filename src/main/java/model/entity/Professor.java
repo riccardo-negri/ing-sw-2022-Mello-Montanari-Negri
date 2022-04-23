@@ -1,5 +1,7 @@
 package model.entity;
 
+import model.entity.characters.Character;
+import model.entity.characters.CharacterTwo;
 import model.enums.StudentColor;
 
 /**
@@ -23,9 +25,10 @@ public class Professor {
         if (contestant.getDiningStudents(color) > master.getDiningStudents(color)) master = contestant;
     }
 
-    public Wizard getMaster(boolean activatorEffectTwo, Wizard activator) {
-        if (activatorEffectTwo && activator.getDiningStudents(color) >= master.getDiningStudents(color)) return activator;
-        return master;
+    public Wizard getMaster(Character activatedCharacter) {
+        if (activatedCharacter instanceof CharacterTwo && activatedCharacter.getActivator().getDiningStudents(color) >= master.getDiningStudents(color))
+            return activatedCharacter.getActivator();
+        else return master;
     }
 
 }

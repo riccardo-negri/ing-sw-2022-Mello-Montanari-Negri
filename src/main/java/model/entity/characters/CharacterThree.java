@@ -10,11 +10,8 @@ public class CharacterThree extends  Character{
         super(3);
     }
 
-    @Override
-    public void useEffect(Wizard player, Game game, Object request) throws Exception {
-        if (! (request instanceof IslandGroup)) throw new Exception("Bad request: not a island group");
+    public void useEffect(Wizard player, Game game, IslandGroup islandGroup) throws Exception {
         useCard(player);
-        IslandGroup group = (IslandGroup) request;
-        group.updateTower(game, false, null);
+        islandGroup.updateTower(game, null);
     }
 }

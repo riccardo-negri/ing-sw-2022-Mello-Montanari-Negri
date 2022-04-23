@@ -1,9 +1,9 @@
 package it.polimi.ingsw.client;
 
+import it.polimi.ingsw.client.states.AbstractClientState;
 import it.polimi.ingsw.client.states.ClientState;
 import it.polimi.ingsw.client.ui.UI;
 import it.polimi.ingsw.client.ui.cli.CoreCLI;
-import it.polimi.ingsw.client.ui.cli.UtilsCLI;
 import it.polimi.ingsw.client.ui.cli.WelcomePageClientStateCLI;
 
 public class Client {
@@ -11,6 +11,7 @@ public class Client {
     private ClientState nextState;
     private boolean newState;
     private WelcomePageClientStateCLI temp;
+    private AbstractClientState currState;
 
     public Client(boolean hasGUI) {
         if(hasGUI) {
@@ -24,9 +25,10 @@ public class Client {
     }
 
     public void start() {
-        temp = new WelcomePageClientStateCLI();
-        temp.draw();
-        UtilsCLI.test();
+        while(nextState != null) {
+            currState = ui.getState(this, nextState);
+            currState.draw(this);
+        }
     }
 
     public ClientState getNextState () {
@@ -37,4 +39,7 @@ public class Client {
         this.nextState = nextState;
     }
 
+    public UI getUI () {
+        return ui;
+    }
 }

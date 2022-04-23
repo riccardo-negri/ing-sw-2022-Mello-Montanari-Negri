@@ -29,6 +29,12 @@
             <artifactId>jansi</artifactId>
             <version>2.4.0</version>
         </dependency>
+        <!-- JLine is a Java library for handling console input. Used here to find terminal window size -->
+        <dependency>
+            <groupId>org.jline</groupId>
+            <artifactId>jline</artifactId>
+            <version>3.9.0</version>
+        </dependency>
     </dependencies>
 
     <build>

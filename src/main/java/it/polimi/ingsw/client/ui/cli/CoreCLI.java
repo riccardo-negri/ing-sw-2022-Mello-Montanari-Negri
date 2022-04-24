@@ -4,7 +4,6 @@ import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.page.AbstractClientState;
 import it.polimi.ingsw.client.page.ClientState;
 import it.polimi.ingsw.client.ui.UI;
-import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
 
 import static org.fusesource.jansi.Ansi.ansi;
@@ -108,7 +107,7 @@ public class CoreCLI implements UI {
         AnsiConsole.out().print(ansi().fgDefault().bgDefault());
     }
 
-    public void waitKeyPressed () {
+    public void waitEnterPressed () {
         try {
             System.in.read();
         } catch (Exception ignored) {
@@ -147,7 +146,7 @@ public class CoreCLI implements UI {
         String zeroTo255 = "(\\d{1,2}|(0|1)\\" + "d{2}|2[0-4]\\d|25[0-5])";
         String regex = zeroTo255 + "\\." + zeroTo255 + "\\." + zeroTo255 + "\\." + zeroTo255;
         String REQUEST = "Please insert the IP address of the server (default is 127.0.0.1):";
-        String DEFAULT = "127.0.0.1";
+        String DEFAULT = "localhost";
 
         printTerminalCenteredLine(REQUEST,10);
         IPAddress = scanner.nextLine();

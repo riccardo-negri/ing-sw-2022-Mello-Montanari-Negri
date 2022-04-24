@@ -23,7 +23,17 @@ public class MatchmakingPageCLI extends AbstractMatchmakingPage {
         cli.printTerminalCenteredMultilineText(GAME_MODE, 1);
         cli.printEmptyLine();
         cli.printTerminalCenteredLine("You are currently in queue to join a game...");
-        cli.waitKeyPressed();
+        //cli.waitKeyPressed();
+        Boolean SetupConnectionLock = client.getConnectionLock();
+        synchronized (SetupConnectionLock) {
+            while(!SetupConnectionLock) {
+                try {
+                    SetupConnectionLock.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         onEnd();
     }
 }

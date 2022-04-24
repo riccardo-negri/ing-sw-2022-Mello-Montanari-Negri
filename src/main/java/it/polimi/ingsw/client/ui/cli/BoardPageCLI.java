@@ -23,7 +23,7 @@ public class BoardPageCLI extends AbstractWelcomePage {
         cli.resetCursorColors();
         drawTilesAndClouds(cli.getTerminalWidth()/2-77/2, 2);
         cli.moveCursorToEnd();
-        cli.waitKeyPressed();
+        cli.waitEnterPressed();
     }
 
     private void drawTilesAndClouds (int BoardBaseX, int BoardBaseY) {

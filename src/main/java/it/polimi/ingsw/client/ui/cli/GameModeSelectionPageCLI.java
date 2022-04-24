@@ -26,8 +26,8 @@ public class GameModeSelectionPageCLI extends AbstractGameModeSelectionPage {
         int  playersNumber = cli.readNumber("Please select the number of players (min 2 players, max 4 players):", 2, 4, null);
         boolean isAdvancedGame = cli.readBoolean("Do you want to play the advanced game rules (y or n)?");
         cli.printEmptyLine();
-        cli.printTerminalCenteredLine("Press any key to join the matchmaking queue...");
-        cli.waitKeyPressed();
-        onEnd();
+        cli.printTerminalCenteredLine("Press enter to join the matchmaking queue...");
+        cli.waitEnterPressed();
+        onEnd(playersNumber, isAdvancedGame);
     }
 }

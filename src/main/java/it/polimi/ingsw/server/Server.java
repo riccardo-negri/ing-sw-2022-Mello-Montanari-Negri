@@ -18,11 +18,13 @@ public abstract class Server {
     protected final List<User> connectedUser;
     protected int maxUsers = Integer.MAX_VALUE;
     protected ServerSocket socket;
+    protected final Object socketLock;
 
     // initialize variables but don't run server code yet
     public Server() {
         connectedUser = new ArrayList<>();
         connecting = new ArrayList<>();
+        socketLock = new Object();
         try {
             openSocket();
         } catch (IOException e) {
@@ -32,7 +34,7 @@ public abstract class Server {
     }
 
     List<String> usernames() {
-        return connectedUser.stream().map(User::getName).collect(Collectors.toList());
+        return getConnectedUser().stream().map(User::getName).collect(Collectors.toList());
     }
 
     void openSocket() throws IOException {
@@ -45,7 +47,9 @@ public abstract class Server {
 
     public void stop() {
         try {
-            socket.close(); // this should stop the connectionThread and cause the termination of the server
+            synchronized (socketLock) {
+                socket.close(); // this should stop the connectionThread and cause the termination of the server
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -63,10 +67,10 @@ public abstract class Server {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        for (Connection c : connecting) {
+        for (Connection c : getConnecting()) {
             c.close();
         }
-        for (User u : connectedUser) {
+        for (User u : getConnectedUser()) {
             u.getConnection().close();
         }
         onQuit();
@@ -77,8 +81,13 @@ public abstract class Server {
     void listenConnection() {
         while (true) {
             try {
-                Socket socket = this.socket.accept();
-                connecting.add(new Connection(socket, this::userLogin));
+                Socket socket;
+                synchronized (socketLock) {
+                    socket = this.socket.accept();
+                }
+                synchronized (connecting) {
+                    connecting.add(new Connection(socket, this::userLogin));
+                }
             } catch (IOException e) {
                 if (e instanceof SocketException) {
                     return;
@@ -99,25 +108,52 @@ public abstract class Server {
             login = (Login) message;
         } catch (ClassCastException e) {
             connection.close();
-            connecting.remove(connection);
+            removeConnecting(connection);
             return;
         }
         if (usernames().contains(login.getUsername())) {
-            for (User u : connectedUser) {
+            for (User u : getConnectedUser()) {
                 if (u.getName().equals(login.getUsername())) {
                     u.replaceConnection(connection);
-                    connecting.remove(connection);
+                    removeConnecting(connection);
                     onUserReconnected(u);
                     return;
                 }
             }
         } else {
-            if (connectedUser.size() < maxUsers) {
+            if (getConnectedUser().size() < maxUsers) {
                 User user = new User(login.getUsername(), connection);
-                connectedUser.add(user);
-                connecting.remove(connection);
+                synchronized (connectedUser) {
+                    connectedUser.add(user);
+                }
+                removeConnecting(connection);
                 onNewUserConnect(user, login);
             }
+        }
+    }
+
+    public void disconnectUser(User user) {
+        synchronized (connectedUser) {
+            user.getConnection().close();
+            connectedUser.remove(user);
+        }
+    }
+
+    public void removeConnecting(Connection connection) {
+        synchronized (connecting) {
+            connecting.remove(connection);
+        }
+    }
+
+    public List<User> getConnectedUser() {
+        synchronized (connectedUser) {
+            return new ArrayList<>(connectedUser);
+        }
+    }
+
+    public List<Connection> getConnecting() {
+        synchronized (connecting) {
+            return new ArrayList<>(connecting);
         }
     }
 
@@ -126,6 +162,8 @@ public abstract class Server {
     }
 
     public int getPort() {
-        return socket.getLocalPort();
+        synchronized (socketLock) {
+            return socket.getLocalPort();
+        }
     }
 }

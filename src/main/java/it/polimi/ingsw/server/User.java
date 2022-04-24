@@ -14,7 +14,7 @@ public class User {
         wizard = new Wizard();
     }
 
-    public void replaceConnection(Connection newConnection) {
+    public synchronized void replaceConnection(Connection newConnection) {
         this.connection.close();
         this.connection = newConnection;
     }
@@ -23,7 +23,7 @@ public class User {
         return name;
     }
 
-    public Connection getConnection() {
+    public synchronized Connection getConnection() {
         return connection;
     }
 }

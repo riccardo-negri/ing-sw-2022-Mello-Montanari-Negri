@@ -45,7 +45,7 @@ public class Connection {
         }
     }
 
-    public void bindFunction(Consumer<Message> onNewMessage) {
+    public synchronized void bindFunction(Consumer<Message> onNewMessage) {
         this.onNewMessage = onNewMessage;
     }
 
@@ -54,7 +54,9 @@ public class Connection {
             try {
                 Message msg = (Message) reader.readObject();
                 msg.setSource(this);
-                onNewMessage.accept(msg);
+                synchronized (this) {
+                    onNewMessage.accept(msg);
+                }
             } catch (IOException e) {
                 if (e instanceof SocketException) {
                     return;

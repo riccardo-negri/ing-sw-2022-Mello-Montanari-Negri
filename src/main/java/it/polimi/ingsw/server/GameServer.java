@@ -11,11 +11,13 @@ public class GameServer extends Server{
     private final boolean advancedRules;
     private final List<String> assignedUsernames;
     private Integer moveCount = 0;
+    private final Object moveCountLock;
 
     public GameServer(int size, boolean advancedRules) {
         maxUsers = size;
         this.advancedRules = advancedRules;
         this.assignedUsernames = new ArrayList<>();
+        this.moveCountLock = new Object();
     }
 
     @Override
@@ -37,11 +39,11 @@ public class GameServer extends Server{
     }
 
     void echoMove(Move move) {
-        synchronized (moveCount) {
+        synchronized (moveCountLock) {
             moveCount++;
             move.setNumber(moveCount);
         }
-        for (User user : connectedUser) {
+        for (User user : getConnectedUser()) {
             user.getConnection().send(move);
         }
     }

@@ -19,14 +19,14 @@ public abstract class Server {
     protected int maxUsers = Integer.MAX_VALUE;
     protected ServerSocket socket;
 
-    // initialize variables but don't run it.polimi.ingsw.server code yet
+    // initialize variables but don't run server code yet
     public Server() {
         connectedUser = new ArrayList<>();
         connecting = new ArrayList<>();
         try {
             openSocket();
         } catch (IOException e) {
-            System.out.println("Unable to open it.polimi.ingsw.server socket:");
+            System.out.println("Unable to open server socket:");
             System.out.println(e.getMessage());
         }
     }
@@ -45,14 +45,14 @@ public abstract class Server {
 
     public void stop() {
         try {
-            socket.close(); // this should stop the connectionThread and cause the termination of the it.polimi.ingsw.server
+            socket.close(); // this should stop the connectionThread and cause the termination of the server
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    // open the socket and run the it.polimi.ingsw.server code
-    // this method blocks the caller until the it.polimi.ingsw.server terminates
+    // open the socket and run server code
+    // this method blocks the caller until server terminates
     public void run() {
         Thread connectionThread;
         connectionThread = new Thread(this::listenConnection);

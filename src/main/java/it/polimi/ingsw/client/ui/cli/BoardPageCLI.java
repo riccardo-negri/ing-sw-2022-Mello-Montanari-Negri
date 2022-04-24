@@ -1,15 +1,15 @@
 package it.polimi.ingsw.client.ui.cli;
 
 import it.polimi.ingsw.client.Client;
-import it.polimi.ingsw.client.states.AbstractWelcomePageClientState;
+import it.polimi.ingsw.client.pages.AbstractWelcomePage;
 import org.fusesource.jansi.AnsiConsole;
 
 import static it.polimi.ingsw.client.ui.cli.BoardUtilsCLI.*;
 import static org.fusesource.jansi.Ansi.ansi;
 
-public class BoardPageClientStateCLI extends AbstractWelcomePageClientState {
+public class BoardPageCLI extends AbstractWelcomePage {
 
-    public BoardPageClientStateCLI (Client client) {
+    public BoardPageCLI (Client client) {
         super(client);
     }
 
@@ -17,6 +17,7 @@ public class BoardPageClientStateCLI extends AbstractWelcomePageClientState {
     public void draw (Client client) {
         CoreCLI cli;
         cli = (CoreCLI) client.getUI();
+
         cli.clearTerminal();
         drawIsland(1, 2,2, "none", 0, 1, 2, 0, 1, true);
         drawIsland(2, 2,2+(getIslandWidth()+2), "black", 0, 1, 2, 0, 1, false);

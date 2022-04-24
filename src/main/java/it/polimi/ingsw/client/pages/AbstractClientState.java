@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.states;
+package it.polimi.ingsw.client.pages;
 
 import it.polimi.ingsw.client.Client;
 

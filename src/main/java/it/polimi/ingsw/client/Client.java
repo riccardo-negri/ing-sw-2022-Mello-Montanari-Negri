@@ -1,16 +1,16 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.client.states.AbstractClientState;
-import it.polimi.ingsw.client.states.ClientState;
+import it.polimi.ingsw.client.pages.AbstractClientState;
+import it.polimi.ingsw.client.pages.ClientState;
 import it.polimi.ingsw.client.ui.UI;
 import it.polimi.ingsw.client.ui.cli.CoreCLI;
-import it.polimi.ingsw.client.ui.cli.WelcomePageClientStateCLI;
+import it.polimi.ingsw.client.ui.cli.WelcomePageCLI;
 
 public class Client {
     private final UI ui;
     private ClientState nextState;
     private boolean newState;
-    private WelcomePageClientStateCLI temp;
+    private WelcomePageCLI temp;
     private AbstractClientState currState;
 
     public Client(boolean hasGUI) {

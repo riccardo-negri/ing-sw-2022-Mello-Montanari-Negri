@@ -14,4 +14,12 @@ public class Login extends Message{
     public String getUsername() {
         return username;
     }
+
+    public int getPlayerNumber() {
+        return playerNumber;
+    }
+
+    public boolean isAdvancedRules() {
+        return advancedRules;
+    }
 }

@@ -20,7 +20,7 @@ public class Client {
         else {
             ui = new CoreCLI();
         }
-        nextState = ClientState.WELCOME_PAGE;
+        nextState = ClientState.BOARD_PAGE;
         newState = true;
     }
 

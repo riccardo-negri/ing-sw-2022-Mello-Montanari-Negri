@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.page.AbstractClientState;
 import it.polimi.ingsw.client.page.ClientState;
 import it.polimi.ingsw.client.ui.UI;
+import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
 
 import static org.fusesource.jansi.Ansi.ansi;
@@ -20,7 +21,6 @@ public class CoreCLI implements UI {
     public void init () {
         AnsiConsole.systemInstall();
     }
-
 
     @Override
     public AbstractClientState getState (Client client, ClientState nextState) {
@@ -40,7 +40,6 @@ public class CoreCLI implements UI {
         }
         return null;
     }
-
 
     public Integer getTerminalWidth () {
         int terminalWidth;
@@ -101,6 +100,14 @@ public class CoreCLI implements UI {
         AnsiConsole.out().println(ansi().cursor(getTerminalHeight()-1,0));
     }
 
+    public void moveCursorToTop () {
+        AnsiConsole.out().print(ansi().cursor(0,0));
+    }
+
+    public void resetCursorColors() {
+        AnsiConsole.out().print(ansi().fgDefault().bgDefault());
+    }
+
     public void waitKeyPressed () {
         try {
             System.in.read();
@@ -159,6 +166,33 @@ public class CoreCLI implements UI {
             AnsiConsole.out().print(ansi().cursorUp(2));
             AnsiConsole.out().print(ansi().eraseLine());
             return readIPAddress();
+        }
+    }
+
+    public String readGenericString (String requestText) {
+        return readGenericString(requestText, null);
+    }
+
+    public String readGenericString (String requestText, String defaultValue) {
+        String s;
+
+        printTerminalCenteredLine(requestText,10);
+        s = scanner.nextLine();
+        if (defaultValue != null && s.length() == 0) {
+            AnsiConsole.out().print(ansi().cursorUp(1));
+            AnsiConsole.out().print(ansi().eraseLine());
+            printTerminalCenteredLine(requestText,10);
+            AnsiConsole.out().print(ansi().fgBlue().a(defaultValue).cursorDownLine());
+            return defaultValue;
+        }
+        else if (s.length() != 0) {
+            return s;
+        }
+        else {
+            printTopErrorBanner("Please type something");
+            AnsiConsole.out().print(ansi().cursorUp(2));
+            AnsiConsole.out().print(ansi().eraseLine());
+            return readGenericString(requestText, null);
         }
     }
 

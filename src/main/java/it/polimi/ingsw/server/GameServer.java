@@ -3,6 +3,7 @@ package it.polimi.ingsw.server;
 import it.polimi.ingsw.utils.Login;
 import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.utils.Move;
+import it.polimi.ingsw.utils.ReceivedMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +31,10 @@ public class GameServer extends Server{
 
     }
 
-    void receiveMessage(Message message) {
-        if (message instanceof Move) {
-            echoMove((Move) message);
+    void receiveMessage(ReceivedMessage received) {
+        Message content = received.getContent();
+        if (content instanceof Move) {
+            echoMove((Move) content);
         } else {
             throw new RuntimeException("Unknown message");
         }

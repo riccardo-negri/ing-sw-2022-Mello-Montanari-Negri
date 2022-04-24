@@ -11,7 +11,7 @@ public class Connection {
 
     private final Socket socket;
 
-    private Consumer<Message> onNewMessage;
+    private Consumer<ReceivedMessage> onNewMessage;
 
     private final Thread thread;
 
@@ -19,7 +19,7 @@ public class Connection {
     private final ObjectOutputStream writer;
 
 
-    public Connection(Socket socket, Consumer<Message> onNewMessage) {
+    public Connection(Socket socket, Consumer<ReceivedMessage> onNewMessage) {
         try {
             this.socket = socket;
             this.onNewMessage = onNewMessage;
@@ -32,12 +32,12 @@ public class Connection {
         }
     }
 
-    public Connection(String address, int port, Consumer<Message> onNewMessage) {
+    public Connection(String address, int port, Consumer<ReceivedMessage> onNewMessage) {
         try {
             this.socket = new Socket(address, port);
             this.onNewMessage = onNewMessage;
-            reader = new ObjectInputStream(socket.getInputStream());
             writer = new ObjectOutputStream(socket.getOutputStream());
+            reader = new ObjectInputStream(socket.getInputStream());
             thread = new Thread(this::listenMessages);
             thread.start();
         } catch (IOException e) {
@@ -45,17 +45,18 @@ public class Connection {
         }
     }
 
-    public synchronized void bindFunction(Consumer<Message> onNewMessage) {
+    public synchronized void bindFunction(Consumer<ReceivedMessage> onNewMessage) {
         this.onNewMessage = onNewMessage;
     }
 
     public void listenMessages() {
         while (true) {
+            System.out.println("list message");
             try {
                 Message msg = (Message) reader.readObject();
-                msg.setSource(this);
+                System.out.println("received");
                 synchronized (this) {
-                    onNewMessage.accept(msg);
+                    onNewMessage.accept(new ReceivedMessage(msg, this));
                 }
             } catch (IOException e) {
                 if (e instanceof SocketException) {
@@ -68,7 +69,6 @@ public class Connection {
     }
 
     public void send(Message message) {
-        message.removeSource();
         try {
             writer.writeObject(message);
         } catch (IOException e) {

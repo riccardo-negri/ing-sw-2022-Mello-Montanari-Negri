@@ -3,7 +3,7 @@ package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.utils.Connection;
 import it.polimi.ingsw.utils.Login;
-import it.polimi.ingsw.utils.Message;
+import it.polimi.ingsw.utils.ReceivedMessage;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -20,13 +20,17 @@ public abstract class Server {
     protected ServerSocket socket;
     protected final Object socketLock;
 
+    int portToBind() {
+        return 0;
+    }
+
     // initialize variables but don't run server code yet
     public Server() {
         connectedUser = new ArrayList<>();
         connecting = new ArrayList<>();
         socketLock = new Object();
         try {
-            openSocket();
+            socket = new ServerSocket(portToBind());
         } catch (IOException e) {
             System.out.println("Unable to open server socket:");
             System.out.println(e.getMessage());
@@ -35,10 +39,6 @@ public abstract class Server {
 
     List<String> usernames() {
         return getConnectedUser().stream().map(User::getName).collect(Collectors.toList());
-    }
-
-    void openSocket() throws IOException {
-        socket = new ServerSocket();
     }
 
     abstract void onStart();
@@ -80,11 +80,13 @@ public abstract class Server {
     // in that case socket.accept() throws SocketException, and we terminate the thread
     void listenConnection() {
         while (true) {
+            System.out.println("listening");
             try {
                 Socket socket;
                 synchronized (socketLock) {
                     socket = this.socket.accept();
                 }
+                System.out.println("accepted");
                 synchronized (connecting) {
                     connecting.add(new Connection(socket, this::userLogin));
                 }
@@ -100,12 +102,12 @@ public abstract class Server {
 
     abstract void onNewUserConnect(User user, Login info);
 
-    public void userLogin(Message message) {
-        assert (message.getSource().isPresent());
-        Connection connection = message.getSource().get();
+    public void userLogin(ReceivedMessage message) {
+        System.out.println("login");
+        Connection connection = message.getSource();
         Login login;
         try {
-            login = (Login) message;
+            login = (Login) message.getContent();
         } catch (ClassCastException e) {
             connection.close();
             removeConnecting(connection);

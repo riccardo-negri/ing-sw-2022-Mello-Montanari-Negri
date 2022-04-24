@@ -1,14 +1,28 @@
 package it.polimi.ingsw.server;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.Socket;
+import it.polimi.ingsw.utils.*;
 
 public class Client {
-    public static void main(String[] args) throws IOException {
-        Socket socket = new Socket("localhost", 60000);
-        OutputStream os = socket.getOutputStream();
-        InputStream reader = socket.getInputStream();
+    Connection connection;
+
+    public static void main(String[] args) {
+        new Client();
+    }
+
+    public Client() {
+        connection = new Connection("localhost", 50000, this::onRedirect);
+        connection.send(new Login("tommaso", 3, true));
+    }
+
+    void onRedirect(ReceivedMessage message) {
+        Redirect redirect = (Redirect) message.getContent();
+        System.out.println("porta");
+        System.out.println(redirect.getPort());
+        connection.close();
+        connection = new Connection("localhost", redirect.getPort(), this::onMessage);
+    }
+
+    void onMessage(ReceivedMessage message) {
+
     }
 }

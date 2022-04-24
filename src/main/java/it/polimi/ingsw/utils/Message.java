@@ -1,19 +1,7 @@
 package it.polimi.ingsw.utils;
 
-import java.util.Optional;
+import java.io.Serializable;
 
-public abstract class Message {
-    protected Optional<Connection> source;
+public abstract class Message implements Serializable {
 
-    public Optional<Connection> getSource() {
-        return source;
-    }
-
-    public void setSource(Connection source) {
-        this.source = Optional.of(source);
-    }
-
-    public void removeSource() {
-        this.source = Optional.empty();
-    }
 }

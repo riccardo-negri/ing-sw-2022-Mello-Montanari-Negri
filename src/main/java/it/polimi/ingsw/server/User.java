@@ -10,6 +10,7 @@ public class User {
     private final String name;
 
     public User(String name, Connection connection) {
+        this.connection = connection;
         this.name = name;
         wizard = new Wizard();
     }

@@ -3,8 +3,6 @@ package it.polimi.ingsw.server;
 import it.polimi.ingsw.utils.Login;
 import it.polimi.ingsw.utils.Redirect;
 
-import java.io.IOException;
-import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,15 +12,13 @@ public class MatchmakingServer extends Server {
 
     private final List<Thread> gameThreads;
 
-
     public MatchmakingServer() {
         startedGames = new ArrayList<>();
         gameThreads = new ArrayList<>();
     }
 
-    @Override
-    void openSocket() throws IOException {
-        socket = new ServerSocket(wellKnownPort);
+    int portToBind() {
+        return 50000;
     }
 
     @Override

@@ -1,8 +1,8 @@
-package it.polimi.ingsw.client.pages;
+package it.polimi.ingsw.client.page;
 
 import it.polimi.ingsw.client.Client;
 
-import static it.polimi.ingsw.client.pages.ClientState.*;
+import static it.polimi.ingsw.client.page.ClientState.*;
 
 public abstract class AbstractStartPage extends AbstractClientState {
 

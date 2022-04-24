@@ -1,7 +1,7 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.client.pages.AbstractClientState;
-import it.polimi.ingsw.client.pages.ClientState;
+import it.polimi.ingsw.client.page.AbstractClientState;
+import it.polimi.ingsw.client.page.ClientState;
 import it.polimi.ingsw.client.ui.UI;
 import it.polimi.ingsw.client.ui.cli.CoreCLI;
 import it.polimi.ingsw.client.ui.cli.WelcomePageCLI;

@@ -1,9 +1,8 @@
-package it.polimi.ingsw.client.pages;
+package it.polimi.ingsw.client.page;
 
 import it.polimi.ingsw.client.Client;
 
-import static it.polimi.ingsw.client.pages.ClientState.BOARD_PAGE;
-import static it.polimi.ingsw.client.pages.ClientState.WELCOME_PAGE;
+import static it.polimi.ingsw.client.page.ClientState.GAME_MODE_SELECTION_PAGE;
 
 public abstract class AbstractConnectionPage extends AbstractClientState{
     public AbstractConnectionPage (Client client) {
@@ -15,6 +14,6 @@ public abstract class AbstractConnectionPage extends AbstractClientState{
     }
 
     public void onEnd() {
-        client.setNextState(BOARD_PAGE);
+        client.setNextState(GAME_MODE_SELECTION_PAGE);
     }
 }

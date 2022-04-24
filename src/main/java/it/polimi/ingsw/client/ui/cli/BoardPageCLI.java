@@ -1,7 +1,7 @@
 package it.polimi.ingsw.client.ui.cli;
 
 import it.polimi.ingsw.client.Client;
-import it.polimi.ingsw.client.pages.AbstractWelcomePage;
+import it.polimi.ingsw.client.page.AbstractWelcomePage;
 import org.fusesource.jansi.AnsiConsole;
 
 import static it.polimi.ingsw.client.ui.cli.BoardUtilsCLI.*;

@@ -1,8 +1,8 @@
 package it.polimi.ingsw.client.ui.cli;
 
 import it.polimi.ingsw.client.Client;
-import it.polimi.ingsw.client.pages.AbstractClientState;
-import it.polimi.ingsw.client.pages.ClientState;
+import it.polimi.ingsw.client.page.AbstractClientState;
+import it.polimi.ingsw.client.page.ClientState;
 import it.polimi.ingsw.client.ui.UI;
 import org.fusesource.jansi.AnsiConsole;
 
@@ -31,6 +31,10 @@ public class CoreCLI implements UI {
                 return new StartPageCLI(client);
             case CONNECTION_PAGE:
                 return new ConnectionPageCLI(client);
+            case GAME_MODE_SELECTION_PAGE:
+                return new GameModeSelectionPageCLI(client);
+            case MATCHMAKING_PAGE:
+                return new MatchmakingPageCLI(client);
             case BOARD_PAGE:
                 return new BoardPageCLI(client);
         }
@@ -64,10 +68,13 @@ public class CoreCLI implements UI {
     }
 
     public void printTerminalCenteredMultilineText (String s) {
-        clearTerminal();
+        printTerminalCenteredMultilineText (s, 0);
+    }
+
+    public void printTerminalCenteredMultilineText (String s, int expectedFollowingLines) {
         String[] arr = s.split("\n");
         List<String> list = Arrays.asList(arr);
-        int startH = getTerminalHeight() / 2 - list.size() / 2;
+        int startH = getTerminalHeight() / 2 - (list.size()+expectedFollowingLines) / 2;
         IntStream.range(0, list.size()).forEach(ind ->
                 AnsiConsole.out().println(
                         ansi()
@@ -90,8 +97,8 @@ public class CoreCLI implements UI {
         AnsiConsole.out().print(ansi().fgDefault().cursorMove(getTerminalWidth() / 2 - (s.length()+expectedInputSize) / 2, 0).a(s + " ").fgBlue());
     }
 
-    public void bringCursorToEnd () {
-        AnsiConsole.out().println(ansi().cursor(1000, 1000));
+    public void moveCursorToEnd () {
+        AnsiConsole.out().println(ansi().cursor(getTerminalHeight()-1,0));
     }
 
     public void waitKeyPressed () {
@@ -113,6 +120,7 @@ public class CoreCLI implements UI {
 
     public void printTopErrorBanner (String warning) {
         AnsiConsole.out().println(ansi().saveCursorPosition());
+        AnsiConsole.out().print(ansi().cursor(1,0).eraseLine());
         AnsiConsole.out().println(
                 ansi().fgBrightRed().
                         cursor(
@@ -125,10 +133,6 @@ public class CoreCLI implements UI {
 
         );
         AnsiConsole.out().println(ansi().restoreCursorPosition());
-    }
-
-    public void bringCursorToMid (int lengthExpected) {
-        AnsiConsole.out().print(ansi().cursorMove(getTerminalWidth() / 2 - lengthExpected / 2, 0));
     }
 
     public String readIPAddress () {
@@ -158,40 +162,56 @@ public class CoreCLI implements UI {
         }
     }
 
-    public int readPortNumber() {
-        int portNumber;
-        String REQUEST = "Please insert the port number of the server (default is 50000):";
-        int DEFAULT = 50000;
-        printTerminalCenteredLine(REQUEST,5);
+    public void printEmptyLine() {
+        AnsiConsole.out().println();
+    }
+
+    public int readNumber(String requestText, int minValue, int maxValue, Integer defaultValue) {
+        int num;
+        printTerminalCenteredLine(requestText,5);
         try {
             String in = scanner.nextLine();
-            if (in.length() == 0) {
+            if (defaultValue != null && in.length() == 0) {
                 AnsiConsole.out().print(ansi().cursorUp(1));
                 AnsiConsole.out().print(ansi().eraseLine());
-                printTerminalCenteredLine(REQUEST,5);
-                AnsiConsole.out().print(ansi().fgBlue().a(DEFAULT).cursorDownLine());
-                return DEFAULT;
+                printTerminalCenteredLine(requestText,5);
+                AnsiConsole.out().print(ansi().fgBlue().a(defaultValue).cursorDownLine());
+                return defaultValue;
             }
-            portNumber = Integer.parseInt(in);
-            if (49152 <= portNumber && portNumber <= 65535) {
-                return portNumber;
+            num = Integer.parseInt(in);
+            if (minValue <= num && num <= maxValue) {
+                return num;
             }
             else {
-                printTopErrorBanner("Please type a valid port number");
+                printTopErrorBanner("Please type a valid number");
                 AnsiConsole.out().print(ansi().cursorUp(2));
                 AnsiConsole.out().print(ansi().eraseLine());
-                return readPortNumber();
+                return readNumber(requestText, minValue, maxValue, defaultValue);
             }
 
         } catch (NumberFormatException e) {
-            printTopErrorBanner("Please type a valid port number");
+            printTopErrorBanner("Please type a valid number");
             AnsiConsole.out().print(ansi().cursorUp(2));
             AnsiConsole.out().print(ansi().eraseLine());
-            return readPortNumber();
+            return readNumber(requestText, minValue, maxValue, defaultValue);
         }
     }
 
-    public void printEmptyLine() {
-        AnsiConsole.out().println();
+    public boolean readBoolean(String requestText) {
+        String read;
+        printTerminalCenteredLine(requestText,10);
+        read = scanner.nextLine();
+        if (read.equals("y")) {
+            return true;
+        }
+        else if (read.equals("n")) {
+            return false;
+        }
+        else {
+            printTopErrorBanner("Please type 'y' or 'n'");
+            AnsiConsole.out().print(ansi().cursorUp(2));
+            AnsiConsole.out().print(ansi().eraseLine());
+            return readBoolean(requestText);
+        }
     }
 }

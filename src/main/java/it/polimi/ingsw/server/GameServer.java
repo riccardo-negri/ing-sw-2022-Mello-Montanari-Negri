@@ -2,6 +2,7 @@ package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.utils.Login;
 import it.polimi.ingsw.utils.Message;
+import it.polimi.ingsw.utils.Move;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.List;
 public class GameServer extends Server{
     private final boolean advancedRules;
     private final List<String> assignedUsernames;
+    private Integer moveCount = 0;
 
     public GameServer(int size, boolean advancedRules) {
         maxUsers = size;
@@ -27,7 +29,21 @@ public class GameServer extends Server{
     }
 
     void receiveMessage(Message message) {
+        if (message instanceof Move) {
+            echoMove((Move) message);
+        } else {
+            throw new RuntimeException("Unknown message");
+        }
+    }
 
+    void echoMove(Move move) {
+        synchronized (moveCount) {
+            moveCount++;
+            move.setNumber(moveCount);
+        }
+        for (User user : connectedUser) {
+            user.getConnection().send(move);
+        }
     }
 
     @Override

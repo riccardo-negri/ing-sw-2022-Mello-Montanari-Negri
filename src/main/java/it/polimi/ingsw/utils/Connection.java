@@ -1,5 +1,6 @@
 package it.polimi.ingsw.utils;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -10,6 +11,7 @@ import java.util.function.Consumer;
 public class Connection {
 
     private final Socket socket;
+    private final String targetAddress;
 
     private Consumer<ReceivedMessage> onNewMessage;
 
@@ -22,6 +24,7 @@ public class Connection {
     public Connection(Socket socket, Consumer<ReceivedMessage> onNewMessage) {
         try {
             this.socket = socket;
+            this.targetAddress = String.valueOf(socket.getInetAddress());
             this.onNewMessage = onNewMessage;
             reader = new ObjectInputStream(socket.getInputStream());
             writer = new ObjectOutputStream(socket.getOutputStream());
@@ -35,6 +38,7 @@ public class Connection {
     public Connection(String address, int port, Consumer<ReceivedMessage> onNewMessage) {
         try {
             this.socket = new Socket(address, port);
+            this.targetAddress = address;
             this.onNewMessage = onNewMessage;
             writer = new ObjectOutputStream(socket.getOutputStream());
             reader = new ObjectInputStream(socket.getInputStream());
@@ -50,17 +54,20 @@ public class Connection {
     }
 
     public void listenMessages() {
+        System.out.println("Listening for new messages from: " + targetAddress);
         while (true) {
-            System.out.println("list message");
             try {
                 Message msg = (Message) reader.readObject();
-                System.out.println("received");
+                System.out.println("Received new object from " + targetAddress + ": " + msg);
                 synchronized (this) {
                     onNewMessage.accept(new ReceivedMessage(msg, this));
                 }
             } catch (IOException e) {
-                if (e instanceof SocketException) {
+                if (e instanceof EOFException || e instanceof SocketException) {
                     return;
+                }
+                else {
+                    throw new RuntimeException(e);
                 }
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException(e);
@@ -76,10 +83,16 @@ public class Connection {
         }
     }
 
-    public void close() {
+    public void stop() {
         try {
             socket.close();
+        } catch (IOException ignored) {}
+    }
+
+    public void close() {
+        try {
+            stop();
             thread.join();
-        } catch (IOException | InterruptedException ignored) {}
+        } catch (InterruptedException ignored) {}
     }
 }

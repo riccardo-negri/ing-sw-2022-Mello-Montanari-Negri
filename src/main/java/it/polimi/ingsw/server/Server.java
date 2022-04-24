@@ -79,14 +79,14 @@ public abstract class Server {
     // listen for new connections until socket.close() is used
     // in that case socket.accept() throws SocketException, and we terminate the thread
     void listenConnection() {
+        System.out.println("Listening for new connections on port: " + getPort());
         while (true) {
-            System.out.println("listening");
             try {
                 Socket socket;
                 synchronized (socketLock) {
                     socket = this.socket.accept();
                 }
-                System.out.println("accepted");
+                System.out.println("Accepted new connection from: " + socket.getInetAddress());
                 synchronized (connecting) {
                     connecting.add(new Connection(socket, this::userLogin));
                 }
@@ -103,7 +103,6 @@ public abstract class Server {
     abstract void onNewUserConnect(User user, Login info);
 
     public void userLogin(ReceivedMessage message) {
-        System.out.println("login");
         Connection connection = message.getSource();
         Login login;
         try {
@@ -118,6 +117,7 @@ public abstract class Server {
                 if (u.getName().equals(login.getUsername())) {
                     u.replaceConnection(connection);
                     removeConnecting(connection);
+                    System.out.println("User " + login.getUsername() + " reconnected");
                     onUserReconnected(u);
                     return;
                 }
@@ -129,6 +129,7 @@ public abstract class Server {
                     connectedUser.add(user);
                 }
                 removeConnecting(connection);
+                System.out.println("New user logged in: " + user.getName());
                 onNewUserConnect(user, login);
             }
         }

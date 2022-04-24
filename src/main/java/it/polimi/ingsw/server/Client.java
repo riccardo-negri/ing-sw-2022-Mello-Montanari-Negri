@@ -19,8 +19,7 @@ public class Client {
         Redirect redirect = (Redirect) message.getContent();
         System.out.println("porta");
         System.out.println(redirect.getPort());
-        connection.stop();
-        connection = new Connection("localhost", redirect.getPort(), this::onMessage);
+        connection = new ReplacingConnection("localhost", redirect.getPort(), this::onMessage, connection);
         connection.send(login);
         connection.close();
     }

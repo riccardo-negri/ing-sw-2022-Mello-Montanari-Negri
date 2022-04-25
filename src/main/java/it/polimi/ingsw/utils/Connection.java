@@ -8,42 +8,36 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.function.Consumer;
 
-public class Connection {
-
-    private final Socket socket;
-    private final String targetAddress;
-
-    private Consumer<ReceivedMessage> onNewMessage;
-
-    private final Thread thread;
-
-    private final ObjectInputStream reader;
-    private final ObjectOutputStream writer;
-
+public class Connection extends ConnectionBase {
+    private Message lastMessage;
+    private  final Object lastMessageLock = new Object();
 
     public Connection(Socket socket, Consumer<ReceivedMessage> onNewMessage) {
-        try {
-            this.socket = socket;
-            this.targetAddress = String.valueOf(socket.getInetAddress());
-            this.onNewMessage = onNewMessage;
-            reader = new ObjectInputStream(socket.getInputStream());
-            writer = new ObjectOutputStream(socket.getOutputStream());
-            thread = new Thread(this::listenMessages);
-            thread.start();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        super(socket, onNewMessage);
+
+    }
+
+    public Connection(Socket socket) {
+        super(socket, Connection::doNothing);
+
     }
 
     public Connection(String address, int port, Consumer<ReceivedMessage> onNewMessage) {
+        super(Connection.createSocket(address, port), onNewMessage);
+
+    }
+
+    public Connection(String address, int port) {
+        super(Connection.createSocket(address, port), Connection::doNothing);
+        System.out.println("super done");
+
+    }
+
+    static private void doNothing(ReceivedMessage message) {}
+
+    static private Socket createSocket(String address, int port) {
         try {
-            this.socket = new Socket(address, port);
-            this.targetAddress = address;
-            this.onNewMessage = onNewMessage;
-            writer = new ObjectOutputStream(socket.getOutputStream());
-            reader = new ObjectInputStream(socket.getInputStream());
-            thread = new Thread(this::listenMessages);
-            thread.start();
+            return new Socket(address, port);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -53,7 +47,7 @@ public class Connection {
         this.onNewMessage = onNewMessage;
     }
 
-    public void listenMessages() {
+    protected void listenMessages() {
         System.out.println("Listening for new messages from: " + targetAddress);
         while (true) {
             try {
@@ -61,6 +55,10 @@ public class Connection {
                 System.out.println("Received new object from " + targetAddress + ": " + msg);
                 synchronized (this) {
                     onNewMessage.accept(new ReceivedMessage(msg, this));
+                }
+                synchronized (lastMessageLock) {
+                    lastMessage = msg;
+                    lastMessageLock.notifyAll();
                 }
             } catch (IOException e) {
                 if (e instanceof EOFException || e instanceof SocketException) {
@@ -75,6 +73,19 @@ public class Connection {
         }
     }
 
+    public Message waitMessage() {
+        synchronized (lastMessageLock) {
+            while (lastMessage == null) {
+                try {
+                    lastMessageLock.wait();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            return lastMessage;
+        }
+    }
+
     public void send(Message message) {
         try {
             writer.writeObject(message);
@@ -83,7 +94,7 @@ public class Connection {
         }
     }
 
-    public void stop() {
+    void stop() {
         try {
             socket.close();
         } catch (IOException ignored) {}

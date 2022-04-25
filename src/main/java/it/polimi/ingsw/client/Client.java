@@ -20,7 +20,6 @@ public class Client {
     public boolean isAdvancedGame;
     public Connection connection;
     public Login login;
-    public Boolean SetupConnectionLock = false;
 
     public Client(boolean hasGUI) {
         if(hasGUI) {
@@ -49,26 +48,16 @@ public class Client {
     }
 
     public void setupConnection(){
-        Connection connection = new Connection(IPAddress, port, this::onRedirect);
         login = new Login(username, playerNumber, isAdvancedGame);
+        Connection connection = new Connection(IPAddress, port);
         connection.send(login);
-    }
-
-    private void onRedirect(ReceivedMessage message) {
-        synchronized (SetupConnectionLock) {
-            Redirect redirect = (Redirect) message.getContent();
-            System.out.println("porta");
-            System.out.println(redirect.getPort());
-            connection = new ReplacingConnection(IPAddress, redirect.getPort(), this::onMessage, connection);
-            connection.send(login);
-            SetupConnectionLock = true;
-            SetupConnectionLock.notifyAll();
-        }
-
-    }
-
-    void onMessage(ReceivedMessage message) {
-
+        Redirect redirect = (Redirect) connection.waitMessage();
+        System.out.println("porta");
+        System.out.println(redirect.getPort());
+        connection = new Connection(IPAddress, redirect.getPort());
+        connection.send(login);
+        connection.waitMessage();
+        // waiting for players
     }
 
     public UI getUI () {
@@ -117,10 +106,6 @@ public class Client {
 
     public void setConnection (Connection connection) {
         this.connection = connection;
-    }
-
-    public boolean getConnectionLock() {
-        return SetupConnectionLock;
     }
 
     public void setPort (int port) {

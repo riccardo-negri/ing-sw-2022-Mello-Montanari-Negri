@@ -2,14 +2,20 @@ package it.polimi.ingsw.client.ui.cli;
 
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
-import org.fusesource.jansi.AnsiPrintStream;
 
 import java.text.MessageFormat;
-import java.util.ArrayList;
+import java.lang.String;
+import java.util.stream.IntStream;
 
 import static org.fusesource.jansi.Ansi.ansi;
 
 public class BoardUtilsCLI {
+    private static final String InfoR1 = "+----------------------------+";
+    private static final String InfoR2 = "| {0}{1} |";
+    private static final String InfoR3 = "|                            |";
+    private static final String s = " ";
+    private static final int lengthToFill = 26;
+
     public static Integer getIslandWidth () {
         return 18;
     }
@@ -195,11 +201,93 @@ public class BoardUtilsCLI {
         drawSchoolBoard(startRow, startCol, towerColor, towerNumber, professors, diningColors, entranceColors);
         AnsiConsole.out().println(ansi().cursor(startRow+1, startCol+getSchoolBoardWidth()+2).fgRgb(255, 128 ,0).a(playerName).fgDefault());
         AnsiConsole.out().print(ansi().cursor(startRow+3, startCol+getSchoolBoardWidth()+2).a("Assistant: " + playedCard));
-        AnsiConsole.out().print(ansi().cursor(startRow+4, startCol+getSchoolBoardWidth()+2).a("Coins:     ").fgRgb(218, 165,32).a(coins).fgDefault());
+        AnsiConsole.out().print(ansi().cursor(startRow+4, startCol+getSchoolBoardWidth()+2).a("Coins: ").fgRgb(218, 165,32).a(coins).fgDefault());
         AnsiConsole.out().print(ansi().cursor(startRow+6, startCol+getSchoolBoardWidth()+2).a("Character: " + playedCharacter));
     }
 
-    public static void drawGameInfoSection(int startRow, int startCol) {
+    public static void drawGameInfoSection(int startRow, int startCol, String gameID, String serverIP, int serverPort, String gameMode, int playersNumber) {
+        AnsiConsole.out().println(ansi().cursor(startRow,startCol).a(InfoR1));
+        AnsiConsole.out().println(ansi().cursor(startRow+1,startCol).a(InfoR3));
+        AnsiConsole.out().println(ansi().cursor(startRow+2, startCol).a(
+                MessageFormat.format(InfoR2, "GameID: " + gameID, s.repeat(lengthToFill-8-gameID.length()))
+        ));
+        AnsiConsole.out().println(ansi().cursor(startRow+3, startCol).a(
+                MessageFormat.format(InfoR2, "Server IP: " + serverIP, s.repeat(lengthToFill-11-serverIP.length()))
+        ));
+        AnsiConsole.out().println(ansi().cursor(startRow+4, startCol).a(
+                MessageFormat.format(InfoR2, "Server Port: " + serverPort, s.repeat(lengthToFill-13-Integer.toString(serverPort).length()))
+        ));
+        AnsiConsole.out().println(ansi().cursor(startRow+5, startCol).a(
+                MessageFormat.format(InfoR2, "Game Mode: " + gameMode, s.repeat(lengthToFill-11-gameMode.length()))
+        ));
+        AnsiConsole.out().println(ansi().cursor(startRow+6, startCol).a(
+                MessageFormat.format(InfoR2, "Players: " + playersNumber, s.repeat(lengthToFill-10))
+        ));
+        AnsiConsole.out().println(ansi().cursor(startRow+7,startCol).a(InfoR1));
+    }
+
+    public static void drawGameStatusSection(int startRow, int startCol, int round, String currPlayer, String currPhase) {
+        AnsiConsole.out().println(ansi().cursor(startRow,startCol).a(InfoR1));
+        AnsiConsole.out().println(ansi().cursor(startRow+1,startCol).a(InfoR3));
+        AnsiConsole.out().println(ansi().cursor(startRow+2, startCol).a(
+                MessageFormat.format(InfoR2, "Round Number: " + round, s.repeat(lengthToFill-15))
+        ));
+        AnsiConsole.out().println(ansi().cursor(startRow+3, startCol).a(
+                MessageFormat.format(InfoR2, "Active Player: " + ansi().fgRgb(255, 128 ,0).a(currPlayer).fgDefault(), s.repeat(lengthToFill-15-currPlayer.length()))
+        ));
+        AnsiConsole.out().println(ansi().cursor(startRow+4, startCol).a(
+                MessageFormat.format(InfoR2, "Turn Phase: " + currPhase, s.repeat(lengthToFill-12-currPhase.length()))
+        ));
+        AnsiConsole.out().println(ansi().cursor(startRow+5,startCol).a(InfoR1));
+    }
+
+    public static void drawGameCharactersSection(int startRow, int startCol, String[]characters, int[]charactersCost) {
+        AnsiConsole.out().println(ansi().cursor(startRow,startCol).a(InfoR1));
+        AnsiConsole.out().println(ansi().cursor(startRow+1,startCol).a(InfoR3));
+        IntStream.range(0, 3).forEach(i -> {
+            AnsiConsole.out().println(ansi().cursor(startRow + 2 + (3 * i), startCol).a(
+                    MessageFormat.format(InfoR2, "Character " + (i + 1) + ": " + characters[i], s.repeat(lengthToFill - 13 - characters[i].length()))
+            ));
+            AnsiConsole.out().println(ansi().cursor(startRow + 3 + (3 * i), startCol).a(
+                    MessageFormat.format(InfoR2, "Cost: " + ansi().fgRgb(218, 165,32).a(charactersCost[i]).fgDefault(), s.repeat(lengthToFill - 7))
+            ));
+            if (i != 2) {
+                AnsiConsole.out().println(ansi().cursor(startRow + 4 + (3 * i), startCol).a(InfoR3));
+            }
+        });
+        AnsiConsole.out().println(ansi().cursor(startRow+10,startCol).a(InfoR1));
+    }
+
+    public static void drawDeckSection(int startRow, int startCol, int[] cards) {
+        AnsiConsole.out().println(ansi().cursor(startRow,startCol).a(InfoR1));
+        AnsiConsole.out().println(ansi().cursor(startRow+1,startCol).a(InfoR3));
+        IntStream.range(0, cards.length).forEach(i -> {
+            AnsiConsole.out().println(ansi().cursor(startRow + 2 + i, startCol).a(
+                    MessageFormat.format(InfoR2, "Card n°" + cards[i] + " - " + (cards[i]+1)/2 + " steps", s.repeat(lengthToFill - 17 - Integer.toString(cards[i]).length()))
+            ));
+        });
+        AnsiConsole.out().println(ansi().cursor(startRow+cards.length+1,startCol).a(InfoR1));
+    }
+
+    public static void drawInfoSection (int startRow, int startCol, String gameID, String serverIP, int serverPort, String gameMode, int playersNumber, int round, String currPlayer, String currPhase, String[]characters, int[]charactersCost) {
+        final String INFO = "Game Info";
+        final String STATUS = "Game Status";
+        final String CHARACTER = "Characters";
+        final String DECK = "Your Deck";
+
+        drawGameInfoSection(startRow, startCol, gameID, serverIP, serverPort, gameMode, playersNumber);
+        AnsiConsole.out().println(ansi().cursor(startRow, startCol+lengthToFill/2-INFO.length()/2+1).a(INFO));
+
+
+        drawGameStatusSection(startRow+9, startCol, round, currPlayer, currPhase);
+        AnsiConsole.out().println(ansi().cursor(startRow+9, startCol+lengthToFill/2-STATUS.length()/2+1).a(STATUS));
+
+
+        drawGameCharactersSection(startRow+16, startCol, characters, charactersCost);
+        AnsiConsole.out().println(ansi().cursor(startRow+16, startCol+lengthToFill/2-CHARACTER.length()/2+1).a(CHARACTER));
+
+        drawDeckSection(startRow+28, startCol, new int[]{1,2,3,4,7,8,10});
+        AnsiConsole.out().println(ansi().cursor(startRow+28, startCol+lengthToFill/2-DECK.length()/2+1).a(DECK));
 
     }
 }

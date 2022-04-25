@@ -2,8 +2,10 @@ package it.polimi.ingsw.client.ui.cli;
 
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.page.AbstractWelcomePage;
+import org.fusesource.jansi.AnsiConsole;
 
 import static it.polimi.ingsw.client.ui.cli.BoardUtilsCLI.*;
+import static it.polimi.ingsw.client.ui.cli.BoardUtilsCLI.getSchoolBoardHeight;
 import static org.fusesource.jansi.Ansi.ansi;
 
 public class BoardPageCLI extends AbstractWelcomePage {
@@ -19,11 +21,19 @@ public class BoardPageCLI extends AbstractWelcomePage {
 
         cli.clearTerminal();
         cli.moveCursorToTop();
-        cli.printTerminalCenteredLine("Eriantys Board");
+        AnsiConsole.out().println(ansi().cursor(0,34).a("Eriantys Board").cursor(0, 105).a("Players"));
         cli.resetCursorColors();
-        drawTilesAndClouds(cli.getTerminalWidth()/2-77/2, 2);
+        drawTilesAndClouds(2, 2);
+        drawPlayers(90, 3);
         cli.moveCursorToEnd();
         cli.waitEnterPressed();
+    }
+
+    private void drawPlayers(int startX, int startY) {
+        drawSinglePlayerArea(startY, startX, "Ric", "10 (5 steps)", 1, "9 (clown)", "white", 4, new boolean[]{true, false, true, true, false}, new int[]{3, 0, 2, 1, 0}, new int[]{1, 2, 1, 0, 3});
+        drawSinglePlayerArea(startY+getSchoolBoardHeight()+2, startX, "Tom", "4 (2 steps)", 1, "9 (clown)", "black", 4, new boolean[]{true, false, true, true, false}, new int[]{3, 0, 2, 1, 0}, new int[]{1, 2, 1, 0, 3});
+        drawSinglePlayerArea(startY+2*(getSchoolBoardHeight()+2), startX, "Pietro", "3 (2 steps)", 1, "9 (clown)", "black", 4, new boolean[]{true, false, true, true, false}, new int[]{3, 0, 2, 1, 0}, new int[]{1, 2, 1, 0, 3});
+        drawSinglePlayerArea(startY+3*(getSchoolBoardHeight()+2), startX, "Sanp", "6 (3 steps)", 1, "", "white", 4, new boolean[]{true, false, true, true, false}, new int[]{3, 0, 2, 1, 0}, new int[]{1, 2, 1, 0, 3});
     }
 
     private void drawTilesAndClouds (int BoardBaseX, int BoardBaseY) {

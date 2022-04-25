@@ -131,6 +131,17 @@ public abstract class Server {
         }
     }
 
+    public User userFromConnection(Connection connection) {
+        synchronized (connectedUser) {
+            for (User u: connectedUser) {
+                if (u.getConnection().equals(connection)) {
+                    return u;
+                }
+            }
+            return null;
+        }
+    }
+
     public void disconnectUser(User user) {
         synchronized (connectedUser) {
             user.getConnection().close();

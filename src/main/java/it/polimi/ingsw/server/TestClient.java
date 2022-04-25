@@ -17,10 +17,10 @@ public class TestClient {
     public TestClient() throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String name = reader.readLine();
-        login = new Login(name, 2, true);
+        login = new Login(name, 3, true);
         connection = new Connection("localhost", 50000);
         connection.send(login);
-        Redirect redirect = (Redirect) connection.waitMessage();
+        Redirect redirect = (Redirect) connection.waitMessage(Redirect.class);
         System.out.println("porta");
         System.out.println(redirect.getPort());
         connection.close();

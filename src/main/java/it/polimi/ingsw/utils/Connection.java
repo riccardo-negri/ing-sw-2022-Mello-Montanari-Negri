@@ -1,5 +1,7 @@
 package it.polimi.ingsw.utils;
 
+import it.polimi.ingsw.server.Disconnected;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -51,23 +53,29 @@ public class Connection extends ConnectionBase {
             try {
                 Message msg = (Message) reader.readObject();
                 System.out.println("Received new object from " + targetAddress + ": " + msg);
-                synchronized (this) {
-                    onNewMessage.accept(new ReceivedMessage(msg, this));
-                }
-                synchronized (lastMessageLock) {
-                    lastMessage = msg;
-                    lastMessageLock.notifyAll();
-                }
+                processMessage(msg);
             } catch (IOException e) {
-                if (e instanceof EOFException || e instanceof SocketException) {
+                if (e instanceof EOFException) {  // EOF means that the connection was closed from the other end
+                    processMessage(new Disconnected());
                     return;
-                }
-                else {
+                } else if (e instanceof SocketException) {  // SocketException I called close() on this socket
+                    return;
+                } else {
                     throw new RuntimeException(e);
                 }
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
+        }
+    }
+
+    private void processMessage(Message message) {
+        synchronized (this) {
+            onNewMessage.accept(new ReceivedMessage(message, this));
+        }
+        synchronized (lastMessageLock) {
+            lastMessage = message;
+            lastMessageLock.notifyAll();
         }
     }
 
@@ -91,9 +99,7 @@ public class Connection extends ConnectionBase {
     public void send(Message message) {
         try {
             writer.writeObject(message);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        } catch (IOException ignored) {}
     }
 
     void stop() {

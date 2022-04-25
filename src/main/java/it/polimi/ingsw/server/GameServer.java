@@ -30,7 +30,12 @@ public class GameServer extends Server{
 
     void receiveMessage(ReceivedMessage received) {
         Message content = received.getContent();
-        if (content instanceof Move) {
+        Connection source = received.getSource();
+        if (content instanceof Disconnected) {
+            User user = userFromConnection(source);
+            if (user != null)
+                broadcast(new UserDisconnected(user.getName()));
+        } else if (content instanceof Move) {
             echoMove((Move) content);
         } else {
             throw new RuntimeException("Unknown message");

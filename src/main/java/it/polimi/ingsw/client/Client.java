@@ -51,12 +51,12 @@ public class Client {
         login = new Login(username, playerNumber, isAdvancedGame);
         Connection connection = new Connection(IPAddress, port);
         connection.send(login);
-        Redirect redirect = (Redirect) connection.waitMessage();
+        Redirect redirect = (Redirect) connection.waitMessage(Redirect.class);
         System.out.println("porta");
         System.out.println(redirect.getPort());
         connection = new Connection(IPAddress, redirect.getPort());
         connection.send(login);
-        connection.waitMessage();
+        connection.waitMessage(GameStart.class);
         // waiting for players
     }
 

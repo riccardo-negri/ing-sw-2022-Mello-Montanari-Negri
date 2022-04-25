@@ -18,7 +18,7 @@ public abstract class Server {
     protected final List<User> connectedUser;
     protected int maxUsers = Integer.MAX_VALUE;
     protected ServerSocket socket;
-    protected final Object socketLock;
+    protected int port;
 
     int portToBind() {
         return 0;
@@ -28,9 +28,9 @@ public abstract class Server {
     public Server() {
         connectedUser = new ArrayList<>();
         connecting = new ArrayList<>();
-        socketLock = new Object();
         try {
             socket = new ServerSocket(portToBind());
+            port = socket.getLocalPort();
         } catch (IOException e) {
             System.out.println("Unable to open server socket:");
             System.out.println(e.getMessage());
@@ -47,9 +47,7 @@ public abstract class Server {
 
     public void stop() {
         try {
-            synchronized (socketLock) {
-                socket.close(); // this should stop the connectionThread and cause the termination of the server
-            }
+            socket.close(); // this should stop the connectionThread and cause the termination of the server
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -83,9 +81,7 @@ public abstract class Server {
         while (true) {
             try {
                 Socket socket;
-                synchronized (socketLock) {
-                    socket = this.socket.accept();
-                }
+                socket = this.socket.accept();
                 System.out.println("Accepted new connection from: " + socket.getInetAddress());
                 synchronized (connecting) {
                     connecting.add(new Connection(socket, this::userLogin));
@@ -165,8 +161,6 @@ public abstract class Server {
     }
 
     public int getPort() {
-        synchronized (socketLock) {
-            return socket.getLocalPort();
-        }
+        return port;
     }
 }

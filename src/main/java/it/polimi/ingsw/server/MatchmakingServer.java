@@ -18,7 +18,7 @@ public class MatchmakingServer extends Server {
     }
 
     int portToBind() {
-        return 50000;
+        return wellKnownPort;
     }
 
     @Override
@@ -29,6 +29,7 @@ public class MatchmakingServer extends Server {
     static void moveToGame(User user, GameServer game) {
         game.assignUser(user.getName());
         user.getConnection().send(new Redirect(game.getPort()));
+        System.out.println("Moving user " + user.getName() + " to game " + game + " with port " + game.getPort());
     }
 
     // create a thread that waits for the game to finish and disconnects all the related users

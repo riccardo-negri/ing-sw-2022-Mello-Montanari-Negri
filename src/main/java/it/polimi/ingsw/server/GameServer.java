@@ -1,9 +1,6 @@
 package it.polimi.ingsw.server;
 
-import it.polimi.ingsw.utils.Login;
-import it.polimi.ingsw.utils.Message;
-import it.polimi.ingsw.utils.Move;
-import it.polimi.ingsw.utils.ReceivedMessage;
+import it.polimi.ingsw.utils.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,8 +42,12 @@ public class GameServer extends Server{
             moveCount++;
             move.setNumber(moveCount);
         }
+        broadcast(move);
+    }
+
+    void broadcast(Message message) {
         for (User user : getConnectedUser()) {
-            user.getConnection().send(move);
+            user.getConnection().send(message);
         }
     }
 
@@ -58,6 +59,9 @@ public class GameServer extends Server{
     @Override
     void onNewUserConnect(User user, Login info) {
         user.getConnection().bindFunction(this::receiveMessage);
+        if (isFull()) {
+            broadcast(new GameStart());
+        }
     }
 
     public boolean isFull() {

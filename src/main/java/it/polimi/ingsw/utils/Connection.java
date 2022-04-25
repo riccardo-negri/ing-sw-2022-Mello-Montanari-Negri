@@ -29,8 +29,6 @@ public class Connection extends ConnectionBase {
 
     public Connection(String address, int port) {
         super(Connection.createSocket(address, port), Connection::doNothing);
-        System.out.println("super done");
-
     }
 
     static private void doNothing(ReceivedMessage message) {}
@@ -74,8 +72,12 @@ public class Connection extends ConnectionBase {
     }
 
     public Message waitMessage() {
+        return waitMessage(Message.class);
+    }
+
+    public Message waitMessage(Class filter) {
         synchronized (lastMessageLock) {
-            while (lastMessage == null) {
+            while (!filter.isInstance(lastMessage)) {
                 try {
                     lastMessageLock.wait();
                 } catch (InterruptedException e) {

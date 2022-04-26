@@ -49,7 +49,7 @@ public class Connection extends ConnectionBase {
 
     protected void listenMessages() {
         System.out.println("Listening for new messages from: " + targetAddress);
-        while (true) {
+        while (isRunning()) {
             try {
                 Message msg = (Message) reader.readObject();
                 System.out.println("Received new object from " + targetAddress + ": " + msg);
@@ -102,16 +102,25 @@ public class Connection extends ConnectionBase {
         } catch (IOException ignored) {}
     }
 
+    boolean isRunning() {
+        synchronized (socket) {
+            return !socket.isClosed();
+        }
+    }
+
     void stop() {
         try {
-            socket.close();
+            synchronized (socket) {
+                socket.close();
+            }
         } catch (IOException ignored) {}
     }
 
     public void close() {
         try {
             stop();
-            thread.join();
+            if (!Thread.currentThread().equals(thread))
+                thread.join();
         } catch (InterruptedException ignored) {}
     }
 }

@@ -7,7 +7,7 @@ import java.net.Socket;
 import java.util.function.Consumer;
 
 public abstract class ConnectionBase {
-    protected Socket socket;
+    protected final Socket socket;
     protected final String targetAddress;
 
     protected Consumer<ReceivedMessage> onNewMessage;

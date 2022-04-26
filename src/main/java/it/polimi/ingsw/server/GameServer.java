@@ -59,6 +59,9 @@ public class GameServer extends Server{
     @Override
     void onUserReconnected(User user) {
         user.getConnection().bindFunction(this::receiveMessage);
+        if (isFull()) {
+            user.getConnection().send(new GameStart());
+        }
     }
 
     @Override

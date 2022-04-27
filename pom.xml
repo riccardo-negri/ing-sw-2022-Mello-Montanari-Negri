@@ -23,6 +23,18 @@
             <version>5.8.2</version>
             <scope>test</scope>
         </dependency>
+        <!-- Jansi is a small java library that allows you to use ANSI escape codes to format your console output -->
+        <dependency>
+            <groupId>org.fusesource.jansi</groupId>
+            <artifactId>jansi</artifactId>
+            <version>2.4.0</version>
+        </dependency>
+        <!-- JLine is a Java library for handling console input. Used here to find terminal window size -->
+        <dependency>
+            <groupId>org.jline</groupId>
+            <artifactId>jline</artifactId>
+            <version>3.9.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -44,6 +56,29 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.1</version>
+            </plugin>
+            <!-- using maven-shade-plugin instead of maven-jar-plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.4.1</version>
+                <executions>
+                    <execution>
+                        <id>Eriantys</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>it.polimi.ingsw.EriantysGame</mainClass>
+                                </transformer>
+                            </transformers>
+                            <finalName>Eriantys</finalName>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

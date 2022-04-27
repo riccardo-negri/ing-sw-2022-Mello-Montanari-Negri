@@ -27,4 +27,6 @@ public abstract class GameState {
         this.game = oldGameState.game;
         this.order = oldGameState.order;
     }
+
+    public Wizard getCurrentPlayer() { return order.get(currentlyPlaying); }
 }

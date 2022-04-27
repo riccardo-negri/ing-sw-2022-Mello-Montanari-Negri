@@ -26,12 +26,12 @@ public class Island {
     public void addStopCard(CharacterFive characterFive) {
         this.characterFive = characterFive;
         stopCard = true;
-        characterFive.removeCard();
+        characterFive.removeOneCard();
     }
 
     public void removeStopCard() {
         stopCard = false;
-        characterFive.returnCard();
+        characterFive.addOneCard();
     }
 
     public boolean isStopCard() { return stopCard; }

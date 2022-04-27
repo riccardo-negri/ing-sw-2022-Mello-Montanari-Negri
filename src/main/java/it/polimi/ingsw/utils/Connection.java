@@ -7,10 +7,11 @@ import java.net.SocketException;
 import java.util.function.Consumer;
 
 public class Connection extends ConnectionBase {
-    private Message lastMessage;
-    private  final Object lastMessageLock = new Object();
+    private MessageContent lastMessage;
+    private Integer messageCount = 0;
+    private final Object messageCountLock = new Object();
 
-    public Connection(Socket socket, Consumer<ReceivedMessage> onNewMessage) {
+    public Connection(Socket socket, Consumer<Connection> onNewMessage) {
         super(socket, onNewMessage);
 
     }
@@ -20,7 +21,7 @@ public class Connection extends ConnectionBase {
 
     }
 
-    public Connection(String address, int port, Consumer<ReceivedMessage> onNewMessage) {
+    public Connection(String address, int port, Consumer<Connection> onNewMessage) {
         super(Connection.createSocket(address, port), onNewMessage);
 
     }
@@ -29,7 +30,7 @@ public class Connection extends ConnectionBase {
         super(Connection.createSocket(address, port), Connection::doNothing);
     }
 
-    static private void doNothing(ReceivedMessage message) {}
+    static private void doNothing(Connection source) {}
 
     static private Socket createSocket(String address, int port) {
         try {
@@ -39,7 +40,7 @@ public class Connection extends ConnectionBase {
         }
     }
 
-    public synchronized void bindFunction(Consumer<ReceivedMessage> onNewMessage) {
+    public synchronized void bindFunction(Consumer<Connection> onNewMessage) {
         this.onNewMessage = onNewMessage;
     }
 
@@ -52,49 +53,52 @@ public class Connection extends ConnectionBase {
                 processMessage(msg);
             } catch (IOException e) {
                 if (e instanceof EOFException) {  // EOF means that the connection was closed from the other end
-                    processMessage(new Disconnected());
+                    processMessageContent(new Disconnected());
                     return;
                 } else if (e instanceof SocketException) {  // SocketException I called close() on this socket
                     return;
                 } else {
                     throw new RuntimeException(e);
                 }
-            } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            }
+            } catch (ClassCastException | ClassNotFoundException ignored) {}
         }
     }
 
     private void processMessage(Message message) {
-        synchronized (this) {
-            onNewMessage.accept(new ReceivedMessage(message, this));
-        }
-        synchronized (lastMessageLock) {
-            lastMessage = message;
-            lastMessageLock.notifyAll();
-        }
+        processMessageContent(message.getContent());
     }
 
-    public Message waitMessage() {
-        return waitMessage(Message.class);
+    private synchronized void processMessageContent(MessageContent message) {
+        lastMessage = message;
+        onNewMessage.accept(this);
+        notifyAll();
     }
 
-    public Message waitMessage(Class filter) {
-        synchronized (lastMessageLock) {
-            while (!filter.isInstance(lastMessage)) {
-                try {
-                    lastMessageLock.wait();
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
+    public MessageContent waitMessage() {
+        return waitMessage(MessageContent.class);
+    }
+
+    public synchronized MessageContent waitMessage(Class filter) {
+        while (!filter.isInstance(lastMessage)) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
-            return lastMessage;
         }
+        return lastMessage;
     }
 
-    public void send(Message message) {
+    public synchronized MessageContent getLastMessage () {
+        return lastMessage;
+    }
+
+    public void send(MessageContent message) {
         try {
-            writer.writeObject(message);
+            synchronized (messageCountLock) {
+                writer.writeObject(new Message(messageCount, message));
+                messageCount++;
+            }
         } catch (IOException ignored) {}
     }
 

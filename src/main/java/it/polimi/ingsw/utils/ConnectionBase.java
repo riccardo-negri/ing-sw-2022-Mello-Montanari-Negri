@@ -10,14 +10,14 @@ public abstract class ConnectionBase {
     protected final Socket socket;
     protected final String targetAddress;
 
-    protected Consumer<ReceivedMessage> onNewMessage;
+    protected Consumer<Connection> onNewMessage;
 
     protected final Thread thread;
 
     protected final ObjectInputStream reader;
     protected final ObjectOutputStream writer;
 
-    public ConnectionBase(Socket socket, Consumer<ReceivedMessage> onNewMessage) {
+    public ConnectionBase(Socket socket, Consumer<Connection> onNewMessage) {
         try {
             this.socket = socket;
             this.targetAddress = String.valueOf(socket.getInetAddress());

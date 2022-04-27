@@ -6,6 +6,7 @@ import it.polimi.ingsw.client.ui.UI;
 import it.polimi.ingsw.client.ui.cli.CoreCLI;
 import it.polimi.ingsw.client.ui.cli.WelcomePageCLI;
 import it.polimi.ingsw.utils.*;
+import it.polimi.ingsw.utils.moves.InitialState;
 
 public class Client {
     private final UI ui;
@@ -56,7 +57,7 @@ public class Client {
         System.out.println(redirect.getPort());
         connection = new Connection(IPAddress, redirect.getPort());
         connection.send(login);
-        connection.waitMessage(GameStart.class);
+        connection.waitMessage(InitialState.class);
         // waiting for players
     }
 

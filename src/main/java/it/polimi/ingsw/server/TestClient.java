@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.utils.*;
+import it.polimi.ingsw.utils.moves.InitialState;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,7 +27,7 @@ public class TestClient {
         connection.close();
         connection = new Connection("localhost", redirect.getPort());
         connection.send(login);
-        connection.waitMessage(GameStart.class);
+        connection.waitMessage(InitialState.class);
         connection.close();
     }
 }

@@ -3,7 +3,6 @@ package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.utils.Connection;
 import it.polimi.ingsw.utils.Login;
-import it.polimi.ingsw.utils.ReceivedMessage;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -98,21 +97,20 @@ public abstract class Server {
 
     abstract void onNewUserConnect(User user, Login info);
 
-    public void userLogin(ReceivedMessage message) {
-        Connection connection = message.getSource();
+    public void userLogin(Connection source) {
         Login login;
         try {
-            login = (Login) message.getContent();
+            login = (Login) source.getLastMessage();
         } catch (ClassCastException e) {
-            connection.close();
-            removeConnecting(connection);
+            source.close();
+            removeConnecting(source);
             return;
         }
         if (usernames().contains(login.getUsername())) {
             for (User u : getConnectedUser()) {
                 if (u.getName().equals(login.getUsername())) {
-                    u.replaceConnection(connection);
-                    removeConnecting(connection);
+                    u.replaceConnection(source);
+                    removeConnecting(source);
                     System.out.println("User " + login.getUsername() + " reconnected");
                     onUserReconnected(u);
                     return;
@@ -120,11 +118,11 @@ public abstract class Server {
             }
         } else {
             if (getConnectedUser().size() < maxUsers) {
-                User user = new User(login.getUsername(), connection);
+                User user = new User(login.getUsername(), source);
                 synchronized (connectedUser) {
                     connectedUser.add(user);
                 }
-                removeConnecting(connection);
+                removeConnecting(source);
                 System.out.println("New user logged in: " + user.getName());
                 onNewUserConnect(user, login);
             }

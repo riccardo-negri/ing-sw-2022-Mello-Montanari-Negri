@@ -3,7 +3,7 @@ package it.polimi.ingsw;
 import it.polimi.ingsw.server.MatchmakingServer;
 import it.polimi.ingsw.server.Server;
 import it.polimi.ingsw.utils.Connection;
-import it.polimi.ingsw.utils.GameStart;
+import it.polimi.ingsw.utils.moves.InitialState;
 import it.polimi.ingsw.utils.Login;
 import it.polimi.ingsw.utils.Redirect;
 
@@ -30,7 +30,7 @@ public class Test1 {
         connection = new Connection("localhost", redirect.getPort());
         connection.send(login);
         if (wait) {
-            connection.waitMessage(GameStart.class);
+            connection.waitMessage(InitialState.class);
             connection.close();
         }
         return connection;

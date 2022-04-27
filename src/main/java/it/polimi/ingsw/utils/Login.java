@@ -1,6 +1,6 @@
 package it.polimi.ingsw.utils;
 
-public class Login extends Message{
+public class Login extends MessageContent {
     final String username;
     final int playerNumber;
     final boolean advancedRules;

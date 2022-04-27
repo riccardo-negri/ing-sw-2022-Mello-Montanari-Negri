@@ -263,7 +263,7 @@ public class BoardUtilsCLI {
         AnsiConsole.out().println(ansi().cursor(startRow+1,startCol).a(InfoR3));
         IntStream.range(0, cards.length).forEach(i -> {
             AnsiConsole.out().println(ansi().cursor(startRow + 2 + i, startCol).a(
-                    MessageFormat.format(InfoR2, "Card n°" + cards[i] + " - " + (cards[i]+1)/2 + " steps", s.repeat(lengthToFill - 17 - Integer.toString(cards[i]).length()))
+                    MessageFormat.format(InfoR2, "Assistant n°" + cards[i] + " - " + (cards[i]+1)/2 + " steps", s.repeat(lengthToFill - 22 - Integer.toString(cards[i]).length()))
             ));
         });
         AnsiConsole.out().println(ansi().cursor(startRow+cards.length+1,startCol).a(InfoR1));

@@ -28,7 +28,7 @@ public class Client {
         else {
             ui = new CoreCLI();
         }
-        nextState = ClientState.BOARD_PAGE;
+        nextState = ClientState.WELCOME_PAGE;
         newState = true;
     }
 

@@ -18,6 +18,8 @@ public class CoreCLI implements UI {
     Scanner scanner = new Scanner(System.in);
 
     public void init () {
+        // https://superuser.com/questions/413073/windows-console-with-ansi-colors-handling
+        // https://github.com/jline/jline3/issues/779
         AnsiConsole.systemInstall();
     }
 

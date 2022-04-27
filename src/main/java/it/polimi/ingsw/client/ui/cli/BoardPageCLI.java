@@ -20,7 +20,6 @@ public class BoardPageCLI extends AbstractWelcomePage {
         cli = (CoreCLI) client.getUI();
 
         cli.clearTerminal();
-        cli.moveCursorToTop();
         AnsiConsole.out().println(ansi().cursor(2,12).a("Dashboard").cursor(2,76).a("Eriantys Board").cursor(2, 151).a("Players"));
         cli.resetCursorColors();
         drawInfoSection(4, 2, "7", "localhost", 50547, "advanced", 4, 3, "Tom", "move students", new String[]{"Clown", "Wizard", "Knight"}, new int[]{3,1,2});

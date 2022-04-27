@@ -1,8 +1,7 @@
 package model.entity.characters;
 
-import model.entity.Bag;
+import model.entity.bag.Bag;
 import model.entity.Game;
-import model.entity.Island;
 import model.entity.Wizard;
 import model.enums.StudentColor;
 

@@ -1,7 +1,6 @@
 package model.entity.characters;
 
-import model.entity.Bag;
-import model.entity.Game;
+import model.entity.bag.Bag;
 import model.entity.Wizard;
 
 public abstract class Character {
@@ -24,7 +23,7 @@ public abstract class Character {
             case 8: return new CharacterNine();
             case 9: return new CharacterTen();
             case 10: return new CharacterEleven(bag);
-            case 11: return null;
+            case 11: return new CharacterTwelve();
             default: return null;
         }
     }

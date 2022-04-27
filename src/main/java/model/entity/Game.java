@@ -1,12 +1,12 @@
 package model.entity;
 
+import model.entity.bag.Bag;
+import model.entity.bag.ClientBag;
+import model.entity.bag.ServerBag;
 import model.entity.characters.Character;
 import model.entity.gameState.GameState;
 import model.entity.gameState.PlanningState;
-import model.enums.GameMode;
-import model.enums.PlayerNumber;
-import model.enums.StudentColor;
-import model.enums.Tower;
+import model.enums.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -38,12 +38,13 @@ public class Game {
      * @param gameMode easy or complete, to activate the character cards
      * @param playerNumber number of players
      */
-    private Game(Integer id, GameMode gameMode, PlayerNumber playerNumber) {
+    private Game(Integer id, GameMode gameMode, PlayerNumber playerNumber, Type type) {
         this.id = id;
         this.gameMode = gameMode;
         this.playerNumber = playerNumber;
+
         Random randomGenerator = new Random();
-        Bag bag = new Bag(randomGenerator);
+        Bag bag = new ServerBag(randomGenerator);
 
         if(gameMode == GameMode.COMPLETE) {
             characters = new Character[3];
@@ -92,28 +93,22 @@ public class Game {
 
     /**
      * Factory method to create a new game
-     * @param gameMode
-     * easy or complete mode
-     * @param playerNumber
-     * two, three or four players
-     * @return
-     * Returns the id of the created match
+     * @param gameMode easy or complete mode
+     * @param playerNumber two, three or four players
+     * @return Returns the id of the created match
      */
-    public static Integer gameEntityFactory(GameMode gameMode, PlayerNumber playerNumber) {
+    public static Integer gameEntityFactory(GameMode gameMode, PlayerNumber playerNumber, Type type) {
         if (gameEntities == null) gameEntities = new ArrayList<Game>();
-        Game game = new Game(idCount, gameMode, playerNumber);
+        Game game = new Game(idCount, gameMode, playerNumber, type);
         gameEntities.add(game);
         return idCount++;
     }
 
     /**
      * Method to retrieve the game object from the game id
-     * @param gameId
-     * game id to retrieve
-     * @return
-     * game object with id
-     * @throws MissingResourceException
-     * if id missing
+     * @param gameId game id to retrieve
+     * @return game object with id
+     * @throws MissingResourceException if id missing
      */
     public static Game request (Integer gameId) throws MissingResourceException, IllegalStateException {
         List <Game> result = gameEntities.stream().filter(x -> x.isGameId(gameId)).collect(Collectors.toList());

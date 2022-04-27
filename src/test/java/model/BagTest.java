@@ -1,12 +1,12 @@
 package model;
 
-import model.entity.Bag;
+import model.entity.bag.Bag;
+import model.entity.bag.ServerBag;
 import model.enums.StudentColor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -15,7 +15,7 @@ public class BagTest {
 
     @BeforeEach
     void setBag() {
-        bag = new Bag(new Random());
+        bag = new ServerBag(new Random());
     }
 
     @Test

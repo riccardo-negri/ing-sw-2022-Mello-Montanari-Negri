@@ -1,5 +1,6 @@
 package model.entity;
 
+import model.entity.bag.Bag;
 import model.enums.PlayerNumber;
 import model.enums.StudentColor;
 
@@ -41,10 +42,8 @@ public class Cloud {
      * @throws Exception if there are not enough students available in the bag
      */
     public void fillCloud() throws Exception{
-        try {
             studentColorList = bag.requestStudents(playerNumber.getCloudSize());
             taken = false;
-        } catch (Exception e) { throw e; }
     }
 
     public boolean isTaken() { return taken; }

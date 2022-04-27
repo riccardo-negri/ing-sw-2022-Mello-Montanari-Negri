@@ -14,7 +14,7 @@ public class CharacterFive extends Character{
     }
 
     public void useEffect(Wizard player, Game game, Island island) throws Exception{
-        if(cardNumber <= 0) throw new Exception("No more stop carda available");
+        if(cardNumber <= 0) throw new Exception("No more stop cards available");
         useCard(player);
         island.addStopCard(this);
     }

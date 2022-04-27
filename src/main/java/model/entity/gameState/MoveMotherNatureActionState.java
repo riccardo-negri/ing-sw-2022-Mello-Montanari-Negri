@@ -18,14 +18,19 @@ public class MoveMotherNatureActionState extends ActionState {
     void moveMotherNature(Wizard player, Integer steps) throws Exception {
         if (player != order.get(currentlyPlaying)) throw new Exception("Wrong player");
 
-        int maximumSteps = player.getCardDeck().getCurrentCard().getSteps();
-        maximumSteps += activatedCharacter instanceof CharacterFour ? 2 : 0;
+        int maximumSteps = getMaximumSteps(player);
         if (steps > maximumSteps) throw new Exception("Too many steps");
 
         game.doMotherNatureSteps(steps);
         game.getFistIslandGroup().updateTower(game, activatedCharacter);
         game.unifyIslands();
         game.updateGameState(new ChooseCloudActionState(this));
+    }
+
+    public int getMaximumSteps(Wizard player) {
+        int maximumSteps = player.getCardDeck().getCurrentCard().getSteps();
+        maximumSteps += activatedCharacter instanceof CharacterFour ? 2 : 0;
+        return maximumSteps;
     }
 
 }

@@ -45,7 +45,9 @@ public class PlanningState extends GameState {
      * @param selected the number of the card to select (1 to 10)
      * @throws Exception wrong player according to the turns, or the card already played
      */
-    public void selectCard (Wizard player, Integer selected) throws Exception{
+    public void selectCard (Wizard player, Integer selected) throws Exception {
+
+        //TODO da rivedere questa classe che non mi sembra abbia molto senso
 
         if (player != order.get(currentlyPlaying)) throw new Exception("Wrong player");
 

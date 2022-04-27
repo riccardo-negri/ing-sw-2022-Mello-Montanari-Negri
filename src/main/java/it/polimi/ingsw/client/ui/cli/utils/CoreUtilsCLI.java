@@ -1,11 +1,6 @@
-package it.polimi.ingsw.client.ui.cli;
+package it.polimi.ingsw.client.ui.cli.utils;
 
-import it.polimi.ingsw.client.Client;
-import it.polimi.ingsw.client.page.AbstractClientState;
-import it.polimi.ingsw.client.page.ClientState;
-import it.polimi.ingsw.client.ui.UI;
 import org.fusesource.jansi.AnsiConsole;
-
 import static org.fusesource.jansi.Ansi.ansi;
 
 import java.util.Arrays;
@@ -14,35 +9,10 @@ import java.util.Scanner;
 import java.util.stream.IntStream;
 import java.util.regex.*;
 
-public class CoreCLI implements UI {
-    Scanner scanner = new Scanner(System.in);
+public class CoreUtilsCLI {
+    private static final Scanner scanner = new Scanner(System.in);
 
-    public void init () {
-        // https://superuser.com/questions/413073/windows-console-with-ansi-colors-handling
-        // https://github.com/jline/jline3/issues/779
-        AnsiConsole.systemInstall();
-    }
-
-    @Override
-    public AbstractClientState getState (Client client, ClientState nextState) {
-        switch (nextState) {
-            case WELCOME_PAGE:
-                return new WelcomePageCLI(client);
-            case START_PAGE:
-                return new StartPageCLI(client);
-            case CONNECTION_PAGE:
-                return new ConnectionPageCLI(client);
-            case GAME_MODE_SELECTION_PAGE:
-                return new GameModeSelectionPageCLI(client);
-            case MATCHMAKING_PAGE:
-                return new MatchmakingPageCLI(client);
-            case BOARD_PAGE:
-                return new BoardPageCLI(client);
-        }
-        return null;
-    }
-
-    public Integer getTerminalWidth () {
+    public static Integer getTerminalWidth () {
         int terminalWidth;
         try {
             terminalWidth = org.jline.terminal.TerminalBuilder.terminal().getWidth();
@@ -52,7 +22,7 @@ public class CoreCLI implements UI {
         }
     }
 
-    public Integer getTerminalHeight () {
+    public static Integer getTerminalHeight () {
         int terminalHeight;
         try {
             terminalHeight = org.jline.terminal.TerminalBuilder.terminal().getHeight();
@@ -63,15 +33,15 @@ public class CoreCLI implements UI {
 
     }
 
-    public void clearTerminal () {
+    public static void clearTerminal () {
         AnsiConsole.out().println(ansi().reset().eraseScreen());
     }
 
-    public void printTerminalCenteredMultilineText (String s) {
+    public static void printTerminalCenteredMultilineText (String s) {
         printTerminalCenteredMultilineText (s, 0);
     }
 
-    public void printTerminalCenteredMultilineText (String s, int expectedFollowingLines) {
+    public static void printTerminalCenteredMultilineText (String s, int expectedFollowingLines) {
         String[] arr = s.split("\n");
         List<String> list = Arrays.asList(arr);
         int startH = getTerminalHeight() / 2 - (list.size()+expectedFollowingLines) / 2;
@@ -89,34 +59,34 @@ public class CoreCLI implements UI {
         );
     }
 
-    public void printTerminalCenteredLine (String s) {
+    public static void printTerminalCenteredLine (String s) {
         printTerminalCenteredLine(s, 0);
     }
 
-    public void printTerminalCenteredLine (String s, int expectedInputSize) {
+    public static void printTerminalCenteredLine (String s, int expectedInputSize) {
         AnsiConsole.out().print(ansi().fgDefault().cursorMove(getTerminalWidth() / 2 - (s.length()+expectedInputSize) / 2, 0).a(s + " ").fgBlue());
     }
 
-    public void moveCursorToEnd () {
+    public static void moveCursorToEnd () {
         AnsiConsole.out().println(ansi().cursor(getTerminalHeight()-1,0));
     }
 
-    public void moveCursorToTop () {
+    public static void moveCursorToTop () {
         AnsiConsole.out().print(ansi().cursor(0,0));
     }
 
-    public void resetCursorColors() {
+    public static void resetCursorColors() {
         AnsiConsole.out().print(ansi().fgDefault().bgDefault());
     }
 
-    public void waitEnterPressed () {
+    public static void waitEnterPressed () {
         try {
             System.in.read();
         } catch (Exception ignored) {
         }
     }
 
-    public Integer readNumber () {
+    public static Integer readNumber () {
         int num;
         try {
             num = Integer.parseInt(scanner.nextLine());
@@ -126,7 +96,7 @@ public class CoreCLI implements UI {
         }
     }
 
-    public void printTopErrorBanner (String warning) {
+    public static void printTopErrorBanner (String warning) {
         AnsiConsole.out().println(ansi().saveCursorPosition());
         AnsiConsole.out().print(ansi().cursor(1,0).eraseLine());
         AnsiConsole.out().println(
@@ -143,7 +113,7 @@ public class CoreCLI implements UI {
         AnsiConsole.out().println(ansi().restoreCursorPosition());
     }
 
-    public String readIPAddress () {
+    public static String readIPAddress () {
         String IPAddress;
         String zeroTo255 = "(\\d{1,2}|(0|1)\\" + "d{2}|2[0-4]\\d|25[0-5])";
         String regex = zeroTo255 + "\\." + zeroTo255 + "\\." + zeroTo255 + "\\." + zeroTo255;
@@ -170,11 +140,11 @@ public class CoreCLI implements UI {
         }
     }
 
-    public String readGenericString (String requestText) {
+    public static String readGenericString (String requestText) {
         return readGenericString(requestText, null);
     }
 
-    public String readGenericString (String requestText, String defaultValue) {
+    public static String readGenericString (String requestText, String defaultValue) {
         String s;
 
         printTerminalCenteredLine(requestText,10);
@@ -197,11 +167,11 @@ public class CoreCLI implements UI {
         }
     }
 
-    public void printEmptyLine() {
+    public static void printEmptyLine() {
         AnsiConsole.out().println();
     }
 
-    public int readNumber(String requestText, int minValue, int maxValue, Integer defaultValue) {
+    public static int readNumber(String requestText, int minValue, int maxValue, Integer defaultValue) {
         int num;
         printTerminalCenteredLine(requestText,5);
         try {
@@ -232,7 +202,7 @@ public class CoreCLI implements UI {
         }
     }
 
-    public boolean readBoolean(String requestText) {
+    public static boolean readBoolean(String requestText) {
         String read;
         printTerminalCenteredLine(requestText,10);
         read = scanner.nextLine();

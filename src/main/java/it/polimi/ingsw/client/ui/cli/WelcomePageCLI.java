@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.ui.cli;
 
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.page.AbstractWelcomePage;
+import static it.polimi.ingsw.client.ui.cli.utils.CoreUtilsCLI.*;
 
 public class WelcomePageCLI extends AbstractWelcomePage {
 
@@ -26,12 +27,10 @@ public class WelcomePageCLI extends AbstractWelcomePage {
                 "██╔══╝  ██╔══██╗██║██╔══██║██║╚██╗██║   ██║     ╚██╔╝  ╚════██║\n" +
                 "███████╗██║  ██║██║██║  ██║██║ ╚████║   ██║      ██║   ███████║\n" +
                 "╚══════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝   ╚═╝      ╚═╝   ╚══════╝\n";
-        CoreCLI cli = (CoreCLI) client.getUI();
-
-        cli.clearTerminal();
-        cli.printTerminalCenteredMultilineText(WELCOME_TO + "\n" + ERIANTYS + "\nMade by Pietro Mello Rella, Tommaso Montanari and Riccardo Negri\n" + "\nPress enter to continue...");
-        cli.moveCursorToEnd();
-        cli.waitEnterPressed();
+        clearTerminal();
+        printTerminalCenteredMultilineText(WELCOME_TO + "\n" + ERIANTYS + "\nMade by Pietro Mello Rella, Tommaso Montanari and Riccardo Negri\n" + "\nPress enter to continue...");
+        moveCursorToEnd();
+        waitEnterPressed();
         onEnd();
     }
 }

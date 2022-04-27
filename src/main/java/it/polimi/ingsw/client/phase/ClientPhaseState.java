@@ -1,7 +1,9 @@
 package it.polimi.ingsw.client.phase;
 
 public enum ClientPhaseState {
-    WAITING,
-    PLAY_CARD,
-    PUT_STUDENT
+    WAIT,
+    MOVE_MOTHER_NATURE,
+    MOVE_STUDENT,
+    PLAY_ASSISTANT,
+    TAKE_FROM_CLOUD
 }

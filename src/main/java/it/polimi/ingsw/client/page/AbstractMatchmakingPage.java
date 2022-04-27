@@ -10,6 +10,7 @@ public abstract class AbstractMatchmakingPage extends AbstractClientState {
     }
 
     public void onEnd() {
+        client.setupConnection();
         client.setNextState(BOARD_PAGE);
     }
 }

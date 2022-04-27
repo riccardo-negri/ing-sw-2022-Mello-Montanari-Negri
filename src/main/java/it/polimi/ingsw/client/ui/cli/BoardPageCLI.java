@@ -3,9 +3,8 @@ package it.polimi.ingsw.client.ui.cli;
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.page.AbstractWelcomePage;
 import org.fusesource.jansi.AnsiConsole;
-
-import static it.polimi.ingsw.client.ui.cli.BoardUtilsCLI.*;
-import static it.polimi.ingsw.client.ui.cli.BoardUtilsCLI.getSchoolBoardHeight;
+import static it.polimi.ingsw.client.ui.cli.utils.BoardUtilsCLI.*;
+import static it.polimi.ingsw.client.ui.cli.utils.CoreUtilsCLI.*;
 import static org.fusesource.jansi.Ansi.ansi;
 
 public class BoardPageCLI extends AbstractWelcomePage {
@@ -16,17 +15,15 @@ public class BoardPageCLI extends AbstractWelcomePage {
 
     @Override
     public void draw (Client client) {
-        CoreCLI cli;
-        cli = (CoreCLI) client.getUI();
 
-        cli.clearTerminal();
+        clearTerminal();
         AnsiConsole.out().println(ansi().cursor(2,12).a("Dashboard").cursor(2,76).a("Eriantys Board").cursor(2, 151).a("Players"));
-        cli.resetCursorColors();
+        resetCursorColors();
         drawInfoSection(4, 2, "7", "localhost", 50547, "advanced", 4, 3, "Tom", "move students", new String[]{"Clown", "Wizard", "Knight"}, new int[]{3,1,2});
         drawTilesAndClouds(45, 3);
         drawPlayers(135, 4);
-        cli.moveCursorToEnd();
-        cli.waitEnterPressed();
+        moveCursorToEnd();
+        waitEnterPressed();
     }
 
     private void drawPlayers(int startX, int startY) {

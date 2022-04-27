@@ -3,7 +3,7 @@ package it.polimi.ingsw.client;
 import it.polimi.ingsw.client.page.AbstractClientState;
 import it.polimi.ingsw.client.page.ClientState;
 import it.polimi.ingsw.client.ui.UI;
-import it.polimi.ingsw.client.ui.cli.CoreCLI;
+import it.polimi.ingsw.client.ui.cli.CLI;
 import it.polimi.ingsw.client.ui.cli.WelcomePageCLI;
 import it.polimi.ingsw.utils.*;
 import it.polimi.ingsw.utils.moves.InitialState;
@@ -27,7 +27,7 @@ public class Client {
             ui = null;
         }
         else {
-            ui = new CoreCLI();
+            ui = new CLI();
         }
         nextState = ClientState.WELCOME_PAGE;
         newState = true;

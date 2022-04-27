@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.ui.cli;
 
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.page.AbstractMatchmakingPage;
+import static it.polimi.ingsw.client.ui.cli.utils.CoreUtilsCLI.*;
 
 public class MatchmakingPageCLI extends AbstractMatchmakingPage {
     public MatchmakingPageCLI (Client client) {
@@ -17,13 +18,11 @@ public class MatchmakingPageCLI extends AbstractMatchmakingPage {
                 "██║╚██╔╝██║██╔══██║   ██║   ██║     ██╔══██║██║╚██╔╝██║██╔══██║██╔═██╗ ██║██║╚██╗██║██║   ██║\n" +
                 "██║ ╚═╝ ██║██║  ██║   ██║   ╚██████╗██║  ██║██║ ╚═╝ ██║██║  ██║██║  ██╗██║██║ ╚████║╚██████╔╝\n" +
                 "╚═╝     ╚═╝╚═╝  ╚═╝   ╚═╝    ╚═════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝ \n";
-        CoreCLI cli = (CoreCLI) client.getUI();
 
-        cli.clearTerminal();
-        cli.printTerminalCenteredMultilineText(GAME_MODE, 1);
-        cli.printEmptyLine();
-        cli.printTerminalCenteredLine("You are currently in queue to join a game...");
-        //cli.waitKeyPressed();
+        clearTerminal();
+        printTerminalCenteredMultilineText(GAME_MODE, 1);
+        printEmptyLine();
+        printTerminalCenteredLine("You are currently in queue to join a game...");
         onEnd();
     }
 }

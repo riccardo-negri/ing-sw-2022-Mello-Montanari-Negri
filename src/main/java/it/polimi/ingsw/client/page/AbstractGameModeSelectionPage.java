@@ -14,7 +14,6 @@ public abstract class AbstractGameModeSelectionPage extends AbstractClientState 
     public void onEnd(int playerNumber, boolean isAdvancedGame) {
         client.setPlayerNumber(playerNumber);
         client.setAdvancedGame(isAdvancedGame);
-        client.setupConnection();
         client.setNextState(MATCHMAKING_PAGE);
     }
 }

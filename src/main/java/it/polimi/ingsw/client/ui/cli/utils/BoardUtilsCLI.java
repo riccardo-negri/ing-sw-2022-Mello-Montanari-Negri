@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.ui.cli;
+package it.polimi.ingsw.client.ui.cli.utils;
 
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;

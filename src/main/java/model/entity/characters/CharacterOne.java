@@ -1,5 +1,6 @@
 package model.entity.characters;
 
+import model.entity.IslandGroup;
 import model.entity.bag.Bag;
 import model.entity.Game;
 import model.entity.Island;
@@ -21,14 +22,36 @@ public class CharacterOne extends Character{
         } catch (Exception e) {}
     }
 
-    public List<StudentColor> getStudentColorList() { return studentColorList; }
-
-    public void useEffect(Wizard player, Game game, StudentColor request, Island island) throws Exception{
-        if (!studentColorList.contains(request)) throw new Exception("Student color not present on the card");
+    /**
+     * take one student and put it on a chosen island, then refill the island from the bag
+     * @param player the player playing the card
+     * @param game the current game
+     * @param studentColor the color of the student to take
+     * @param island the island to put the student on
+     */
+    public void useEffect(Wizard player, Game game, StudentColor studentColor, Island island) throws Exception{
+        characterOneValidator(player, game, studentColor, island);
         useCard(player);
-        studentColorList.remove(request);
-        island.putIslandStudent(request);
+        studentColorList.remove(studentColor);
+        island.putIslandStudent(studentColor);
         studentColorList.addAll(bag.requestStudents(1));
-
     }
+
+    /**
+     * Validator for character one useEffect method
+     * @param player the player playing the card
+     * @param game the current game
+     * @param studentColor the color of the student to take
+     * @param island the island to put the student on
+     * @throws Exception if it is not the player turn, he does not have enough money to activate the card,
+     * the card does not contain the student asked or the island does not exist
+     */
+    public void characterOneValidator (Wizard player, Game game, StudentColor studentColor, Island island) throws Exception{
+        characterValidator(player, game);
+        if (!studentColorList.contains(studentColor)) throw new Exception("Student color not present on the card");
+        if (game.getIslandGroupList().stream().flatMap(x -> x.getIslandList().stream()).noneMatch(x -> x == island))
+            throw new Exception("Island does not exist");
+    }
+
+    public List<StudentColor> getStudentColorList() { return studentColorList; }
 }

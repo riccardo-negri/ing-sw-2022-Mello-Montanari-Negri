@@ -36,7 +36,7 @@ public class Wizard {
 
     public CardDeck getCardDeck() { return cardDeck; }
 
-    public boolean takeEntranceStudent (StudentColor studentColor) { return entranceStudents.remove(studentColor); }
+    public void takeEntranceStudent (StudentColor studentColor) { entranceStudents.remove(studentColor); }
 
     public void putDiningStudent (StudentColor studentColor) { if(++diningStudents[studentColor.getValue()] % 3 == 0) money++; }
 
@@ -53,6 +53,8 @@ public class Wizard {
         if (price > money) throw new Exception("Not enough money to activate the effect");
         money -= price;
     }
+
+    public Integer getMoney() { return money; }
 
     public Integer getDiningStudents (StudentColor studentColor) { return diningStudents[studentColor.getValue()]; }
 

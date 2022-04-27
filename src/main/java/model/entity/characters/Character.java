@@ -1,7 +1,9 @@
 package model.entity.characters;
 
+import model.entity.Game;
 import model.entity.bag.Bag;
 import model.entity.Wizard;
+import model.entity.gameState.ActionState;
 
 public abstract class Character {
 
@@ -34,10 +36,21 @@ public abstract class Character {
     }
 
     protected void useCard(Wizard player) throws Exception{
-        if(used) player.payEffect(price+1);
-        else player.payEffect(price);
+        player.payEffect(price + (used ? 1 : 0));
         activator = player;
         used = true;
+    }
+
+    /**
+     * Validator for all the character useEffect
+     * @param player the player using the effect
+     * @throws Exception if it is not the player turn, or he does not have enough money to activate the card
+     */
+    protected void characterValidator (Wizard player, Game game) throws Exception {
+        if (game.getGameState().getCurrentPlayer() != player)
+            throw new Exception("Wrong player");
+        if (price + (used ? 1 : 0) > player.getMoney())
+            throw new Exception("Not enough money to activate the effect");
     }
 
     public Wizard getActivator() { return activator; }

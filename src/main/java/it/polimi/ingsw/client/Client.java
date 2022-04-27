@@ -31,6 +31,7 @@ public class Client {
         }
         nextState = ClientState.WELCOME_PAGE;
         newState = true;
+
     }
 
     public void start() {

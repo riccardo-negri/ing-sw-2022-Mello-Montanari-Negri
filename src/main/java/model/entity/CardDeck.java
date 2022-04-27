@@ -34,5 +34,9 @@ public class CardDeck {
         assistantCards.remove(currentCard);
     }
 
+    public boolean checkAvailableCards(List<Integer> cards) {
+        return assistantCards.stream().map(AssistantCard::getNumber).anyMatch(x -> ! cards.contains(x));
+    }
+
     public AssistantCard getCurrentCard() { return currentCard; }
 }

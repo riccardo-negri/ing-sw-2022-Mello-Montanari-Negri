@@ -1,9 +1,11 @@
 package model.entity.gameState;
 
+import model.entity.AssistantCard;
 import model.entity.Cloud;
 import model.entity.Game;
 import model.entity.Wizard;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -47,9 +49,7 @@ public class PlanningState extends GameState {
      */
     public void selectCard (Wizard player, Integer selected) throws Exception {
 
-        //TODO da rivedere questa classe che non mi sembra abbia molto senso
-
-        if (player != order.get(currentlyPlaying)) throw new Exception("Wrong player");
+        validateCardSelection(player, selected);
 
         order.get(currentlyPlaying).getCardDeck().playCard(selected);
 
@@ -66,5 +66,22 @@ public class PlanningState extends GameState {
 
             game.updateGameState(new MoveStudentActionState(this));
         }
+    }
+
+    /**
+     * Validation of card selection by player
+     * @param player the player who is selectiong the cart
+     * @param selected the number of the card to select (1 to 10)
+     * @throws Exception wrong player according to the turns, or the card already played
+     */
+    public void validateCardSelection(Wizard player, Integer selected) throws Exception {
+        if (player != order.get(currentlyPlaying)) throw new Exception("Wrong player");
+
+        List<Integer> cardNumbers = new ArrayList<>();
+        for (int i=0; i<currentlyPlaying; i++)
+            cardNumbers.add(player.getCardDeck().getCurrentCard().getNumber());
+        if (cardNumbers.contains(selected) && player.getCardDeck().checkAvailableCards(cardNumbers))
+            throw new Exception("Card already played with valid alternatives");
+
     }
 }

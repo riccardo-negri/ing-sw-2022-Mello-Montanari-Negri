@@ -10,7 +10,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build_and_test:
+  build-and-test:
 
     runs-on: ubuntu-latest
 
@@ -29,7 +29,7 @@ jobs:
   
       runs-on: ubuntu-latest
       
-      needs: [build_and_test]
+      needs: [build-and-test]
       
       steps:
         - uses: actions/checkout@v3
@@ -40,8 +40,7 @@ jobs:
             distribution: 'temurin'
             cache: maven
         - run: mvn -B package --file pom.xml -DskipTests
-        - run: mkdir staging && cp target/Eriantys.jar staging
         - uses: actions/upload-artifact@v3
           with:
-            name: Eriantys
-            path: staging
+            name: Eriantys.jar
+            path: target/Eriantys.jar

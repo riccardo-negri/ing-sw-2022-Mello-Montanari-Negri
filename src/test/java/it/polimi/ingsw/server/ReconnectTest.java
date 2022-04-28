@@ -1,14 +1,14 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.server;
 
-import it.polimi.ingsw.server.MatchmakingServer;
-import it.polimi.ingsw.server.Server;
 import it.polimi.ingsw.utils.Connection;
 import it.polimi.ingsw.utils.moves.InitialState;
 import it.polimi.ingsw.utils.Login;
 import it.polimi.ingsw.utils.Redirect;
+import org.junit.jupiter.api.Test;
 
-public class Test1 {
-    public static void main(String[] args) {
+public class ReconnectTest {
+    @Test
+    void startTest() {
         Server s = new MatchmakingServer();
         new Thread(s::run).start();
         Login l1 = new Login("tommaso", 2, true);
@@ -18,9 +18,10 @@ public class Test1 {
         c.close();
         enterGame(l1, true);
         System.out.println("fine");
+        s.stop();
     }
 
-    static Connection enterGame(Login login, boolean wait) {
+    Connection enterGame(Login login, boolean wait) {
         Connection connection = new Connection("localhost", 50000);
         connection.send(login);
         Redirect redirect = (Redirect) connection.waitMessage(Redirect.class);

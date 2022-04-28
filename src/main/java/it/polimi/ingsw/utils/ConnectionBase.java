@@ -4,26 +4,31 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.function.Consumer;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
 
 public abstract class ConnectionBase {
     protected final Socket socket;
     protected final String targetAddress;
 
-    protected Consumer<Connection> onNewMessage;
+    protected Predicate<Connection> acceptMessage;
+
+    protected final List<MessageContent> messages;
 
     protected final Thread thread;
 
     protected final ObjectInputStream reader;
     protected final ObjectOutputStream writer;
 
-    public ConnectionBase(Socket socket, Consumer<Connection> onNewMessage) {
+    public ConnectionBase(Socket socket, Predicate<Connection> acceptMessage) {
         try {
             this.socket = socket;
             this.targetAddress = String.valueOf(socket.getInetAddress());
-            this.onNewMessage = onNewMessage;
+            this.acceptMessage = acceptMessage;
             writer = new ObjectOutputStream(socket.getOutputStream());
             reader = new ObjectInputStream(socket.getInputStream());
+            messages = new ArrayList<>();
             thread = new Thread(this::listenMessages);
             thread.start();
         } catch (IOException e) {

@@ -27,7 +27,7 @@ public class GameServer extends Server{
 
     }
 
-    void receiveMessage(Connection source) {
+    boolean receiveMessage(Connection source) {
         MessageContent message = source.getLastMessage();
         if (message instanceof Disconnected) {
             User user = userFromConnection(source);
@@ -37,8 +37,9 @@ public class GameServer extends Server{
             ((Move) message).applyEffect();
             broadcast(message);
         } else {
-            throw new RuntimeException("Unknown message");
+            throw new RuntimeException("Unknown message" + message);
         }
+        return true;
     }
 
     void broadcast(MessageContent message) {

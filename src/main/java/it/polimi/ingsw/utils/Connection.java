@@ -4,15 +4,15 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.function.Consumer;
+import java.util.List;
+import java.util.function.Predicate;
 
 public class Connection extends ConnectionBase {
-    private MessageContent lastMessage;
     private Integer messageCount = 0;
     private final Object messageCountLock = new Object();
 
-    public Connection(Socket socket, Consumer<Connection> onNewMessage) {
-        super(socket, onNewMessage);
+    public Connection(Socket socket, Predicate<Connection> acceptMessage) {
+        super(socket, acceptMessage);
 
     }
 
@@ -21,8 +21,8 @@ public class Connection extends ConnectionBase {
 
     }
 
-    public Connection(String address, int port, Consumer<Connection> onNewMessage) {
-        super(Connection.createSocket(address, port), onNewMessage);
+    public Connection(String address, int port, Predicate<Connection> acceptMessage) {
+        super(Connection.createSocket(address, port), acceptMessage);
 
     }
 
@@ -30,7 +30,7 @@ public class Connection extends ConnectionBase {
         super(Connection.createSocket(address, port), Connection::doNothing);
     }
 
-    static private void doNothing(Connection source) {}
+    static private boolean doNothing(Connection source) {return false;}
 
     static private Socket createSocket(String address, int port) {
         try {
@@ -40,8 +40,8 @@ public class Connection extends ConnectionBase {
         }
     }
 
-    public synchronized void bindFunction(Consumer<Connection> onNewMessage) {
-        this.onNewMessage = onNewMessage;
+    public synchronized void bindFunction(Predicate<Connection> acceptMessage) {
+        this.acceptMessage = acceptMessage;
     }
 
     protected void listenMessages() {
@@ -69,8 +69,10 @@ public class Connection extends ConnectionBase {
     }
 
     private synchronized void processMessageContent(MessageContent message) {
-        lastMessage = message;
-        onNewMessage.accept(this);
+        messages.add(message);
+        if(acceptMessage.test(this)) {
+            removeLastMessage();  // remove the only message accessible by acceptMessage
+        }
         notifyAll();
     }
 
@@ -79,18 +81,34 @@ public class Connection extends ConnectionBase {
     }
 
     public synchronized MessageContent waitMessage(Class filter) {
-        while (!filter.isInstance(lastMessage)) {
+        for (MessageContent m: messages) {  // if message was received before the call of waitMessage
+            if(!filter.isInstance(m)) {
+                return m;
+            }
+        }
+        while (!filter.isInstance(getLastMessage())) {  // if no compatible found wait for one
             try {
                 wait();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         }
-        return lastMessage;
+        MessageContent result = getLastMessage();
+        removeLastMessage();
+        return result;
     }
 
     public synchronized MessageContent getLastMessage () {
-        return lastMessage;
+        if (messages.size() > 0) {
+            return messages.get(messages.size() - 1);
+        }
+        return null;
+    }
+
+    private synchronized void removeLastMessage() {
+        if (messages.size() > 0) {
+            messages.remove(messages.size() - 1);
+        }
     }
 
     public void send(MessageContent message) {

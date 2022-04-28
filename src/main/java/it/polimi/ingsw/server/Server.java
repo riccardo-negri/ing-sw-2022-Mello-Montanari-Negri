@@ -97,14 +97,14 @@ public abstract class Server {
 
     abstract void onNewUserConnect(User user, Login info);
 
-    public void userLogin(Connection source) {
+    public boolean userLogin(Connection source) {
         Login login;
         try {
             login = (Login) source.getLastMessage();
         } catch (ClassCastException e) {
             source.close();
             removeConnecting(source);
-            return;
+            return false;
         }
         if (usernames().contains(login.getUsername())) {
             for (User u : getConnectedUser()) {
@@ -113,7 +113,7 @@ public abstract class Server {
                     removeConnecting(source);
                     System.out.println("User " + login.getUsername() + " reconnected");
                     onUserReconnected(u);
-                    return;
+                    return true;
                 }
             }
         } else {
@@ -127,6 +127,7 @@ public abstract class Server {
                 onNewUserConnect(user, login);
             }
         }
+        return true;
     }
 
     public User userFromConnection(Connection connection) {

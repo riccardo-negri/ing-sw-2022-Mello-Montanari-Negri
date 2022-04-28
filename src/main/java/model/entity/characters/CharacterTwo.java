@@ -19,7 +19,6 @@ public class CharacterTwo extends Character{
         characterTwoValidator(player, game);
         useCard(player);
         ((ActionState) game.getGameState()).activateEffect(this);
-        activator = player;
     }
 
     /**

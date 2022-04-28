@@ -20,7 +20,7 @@ public class CharacterFive extends Character{
      * @param island the island to put the student on
      */
     public void useEffect(Wizard player, Game game, Island island) throws Exception{
-
+        characterFiveValidator(player, game, island);
         useCard(player);
         island.addStopCard(this);
     }

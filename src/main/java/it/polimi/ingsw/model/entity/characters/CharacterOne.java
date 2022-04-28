@@ -1,24 +1,35 @@
 package it.polimi.ingsw.model.entity.characters;
 
+import com.google.gson.JsonObject;
 import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Island;
 import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.entity.bag.Bag;
 import it.polimi.ingsw.model.enums.StudentColor;
+import netscape.javascript.JSObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CharacterOne extends Character{
 
-    private final Bag bag;
+    private final transient Bag bag;
     private List<StudentColor> studentColorList;
 
-    public CharacterOne(Bag bag) {
-        super(1);
+    public CharacterOne(Integer characterId, Bag bag) {
+        super(characterId,1);
         this.bag = bag;
-        try {
-            studentColorList = bag.requestStudents(4);
+        try { studentColorList = bag.requestStudents(4);
         } catch (Exception e) {}
+    }
+
+    public CharacterOne(JsonObject jsonObject) {
+        super(1, 1);
+        this.bag = null;    //TODO da sistemare questione bag
+        studentColorList = new ArrayList<>();
+        jsonObject.get("studentColorList").getAsJsonArray().iterator()
+                .forEachRemaining(x -> studentColorList.add(StudentColor.valueOf(x.toString().substring(1,-1))));
+        System.out.println(studentColorList);
     }
 
     /**

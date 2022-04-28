@@ -3,16 +3,16 @@ package it.polimi.ingsw.model.entity.bag;
 import it.polimi.ingsw.model.enums.StudentColor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 public class ServerBag extends Bag {
 
-    private final Random randomGenerator;
-    private StudentColor chooseClient;
+    private final transient Random randomGenerator;
     private List<StudentColor> recentlySelected;
     protected final Integer[] colorNumber;
-    protected Integer total;
+    protected transient Integer total;
 
     public ServerBag(Random randomGenerator) {
         colorNumber = new Integer[5];
@@ -21,6 +21,14 @@ public class ServerBag extends Bag {
         total = 130;
         this.randomGenerator = randomGenerator;
         recentlySelected = new ArrayList<>();
+    }
+
+    public ServerBag(Integer[] colorNumber, List<StudentColor> studentColorList) {
+        randomGenerator = new Random();
+        this.colorNumber = colorNumber;
+        total = 0;
+        Arrays.stream(colorNumber).forEach(x -> total += x);
+        recentlySelected = studentColorList;
     }
 
     /**

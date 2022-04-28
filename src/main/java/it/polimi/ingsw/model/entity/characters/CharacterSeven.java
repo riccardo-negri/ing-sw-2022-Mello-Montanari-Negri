@@ -11,8 +11,8 @@ public class CharacterSeven extends Character{
 
     private List<StudentColor> studentColorList;
 
-    public CharacterSeven (Bag bag) {
-        super(1);
+    public CharacterSeven (Integer characterId, Bag bag) {
+        super(characterId, 1);
         try { studentColorList = bag.requestStudents(6);
         } catch (Exception e) { }
 

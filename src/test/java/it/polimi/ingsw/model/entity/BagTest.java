@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.model.entity;
 
 import it.polimi.ingsw.model.entity.bag.Bag;
 import it.polimi.ingsw.model.entity.bag.ServerBag;

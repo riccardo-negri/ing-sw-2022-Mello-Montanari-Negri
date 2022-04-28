@@ -7,7 +7,7 @@ import it.polimi.ingsw.model.entity.bag.Bag;
 import java.util.List;
 
 public class Cloud {
-    private final Bag bag;
+    private transient Bag bag;
     private final PlayerNumber playerNumber;
     private List<StudentColor> studentColorList;
     private boolean taken;
@@ -25,6 +25,8 @@ public class Cloud {
     public List<StudentColor> getCloudContent() {
         return studentColorList;
     }
+
+    protected void setBag(Bag bag) { this.bag = bag; }
 
     /**
      * to take the student from the cloud at the end of the Action State

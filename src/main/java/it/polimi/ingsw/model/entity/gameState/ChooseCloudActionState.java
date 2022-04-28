@@ -7,6 +7,7 @@ public class ChooseCloudActionState extends ActionState{
 
     protected ChooseCloudActionState(GameState oldState){
         super(oldState);
+        gameState = "CIS";
     }
 
     /**

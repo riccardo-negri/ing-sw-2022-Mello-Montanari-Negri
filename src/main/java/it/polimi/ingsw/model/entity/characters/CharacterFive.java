@@ -6,11 +6,11 @@ import it.polimi.ingsw.model.entity.Wizard;
 
 public class CharacterFive extends Character{
 
-    private Integer cardNumber;
+    private Integer stopNumber;
 
-    public CharacterFive() {
-        super(2);
-        cardNumber = 4;
+    public CharacterFive(Integer characterId) {
+        super(characterId, 2);
+        stopNumber = 4;
     }
 
     /**
@@ -35,12 +35,12 @@ public class CharacterFive extends Character{
      */
     public void characterFiveValidator(Wizard player, Game game, Island island) throws Exception {
         characterValidator(player, game);
-        if(cardNumber <= 0) throw new Exception("No more stop cards available");
+        if(stopNumber <= 0) throw new Exception("No more stop cards available");
         if (game.getIslandGroupList().stream().flatMap(x -> x.getIslandList().stream()).noneMatch(x -> x == island))
             throw new Exception("Island does not exist");
     }
 
-    public void removeOneCard() { cardNumber -= 1; }
+    public void removeOneCard() { stopNumber -= 1; }
 
-    public void addOneCard() { cardNumber += 1; }
+    public void addOneCard() { stopNumber += 1; }
 }

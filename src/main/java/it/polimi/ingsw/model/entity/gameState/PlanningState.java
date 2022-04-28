@@ -18,9 +18,9 @@ public class PlanningState extends GameState {
      */
     public PlanningState (Game game, List<Wizard> wizardList, Random randomGenerator) {
         super(wizardList, game);
+        gameState = "PS";
         Collections.shuffle(order, randomGenerator);
-        try {
-            for(Cloud c : game.getCloudList()) c.fillCloud();
+        try { for(Cloud c : game.getCloudList()) c.fillCloud();
         } catch (Exception e) {
             //TODO codice per gestire la fine degli studenti nella bag, condizione di fine partita
         }
@@ -32,8 +32,8 @@ public class PlanningState extends GameState {
      */
     public PlanningState(GameState oldState) {
         super(oldState);
-        try {
-            for(Cloud c : game.getCloudList()) c.fillCloud();
+        gameState = "PS";
+        try { for(Cloud c : game.getCloudList()) c.fillCloud();
         } catch (Exception e) {
             //TODO codice per gestire la fine degli studenti nella bag, condizione di fine partita
         }
@@ -46,24 +46,10 @@ public class PlanningState extends GameState {
      * @throws Exception wrong player according to the turns, or the card already played
      */
     public void selectCard (Wizard player, Integer selected) throws Exception {
-
         cardSelectionValidator(player, selected);
-
         order.get(currentlyPlaying).getCardDeck().playCard(selected);
-
         currentlyPlaying++;
-
-        if (currentlyPlaying == order.size()) {
-            order.stream().sorted((x,y) -> {
-                int valX = x.getCardDeck().getCurrentCard().getNumber();
-                int valY = y.getCardDeck().getCurrentCard().getNumber();
-                if(valX > valY) return 1;
-                else if (valX < valY) return -1;
-                else return 0;
-            });
-
-            game.updateGameState(new MoveStudentActionState(this));
-        }
+        checkState();
     }
 
     /**
@@ -80,6 +66,21 @@ public class PlanningState extends GameState {
             cardNumbers.add(player.getCardDeck().getCurrentCard().getNumber());
         if (cardNumbers.contains(selected) && player.getCardDeck().checkAvailableCards(cardNumbers))
             throw new Exception("Card already played with valid alternatives");
+    }
 
+    /**
+     * checks if all the players chose their assistant card already
+     */
+    private void checkState() {
+        if (currentlyPlaying == order.size()) {
+            order.stream().sorted((x,y) -> {
+                int valX = x.getCardDeck().getCurrentCard().getNumber();
+                int valY = y.getCardDeck().getCurrentCard().getNumber();
+                if(valX > valY) return 1;
+                else if (valX < valY) return -1;
+                else return 0;
+            });
+            game.updateGameState(new MoveStudentActionState(this));
+        }
     }
 }

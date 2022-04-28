@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.entity;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import it.polimi.ingsw.model.enums.*;
 import it.polimi.ingsw.model.entity.bag.Bag;
 import it.polimi.ingsw.model.entity.bag.ServerBag;
@@ -7,6 +9,7 @@ import it.polimi.ingsw.model.entity.characters.Character;
 import it.polimi.ingsw.model.entity.gameState.GameState;
 import it.polimi.ingsw.model.entity.gameState.PlanningState;
 
+import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -15,7 +18,7 @@ import java.util.stream.Collectors;
  * Main class of the single game, with a factory method to create a new game
  * The objects in the class are saved into a static list, and can be retrieved from their id
  */
-public class Game {
+public class Game implements Serializable {
 
     private static Integer idCount = 0;
     private static List<Game> gameEntities;
@@ -28,6 +31,7 @@ public class Game {
     private final List<IslandGroup> islandGroupList;
     private final List<Cloud> cloudList;
     private final Character[] characters;
+    private final Bag bag;
 
     private GameState gameState;
 
@@ -43,7 +47,7 @@ public class Game {
         this.playerNumber = playerNumber;
 
         Random randomGenerator = new Random();
-        Bag bag = new ServerBag(randomGenerator);
+        this.bag = new ServerBag(randomGenerator);
 
         if(gameMode == GameMode.COMPLETE) {
             characters = new Character[3];
@@ -70,8 +74,8 @@ public class Game {
         islandGroupList = new LinkedList<>();
         for(int i=0; i<12; i++) {
             try {
-                islandGroupList.add(new IslandGroup(bag.requestStudents((i == 0 || i == 6) ? 0 : 1)));
-            } catch (Exception e) { System.err.println("Error creating islang group"); }
+                islandGroupList.add(new IslandGroup(bag.requestStudents((i == 0 || i == 6) ? 0 : 1),i));
+            } catch (Exception e) { System.err.println("Error creating island group"); }
         }
 
         cloudList = new ArrayList<>();
@@ -101,6 +105,53 @@ public class Game {
         Game game = new Game(idCount, gameMode, playerNumber, type);
         gameEntities.add(game);
         return idCount++;
+    }
+
+    /**
+     * Method to serialize a game, and save it to the disk
+     * @return string of the serialization
+     * @throws Exception if the directory can't be reached
+     */
+    public String serializeGame() throws Exception {
+        Gson gson = new Gson();
+        String out = gson.toJson(this, Game.class);
+        BufferedWriter writer = new BufferedWriter(new FileWriter("./data/game_" + this.id + ".json"));
+        writer.write(out);
+        writer.close();
+        return out;
+    }
+
+    /**
+     * Method to deserialize a game from a file
+     * @param fileName name of the file in the disk
+     * @return the index of the game
+     * @throws Exception if the file can't be found, or the index of the game already exists
+     */
+    public static Integer deserializeGame(String fileName) throws Exception {
+
+        if(JsonDeserializerClass.getGson() == null) {
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            JsonDeserializerClass.BagDeserializer bagDeserializer = new JsonDeserializerClass.BagDeserializer();
+            gsonBuilder.registerTypeAdapter(Bag.class, bagDeserializer);
+            JsonDeserializerClass.CharacterDeserializer characterDeserializer = new JsonDeserializerClass.CharacterDeserializer();
+            gsonBuilder.registerTypeAdapter(Character.class, characterDeserializer);
+            JsonDeserializerClass.GameStateDeserializer gameStateDeserializer = new JsonDeserializerClass.GameStateDeserializer();
+            gsonBuilder.registerTypeAdapter(GameState.class, gameStateDeserializer);
+            Gson customGson = gsonBuilder.create();
+            JsonDeserializerClass.setGson(customGson);
+        }
+        if (gameEntities == null) gameEntities = new ArrayList<>();
+
+        BufferedReader reader = new BufferedReader(new FileReader(fileName));
+        String in = reader.readLine();
+        reader.close();
+
+        Game newGame = JsonDeserializerClass.getGson().fromJson(in, Game.class);
+        if(gameEntities.stream().filter(x -> x.isGameId(newGame.id)).count() != 0) throw new Exception("Game already present");
+        newGame.getCloudList().stream().forEach(x -> x.setBag(newGame.bag));
+        newGame.getGameState().setGame(newGame);
+        Game.gameEntities.add(newGame);
+        return newGame.id;
     }
 
     /**
@@ -157,4 +208,6 @@ public class Game {
     private boolean isGameId(Integer id) { return id.equals(this.id); }
 
     public GameState getGameState() { return gameState; }
+
+    public Character getCharacter(int index) { return characters[index]; }
 }

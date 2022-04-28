@@ -9,8 +9,8 @@ public class CharacterNine extends Character{
 
     private StudentColor studentColor;
 
-    public CharacterNine () {
-        super(3);
+    public CharacterNine (Integer characterId) {
+        super(characterId, 3);
     }
 
     /**

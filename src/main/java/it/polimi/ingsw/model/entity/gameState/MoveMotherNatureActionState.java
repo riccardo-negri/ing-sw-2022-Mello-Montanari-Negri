@@ -7,6 +7,7 @@ public class MoveMotherNatureActionState extends ActionState {
 
     protected MoveMotherNatureActionState(GameState oldState){
         super(oldState);
+        gameState = "MMNS";
     }
 
     /**

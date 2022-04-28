@@ -9,11 +9,11 @@ import java.util.List;
 
 public class CharacterEleven extends Character{
 
-    private final Bag bag;
+    private final transient Bag bag;
     private List<StudentColor> studentColorList;
 
-    public CharacterEleven(Bag bag) {
-        super(2);
+    public CharacterEleven(Integer characterId, Bag bag) {
+        super(characterId, 2);
         this.bag = bag;
         try { studentColorList = bag.requestStudents(4);
         } catch (Exception e) {}

@@ -8,8 +8,8 @@ import java.util.List;
 
 public class CharacterTen extends Character {
 
-    public CharacterTen () {
-        super(1);
+    public CharacterTen (Integer characterId) {
+        super(characterId, 1);
     }
 
     /**

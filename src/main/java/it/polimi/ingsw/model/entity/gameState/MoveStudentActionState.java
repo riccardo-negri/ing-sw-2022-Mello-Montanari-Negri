@@ -13,6 +13,7 @@ public class MoveStudentActionState extends ActionState {
 
     protected MoveStudentActionState(GameState oldState){
         super(oldState);
+        gameState = "MSS";
         studentMoved = 0;
     }
 

@@ -10,9 +10,10 @@ import java.util.List;
  */
 public abstract class GameState {
 
+    protected String gameState;
     protected List<Wizard> order;
     protected Integer currentlyPlaying;
-    protected Game game;
+    protected transient Game game;
 
     public GameState (List<Wizard> order, Game game) {
         this.currentlyPlaying = 0;
@@ -27,6 +28,8 @@ public abstract class GameState {
         this.game = oldGameState.game;
         this.order = oldGameState.order;
     }
+
+    public void setGame(Game game) { this.game = game; }
 
     public Wizard getCurrentPlayer() { return order.get(currentlyPlaying); }
 }

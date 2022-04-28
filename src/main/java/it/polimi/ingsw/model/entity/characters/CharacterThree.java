@@ -6,8 +6,8 @@ import it.polimi.ingsw.model.entity.Wizard;
 
 public class CharacterThree extends Character {
 
-    public CharacterThree() {
-        super(3);
+    public CharacterThree(Integer characterId) {
+        super(characterId, 3);
     }
 
     /**

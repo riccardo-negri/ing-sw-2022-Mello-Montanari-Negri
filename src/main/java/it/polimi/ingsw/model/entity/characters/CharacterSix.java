@@ -6,7 +6,7 @@ import it.polimi.ingsw.model.entity.gameState.ActionState;
 
 public class CharacterSix extends Character{
 
-    public CharacterSix() { super(3); }
+    public CharacterSix(Integer characterId) { super(characterId, 3); }
 
     /**
      * towers are not counted when calculating the influence of an island group

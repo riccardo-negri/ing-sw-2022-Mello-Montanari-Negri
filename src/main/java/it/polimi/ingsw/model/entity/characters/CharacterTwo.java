@@ -6,8 +6,8 @@ import it.polimi.ingsw.model.entity.gameState.ActionState;
 
 public class CharacterTwo extends Character{
 
-    public CharacterTwo() {
-        super(2);
+    public CharacterTwo(Integer characterId) {
+        super(characterId, 2);
     }
 
     /**

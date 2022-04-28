@@ -7,8 +7,8 @@ import it.polimi.ingsw.model.enums.Tower;
 
 public class CharacterTwelve extends Character{
 
-    public CharacterTwelve () {
-        super(3);
+    public CharacterTwelve (Integer characterId) {
+        super(characterId, 3);
     }
 
     /**

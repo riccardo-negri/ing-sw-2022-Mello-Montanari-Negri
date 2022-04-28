@@ -32,8 +32,6 @@ public class BagTest {
             }
             assert (vals[0] == 26 && vals[1] == 26 && vals[2] == 26 && vals[3] == 26 && vals[4] == 26);
             bag.requestStudents(1);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        } catch (Exception e) { }
     }
 }

@@ -1,6 +1,5 @@
 package model.entity.gameState;
 
-import model.entity.AssistantCard;
 import model.entity.Cloud;
 import model.entity.Game;
 import model.entity.Wizard;
@@ -9,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 public class PlanningState extends GameState {
 
@@ -49,7 +47,7 @@ public class PlanningState extends GameState {
      */
     public void selectCard (Wizard player, Integer selected) throws Exception {
 
-        validateCardSelection(player, selected);
+        cardSelectionValidator(player, selected);
 
         order.get(currentlyPlaying).getCardDeck().playCard(selected);
 
@@ -74,7 +72,7 @@ public class PlanningState extends GameState {
      * @param selected the number of the card to select (1 to 10)
      * @throws Exception wrong player according to the turns, or the card already played
      */
-    public void validateCardSelection(Wizard player, Integer selected) throws Exception {
+    public void cardSelectionValidator(Wizard player, Integer selected) throws Exception {
         if (player != order.get(currentlyPlaying)) throw new Exception("Wrong player");
 
         List<Integer> cardNumbers = new ArrayList<>();

@@ -118,7 +118,7 @@ public abstract class Server {
             }
         } else {
             if (getConnectedUser().size() < maxUsers) {
-                User user = new User(login.getUsername(), source);
+                User user = createUser(login.getUsername(), source);
                 synchronized (connectedUser) {
                     connectedUser.add(user);
                 }
@@ -128,6 +128,10 @@ public abstract class Server {
             }
         }
         return true;
+    }
+    
+    User createUser(String name, Connection connection) {
+        return new User(name, connection);
     }
 
     public User userFromConnection(Connection connection) {
@@ -164,6 +168,10 @@ public abstract class Server {
         synchronized (connecting) {
             return new ArrayList<>(connecting);
         }
+    }
+
+    public boolean allConnected() {
+        return connectedUser.size() >= maxUsers;
     }
 
     public int getMaxUsers() {

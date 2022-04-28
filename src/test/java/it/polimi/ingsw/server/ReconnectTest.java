@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server;
 
+import it.polimi.ingsw.model.enums.GameMode;
+import it.polimi.ingsw.model.enums.PlayerNumber;
 import it.polimi.ingsw.utils.Connection;
 import it.polimi.ingsw.utils.moves.InitialState;
 import it.polimi.ingsw.utils.Login;
@@ -11,8 +13,8 @@ public class ReconnectTest {
     void startTest() {
         Server s = new MatchmakingServer();
         new Thread(s::run).start();
-        Login l1 = new Login("tommaso", 2, true);
-        Login l2 = new Login("riccardo", 2, true);
+        Login l1 = new Login("tommaso", PlayerNumber.TWO, GameMode.COMPLETE);
+        Login l2 = new Login("riccardo", PlayerNumber.TWO, GameMode.COMPLETE);
         Connection c = enterGame(l1, false);
         enterGame(l2, true);
         c.close();

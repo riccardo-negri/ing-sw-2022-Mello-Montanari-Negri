@@ -49,7 +49,7 @@ public class Connection extends ConnectionBase {
         while (isRunning()) {
             try {
                 Message msg = (Message) reader.readObject();
-                System.out.println("Received new object from " + targetAddress + ": " + msg);
+                System.out.println("Received new object from " + targetAddress + ": " + msg.getContent());
                 processMessage(msg);
             } catch (IOException e) {
                 if (e instanceof EOFException) {  // EOF means that the connection was closed from the other end

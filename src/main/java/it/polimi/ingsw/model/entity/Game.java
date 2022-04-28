@@ -157,4 +157,8 @@ public class Game {
     private boolean isGameId(Integer id) { return id.equals(this.id); }
 
     public GameState getGameState() { return gameState; }
+
+    public GameMode getGameMode() {
+        return gameMode;
+    }
 }

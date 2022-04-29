@@ -22,6 +22,7 @@ public class BoardPageCLI extends AbstractWelcomePage {
         drawInfoSection(4, 2, "7", "localhost", 50547, "advanced", 4, 3, "Tom", "move students", new String[]{"Clown", "Wizard", "Knight"}, new int[]{3,1,2});
         drawTilesAndClouds(45, 3);
         drawPlayers(135, 4);
+        //getMoveToIsland();
         moveCursorToEnd();
         waitEnterPressed();
     }

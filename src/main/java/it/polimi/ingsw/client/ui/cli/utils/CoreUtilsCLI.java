@@ -1,21 +1,54 @@
 package it.polimi.ingsw.client.ui.cli.utils;
 
 import org.fusesource.jansi.AnsiConsole;
-import static org.fusesource.jansi.Ansi.ansi;
+import org.jline.builtins.Completers;
+//import org.jline.console.ArgDesc;
+//import org.jline.console.CmdDesc;
+//import org.jline.console.Printer;
+import org.jline.console.CmdDesc;
+import org.jline.console.impl.JlineCommandRegistry;
+import org.jline.reader.LineReader;
+import org.jline.reader.LineReaderBuilder;
+import org.jline.reader.impl.completer.ArgumentCompleter;
+import org.jline.reader.impl.completer.NullCompleter;
+import org.jline.reader.impl.completer.StringsCompleter;
+import org.jline.terminal.Terminal;
+import org.jline.utils.AttributedString;
+import org.jline.reader.impl.DefaultParser;
+import org.jline.terminal.TerminalBuilder;
+import org.jline.widget.AutosuggestionWidgets;
+import org.jline.widget.TailTipWidgets;
+//import org.jline.widget.TailTipWidgets;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import static org.fusesource.jansi.Ansi.ansi;
+import static org.jline.builtins.Completers.TreeCompleter.node;
+
+import java.io.Console;
+import java.io.IOException;
+import java.util.*;
 import java.util.stream.IntStream;
 import java.util.regex.*;
 
 public class CoreUtilsCLI {
     private static final Scanner scanner = new Scanner(System.in);
 
+    public static void getMoveToIsland(LineReader reader) {
+
+
+        Map<String, CmdDesc> tailTips = new HashMap<>();
+        AutosuggestionWidgets autosuggestionWidgets = new AutosuggestionWidgets(reader);
+        autosuggestionWidgets.enable();
+        TailTipWidgets tailtipWidgets = new TailTipWidgets(reader, tailTips, 0, TailTipWidgets.TipType.COMPLETER);
+        tailtipWidgets.enable();
+        reader.getTerminal().writer().println(ansi().fgBlue().a("TEST"));
+        String temp = reader.readLine(">> ");
+        System.out.println(temp);
+    }
+
     public static Integer getTerminalWidth () {
         int terminalWidth;
         try {
-            terminalWidth = org.jline.terminal.TerminalBuilder.terminal().getWidth();
+            terminalWidth = Integer.parseInt(String.valueOf(TerminalBuilder.terminal().getWidth()));
             return terminalWidth;
         } catch (Exception ignored) {
             return 100;
@@ -57,6 +90,26 @@ public class CoreUtilsCLI {
                                 )
                 )
         );
+    }
+
+    public static void printTerminalCenteredMultilineText (LineReader reader, String s) {
+        String[] arr = s.split("\n");
+        List<String> list = Arrays.asList(arr);
+        int startH = reader.getTerminal().getHeight() / 2 - (list.size()) / 2;
+        //Ansi ansi = ansi();
+        IntStream.range(0, list.size()).forEach(ind ->
+                reader.getTerminal().writer().println(
+                        ansi()
+                                .cursor(
+                                        startH + ind,
+                                        reader.getTerminal().getWidth() / 2 - list.get(ind).length() / 2
+                                )
+                                .a(
+                                        list.get(ind)
+                                )
+                )
+        );
+        System.out.println(ansi().reset());
     }
 
     public static void printTerminalCenteredLine (String s) {
@@ -219,4 +272,6 @@ public class CoreUtilsCLI {
             return readBoolean(requestText);
         }
     }
+
+
 }

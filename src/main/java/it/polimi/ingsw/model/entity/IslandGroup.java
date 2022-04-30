@@ -84,4 +84,6 @@ public class IslandGroup {
     }
 
     public Tower getTower() { return tower; }
+
+    public Integer getId() { return islandGroupId; }
 }

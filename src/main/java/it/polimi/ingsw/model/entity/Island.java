@@ -37,4 +37,6 @@ public class Island {
     }
 
     public boolean isStopCard() { return stopCard; }
+
+    public Integer getId() { return islandId; }
 }

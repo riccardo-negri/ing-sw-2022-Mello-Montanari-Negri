@@ -7,6 +7,8 @@ import it.polimi.ingsw.model.entity.bag.Bag;
 import java.util.List;
 
 public class Cloud {
+
+    private final Integer cloudId;
     private transient Bag bag;
     private final PlayerNumber playerNumber;
     private List<StudentColor> studentColorList;
@@ -17,7 +19,8 @@ public class Cloud {
      * @param bag the bag to take students from
      * @param playerNumber the number of player to fill at the beginning of the turn
      */
-    public Cloud(Bag bag, PlayerNumber playerNumber) {
+    public Cloud(Integer cloudId, Bag bag, PlayerNumber playerNumber) {
+        this.cloudId = cloudId;
         this.bag = bag;
         this.playerNumber = playerNumber;
     }
@@ -49,4 +52,6 @@ public class Cloud {
     }
 
     public boolean isTaken() { return taken; }
+
+    public Integer getId() { return cloudId; }
 }

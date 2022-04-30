@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.entity.gameState;
 
 import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Wizard;
+import it.polimi.ingsw.model.enums.Tower;
 
 import java.util.List;
 
@@ -11,25 +12,23 @@ import java.util.List;
 public abstract class GameState {
 
     protected String gameState;
-    protected List<Wizard> order;
+    protected List<Tower> towerOrder;
     protected Integer currentlyPlaying;
-    protected transient Game game;
+    protected Integer gameId;
 
-    public GameState (List<Wizard> order, Game game) {
+    public GameState (List<Tower> towerOrder, Integer gameId) {
         this.currentlyPlaying = 0;
-        this.game = game;
-        this.order = order;
+        this.gameId = gameId;
+        this.towerOrder = towerOrder;
     }
 
     public GameState (GameState oldGameState) {
         if (oldGameState instanceof PlanningState) this.currentlyPlaying = 0;
         else this.currentlyPlaying = oldGameState.currentlyPlaying;
 
-        this.game = oldGameState.game;
-        this.order = oldGameState.order;
+        this.gameId = oldGameState.gameId;
+        this.towerOrder = oldGameState.towerOrder;
     }
 
-    public void setGame(Game game) { this.game = game; }
-
-    public Wizard getCurrentPlayer() { return order.get(currentlyPlaying); }
+    public Tower getCurrentPlayer() { return towerOrder.get(currentlyPlaying); }
 }

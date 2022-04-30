@@ -3,41 +3,39 @@ package it.polimi.ingsw.model.entity.characters;
 import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Island;
 import it.polimi.ingsw.model.entity.Wizard;
+import it.polimi.ingsw.model.enums.Tower;
 
 public class CharacterFive extends Character{
 
     private Integer stopNumber;
 
-    public CharacterFive(Integer characterId) {
-        super(characterId, 2);
+    public CharacterFive(Integer gameId, Integer characterId) {
+        super(gameId, characterId, 2);
         stopNumber = 4;
     }
 
     /**
      * a stop card can be put on any island to prevent a change of owner
-     * @param player the player playing the card
-     * @param game the current game
-     * @param island the island to put the student on
+     * @param playingTower the player playing the card
+     * @param islandId the island to put the student on
      */
-    public void useEffect(Wizard player, Game game, Island island) throws Exception{
-        characterFiveValidator(player, game, island);
-        useCard(player);
-        island.addStopCard(this);
+    public void useEffect(Tower playingTower, Integer islandId) throws Exception{
+        characterFiveValidator(playingTower, islandId);
+        useCard(playingTower);
+        Game.request(gameId).getIsland(islandId).addStopCard(this);
     }
 
     /**
      * Validator for character five useEffect method
-     * @param player the player playing the card
-     * @param game the current game
-     * @param island the island to put the student on
+     * @param playingTower the player playing the card
+     * @param islandId the island to put the student on
      * @throws Exception if it is not the player turn, he does not have enough money to activate the card,
      * there are no more stop card available, or the island does not exist
      */
-    public void characterFiveValidator(Wizard player, Game game, Island island) throws Exception {
-        characterValidator(player, game);
+    public void characterFiveValidator(Tower playingTower, Integer islandId) throws Exception {
+        characterValidator(playingTower);
         if(stopNumber <= 0) throw new Exception("No more stop cards available");
-        if (game.getIslandGroupList().stream().flatMap(x -> x.getIslandList().stream()).noneMatch(x -> x == island))
-            throw new Exception("Island does not exist");
+        if (islandId<0 || islandId>=12) throw new Exception("Island does not exist");
     }
 
     public void removeOneCard() { stopNumber -= 1; }

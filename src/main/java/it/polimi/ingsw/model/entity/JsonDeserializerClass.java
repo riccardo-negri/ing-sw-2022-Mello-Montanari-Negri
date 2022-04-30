@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.entity;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import it.polimi.ingsw.model.entity.bag.Bag;
+import it.polimi.ingsw.model.entity.bag.ClientBag;
 import it.polimi.ingsw.model.entity.bag.ServerBag;
 import it.polimi.ingsw.model.entity.characters.*;
 import it.polimi.ingsw.model.entity.characters.Character;
@@ -25,13 +26,12 @@ public class JsonDeserializerClass {
     public static class BagDeserializer implements JsonDeserializer<Bag> {
 
         @Override
-        public ServerBag deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-            JsonObject jsonObject = jsonElement.getAsJsonObject();
-
-            Integer[] colorNumber = gson.fromJson(jsonElement.getAsJsonObject().get("colorNumber"), Integer[].class);
-            List<StudentColor> studentColorList = gson.fromJson(jsonObject.get("recentlySelected"), new TypeToken<ArrayList<StudentColor>>() {}.getType());
-
-            return new ServerBag(colorNumber, studentColorList);
+        public Bag deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+            switch (jsonElement.getAsJsonObject().get("type").getAsString()) {
+                case "SERVER": return gson.fromJson(jsonElement, ServerBag.class);
+                case "CLIENT": return gson.fromJson(jsonElement, ClientBag.class);
+                default: return null;
+            }
         }
     }
 
@@ -70,4 +70,6 @@ public class JsonDeserializerClass {
             }
         }
     }
+
+
 }

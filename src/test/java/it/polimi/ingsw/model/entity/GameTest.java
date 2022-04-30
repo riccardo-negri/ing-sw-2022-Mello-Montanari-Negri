@@ -10,12 +10,12 @@ class GameTest {
     @Test
     void SerializationTest() throws Exception{
         Game game = Game.request(Game.gameEntityFactory(GameMode.COMPLETE, PlayerNumber.TWO, Type.SERVER));
-        game.serializeGame();
+        game.serializeGame("./data/planningStateTest.json");
     }
 
     @Test
     void DeserializationTest() throws Exception{
-        Game.deserializeGame("./data/game_0.json");
+        Game.deserializeGame("./data/planningStateTest.json");
     }
 
 }

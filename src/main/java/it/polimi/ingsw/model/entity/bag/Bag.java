@@ -10,6 +10,10 @@ import java.util.List;
  */
 public abstract class Bag {
 
+    private final String type;
+
+    public Bag (String type) { this.type = type; }
+
     public abstract List<StudentColor> requestStudents(int num) throws Exception;
 
     public abstract List<StudentColor> takeRecentlySelected();

@@ -9,26 +9,19 @@ import java.util.Random;
 
 public class ServerBag extends Bag {
 
-    private final transient Random randomGenerator;
+    private transient Random randomGenerator;
     private List<StudentColor> recentlySelected;
     protected final Integer[] colorNumber;
-    protected transient Integer total;
+    protected Integer total;
 
     public ServerBag(Random randomGenerator) {
+        super("SERVER");
         colorNumber = new Integer[5];
         for (int i=0; i<5; i++)
             colorNumber[i] = 26;
         total = 130;
         this.randomGenerator = randomGenerator;
         recentlySelected = new ArrayList<>();
-    }
-
-    public ServerBag(Integer[] colorNumber, List<StudentColor> studentColorList) {
-        randomGenerator = new Random();
-        this.colorNumber = colorNumber;
-        total = 0;
-        Arrays.stream(colorNumber).forEach(x -> total += x);
-        recentlySelected = studentColorList;
     }
 
     /**
@@ -39,6 +32,7 @@ public class ServerBag extends Bag {
      */
     public List<StudentColor> requestStudents(int num) throws Exception{
         if (total < num) throw new Exception("Not enough items in bag");
+        if (randomGenerator==null) randomGenerator = new Random();
         List<StudentColor> students = new ArrayList<>();
         for (int i = 0; i < num; i++) {
             int value = randomGenerator.nextInt(total--);

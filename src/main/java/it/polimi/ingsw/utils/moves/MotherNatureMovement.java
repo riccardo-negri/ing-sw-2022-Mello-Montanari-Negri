@@ -4,10 +4,10 @@ import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.entity.gameState.MoveMotherNatureActionState;
 
-public class MoveMotherNature extends Move{
+public class MotherNatureMovement extends Move{
     private final int steps;
 
-    public MoveMotherNature(int steps) {
+    public MotherNatureMovement(int steps) {
         this.steps = steps;
     }
 

@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.ui.cli.utils;
 
 import org.jline.builtins.Completers;
 import org.jline.console.impl.JlineCommandRegistry;
+import org.jline.reader.Completer;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
 import org.jline.reader.impl.DefaultParser;
@@ -16,17 +17,23 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 import static org.fusesource.jansi.Ansi.ansi;
-import static org.jline.builtins.Completers.TreeCompleter.node;
+
 
 public class MoveUtilsCLI {
 
-    public static String askForMove (LineReader reader) {
+    public static String askForMove (Terminal terminal, Completer completer) {
+        LineReader reader = LineReaderBuilder.builder()
+                .terminal(terminal)
+                .completer(completer)
+                .parser(new DefaultParser())
+                .build();
+
         AutosuggestionWidgets autosuggestionWidgets = new AutosuggestionWidgets(reader);
         TailTipWidgets tailtipWidgets = new TailTipWidgets(reader, new HashMap<>(), 0, TailTipWidgets.TipType.COMPLETER);
 
         autosuggestionWidgets.enable();
         tailtipWidgets.enable();
-        return reader.readLine(String.valueOf(ansi().fgRed().a(">> ").fgDefault()));
+        return reader.readLine(String.valueOf(ansi().fgRgb(255, 128, 0).a("Tom").fgDefault().a(":").fgBlue().a("~").fgGreen().a("$ ").fgDefault()));
     }
 
     public static String getMoveStudentToIsland (Terminal terminal) {
@@ -36,17 +43,11 @@ public class MoveUtilsCLI {
                         new StringsCompleter("student"),
                         new StringsCompleter("green", "red", "yellow", "pink", "blue"),
                         new StringsCompleter("to"),
-                        new StringsCompleter("dining-room", "island-1", "island-2", "island-3", "island-4", "island-5", "island-6", "island-7", "island-8",  "island-9", "island-10", "island-11", "island-12"), NullCompleter.INSTANCE),
+                        new StringsCompleter("dining-room", "island-1", "island-2", "island-3", "island-4", "island-5", "island-6", "island-7", "island-8", "island-9", "island-10", "island-11", "island-12"), NullCompleter.INSTANCE),
                         JlineCommandRegistry.compileCommandOptions(""), 1)
         );
 
-        LineReader reader = LineReaderBuilder.builder()
-                .terminal(terminal)
-                .completer(completer)
-                .parser(new DefaultParser())
-                .build();
-
-        return askForMove(reader);
+        return askForMove(terminal, completer);
     }
 
     public static String getMoveMotherNature (Terminal terminal) {
@@ -60,13 +61,7 @@ public class MoveUtilsCLI {
                         JlineCommandRegistry.compileCommandOptions(""), 1)
         );
 
-        LineReader reader = LineReaderBuilder.builder()
-                .terminal(terminal)
-                .completer(completer)
-                .parser(new DefaultParser())
-                .build();
-
-        return askForMove(reader);
+        return askForMove(terminal, completer);
     }
 
     public static String getMoveSelectCloud (Terminal terminal) {
@@ -78,13 +73,7 @@ public class MoveUtilsCLI {
                         JlineCommandRegistry.compileCommandOptions(""), 1)
         );
 
-        LineReader reader = LineReaderBuilder.builder()
-                .terminal(terminal)
-                .completer(completer)
-                .parser(new DefaultParser())
-                .build();
-
-        return askForMove(reader);
+        return askForMove(terminal, completer);
     }
 
     public static String getMovePlayAssistant (Terminal terminal) {
@@ -96,12 +85,6 @@ public class MoveUtilsCLI {
                         JlineCommandRegistry.compileCommandOptions(""), 1)
         );
 
-        LineReader reader = LineReaderBuilder.builder()
-                .terminal(terminal)
-                .completer(completer)
-                .parser(new DefaultParser())
-                .build();
-
-        return askForMove(reader);
+        return askForMove(terminal, completer);
     }
 }

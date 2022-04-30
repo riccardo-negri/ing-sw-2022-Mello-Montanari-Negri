@@ -25,7 +25,7 @@ public class WelcomePageCLI extends AbstractWelcomePage {
     @Override
     public void draw (Client client) {
         CLI cli = (CLI) client.getUI();
-        Terminal terminal = cli.getTerminal();
+        //Terminal terminal = cli.getTerminal();
         // ANSI Shadow (https://patorjk.com/software/taag/#p=testall&h=2&f=Avatar&t=ERIANTYS)
         String WELCOME_TO =
                 "██╗    ██╗███████╗██╗      ██████╗ ██████╗ ███╗   ███╗███████╗    ████████╗ ██████╗ \n" +
@@ -41,28 +41,18 @@ public class WelcomePageCLI extends AbstractWelcomePage {
                         "██╔══╝  ██╔══██╗██║██╔══██║██║╚██╗██║   ██║     ╚██╔╝  ╚════██║\n" +
                         "███████╗██║  ██║██║██║  ██║██║ ╚████║   ██║      ██║   ███████║\n" +
                         "╚══════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝   ╚═╝      ╚═╝   ╚══════╝\n";
-        //clearTerminal();
+        clearTerminal(cli.getTerminal());
 
         // https://www.tabnine.com/code/query/%22JLINE%22+org.fusesource.jansi@Ansi
         // https://github.com/jline/jline3/wiki/Completion
         // https://github.com/jline/jline3/wiki/Autosuggestions
-        LineReader reader = null;
-        reader = LineReaderBuilder.builder()
-                .completer(new ArgumentCompleter(
-                        new StringsCompleter("movee"),
-                        new Completers.OptionCompleter(Arrays.asList(
-                                new StringsCompleter("student"),
-                                new StringsCompleter("green", "red", "yellow", "pink", "blue"),
-                                new StringsCompleter("island"),
-                                new StringsCompleter("1", "2", "3", "4", "5"), NullCompleter.INSTANCE), JlineCommandRegistry.compileCommandOptions(""), 1)))
-                .parser(new DefaultParser())
-                .build();
-
-        printTerminalCenteredMultilineText(reader, WELCOME_TO + "\n" + ERIANTYS + "\nMade by Pietro Mello Rella, Tommaso Montanari and Riccardo Negri\n" + "\nPress enter to continue...");
-        //moveCursorToEnd();
 
 
-        getMoveToIsland(reader);
+        printTerminalCenteredMultilineText(cli.getTerminal(), WELCOME_TO + "\n" + ERIANTYS + "\nMade by Pietro Mello Rella, Tommaso Montanari and Riccardo Negri\n" + "\nPress enter to continue...");
+        //moveCursorToEnd(cli.getTerminal());
+        waitEnterPressed();
+        System.out.println("HERE£$");
+        //getMoveToIsland(reader);
         onEnd();
     }
 }

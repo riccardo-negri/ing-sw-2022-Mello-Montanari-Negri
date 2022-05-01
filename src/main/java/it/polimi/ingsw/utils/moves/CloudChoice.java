@@ -14,7 +14,7 @@ public class CloudChoice extends Move{
     @Override
     public void applyEffect(Game game, Wizard wizard) throws Exception {
         try {
-            ((ChooseCloudActionState) game.getGameState()).;
+            //((ChooseCloudActionState) game.getGameState()).;
         } catch (ClassCastException e) {
             throw new Exception("This phase doesn't allow this move");
         }
@@ -23,7 +23,7 @@ public class CloudChoice extends Move{
     @Override
     public void validate(Game game, Wizard wizard) throws Exception {
         try {
-            ((ChooseCloudActionState) game.getGameState()).;
+            //((ChooseCloudActionState) game.getGameState()).;
         } catch (ClassCastException e) {
             throw new Exception("This phase doesn't allow this move");
         }

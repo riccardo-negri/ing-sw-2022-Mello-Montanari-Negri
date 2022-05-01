@@ -17,7 +17,7 @@ public class MoveMotherNatureActionState extends ActionState {
      * @param playingTower the player doing the move
      * @param steps the number of steps to move
      */
-    void moveMotherNature(Tower playingTower, Integer steps) throws Exception {
+    public void moveMotherNature(Tower playingTower, Integer steps) throws Exception {
         moveMotherNatureValidator(playingTower, steps);
         Game.request(gameId).doMotherNatureSteps(steps);
         Game.request(gameId).getFistIslandGroup().updateTower(Game.request(gameId), activatedCharacter);

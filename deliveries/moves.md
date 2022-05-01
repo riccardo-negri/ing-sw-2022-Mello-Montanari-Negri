@@ -7,7 +7,7 @@
 - user disconnect
 - user reconnected
 - surrender
-- end game
+- end game // removed
 
 ## Updates
 - initial state -> (all model)  [Model m]

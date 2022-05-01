@@ -5,6 +5,8 @@ import it.polimi.ingsw.client.page.ClientState;
 import it.polimi.ingsw.client.ui.UI;
 import it.polimi.ingsw.client.ui.cli.CLI;
 import it.polimi.ingsw.client.ui.cli.WelcomePageCLI;
+import it.polimi.ingsw.model.enums.GameMode;
+import it.polimi.ingsw.model.enums.PlayerNumber;
 import it.polimi.ingsw.utils.*;
 import it.polimi.ingsw.utils.moves.InitialState;
 
@@ -50,7 +52,8 @@ public class Client {
     }
 
     public void setupConnection(){
-        login = new Login(username, playerNumber, isAdvancedGame);
+        GameMode gm = isAdvancedGame ? GameMode.COMPLETE : GameMode.EASY;
+        login = new Login(username, PlayerNumber.fromNumber(playerNumber), gm);
         Connection connection = new Connection(IPAddress, port);
         connection.send(login);
         Redirect redirect = (Redirect) connection.waitMessage(Redirect.class);

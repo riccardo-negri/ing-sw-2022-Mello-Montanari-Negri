@@ -14,7 +14,7 @@ public class CardChoice extends Move{
     @Override
     public void applyEffect(Game game, Wizard wizard) throws Exception {
         try {
-            ((PlanningState) game.getGameState()).selectCard(wizard, card);
+            ((PlanningState) game.getGameState()).selectCard(wizard.getTowerColor(), card);
         } catch (ClassCastException e) {
             throw new Exception("This phase doesn't allow this move");
         }
@@ -23,7 +23,7 @@ public class CardChoice extends Move{
     @Override
     public void validate(Game game, Wizard wizard) throws Exception {
         try {
-            ((PlanningState) game.getGameState()).cardSelectionValidator(wizard, card);
+            ((PlanningState) game.getGameState()).cardSelectionValidator(wizard.getTowerColor(), card);
         } catch (ClassCastException e) {
             throw new Exception("This phase doesn't allow this move");
         }

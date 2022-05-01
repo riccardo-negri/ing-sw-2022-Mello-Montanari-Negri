@@ -5,12 +5,12 @@ import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.entity.gameState.GameState;
 
 public class InitialState extends Move {
-    private final GameState state;
-    public InitialState() {this.state = null;}
+    private final String state;
+    public InitialState(String state) {this.state = state;}
 
     @Override
     public void applyEffect(Game game, Wizard wizard) throws Exception {
-        game.updateGameState(state);
+        Game.deserializeGame(state); //TODO: replace state instead of create new game
     }
 
     @Override

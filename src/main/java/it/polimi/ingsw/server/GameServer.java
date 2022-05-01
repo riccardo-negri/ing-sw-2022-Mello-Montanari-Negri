@@ -67,7 +67,7 @@ public class GameServer extends Server{
     void onUserReconnected(User user) {
         user.getConnection().bindFunction(this::receiveMessage);
         if (allConnected()) {
-            user.getConnection().send(new InitialState());
+            user.getConnection().send(new InitialState(game.serializeGame()));
         }
     }
 
@@ -75,7 +75,7 @@ public class GameServer extends Server{
     void onNewUserConnect(User user, Login info) {
         user.getConnection().bindFunction(this::receiveMessage);
         if (allConnected()) {
-            broadcast(new InitialState());
+            broadcast(new InitialState(game.serializeGame()));
         }
     }
 

@@ -15,7 +15,7 @@ public class DiningRoomMovement extends Move{
     @Override
     public void applyEffect(Game game, Wizard wizard) throws Exception {
         try {
-            ((MoveStudentActionState) game.getGameState()).moveStudentToDiningRoom(wizard, color);
+            ((MoveStudentActionState) game.getGameState()).moveStudentToDiningRoom(wizard.getTowerColor(), color);
         } catch (ClassCastException e) {
             throw new Exception("This phase doesn't allow this move");
         }
@@ -24,7 +24,7 @@ public class DiningRoomMovement extends Move{
     @Override
     public void validate(Game game, Wizard wizard) throws Exception {
         try {
-            ((MoveStudentActionState) game.getGameState()).moveStudentToDiningRoomValidator(wizard, color);
+            ((MoveStudentActionState) game.getGameState()).moveStudentToDiningRoomValidator(wizard.getTowerColor(), color);
         } catch (ClassCastException e) {
             throw new Exception("This phase doesn't allow this move");
         }

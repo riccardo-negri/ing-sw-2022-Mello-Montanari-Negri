@@ -1,41 +1,43 @@
 package it.polimi.ingsw.model.entity.gameState;
 
-import it.polimi.ingsw.model.entity.Cloud;
-import it.polimi.ingsw.model.entity.Wizard;
+import it.polimi.ingsw.model.entity.Game;
+import it.polimi.ingsw.model.enums.Tower;
 
 public class ChooseCloudActionState extends ActionState{
 
     protected ChooseCloudActionState(GameState oldState){
         super(oldState);
+        gameState = "CIS";
     }
 
     /**
      * Third phase of the Action State, to take a cloud
-     * @param player the player doing the action
-     * @param chosen the chosen cloud
+     * @param playingTower the player doing the action
+     * @param cloudId the chosen cloud
      */
-    public void chooseCloud(Wizard player, Cloud chosen) throws Exception{
-        chooseCloudValidator(player, chosen);
-        player.getEntranceStudents().addAll(chosen.takeStudents());
+    public void chooseCloud(Tower playingTower, Integer cloudId) throws Exception {
+        chooseCloudValidator(playingTower, cloudId);
+        Game.request(gameId).getWizard(playingTower).getEntranceStudents().addAll(Game.request(gameId).getCloud(cloudId).takeStudents());
         updateGameState();
     }
 
     /**
      * Validator for chooseCloud method
-     * @param player the player doing the action
-     * @param chosen the chosen cloud
+     * @param playingTower the player doing the action
+     * @param cloudId the chosen cloud
      * @throws Exception wrong player, phase or cloud not available or taken
      */
-    public void chooseCloudValidator(Wizard player, Cloud chosen) throws Exception {
-        if (player != order.get(currentlyPlaying)) throw new Exception("Wrong player");
-        if (!game.getCloudList().contains(chosen)) throw new Exception("Chosen cloud not available");
+    public void chooseCloudValidator(Tower playingTower, Integer cloudId) throws Exception {
+        if (playingTower != towerOrder.get(currentlyPlaying)) throw new Exception("Wrong player");
+        if (cloudId >= Game.request(gameId).getPlayerNumber().getWizardNumber()) throw new Exception("Chosen cloud not present");
+        if (Game.request(gameId).getCloud(cloudId).isTaken()) throw new Exception("Chosen cloud already taken");
     }
 
     /**
      * It moves to the next state of the game
      */
     private void updateGameState() {
-        if(++currentlyPlaying == order.size()) game.updateGameState(new PlanningState(this));
-        else game.updateGameState(new MoveStudentActionState(this));
+        if(++currentlyPlaying == towerOrder.size()) Game.request(gameId).updateGameState(new PlanningState(this));
+        else Game.request(gameId).updateGameState(new MoveStudentActionState(this));
     }
 }

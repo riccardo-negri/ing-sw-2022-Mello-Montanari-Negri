@@ -16,12 +16,14 @@ import java.util.stream.Collectors;
  */
 public class IslandGroup {
 
+    private final Integer islandGroupId;
     private final List<Island> islandList;
     private Tower tower;
 
-    public IslandGroup(List<StudentColor> studentColors) {
+    public IslandGroup(List<StudentColor> studentColors, Integer islandGroupId) {
         islandList = new ArrayList<>();
-        islandList.add(new Island(studentColors));
+        islandList.add(new Island(studentColors, islandGroupId));
+        this.islandGroupId = islandGroupId;
     }
 
     public List<Island> getIslandList() { return islandList; }
@@ -82,4 +84,6 @@ public class IslandGroup {
     }
 
     public Tower getTower() { return tower; }
+
+    public Integer getId() { return islandGroupId; }
 }

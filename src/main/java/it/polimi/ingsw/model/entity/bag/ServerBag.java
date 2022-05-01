@@ -3,18 +3,19 @@ package it.polimi.ingsw.model.entity.bag;
 import it.polimi.ingsw.model.enums.StudentColor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 public class ServerBag extends Bag {
 
-    private final Random randomGenerator;
-    private StudentColor chooseClient;
+    private transient Random randomGenerator;
     private List<StudentColor> recentlySelected;
     protected final Integer[] colorNumber;
     protected Integer total;
 
     public ServerBag(Random randomGenerator) {
+        super("SERVER");
         colorNumber = new Integer[5];
         for (int i=0; i<5; i++)
             colorNumber[i] = 26;
@@ -31,6 +32,7 @@ public class ServerBag extends Bag {
      */
     public List<StudentColor> requestStudents(int num) throws Exception{
         if (total < num) throw new Exception("Not enough items in bag");
+        if (randomGenerator==null) randomGenerator = new Random();
         List<StudentColor> students = new ArrayList<>();
         for (int i = 0; i < num; i++) {
             int value = randomGenerator.nextInt(total--);

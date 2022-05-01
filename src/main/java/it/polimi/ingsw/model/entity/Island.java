@@ -10,11 +10,13 @@ import java.util.List;
  */
 public class Island {
 
+    private final Integer islandId;
     private boolean stopCard;
     private CharacterFive characterFive;
     private final List<StudentColor> studentColorList;
 
-    public Island(List<StudentColor> studentColorList) {
+    public Island(List<StudentColor> studentColorList, Integer islandId) {
+        this.islandId = islandId;
         this.studentColorList = studentColorList;
         stopCard = false;
     }
@@ -35,4 +37,6 @@ public class Island {
     }
 
     public boolean isStopCard() { return stopCard; }
+
+    public Integer getId() { return islandId; }
 }

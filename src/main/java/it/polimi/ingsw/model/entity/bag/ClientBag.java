@@ -10,7 +10,7 @@ public class ClientBag extends Bag{
     private List<StudentColor> recentlySelected;
 
     public ClientBag() {
-        super();
+        super("CLIENT");
         recentlySelected = new ArrayList<>();
     }
 

@@ -4,6 +4,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -76,17 +77,31 @@ public class Connection extends ConnectionBase {
         notifyAll();
     }
 
+    static boolean matchFileter(MessageContent message, List<Class> filter) {
+        for (Class c: filter) {
+            if(c.isInstance(message))
+                return true;
+        }
+        return false;
+    }
+
     public MessageContent waitMessage() {
         return waitMessage(MessageContent.class);
     }
 
-    public synchronized MessageContent waitMessage(Class filter) {
+    public MessageContent waitMessage(Class filter) {
+        List<Class> filterList = new ArrayList<>();
+        filterList.add(filter);
+        return waitMessage(filterList);
+    }
+
+    public synchronized MessageContent waitMessage(List<Class> filter) {
         for (MessageContent m: messages) {  // if message was received before the call of waitMessage
-            if(!filter.isInstance(m)) {
+            if(matchFileter(m, filter)) {
                 return m;
             }
         }
-        while (!filter.isInstance(getLastMessage())) {  // if no compatible found wait for one
+        while (!matchFileter(getLastMessage(), filter)) {  // if no compatible found wait for one
             try {
                 wait();
             } catch (InterruptedException e) {

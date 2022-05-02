@@ -228,5 +228,9 @@ public class Game implements Serializable {
 
     public GameState getGameState() { return gameState; }
 
+    public GameMode getGameMode() {
+        return gameMode;
+    }
+
     public Character getCharacter(int index) { return characters[index]; }
 }

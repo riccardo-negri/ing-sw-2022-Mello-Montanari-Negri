@@ -97,14 +97,14 @@ public abstract class Server {
 
     abstract void onNewUserConnect(User user, Login info);
 
-    public void userLogin(Connection source) {
+    public boolean userLogin(Connection source) {
         Login login;
         try {
             login = (Login) source.getLastMessage();
         } catch (ClassCastException e) {
             source.close();
             removeConnecting(source);
-            return;
+            return false;
         }
         if (usernames().contains(login.getUsername())) {
             for (User u : getConnectedUser()) {
@@ -113,12 +113,12 @@ public abstract class Server {
                     removeConnecting(source);
                     System.out.println("User " + login.getUsername() + " reconnected");
                     onUserReconnected(u);
-                    return;
+                    return true;
                 }
             }
         } else {
             if (getConnectedUser().size() < maxUsers) {
-                User user = new User(login.getUsername(), source);
+                User user = createUser(login.getUsername(), source);
                 synchronized (connectedUser) {
                     connectedUser.add(user);
                 }
@@ -127,6 +127,11 @@ public abstract class Server {
                 onNewUserConnect(user, login);
             }
         }
+        return true;
+    }
+    
+    User createUser(String name, Connection connection) {
+        return new User(name, connection);
     }
 
     public User userFromConnection(Connection connection) {
@@ -163,6 +168,10 @@ public abstract class Server {
         synchronized (connecting) {
             return new ArrayList<>(connecting);
         }
+    }
+
+    public boolean allConnected() {
+        return connectedUser.size() >= maxUsers;
     }
 
     public int getMaxUsers() {

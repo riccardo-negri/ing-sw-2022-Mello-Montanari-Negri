@@ -81,8 +81,8 @@ public class MatchmakingServer extends Server {
     void onNewUserConnect(User user, Login info) {
         for (GameServer g : getStartedGames()) {
             synchronized (g.getAssignedUsernames()) {
-                if (!g.isFull()) {
-                    if (g.getMaxUsers() == info.getPlayerNumber() && g.isAdvancedRules() == info.isAdvancedRules()) {
+                if (g.acceptsAssign()) {
+                    if (g.getPlayerNumber() == info.getPlayerNumber() && g.getGameMode() == info.getGameMode()) {
                         moveToGame(user, g);
                         return;
                     }
@@ -90,7 +90,7 @@ public class MatchmakingServer extends Server {
             }
         }
         // reach this point only if no compatible game exists
-        GameServer game = new GameServer(info.getPlayerNumber(), info.isAdvancedRules());
+        GameServer game = new GameServer(info.getPlayerNumber(), info.getGameMode());
         runGameServer(game);
         moveToGame(user, game);
     }

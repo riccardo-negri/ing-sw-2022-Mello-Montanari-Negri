@@ -14,10 +14,8 @@ class PlanningStateTest {
 
     @BeforeEach
     void initializeGame() {
-        try{ game = Game.request(Game.deserializeGame("./src/test/java/it/polimi/ingsw/model/entity//serialized_tests/planningStateTest.json"));
-        } catch (Exception e) {
-            System.err.println("Can't find file in test initialization...");
-        }
+        try{ game = Game.request(Game.deserializeGame("./src/test/java/it/polimi/ingsw/model/entity/serialized_tests/planningStateTest.json"));
+        } catch (Exception e) { System.err.println("Can't find file in test initialization..."); }
     }
 
     @Test

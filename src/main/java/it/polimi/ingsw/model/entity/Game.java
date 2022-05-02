@@ -232,5 +232,8 @@ public class Game implements Serializable {
         return gameMode;
     }
 
-    public Character getCharacter(int index) { return characters[index]; }
+    public Character getCharacter(int characterId) throws Exception {
+        if (Arrays.stream(characters).noneMatch(x -> x.getCharacterId() == characterId)) throw new Exception("Character not found");
+        return Arrays.stream(characters).filter(x -> x.getCharacterId() == characterId).findFirst().get();
+    }
 }

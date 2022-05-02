@@ -1,15 +1,10 @@
 package it.polimi.ingsw.model.entity.characters;
 
-import com.google.gson.JsonObject;
 import it.polimi.ingsw.model.entity.Game;
-import it.polimi.ingsw.model.entity.Island;
-import it.polimi.ingsw.model.entity.Wizard;
-import it.polimi.ingsw.model.entity.bag.Bag;
+import it.polimi.ingsw.model.entity.Bag;
 import it.polimi.ingsw.model.enums.StudentColor;
 import it.polimi.ingsw.model.enums.Tower;
-import netscape.javascript.JSObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CharacterOne extends Character{

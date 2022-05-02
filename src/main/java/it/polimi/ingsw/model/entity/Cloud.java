@@ -2,7 +2,6 @@ package it.polimi.ingsw.model.entity;
 
 import it.polimi.ingsw.model.enums.PlayerNumber;
 import it.polimi.ingsw.model.enums.StudentColor;
-import it.polimi.ingsw.model.entity.bag.Bag;
 
 import java.util.List;
 

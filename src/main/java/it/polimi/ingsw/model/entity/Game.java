@@ -3,8 +3,6 @@ package it.polimi.ingsw.model.entity;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import it.polimi.ingsw.model.enums.*;
-import it.polimi.ingsw.model.entity.bag.Bag;
-import it.polimi.ingsw.model.entity.bag.ServerBag;
 import it.polimi.ingsw.model.entity.characters.Character;
 import it.polimi.ingsw.model.entity.gameState.GameState;
 import it.polimi.ingsw.model.entity.gameState.PlanningState;
@@ -48,7 +46,7 @@ public class Game implements Serializable {
         this.playerNumber = playerNumber;
 
         Random randomGenerator = new Random();
-        this.bag = new ServerBag(randomGenerator);
+        this.bag = new Bag(randomGenerator);
 
         if(gameMode == GameMode.COMPLETE) {
             characters = new Character[3];
@@ -91,7 +89,7 @@ public class Game implements Serializable {
             } catch (Exception e) { System.err.println(e.getMessage()); }
         }
 
-        this.gameState = new PlanningState(id, wizardList.stream().map(x -> x.getTowerColor()).collect(Collectors.toList()), randomGenerator);
+        this.gameState = new PlanningState(id, wizardList.stream().map(Wizard::getTowerColor).collect(Collectors.toList()), randomGenerator);
 
     }
 
@@ -143,16 +141,14 @@ public class Game implements Serializable {
         reader.close();
 
         Game newGame = JsonDeserializerClass.getGson().fromJson(in, Game.class);
-        if(gameEntities.stream().filter(x -> x.isGameId(newGame.id)).count() != 0) throw new Exception("Game already present");
-        newGame.getCloudList().stream().forEach(x -> x.setBag(newGame.bag));
+        if(gameEntities.stream().anyMatch(x -> x.isGameId(newGame.id))) throw new Exception("Game already present");
+        newGame.getCloudList().forEach(x -> x.setBag(newGame.bag));
         Game.gameEntities.add(newGame);
         return newGame.id;
     }
 
     private static void initializeDeserializationGson() {
         GsonBuilder gsonBuilder = new GsonBuilder();
-        JsonDeserializerClass.BagDeserializer bagDeserializer = new JsonDeserializerClass.BagDeserializer();
-        gsonBuilder.registerTypeAdapter(Bag.class, bagDeserializer);
         JsonDeserializerClass.CharacterDeserializer characterDeserializer = new JsonDeserializerClass.CharacterDeserializer();
         gsonBuilder.registerTypeAdapter(Character.class, characterDeserializer);
         JsonDeserializerClass.GameStateDeserializer gameStateDeserializer = new JsonDeserializerClass.GameStateDeserializer();
@@ -201,15 +197,15 @@ public class Game implements Serializable {
     }
 
     public Island getIsland(Integer islandId) {
-        return islandGroupList.stream().flatMap(x -> x.getIslandList().stream()).filter(x -> x.getId()==islandId).findFirst().get();
+        return islandGroupList.stream().flatMap(x -> x.getIslandList().stream()).filter(x -> Objects.equals(x.getId(), islandId)).findFirst().get();
     }
 
     public Cloud getCloud(Integer cloudId) {
-        return cloudList.stream().filter(x -> x.getId()==cloudId).findFirst().get();
+        return cloudList.stream().filter(x -> Objects.equals(x.getId(), cloudId)).findFirst().get();
     }
 
     public IslandGroup getIslandGroup(Integer islandGroupId) {
-        return islandGroupList.stream().filter(x -> x.getId()==islandGroupId).findFirst().get();
+        return islandGroupList.stream().filter(x -> Objects.equals(x.getId(), islandGroupId)).findFirst().get();
     }
 
     public IslandGroup getFistIslandGroup () { return islandGroupList.get(0); }

@@ -1,19 +1,11 @@
 package it.polimi.ingsw.model.entity;
 
 import com.google.gson.*;
-import com.google.gson.reflect.TypeToken;
-import it.polimi.ingsw.model.entity.bag.Bag;
-import it.polimi.ingsw.model.entity.bag.ClientBag;
-import it.polimi.ingsw.model.entity.bag.ServerBag;
 import it.polimi.ingsw.model.entity.characters.*;
 import it.polimi.ingsw.model.entity.characters.Character;
 import it.polimi.ingsw.model.entity.gameState.*;
-import it.polimi.ingsw.model.enums.StudentColor;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 public class JsonDeserializerClass {
 
@@ -22,18 +14,6 @@ public class JsonDeserializerClass {
     public static void setGson(Gson gson) { JsonDeserializerClass.gson = gson; }
 
     public static Gson getGson() { return gson; }
-
-    public static class BagDeserializer implements JsonDeserializer<Bag> {
-
-        @Override
-        public Bag deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-            switch (jsonElement.getAsJsonObject().get("type").getAsString()) {
-                case "SERVER": return gson.fromJson(jsonElement, ServerBag.class);
-                case "CLIENT": return gson.fromJson(jsonElement, ClientBag.class);
-                default: return null;
-            }
-        }
-    }
 
     public static class CharacterDeserializer implements JsonDeserializer<Character> {
 

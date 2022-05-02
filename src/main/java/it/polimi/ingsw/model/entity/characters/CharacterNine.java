@@ -19,7 +19,7 @@ public class CharacterNine extends Character{
      * @param playingTower the player playing the card
      * @param studentColor the color not to consider in the calculation
      */
-    public void useEffect(Tower playingTower, StudentColor studentColor) throws Exception{
+    public void useEffect(Tower playingTower, StudentColor studentColor) throws Exception {
         characterNineValidator(playingTower);
         useCard(playingTower);
         this.studentColor = studentColor;

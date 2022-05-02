@@ -1,14 +1,9 @@
 package it.polimi.ingsw.model.entity.characters;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
 import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Wizard;
-import it.polimi.ingsw.model.entity.bag.Bag;
+import it.polimi.ingsw.model.entity.Bag;
 import it.polimi.ingsw.model.enums.Tower;
-
-import java.lang.reflect.Type;
 
 public abstract class Character {
 

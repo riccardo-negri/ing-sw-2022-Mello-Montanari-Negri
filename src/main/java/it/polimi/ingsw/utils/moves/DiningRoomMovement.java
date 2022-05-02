@@ -6,16 +6,16 @@ import it.polimi.ingsw.model.entity.gameState.MoveStudentActionState;
 import it.polimi.ingsw.model.enums.StudentColor;
 
 public class DiningRoomMovement extends Move{
-    private final StudentColor color;
+    private final StudentColor student;
 
-    public DiningRoomMovement(StudentColor color) {
-        this.color = color;
+    public DiningRoomMovement(StudentColor student) {
+        this.student = student;
     }
 
     @Override
     public void applyEffect(Game game, Wizard wizard) throws Exception {
         try {
-            ((MoveStudentActionState) game.getGameState()).moveStudentToDiningRoom(wizard.getTowerColor(), color);
+            ((MoveStudentActionState) game.getGameState()).moveStudentToDiningRoom(wizard.getTowerColor(), student);
         } catch (ClassCastException e) {
             throw new Exception("This phase doesn't allow this move");
         }
@@ -24,7 +24,7 @@ public class DiningRoomMovement extends Move{
     @Override
     public void validate(Game game, Wizard wizard) throws Exception {
         try {
-            ((MoveStudentActionState) game.getGameState()).moveStudentToDiningRoomValidator(wizard.getTowerColor(), color);
+            ((MoveStudentActionState) game.getGameState()).moveStudentToDiningRoomValidator(wizard.getTowerColor(), student);
         } catch (ClassCastException e) {
             throw new Exception("This phase doesn't allow this move");
         }

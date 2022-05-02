@@ -16,7 +16,7 @@ user send this message to all the other clients
 - **Surrender (String username):** The user can send this message to the server to
 communicate he wants to quit the game, the server will broadcast the message to
 everyone else. In case of user disconnected and reconnection time elapsed the server
-will send this message to all the remaining users and comunicate the end of the game
+will send this message to all the remaining users and communicate the end of the game
 
 ## Updates
 - **InitialState (String model):** When the game starts send the model to all the users,
@@ -24,7 +24,7 @@ when a user reconnects send the current model just to him. The model is sent as 
 string
 
 ## Moves
-All the moves can be sent from the client to the server to comunicate the intention to do
+All the moves can be sent from the client to the server to communicate the intention to do
 it and, as a response to the intention, from the server to all the clients to apply the
 move effect
 - **CardChoice (int card):** At the beginning of each round all the players need to select an assistant card 
@@ -35,8 +35,8 @@ a player can decide to move one of the students in the entrance to the dining ro
 - **MotherNatureMovement (int steps):** During the second part of the action phase,
  the players needs to move mother nature by X amount of steps
 - ***CloudChoice (int cloudId, List\<StudentColor> extracted):** During the third and last part of the action phase, the player 
- needs to choose a cloud to take the students from. If that student is the last student playing in the round the 
- move CloudChoice
+ needs to choose a cloud to take the students from. If that student is the last student playing in the round refill
+the clouds from the bag
 
 ### Activate character:
 Can be sent at any moment during the action phase

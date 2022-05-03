@@ -4,13 +4,16 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.function.Predicate;
 
 public class Connection extends ConnectionBase {
-    private Integer messageCount = 0;
-    private final Object messageCountLock = new Object();
+    private int sentCount = 0;
+    private int receivedCount = 0;
+    private final Object sentCountLock = new Object();
+
+    private final Queue<Message> messageQueue = new PriorityQueue<>((a, b) -> a.getNumber() - b.getNumber());
+    protected final List<MessageContent> messagesToProcess = new ArrayList<>();
 
     public Connection(Socket socket, Predicate<Connection> acceptMessage) {
         super(socket, acceptMessage);
@@ -50,8 +53,7 @@ public class Connection extends ConnectionBase {
         while (isRunning()) {
             try {
                 Message msg = (Message) reader.readObject();
-                System.out.println("Received new object from " + targetAddress + ": " + msg.getContent());
-                processMessage(msg);
+                updateQueue(msg);
             } catch (IOException e) {
                 if (e instanceof EOFException) {  // EOF means that the connection was closed from the other end
                     processMessageContent(new Disconnected());
@@ -65,12 +67,29 @@ public class Connection extends ConnectionBase {
         }
     }
 
+    /*
+    The queue is used to make sure the messages are processed in the correct order, follows this procedure:
+    Add the new message to the queue in the correct position
+    Process all the messages in the queue following the order they were sent, remove them when done
+    If on message is missing stops processing and will continue from there on the next call
+     */
+    private synchronized void updateQueue(Message newMessage) {
+        messageQueue.add(newMessage);
+        while (messageQueue.peek() != null && messageQueue.peek().getNumber() == receivedCount) {
+            Message msg = messageQueue.poll();
+            receivedCount++;
+            if (msg != null)
+                processMessage(msg);
+        }
+    }
+
     private void processMessage(Message message) {
         processMessageContent(message.getContent());
     }
 
     private synchronized void processMessageContent(MessageContent message) {
-        messages.add(message);
+        System.out.println("Received new object from " + targetAddress + ": " + message);
+        messagesToProcess.add(message);
         if(acceptMessage.test(this)) {
             removeLastMessage();  // remove the only message accessible by acceptMessage
         }
@@ -96,7 +115,7 @@ public class Connection extends ConnectionBase {
     }
 
     public synchronized MessageContent waitMessage(List<Class> filter) {
-        for (MessageContent m: messages) {  // if message was received before the call of waitMessage
+        for (MessageContent m: messagesToProcess) {  // if message was received before the call of waitMessage
             if(matchFileter(m, filter)) {
                 return m;
             }
@@ -114,23 +133,23 @@ public class Connection extends ConnectionBase {
     }
 
     public synchronized MessageContent getLastMessage () {
-        if (messages.size() > 0) {
-            return messages.get(messages.size() - 1);
+        if (messagesToProcess.size() > 0) {
+            return messagesToProcess.get(messagesToProcess.size() - 1);
         }
         return null;
     }
 
     private synchronized void removeLastMessage() {
-        if (messages.size() > 0) {
-            messages.remove(messages.size() - 1);
+        if (messagesToProcess.size() > 0) {
+            messagesToProcess.remove(messagesToProcess.size() - 1);
         }
     }
 
     public void send(MessageContent message) {
         try {
-            synchronized (messageCountLock) {
-                writer.writeObject(new Message(messageCount, message));
-                messageCount++;
+            synchronized (sentCountLock) {
+                writer.writeObject(new Message(sentCount, message));
+                sentCount++;
             }
         } catch (IOException ignored) {}
     }

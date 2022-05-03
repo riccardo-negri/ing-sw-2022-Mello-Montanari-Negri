@@ -14,8 +14,6 @@ public abstract class ConnectionBase {
 
     protected Predicate<Connection> acceptMessage;
 
-    protected final List<MessageContent> messages;
-
     protected final Thread thread;
 
     protected final ObjectInputStream reader;
@@ -28,7 +26,6 @@ public abstract class ConnectionBase {
             this.acceptMessage = acceptMessage;
             writer = new ObjectOutputStream(socket.getOutputStream());
             reader = new ObjectInputStream(socket.getInputStream());
-            messages = new ArrayList<>();
             thread = new Thread(this::listenMessages);
             thread.start();
         } catch (IOException e) {

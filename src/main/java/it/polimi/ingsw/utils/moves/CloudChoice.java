@@ -12,7 +12,7 @@ public class CloudChoice extends Move{
     }
 
     @Override
-    public void applyEffect(Game game, Wizard wizard) throws Exception {
+    protected void applyEffect(Game game, Wizard wizard) throws Exception {
         try {
             ((ChooseCloudActionState) game.getGameState()).chooseCloud(wizard.getTowerColor(), cloudId);
         } catch (ClassCastException e) {
@@ -27,5 +27,9 @@ public class CloudChoice extends Move{
         } catch (ClassCastException e) {
             throw new Exception("This phase doesn't allow this move");
         }
+    }
+
+    public int getCloudId() {
+        return cloudId;
     }
 }

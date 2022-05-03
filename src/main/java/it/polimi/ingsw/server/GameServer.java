@@ -7,7 +7,7 @@ import it.polimi.ingsw.model.enums.PlayerNumber;
 import it.polimi.ingsw.model.enums.Tower;
 import it.polimi.ingsw.model.enums.Type;
 import it.polimi.ingsw.utils.*;
-import it.polimi.ingsw.utils.moves.InitialState;
+import it.polimi.ingsw.utils.InitialState;
 import it.polimi.ingsw.utils.moves.Move;
 
 import java.util.ArrayList;
@@ -52,7 +52,7 @@ public class GameServer extends Server{
     void doMove(Move move, Connection source) {
         Wizard wizard = ((GameUser) userFromConnection(source)).getWizard();
         try {
-            move.applyEffect(game, wizard);
+            move.applyEffectServer(game, wizard);
             broadcast(move);
         } catch (Exception ignored) {}
     }

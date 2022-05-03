@@ -232,4 +232,8 @@ public class Game implements Serializable {
         if (Arrays.stream(characters).noneMatch(x -> x.getCharacterId() == characterId)) throw new Exception("Character not found");
         return Arrays.stream(characters).filter(x -> x.getCharacterId() == characterId).findFirst().get();
     }
+
+    public Bag getBag() {
+        return bag;
+    }
 }

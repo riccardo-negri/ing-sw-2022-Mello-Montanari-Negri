@@ -8,7 +8,7 @@ import it.polimi.ingsw.client.ui.cli.WelcomePageCLI;
 import it.polimi.ingsw.model.enums.GameMode;
 import it.polimi.ingsw.model.enums.PlayerNumber;
 import it.polimi.ingsw.utils.*;
-import it.polimi.ingsw.utils.moves.InitialState;
+import it.polimi.ingsw.utils.InitialState;
 
 public class Client {
     private final UI ui;

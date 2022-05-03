@@ -7,7 +7,7 @@ import it.polimi.ingsw.model.enums.PlayerNumber;
 import it.polimi.ingsw.model.enums.Tower;
 import it.polimi.ingsw.model.enums.Type;
 import it.polimi.ingsw.utils.*;
-import it.polimi.ingsw.utils.moves.InitialState;
+import it.polimi.ingsw.utils.InitialState;
 import it.polimi.ingsw.utils.moves.Move;
 
 import java.util.ArrayList;

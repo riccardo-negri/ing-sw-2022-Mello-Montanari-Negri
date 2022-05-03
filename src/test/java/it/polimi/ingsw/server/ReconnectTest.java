@@ -19,7 +19,7 @@ public class ReconnectTest {
         enterGame(l2, true);
         c.close();
         enterGame(l1, true);
-        System.out.println("fine");
+        System.out.println("done");
         s.stop();
     }
 
@@ -27,7 +27,7 @@ public class ReconnectTest {
         Connection connection = new Connection("localhost", 50000);
         connection.send(login);
         Redirect redirect = (Redirect) connection.waitMessage(Redirect.class);
-        System.out.println("porta");
+        System.out.println("port");
         System.out.println(redirect.getPort());
         connection.close();
         connection = new Connection("localhost", redirect.getPort());

@@ -31,4 +31,12 @@ public class IslandMovement extends Move{
             throw new Exception("This phase doesn't allow this move");
         }
     }
+
+    public int getIslandId() {
+        return islandId;
+    }
+
+    public StudentColor getStudent() {
+        return student;
+    }
 }

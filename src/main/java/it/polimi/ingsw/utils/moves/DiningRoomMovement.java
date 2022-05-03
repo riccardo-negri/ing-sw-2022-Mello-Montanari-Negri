@@ -29,4 +29,8 @@ public class DiningRoomMovement extends Move{
             throw new Exception("This phase doesn't allow this move");
         }
     }
+
+    public StudentColor getStudent() {
+        return student;
+    }
 }

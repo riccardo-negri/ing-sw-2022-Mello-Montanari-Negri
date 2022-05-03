@@ -28,4 +28,8 @@ public class CardChoice extends Move{
             throw new Exception("This phase doesn't allow this move");
         }
     }
+
+    public int getCard() {
+        return card;
+    }
 }

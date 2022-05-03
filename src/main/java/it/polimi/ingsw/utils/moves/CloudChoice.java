@@ -28,4 +28,8 @@ public class CloudChoice extends Move{
             throw new Exception("This phase doesn't allow this move");
         }
     }
+
+    public int getCloudId() {
+        return cloudId;
+    }
 }

@@ -28,4 +28,8 @@ public class MotherNatureMovement extends Move{
             throw new Exception("This phase doesn't allow this move");
         }
     }
+
+    public int getSteps() {
+        return steps;
+    }
 }

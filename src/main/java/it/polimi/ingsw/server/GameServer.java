@@ -52,7 +52,7 @@ public class GameServer extends Server{
     void doMove(Move move, Connection source) {
         Wizard wizard = ((GameUser) userFromConnection(source)).getWizard();
         try {
-            move.applyEffect(game, wizard);
+            move.applyEffectServer(game, wizard);
             broadcast(move);
         } catch (Exception ignored) {}
     }

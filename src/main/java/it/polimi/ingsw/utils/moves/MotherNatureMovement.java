@@ -12,7 +12,7 @@ public class MotherNatureMovement extends Move{
     }
 
     @Override
-    public void applyEffect(Game game, Wizard wizard) throws Exception {
+    protected void applyEffect(Game game, Wizard wizard) throws Exception {
         try {
             ((MoveMotherNatureActionState) game.getGameState()).moveMotherNature(wizard.getTowerColor(), steps);
         } catch (ClassCastException e) {

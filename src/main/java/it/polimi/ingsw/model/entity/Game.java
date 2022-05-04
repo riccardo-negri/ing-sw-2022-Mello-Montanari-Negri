@@ -85,11 +85,12 @@ public class Game implements Serializable {
         wizardList = new ArrayList<>();
         for (int i=0; i<playerNumber.getWizardNumber(); i++) {
             try{
-                wizardList.add(new Wizard(bag.requestStudents(playerNumber.getEntranceNumber()), Tower.fromNumber(i), playerNumber.getTowerNumber()));
+                wizardList.add(new Wizard(i, bag.requestStudents(playerNumber.getEntranceNumber()),
+                        playerNumber == PlayerNumber.FOUR ? Tower.fromNumber(i%2) : Tower.fromNumber(i), playerNumber.getTowerNumber()));
             } catch (Exception e) { System.err.println(e.getMessage()); }
         }
 
-        this.gameState = new PlanningState(id, wizardList.stream().map(Wizard::getTowerColor).collect(Collectors.toList()), randomGenerator);
+        this.gameState = new PlanningState(id, wizardList.stream().map(Wizard::getId).collect(Collectors.toList()), randomGenerator);
 
     }
 
@@ -192,8 +193,8 @@ public class Game implements Serializable {
         }
     }
 
-    public Wizard getWizard(Tower tower) {
-        return wizardList.stream().filter(w -> w.getTowerColor() == tower).findFirst().get();
+    public Wizard getWizard(Integer wizardId) {
+        return wizardList.stream().filter(w -> Objects.equals(w.getId(), wizardId)).findFirst().get();
     }
 
     public Island getIsland(Integer islandId) {

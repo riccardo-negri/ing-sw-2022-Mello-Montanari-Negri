@@ -12,7 +12,7 @@ public class Professor {
 
     private final Integer gameId;
     private final StudentColor color;
-    private Tower master;
+    private Integer master;
 
     public Professor(Integer gameId, StudentColor color) {
         this.gameId = gameId;
@@ -24,7 +24,7 @@ public class Professor {
      * used to calculate the new owner of the professor
      * @param contestant the wizard who may become the new owner, the one who added some students
      */
-    public void refreshMaster(Tower contestant) {
+    public void refreshMaster(Integer contestant) {
         if (Game.request(gameId).getWizard(contestant).getDiningStudents(color) > Game.request(gameId).getWizard(master).getDiningStudents(color))
             master = contestant;
     }

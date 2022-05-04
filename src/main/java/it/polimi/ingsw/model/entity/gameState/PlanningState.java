@@ -5,22 +5,19 @@ import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.enums.Tower;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class PlanningState extends GameState {
 
     /**
      * Constructor to be used for the first creation of a gameState, at the beginning of the game, it also fills the clouds
-     * @param towerList The list of wizard of the game
+     * @param playerList The list of wizard of the game
      * @param randomGenerator a random generator to shuffle the wizards, to choose the order of execution of the first planning phase randomly
      */
-    public PlanningState (Integer gameId, List<Tower> towerList, Random randomGenerator) {
-        super(towerList, gameId);
+    public PlanningState (Integer gameId, List<Integer> playerList, Random randomGenerator) {
+        super(playerList, gameId);
         gameState = "PS";
-        Collections.shuffle(towerOrder, randomGenerator);
+        Collections.shuffle(playerOrder, randomGenerator);
         try { for(Cloud c : Game.request(gameId).getCloudList()) c.fillCloud();
         } catch (Exception e) {
             //TODO codice per gestire la fine degli studenti nella bag, condizione di fine partita
@@ -42,28 +39,28 @@ public class PlanningState extends GameState {
 
     /**
      * Selection of the assistant card to be played
-     * @param playingTower the player who is selecting the card
+     * @param playingWizard the player who is selecting the card
      * @param selected the number of the card to select (1 to 10)
      * @throws Exception wrong player according to the turns, or the card already played
      */
-    public void selectCard (Tower playingTower, Integer selected) throws Exception {
-        cardSelectionValidator(playingTower, selected);
-        Game.request(gameId).getWizard(playingTower).getCardDeck().playCard(selected);
+    public void selectCard (Integer playingWizard, Integer selected) throws Exception {
+        cardSelectionValidator(playingWizard, selected);
+        Game.request(gameId).getWizard(playingWizard).getCardDeck().playCard(selected);
         currentlyPlaying++;
         checkState();
     }
 
     /**
      * Validation of card selection by player
-     * @param playingTower the player who is selecting the card
+     * @param playingWizard the player who is selecting the card
      * @param selected the number of the card to select (1 to 10)
      * @throws Exception wrong player according to the turns, or the card already played
      */
-    public void cardSelectionValidator(Tower playingTower, Integer selected) throws Exception {
+    public void cardSelectionValidator(Integer playingWizard, Integer selected) throws Exception {
 
-        if (playingTower != towerOrder.get(currentlyPlaying)) throw new Exception("Wrong player");
+        if (!Objects.equals(playingWizard, playerOrder.get(currentlyPlaying))) throw new Exception("Wrong player");
 
-        Wizard player = Game.request(gameId).getWizard(playingTower);
+        Wizard player = Game.request(gameId).getWizard(playingWizard);
 
         List<Integer> cardNumbers = new ArrayList<>();
         for (int i=0; i<currentlyPlaying; i++)
@@ -76,8 +73,8 @@ public class PlanningState extends GameState {
      * checks if all the players chose their assistant card already
      */
     private void checkState() {
-        if (currentlyPlaying == towerOrder.size()) {
-            towerOrder.stream().sorted((x, y) -> {
+        if (currentlyPlaying == playerOrder.size()) {
+            playerOrder.stream().sorted((x, y) -> {
                 int valX = Game.request(gameId).getWizard(x).getCardDeck().getCurrentCard().getNumber();
                 int valY = Game.request(gameId).getWizard(y).getCardDeck().getCurrentCard().getNumber();
                 if(valX > valY) return 1;

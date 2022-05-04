@@ -9,7 +9,7 @@ public abstract class Character {
 
     protected final Integer gameId;
     protected final Integer characterId;
-    protected Tower activator;
+    protected Integer activator;
     private final Integer price;
     private boolean used;
 
@@ -39,21 +39,21 @@ public abstract class Character {
         this.used = false;
     }
 
-    protected void useCard(Tower playingTower) throws Exception{
-        Game.request(gameId).getWizard(playingTower).payEffect(price + (used ? 1 : 0));
-        activator = playingTower;
+    protected void useCard(Integer playingWizard) throws Exception{
+        Game.request(gameId).getWizard(playingWizard).payEffect(price + (used ? 1 : 0));
+        activator = playingWizard;
         used = true;
     }
 
     /**
      * Validator for all the character useEffect
-     * @param playingTower the player using the effect
+     * @param playingWizard the player using the effect
      * @throws Exception if it is not the player turn, or he does not have enough money to activate the card
      */
-    protected void characterValidator (Tower playingTower) throws Exception {
-        if (Game.request(gameId).getGameState().getCurrentPlayer() != playingTower)
+    protected void characterValidator (Integer playingWizard) throws Exception {
+        if (Game.request(gameId).getGameState().getCurrentPlayer() != playingWizard)
             throw new Exception("Wrong player");
-        if (price + (used ? 1 : 0) > Game.request(gameId).getWizard(playingTower).getMoney())
+        if (price + (used ? 1 : 0) > Game.request(gameId).getWizard(playingWizard).getMoney())
             throw new Exception("Not enough money to activate the effect");
     }
 

@@ -13,25 +13,25 @@ public class CharacterThree extends Character {
 
     /**
      * update the owner of an island group without the need of mother nature
-     * @param playingTower the player playing the card
+     * @param playingWizard the player playing the card
      * @param islandGroupId the group to update the owner on
      */
-    public void useEffect(Tower playingTower, Integer islandGroupId) throws Exception {
-        characterThreeValidator(playingTower, islandGroupId);
-        useCard(playingTower);
+    public void useEffect(Integer playingWizard, Integer islandGroupId) throws Exception {
+        characterThreeValidator(playingWizard, islandGroupId);
+        useCard(playingWizard);
         Game.request(gameId).getIslandGroup(islandGroupId).updateTower(Game.request(gameId), null);
         Game.request(gameId).unifyIslands();
     }
 
     /**
      * validator for character three useEffect method
-     * @param playingTower the player playing the card
+     * @param playingWizard the player playing the card
      * @param islandGroupId the group to update the owner on
      * @throws Exception if it is not the player turn, he does not have enough money to activate the card,
      * or the island group does not exist
      */
-    public void characterThreeValidator(Tower playingTower, Integer islandGroupId) throws Exception {
-        characterValidator(playingTower);
+    public void characterThreeValidator(Integer playingWizard, Integer islandGroupId) throws Exception {
+        characterValidator(playingWizard);
         Game.request(gameId).getIslandGroup(islandGroupId);
     }
 }

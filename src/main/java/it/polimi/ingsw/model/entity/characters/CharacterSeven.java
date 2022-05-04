@@ -20,31 +20,31 @@ public class CharacterSeven extends Character{
 
     /**
      * exchange up to three student on this card with three students in the entrance
-     * @param playingTower the player playing the card
+     * @param playingWizard the player playing the card
      * @param take students to take from the card
      * @param give students to take from the entrance
      */
-    public void useEffect(Tower playingTower, List<StudentColor> take, List<StudentColor> give) throws Exception {
-        characterSevenValidator(playingTower, take, give);
-        useCard(playingTower);
+    public void useEffect(Integer playingWizard, List<StudentColor> take, List<StudentColor> give) throws Exception {
+        characterSevenValidator(playingWizard, take, give);
+        useCard(playingWizard);
         studentColorList.removeAll(take);
         studentColorList.addAll(give);
-        Game.request(gameId).getWizard(playingTower).getEntranceStudents().removeAll(give);
-        Game.request(gameId).getWizard(playingTower).getEntranceStudents().addAll(take);
+        Game.request(gameId).getWizard(playingWizard).getEntranceStudents().removeAll(give);
+        Game.request(gameId).getWizard(playingWizard).getEntranceStudents().addAll(take);
     }
 
     /**
      * Validator for character seven useEffect method
-     * @param playingTower the player playing the card
+     * @param playingWizard the player playing the card
      * @param take students to take from the card
      * @param give students to take from the entrance
      * @throws Exception if it is not the player turn, he does not have enough money to activate the card,
      * the students he is asking are not available, or he is asking an incorrect number of students
      */
-    public void characterSevenValidator(Tower playingTower, List<StudentColor> take, List<StudentColor> give) throws Exception {
-        characterValidator(playingTower);
+    public void characterSevenValidator(Integer playingWizard, List<StudentColor> take, List<StudentColor> give) throws Exception {
+        characterValidator(playingWizard);
         if (!studentColorList.containsAll(take)) throw new Exception("Students not available on the card");
-        if (!Game.request(gameId).getWizard(playingTower).getEntranceStudents().containsAll(give))
+        if (!Game.request(gameId).getWizard(playingWizard).getEntranceStudents().containsAll(give))
             throw new Exception("Students not available in the entrance");
         if(give.size()>3 || give.size() != take.size()) throw new Exception("Inexact number of students");
     }

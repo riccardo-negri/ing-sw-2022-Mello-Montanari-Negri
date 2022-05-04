@@ -13,20 +13,20 @@ public class CharacterFour extends Character{
 
     /**
      * mother nature can do two more steps than the assistant card says
-     * @param playingTower the player playing the card
+     * @param playingWizard the player playing the card
      */
-    public void useEffect(Tower playingTower) throws Exception {
-        characterFourValidator(playingTower);
-        useCard(playingTower);
+    public void useEffect(Integer playingWizard) throws Exception {
+        characterFourValidator(playingWizard);
+        useCard(playingWizard);
         ((ActionState) Game.request(gameId).getGameState()).activateEffect(this);
     }
 
     /**
      * Validator for character four useEffect method
-     * @param playingTower the player playing the card
+     * @param playingWizard the player playing the card
      * @throws Exception if it is not the player turn, or he does not have enough money to activate the card
      */
-    public void characterFourValidator(Tower playingTower) throws Exception {
-        characterValidator(playingTower);
+    public void characterFourValidator(Integer playingWizard) throws Exception {
+        characterValidator(playingWizard);
     }
 }

@@ -12,20 +12,21 @@ public class UseCharacter7 extends UseCharacter {
     private final ArrayList<StudentColor> taken;
     private final ArrayList<StudentColor> given;
 
-    public UseCharacter7(List<StudentColor> taken, List<StudentColor> given) {
+    public UseCharacter7(Wizard author, List<StudentColor> taken, List<StudentColor> given) {
+        super(author);
         this.taken = new ArrayList<>(taken);
         this.given = new ArrayList<>(given);
     }
 
     @Override
-    protected void applyEffect(Game game, Wizard wizard) throws Exception {
+    protected void applyEffect(Game game) throws Exception {
         CharacterSeven character = ((CharacterSeven) game.getCharacter(7));
-        character.useEffect(wizard.getTowerColor(), taken, given);
+        character.useEffect(authorId, taken, given);
     }
 
     @Override
-    public void validate(Game game, Wizard wizard) throws Exception {
+    public void validate(Game game) throws Exception {
         CharacterSeven character = ((CharacterSeven) game.getCharacter(7));
-        character.characterSevenValidator(wizard.getTowerColor(), taken, given);
+        character.characterSevenValidator(authorId, taken, given);
     }
 }

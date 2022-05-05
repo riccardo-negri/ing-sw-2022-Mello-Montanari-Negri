@@ -34,8 +34,8 @@ public class IslandGroup {
      */
     public void updateTower (Game game, Character activatedCharacter) {
 
-        if (getIslandList().stream().anyMatch(Island::isStopCard))
-            getIslandList().stream().filter(Island::isStopCard).findFirst().get().removeStopCard();
+        if (getIslandList().stream().anyMatch(Island::hasStopCard))
+            getIslandList().stream().filter(Island::hasStopCard).findFirst().get().removeStopCard();
         else {
             Integer[] values = new Integer[game.getPlayerNumber().getWizardNumber()];
             for (int i = 0; i < game.getPlayerNumber().getWizardNumber(); i++) {
@@ -50,9 +50,9 @@ public class IslandGroup {
                 Wizard w;
                 if ((!(activatedCharacter instanceof CharacterNine) || ((CharacterNine) activatedCharacter).getStudentColor() != color)
                         && (w = game.getProfessor(color).getMaster(activatedCharacter)) != null) {
-                    values[w.getTowerColor().getValue()] += islandList.stream()
-                        .flatMap(x -> x.getStudentColorList().stream())
-                        .filter(x -> x == color).collect(Collectors.toList()).size();
+                    values[w.getTowerColor().getValue()] += (int) islandList.stream()
+                            .flatMap(x -> x.getStudentColorList().stream())
+                            .filter(x -> x == color).count();
                 }
             }
 
@@ -78,8 +78,8 @@ public class IslandGroup {
      * @param game game, used to reach the wizards
      */
     private void changeTower(Tower newOwner, Game game) {
-        game.getWizard(tower).changeTowerNumber(islandList.size());
-        game.getWizard(newOwner).changeTowerNumber(-islandList.size());
+        game.getWizardsFromTower(tower).stream().forEach(x -> x.changeTowerNumber(islandList.size()));
+        game.getWizardsFromTower(newOwner).stream().forEach(x -> x.changeTowerNumber(-islandList.size()));
         tower = newOwner;
     }
 

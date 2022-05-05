@@ -9,24 +9,25 @@ public class IslandMovement extends Move{
     private final StudentColor student;
     private final int islandId;
 
-    public IslandMovement(StudentColor student, int islandId) {
+    public IslandMovement(Wizard author, StudentColor student, int islandId) {
+        super(author);
         this.student = student;
         this.islandId = islandId;
     }
 
     @Override
-    protected void applyEffect(Game game, Wizard wizard) throws Exception {
+    protected void applyEffect(Game game) throws Exception {
         try {
-            ((MoveStudentActionState) game.getGameState()).moveStudentToIsland(wizard.getTowerColor(), student, islandId);
+            ((MoveStudentActionState) game.getGameState()).moveStudentToIsland(authorId, student, islandId);
         } catch (ClassCastException e) {
             throw new Exception("This phase doesn't allow this move");
         }
     }
 
     @Override
-    public void validate(Game game, Wizard wizard) throws Exception {
+    public void validate(Game game) throws Exception {
         try {
-            ((MoveStudentActionState) game.getGameState()).moveStudentToIslandValidator(wizard.getTowerColor(), student, islandId);
+            ((MoveStudentActionState) game.getGameState()).moveStudentToIslandValidator(authorId, student, islandId);
         } catch (ClassCastException e) {
             throw new Exception("This phase doesn't allow this move");
         }

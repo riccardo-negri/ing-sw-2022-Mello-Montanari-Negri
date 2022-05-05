@@ -27,7 +27,8 @@ public class Professor {
      * @param contestant the wizard who may become the new owner, the one who added some students
      */
     public void refreshMaster(Integer contestant) {
-        if (Game.request(gameId).getWizard(contestant).getDiningStudents(color) > Game.request(gameId).getWizard(master).getDiningStudents(color))
+        if (master == null) master = contestant;
+        else if (Game.request(gameId).getWizard(contestant).getDiningStudents(color) > Game.request(gameId).getWizard(master).getDiningStudents(color))
             master = contestant;
     }
 

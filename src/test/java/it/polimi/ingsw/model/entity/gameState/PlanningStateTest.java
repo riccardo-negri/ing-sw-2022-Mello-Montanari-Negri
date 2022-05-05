@@ -22,7 +22,9 @@ class PlanningStateTest {
 
     @Test
     void selectCard() {
-        initializeGame();
+        Assertions.assertEquals("Wrong player", Assertions.assertThrows(Exception.class, () ->
+                ((PlanningState) game.getGameState()).cardSelectionValidator(0, 2)
+        ).getMessage());
         Assertions.assertDoesNotThrow(() -> {
             ((PlanningState) game.getGameState()).selectCard(2, 2);
             //game.serializeGame("./src/test/java/it/polimi/ingsw/model/entity/serialized_tests/planning_state_test/Test1After1.json");

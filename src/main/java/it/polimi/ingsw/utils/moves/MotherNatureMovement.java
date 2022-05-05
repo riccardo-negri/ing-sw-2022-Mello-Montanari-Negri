@@ -14,7 +14,7 @@ public class MotherNatureMovement extends Move{
     @Override
     protected void applyEffect(Game game, Wizard wizard) throws Exception {
         try {
-            ((MoveMotherNatureActionState) game.getGameState()).moveMotherNature(wizard.getTowerColor(), steps);
+            ((MoveMotherNatureActionState) game.getGameState()).moveMotherNature(wizard.getId(), steps);
         } catch (ClassCastException e) {
             throw new Exception("This phase doesn't allow this move");
         }
@@ -23,7 +23,7 @@ public class MotherNatureMovement extends Move{
     @Override
     public void validate(Game game, Wizard wizard) throws Exception {
         try {
-            ((MoveMotherNatureActionState) game.getGameState()).moveMotherNatureValidator(wizard.getTowerColor(), steps);
+            ((MoveMotherNatureActionState) game.getGameState()).moveMotherNatureValidator(wizard.getId(), steps);
         } catch (ClassCastException e) {
             throw new Exception("This phase doesn't allow this move");
         }

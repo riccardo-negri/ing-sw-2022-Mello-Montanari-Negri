@@ -6,7 +6,7 @@ package it.polimi.ingsw.model.enums;
 public enum PlayerNumber {
     TWO(2,3, 7,8),
     THREE(3,4, 9,6),
-    FOUR(2,3, 7,8);
+    FOUR(4,3, 7,8);
 
     private final Integer wizardNumber;
     private final Integer cloudSize;

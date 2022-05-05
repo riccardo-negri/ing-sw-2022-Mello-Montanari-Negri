@@ -13,20 +13,20 @@ public class CharacterEight extends Character {
 
     /**
      * During the influence calculation, two points are added to the activator
-     * @param playingTower the player playing the card
+     * @param playingWizard the player playing the card
      */
-    public void useEffect(Tower playingTower) throws Exception {
-        characterEightValidator(playingTower);
-        useCard(playingTower);
+    public void useEffect(Integer playingWizard) throws Exception {
+        characterEightValidator(playingWizard);
+        useCard(playingWizard);
         ((ActionState) Game.request(gameId).getGameState()).activateEffect(this);
     }
 
     /**
      * During the influence calculation, two points are added to the activator
-     * @param playingTower the player playing the card
+     * @param playingWizard the player playing the card
      * @throws Exception if it is not the player turn, or he does not have enough money to activate the card
      */
-    public void characterEightValidator(Tower playingTower) throws Exception {
-        characterValidator(playingTower);
+    public void characterEightValidator(Integer playingWizard) throws Exception {
+        characterValidator(playingWizard);
     }
 }

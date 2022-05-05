@@ -11,6 +11,7 @@ import java.util.List;
  * class to represent the player
  */
 public class Wizard {
+    private final Integer wizardId;
     private Integer money;
     private final CardDeck cardDeck;
     private final List<StudentColor> entranceStudents;
@@ -24,7 +25,8 @@ public class Wizard {
      * @param towerColor color of the player
      * @param towerNumber starting number of towers, depending on the number of players
      */
-    public Wizard(List<StudentColor> entranceStudents, Tower towerColor, Integer towerNumber) {
+    public Wizard(int wizardId, List<StudentColor> entranceStudents, Tower towerColor, Integer towerNumber) {
+        this.wizardId = wizardId;
         this.towerNumber = towerNumber;
         cardDeck = new CardDeck();
         money = 1;
@@ -62,6 +64,8 @@ public class Wizard {
     public Tower getTowerColor() { return towerColor; }
 
     public List<StudentColor> getEntranceStudents() { return entranceStudents; }
+
+    public Integer getId() { return wizardId; }
 }
 
 

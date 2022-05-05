@@ -13,20 +13,20 @@ public class CharacterTwo extends Character{
 
     /**
      * for the turn take control of professors even if the number of student is the same as the one controlling them
-     * @param playingTower the player playing the card
+     * @param playingWizard the player playing the card
      */
-    public void useEffect(Tower playingTower) throws Exception {
-        characterTwoValidator(playingTower);
-        useCard(playingTower);
+    public void useEffect(Integer playingWizard) throws Exception {
+        characterTwoValidator(playingWizard);
+        useCard(playingWizard);
         ((ActionState) Game.request(gameId).getGameState()).activateEffect(this);
     }
 
     /**
      * Validator for character two useEffect method
-     * @param playingTower the player playing the card
+     * @param playingWizard the player playing the card
      * @throws Exception if it is not the player turn, or he does not have enough money to activate the card
      */
-    public void characterTwoValidator(Tower playingTower) throws Exception {
-        characterValidator(playingTower);
+    public void characterTwoValidator(Integer playingWizard) throws Exception {
+        characterValidator(playingWizard);
     }
 }

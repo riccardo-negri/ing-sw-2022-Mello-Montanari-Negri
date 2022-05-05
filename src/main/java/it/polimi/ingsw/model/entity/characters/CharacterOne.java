@@ -21,13 +21,13 @@ public class CharacterOne extends Character{
 
     /**
      * take one student and put it on a chosen island, then refill the island from the bag
-     * @param playingTower the player playing the card
+     * @param playingWizard the player playing the card
      * @param studentColor the color of the student to take
      * @param islandId the island to put the student on
      */
-    public void useEffect(Tower playingTower, StudentColor studentColor, Integer islandId) throws Exception{
-        characterOneValidator(playingTower, studentColor, islandId);
-        useCard(playingTower);
+    public void useEffect(Integer playingWizard, StudentColor studentColor, Integer islandId) throws Exception{
+        characterOneValidator(playingWizard, studentColor, islandId);
+        useCard(playingWizard);
         studentColorList.remove(studentColor);
         Game.request(gameId).getIsland(islandId).putIslandStudent(studentColor);
         studentColorList.addAll(bag.requestStudents(1));
@@ -35,14 +35,14 @@ public class CharacterOne extends Character{
 
     /**
      * Validator for character one useEffect method
-     * @param playingTower the player playing the card
+     * @param playingWizard the player playing the card
      * @param studentColor the color of the student to take
      * @param islandId the island to put the student on
      * @throws Exception if it is not the player turn, he does not have enough money to activate the card,
      * the card does not contain the student asked or the island does not exist
      */
-    public void characterOneValidator (Tower playingTower, StudentColor studentColor, Integer islandId) throws Exception{
-        characterValidator(playingTower);
+    public void characterOneValidator (Integer playingWizard, StudentColor studentColor, Integer islandId) throws Exception{
+        characterValidator(playingWizard);
         if (!studentColorList.contains(studentColor)) throw new Exception("Student color not present on the card");
         if (islandId<0 || islandId>=12) throw new Exception("Selected island doesn't exist");
     }

@@ -20,6 +20,8 @@ public class PlanningState extends GameState {
         Collections.shuffle(playerOrder, randomGenerator);
         try { for(Cloud c : Game.request(gameId).getCloudList()) c.fillCloud();
         } catch (Exception e) {
+            System.err.println("Passato da qua");
+            System.err.println(e.getMessage());
             //TODO codice per gestire la fine degli studenti nella bag, condizione di fine partita
         }
     }
@@ -33,6 +35,7 @@ public class PlanningState extends GameState {
         gameState = "PS";
         try { for(Cloud c : Game.request(gameId).getCloudList()) c.fillCloud();
         } catch (Exception e) {
+            System.err.println("Passato da qua");
             //TODO codice per gestire la fine degli studenti nella bag, condizione di fine partita
         }
     }
@@ -64,7 +67,7 @@ public class PlanningState extends GameState {
 
         List<Integer> cardNumbers = new ArrayList<>();
         for (int i=0; i<currentlyPlaying; i++)
-            cardNumbers.add(player.getCardDeck().getCurrentCard().getNumber());
+            cardNumbers.add(Game.request(gameId).getWizard(playerOrder.get(i)).getCardDeck().getCurrentCard().getNumber());
         if (cardNumbers.contains(selected) && player.getCardDeck().checkAvailableCards(cardNumbers))
             throw new Exception("Card already played with valid alternatives");
     }

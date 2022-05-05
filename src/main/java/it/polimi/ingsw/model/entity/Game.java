@@ -25,12 +25,12 @@ public class Game implements Serializable {
     private transient Integer id;
     private final GameMode gameMode;
     private final PlayerNumber playerNumber;
-    private final List<Wizard> wizardList;
-    private final Professor[] professors;
-    private final List<IslandGroup> islandGroupList;
-    private final List<Cloud> cloudList;
-    private final Character[] characters;
-    private final Bag bag;
+    private List<Wizard> wizardList;
+    private Professor[] professors;
+    private List<IslandGroup> islandGroupList;
+    private List<Cloud> cloudList;
+    private Character[] characters;
+    private Bag bag;
 
     private GameState gameState;
 
@@ -40,11 +40,13 @@ public class Game implements Serializable {
      * @param gameMode easy or complete, to activate the character cards
      * @param playerNumber number of players
      */
-    private Game(Integer id, GameMode gameMode, PlayerNumber playerNumber, Type type) {
+    private Game(Integer id, GameMode gameMode, PlayerNumber playerNumber) {
         this.id = id;
         this.gameMode = gameMode;
         this.playerNumber = playerNumber;
+    }
 
+    private void initializeGame() {
         Random randomGenerator = new Random();
         this.bag = new Bag(randomGenerator);
 
@@ -102,8 +104,9 @@ public class Game implements Serializable {
      */
     public static Integer gameEntityFactory(GameMode gameMode, PlayerNumber playerNumber, Type type) {
         if (gameEntities == null) gameEntities = new ArrayList<>();
-        Game game = new Game(idCount, gameMode, playerNumber, type);
-        gameEntities.add(game);
+        Game generatedGame = new Game(idCount, gameMode, playerNumber);
+        gameEntities.add(generatedGame);
+        generatedGame.initializeGame();
         return idCount++;
     }
 

@@ -9,20 +9,21 @@ public class UseCharacter1 extends UseCharacter {
     private final StudentColor student;
     private final int islandId;
 
-    public UseCharacter1(StudentColor student, int islandId) {
+    public UseCharacter1(Wizard author, StudentColor student, int islandId) {
+        super(author);
         this.student = student;
         this.islandId = islandId;
     }
 
     @Override
-    protected void applyEffect(Game game, Wizard wizard) throws Exception {
+    protected void applyEffect(Game game) throws Exception {
         CharacterOne character = ((CharacterOne) game.getCharacter(1));
-        character.useEffect(wizard.getTowerColor(), student, islandId);
+        character.useEffect(authorId, student, islandId);
     }
 
     @Override
-    public void validate(Game game, Wizard wizard) throws Exception {
+    public void validate(Game game) throws Exception {
         CharacterOne character = ((CharacterOne) game.getCharacter(1));
-        character.characterOneValidator(wizard.getTowerColor(), student, islandId);
+        character.characterOneValidator(authorId, student, islandId);
     }
 }

@@ -7,23 +7,24 @@ import it.polimi.ingsw.model.entity.gameState.ChooseCloudActionState;
 public class CloudChoice extends Move{
     private final int cloudId;
 
-    public CloudChoice(int cloudId) {
+    public CloudChoice(Wizard author, int cloudId) {
+        super(author);
         this.cloudId = cloudId;
     }
 
     @Override
-    protected void applyEffect(Game game, Wizard wizard) throws Exception {
+    protected void applyEffect(Game game) throws Exception {
         try {
-            ((ChooseCloudActionState) game.getGameState()).chooseCloud(wizard.getId(), cloudId);
+            ((ChooseCloudActionState) game.getGameState()).chooseCloud(authorId, cloudId);
         } catch (ClassCastException e) {
             throw new Exception("This phase doesn't allow this move");
         }
     }
 
     @Override
-    public void validate(Game game, Wizard wizard) throws Exception {
+    public void validate(Game game) throws Exception {
         try {
-            ((ChooseCloudActionState) game.getGameState()).chooseCloudValidator(wizard.getId(), cloudId);
+            ((ChooseCloudActionState) game.getGameState()).chooseCloudValidator(authorId, cloudId);
         } catch (ClassCastException e) {
             throw new Exception("This phase doesn't allow this move");
         }

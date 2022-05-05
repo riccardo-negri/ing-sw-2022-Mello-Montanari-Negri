@@ -6,15 +6,19 @@ import it.polimi.ingsw.model.entity.characters.CharacterTwo;
 
 public class UseCharacter2 extends UseCharacter {
 
-    @Override
-    protected void applyEffect(Game game, Wizard wizard) throws Exception {
-        CharacterTwo character = ((CharacterTwo) game.getCharacter(2));
-        character.useEffect(wizard.getTowerColor());
+    public UseCharacter2(Wizard author) {
+        super(author);
     }
 
     @Override
-    public void validate(Game game, Wizard wizard) throws Exception {
+    protected void applyEffect(Game game) throws Exception {
         CharacterTwo character = ((CharacterTwo) game.getCharacter(2));
-        character.characterTwoValidator(wizard.getTowerColor());
+        character.useEffect(authorId);
+    }
+
+    @Override
+    public void validate(Game game) throws Exception {
+        CharacterTwo character = ((CharacterTwo) game.getCharacter(2));
+        character.characterTwoValidator(authorId);
     }
 }

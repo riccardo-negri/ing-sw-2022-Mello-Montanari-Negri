@@ -10,7 +10,7 @@ import it.polimi.ingsw.model.enums.Tower;
  */
 public class Professor {
 
-    private final Integer gameId;
+    private transient Integer gameId;
     private final StudentColor color;
     private Integer master;
 
@@ -19,6 +19,8 @@ public class Professor {
         this.color = color;
         this.master = null;
     }
+
+    public void refreshGameId(Game game) { this.gameId = game.getId(); }
 
     /**
      * used to calculate the new owner of the professor

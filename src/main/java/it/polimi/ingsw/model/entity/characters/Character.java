@@ -7,7 +7,7 @@ import it.polimi.ingsw.model.enums.Tower;
 
 public abstract class Character {
 
-    protected final Integer gameId;
+    protected transient Integer gameId;
     protected final Integer characterId;
     protected Integer activator;
     private final Integer price;
@@ -38,6 +38,8 @@ public abstract class Character {
         this.price = price;
         this.used = false;
     }
+
+    public void refreshGameId(Game game) { this.gameId = game.getId(); }
 
     protected void useCard(Integer playingWizard) throws Exception{
         Game.request(gameId).getWizard(playingWizard).payEffect(price + (used ? 1 : 0));

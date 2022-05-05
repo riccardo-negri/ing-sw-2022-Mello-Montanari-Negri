@@ -22,7 +22,7 @@ public class Game implements Serializable {
     private static Integer idCount = 0;
     private static List<Game> gameEntities;
 
-    private final Integer id;
+    private transient Integer id;
     private final GameMode gameMode;
     private final PlayerNumber playerNumber;
     private final List<Wizard> wizardList;
@@ -142,8 +142,14 @@ public class Game implements Serializable {
         reader.close();
 
         Game newGame = JsonDeserializerClass.getGson().fromJson(in, Game.class);
-        if(gameEntities.stream().anyMatch(x -> x.isGameId(newGame.id))) throw new Exception("Game already present");
-        newGame.getCloudList().forEach(x -> x.setBag(newGame.bag));
+
+        newGame.id = idCount++;
+        Arrays.stream(newGame.professors).forEach(x -> x.refreshGameId(newGame));
+        Arrays.stream(newGame.characters).forEach(x -> x.refreshGameId(newGame));
+        newGame.gameState.refreshGameId(newGame);
+
+        newGame.cloudList.forEach(x -> x.setBag(newGame.bag));
+
         Game.gameEntities.add(newGame);
         return newGame.id;
     }
@@ -197,6 +203,10 @@ public class Game implements Serializable {
         return wizardList.stream().filter(w -> Objects.equals(w.getId(), wizardId)).findFirst().get();
     }
 
+    public List<Wizard> getWizardsFromTower(Tower towerColor) {
+        return wizardList.stream().filter(w -> Objects.equals(w.getTowerColor(), towerColor)).collect(Collectors.toList());
+    }
+
     public Island getIsland(Integer islandId) {
         return islandGroupList.stream().flatMap(x -> x.getIslandList().stream()).filter(x -> Objects.equals(x.getId(), islandId)).findFirst().get();
     }
@@ -222,6 +232,8 @@ public class Game implements Serializable {
     public List<Cloud> getCloudList() { return cloudList; }
 
     private boolean isGameId(Integer id) { return id.equals(this.id); }
+
+    public Integer getId () { return id; }
 
     public GameState getGameState() { return gameState; }
 

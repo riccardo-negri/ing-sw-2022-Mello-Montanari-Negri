@@ -62,6 +62,7 @@ public class PlanningState extends GameState {
     public void cardSelectionValidator(Integer playingWizard, Integer selected) throws Exception {
 
         if (!Objects.equals(playingWizard, playerOrder.get(currentlyPlaying))) throw new Exception("Wrong player");
+        if (!Objects.equals(gameState, "PS")) throw new Exception("Wrong game phase");
 
         Wizard player = Game.request(gameId).getWizard(playingWizard);
 

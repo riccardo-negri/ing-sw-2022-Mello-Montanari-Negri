@@ -87,6 +87,8 @@ public class MoveStudentActionState extends ActionState {
     private void moveStudentValidator(Integer playingWizard, StudentColor studentColor) throws Exception {
         if (!Objects.equals(playingWizard, playerOrder.get(currentlyPlaying)))
             throw new Exception("Wrong player");
+        if (!Objects.equals(gameState, "MSS"))
+            throw new Exception("Wrong game phase");
         if (!Game.request(gameId).getWizard(playingWizard).getEntranceStudents().contains(studentColor))
             throw new Exception("No students available in the selected color");
     }

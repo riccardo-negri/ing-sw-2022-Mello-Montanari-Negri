@@ -4,6 +4,8 @@ import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.characters.CharacterFour;
 import it.polimi.ingsw.model.enums.Tower;
 
+import java.util.Objects;
+
 public class MoveMotherNatureActionState extends ActionState {
 
     protected MoveMotherNatureActionState(GameState oldState){
@@ -32,6 +34,7 @@ public class MoveMotherNatureActionState extends ActionState {
      */
     public void moveMotherNatureValidator(Integer playingWizard, Integer steps) throws Exception {
         if (playingWizard != playerOrder.get(currentlyPlaying)) throw new Exception("Wrong player");
+        if (!Objects.equals(gameState, "MMNS")) throw new Exception("Wrong game phase");
         if (steps > getMaximumSteps(playingWizard)) throw new Exception("Too many steps");
     }
 

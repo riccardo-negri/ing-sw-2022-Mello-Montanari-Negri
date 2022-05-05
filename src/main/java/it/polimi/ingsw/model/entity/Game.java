@@ -194,7 +194,7 @@ public class Game implements Serializable {
      */
     public void unifyIslands() {
         for (int i=0; i<islandGroupList.size(); i++) {
-            if (islandGroupList.get(i).getTower() == islandGroupList.get((i+1)%islandGroupList.size()).getTower()) {
+            if (islandGroupList.get(i).getTower() != null && islandGroupList.get(i).getTower() == islandGroupList.get((i+1)%islandGroupList.size()).getTower()) {
                 islandGroupList.get(i).getIslandList().addAll(islandGroupList.get((i+1)%islandGroupList.size()).getIslandList());
                 islandGroupList.remove((i+1)%islandGroupList.size());
                 i--;
@@ -203,7 +203,9 @@ public class Game implements Serializable {
     }
 
     public Wizard getWizard(Integer wizardId) {
-        return wizardList.stream().filter(w -> Objects.equals(w.getId(), wizardId)).findFirst().get();
+        for (Wizard w : wizardList)
+            if (w.getId() == wizardId) return w;
+        return null;
     }
 
     public List<Wizard> getWizardsFromTower(Tower towerColor) {

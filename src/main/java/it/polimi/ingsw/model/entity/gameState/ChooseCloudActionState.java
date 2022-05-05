@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.entity.gameState;
 
 import it.polimi.ingsw.model.entity.Game;
-import it.polimi.ingsw.model.enums.Tower;
 
 import java.util.Objects;
 
@@ -30,7 +29,7 @@ public class ChooseCloudActionState extends ActionState{
      * @throws Exception wrong player, phase or cloud not available or taken
      */
     public void chooseCloudValidator(Integer playingWizard, Integer cloudId) throws Exception {
-        if (playingWizard != playerOrder.get(currentlyPlaying)) throw new Exception("Wrong player");
+        if (!Objects.equals(playingWizard, playerOrder.get(currentlyPlaying))) throw new Exception("Wrong player");
         if (!Objects.equals(gameState, "CCS")) throw new Exception("Wrong game phase");
 
         if (cloudId >= Game.request(gameId).getPlayerNumber().getWizardNumber()) throw new Exception("Chosen cloud not present");

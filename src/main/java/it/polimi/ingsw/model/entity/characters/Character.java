@@ -3,7 +3,6 @@ package it.polimi.ingsw.model.entity.characters;
 import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.entity.Bag;
-import it.polimi.ingsw.model.enums.Tower;
 
 public abstract class Character {
 
@@ -61,5 +60,5 @@ public abstract class Character {
 
     public Wizard getActivator() { return Game.request(gameId).getWizard(activator); }
 
-    public Integer getCharacterId() { return characterId; }
+    public Integer getId() { return characterId; }
 }

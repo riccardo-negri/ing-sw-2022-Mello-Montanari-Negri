@@ -204,7 +204,7 @@ public class Game implements Serializable {
 
     public Wizard getWizard(Integer wizardId) {
         for (Wizard w : wizardList)
-            if (w.getId() == wizardId) return w;
+            if (Objects.equals(w.getId(), wizardId)) return w;
         return null;
     }
 
@@ -213,15 +213,23 @@ public class Game implements Serializable {
     }
 
     public Island getIsland(Integer islandId) {
-        return islandGroupList.stream().flatMap(x -> x.getIslandList().stream()).filter(x -> Objects.equals(x.getId(), islandId)).findFirst().get();
+        for(Island i : islandGroupList.stream().flatMap(x -> x.getIslandList().stream()).collect(Collectors.toList()))
+            if (Objects.equals(i.getId(), islandId)) return i;
+        return null;
     }
 
     public Cloud getCloud(Integer cloudId) {
-        return cloudList.stream().filter(x -> Objects.equals(x.getId(), cloudId)).findFirst().get();
+        for (Cloud c : cloudList)
+            if (Objects.equals(c.getId(), cloudId))
+                return c;
+        return null;
     }
 
     public IslandGroup getIslandGroup(Integer islandGroupId) {
-        return islandGroupList.stream().filter(x -> Objects.equals(x.getId(), islandGroupId)).findFirst().get();
+        for (IslandGroup g : islandGroupList)
+            if (Objects.equals(g.getId(), islandGroupId))
+                return g;
+        return null;
     }
 
     public IslandGroup getFistIslandGroup () { return islandGroupList.get(0); }
@@ -247,7 +255,8 @@ public class Game implements Serializable {
     }
 
     public Character getCharacter(int characterId) throws Exception {
-        if (Arrays.stream(characters).noneMatch(x -> x.getCharacterId() == characterId)) throw new Exception("Character not found");
-        return Arrays.stream(characters).filter(x -> x.getCharacterId() == characterId).findFirst().get();
+        for (Character c : characters)
+            if (c.getId() == characterId) return c;
+        throw new Exception("Character not found");
     }
 }

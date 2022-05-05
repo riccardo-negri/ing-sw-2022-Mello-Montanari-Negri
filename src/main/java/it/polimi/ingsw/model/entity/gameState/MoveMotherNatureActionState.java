@@ -1,9 +1,10 @@
 package it.polimi.ingsw.model.entity.gameState;
 
 import it.polimi.ingsw.model.entity.Game;
-import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.entity.characters.CharacterFour;
 import it.polimi.ingsw.model.enums.Tower;
+
+import java.util.Objects;
 
 public class MoveMotherNatureActionState extends ActionState {
 
@@ -14,11 +15,11 @@ public class MoveMotherNatureActionState extends ActionState {
 
     /**
      * Second phase of the Action State, to move mother nature
-     * @param playingTower the player doing the move
+     * @param playingWizard the player doing the move
      * @param steps the number of steps to move
      */
-    public void moveMotherNature(Tower playingTower, Integer steps) throws Exception {
-        moveMotherNatureValidator(playingTower, steps);
+    public void moveMotherNature(Integer playingWizard, Integer steps) throws Exception {
+        moveMotherNatureValidator(playingWizard, steps);
         Game.request(gameId).doMotherNatureSteps(steps);
         Game.request(gameId).getFistIslandGroup().updateTower(Game.request(gameId), activatedCharacter);
         Game.request(gameId).unifyIslands();
@@ -27,22 +28,23 @@ public class MoveMotherNatureActionState extends ActionState {
 
     /**
      * Validator for moveMotherNature method
-     * @param playingTower the player doing the move
+     * @param playingWizard the player doing the move
      * @param steps the number of steps to move
      * @throws Exception wrong player, phase or too many steps asked
      */
-    public void moveMotherNatureValidator(Tower playingTower, Integer steps) throws Exception {
-        if (playingTower != towerOrder.get(currentlyPlaying)) throw new Exception("Wrong player");
-        if (steps > getMaximumSteps(playingTower)) throw new Exception("Too many steps");
+    public void moveMotherNatureValidator(Integer playingWizard, Integer steps) throws Exception {
+        if (playingWizard != playerOrder.get(currentlyPlaying)) throw new Exception("Wrong player");
+        if (!Objects.equals(gameState, "MMNS")) throw new Exception("Wrong game phase");
+        if (steps > getMaximumSteps(playingWizard)) throw new Exception("Too many steps");
     }
 
     /**
      * It returns the maximum number of steps mother nature can make in the turn
-     * @param playingTower the player doing the move
+     * @param playingWizard the player doing the move
      * @return maximum number of steps
      */
-    public int getMaximumSteps(Tower playingTower) {
-        int maximumSteps = Game.request(gameId).getWizard(playingTower).getCardDeck().getCurrentCard().getSteps();
+    public int getMaximumSteps(Integer playingWizard) {
+        int maximumSteps = Game.request(gameId).getWizard(playingWizard).getCardDeck().getCurrentCard().getSteps();
         maximumSteps += activatedCharacter instanceof CharacterFour ? 2 : 0;
         return maximumSteps;
     }

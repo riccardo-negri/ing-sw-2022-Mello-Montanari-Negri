@@ -16,23 +16,23 @@ public class CharacterNine extends Character{
 
     /**
      * during the influence calculation on student color is not considered
-     * @param playingTower the player playing the card
+     * @param playingWizard the player playing the card
      * @param studentColor the color not to consider in the calculation
      */
-    public void useEffect(Tower playingTower, StudentColor studentColor) throws Exception {
-        characterNineValidator(playingTower);
-        useCard(playingTower);
+    public void useEffect(Integer playingWizard, StudentColor studentColor) throws Exception {
+        characterNineValidator(playingWizard);
+        useCard(playingWizard);
         this.studentColor = studentColor;
         ((ActionState) Game.request(gameId).getGameState()).activateEffect(this);
     }
 
     /**
      * Validator for character nine useEffect method
-     * @param playingTower the player playing the card
+     * @param playingWizard the player playing the card
      * @throws Exception if it is not the player turn, or he does not have enough money to activate the card
      */
-    public void characterNineValidator(Tower playingTower) throws Exception {
-        characterValidator(playingTower);
+    public void characterNineValidator(Integer playingWizard) throws Exception {
+        characterValidator(playingWizard);
     }
 
     public StudentColor getStudentColor() { return studentColor; }

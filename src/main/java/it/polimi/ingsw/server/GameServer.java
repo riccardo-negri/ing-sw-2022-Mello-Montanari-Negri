@@ -85,7 +85,7 @@ public class GameServer extends Server{
         synchronized (connectedUser) {
             id = connectedUser.size();
         }
-        return new GameUser(name, connection, game.getWizard(Tower.fromNumber(id)));
+        return new GameUser(name, connection, game.getWizard(id));
     }
 
     public boolean acceptsAssign() {

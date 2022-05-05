@@ -45,7 +45,7 @@ public class JsonDeserializerClass {
                 case "PS": return gson.fromJson(jsonElement, PlanningState.class);
                 case "MSS": return gson.fromJson(jsonElement, MoveStudentActionState.class);
                 case "MMNS": return gson.fromJson(jsonElement, MoveMotherNatureActionState.class);
-                case "CIS": return gson.fromJson(jsonElement, ChooseCloudActionState.class);
+                case "CCS": return gson.fromJson(jsonElement, ChooseCloudActionState.class);
                 default: return null;
             }
         }

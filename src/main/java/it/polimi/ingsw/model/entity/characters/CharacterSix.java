@@ -11,20 +11,20 @@ public class CharacterSix extends Character{
 
     /**
      * towers are not counted when calculating the influence of an island group
-     * @param playingTower the player playing the card
+     * @param playingWizard the player playing the card
      */
-    public void useEffect(Tower playingTower) throws Exception{
-        characterSixValidator(playingTower);
-        useCard(playingTower);
+    public void useEffect(Integer playingWizard) throws Exception{
+        characterSixValidator(playingWizard);
+        useCard(playingWizard);
         ((ActionState) Game.request(gameId).getGameState()).activateEffect(this);
     }
 
     /**
      * Validator for character six useEffect method
-     * @param playingTower the player playing the card
+     * @param playingWizard the player playing the card
      * @throws Exception if it is not the player turn, or he does not have enough money to activate the card
      */
-    public void characterSixValidator(Tower playingTower) throws Exception {
-        characterValidator(playingTower);
+    public void characterSixValidator(Integer playingWizard) throws Exception {
+        characterValidator(playingWizard);
     }
 }

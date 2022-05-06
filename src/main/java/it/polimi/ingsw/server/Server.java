@@ -3,10 +3,10 @@ package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.utils.Connection;
 import it.polimi.ingsw.utils.Login;
+import it.polimi.ingsw.utils.SafeSocket;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.Socket;
 import java.net.SocketException;
 import java.util.List;
 import java.util.Vector;
@@ -80,8 +80,8 @@ public abstract class Server {
         System.out.println("Listening for new connections on port: " + getPort());
         while (true) {
             try {
-                Socket socket;
-                socket = this.socket.accept();
+                SafeSocket socket;
+                socket = new SafeSocket(this.socket.accept());
                 System.out.println("Accepted new connection from: " + socket.getInetAddress());
                 connecting.add(new Connection(socket, this::userLogin));
             } catch (IOException e) {

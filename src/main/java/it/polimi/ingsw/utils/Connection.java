@@ -8,19 +8,18 @@ import java.util.*;
 import java.util.function.Predicate;
 
 public class Connection extends ConnectionBase {
-    private int sentCount = 0;
-    private int receivedCount = 0;
-    private final Object sentCountLock = new Object();
+    private final Counter sentCount = new Counter();
+    private final Counter receivedCount = new Counter();
 
-    private final Queue<Message> messageQueue = new PriorityQueue<>((a, b) -> a.getNumber() - b.getNumber());
-    protected final List<MessageContent> messagesToProcess = new ArrayList<>();
+    private final Queue<Message> receivedQueue = new PriorityQueue<>((a, b) -> a.getNumber() - b.getNumber());
+    private final Queue<MessageContent> messagesToProcess = new LinkedList<>();
 
-    public Connection(Socket socket, Predicate<Connection> acceptMessage) {
+    public Connection(SafeSocket socket, Predicate<Connection> acceptMessage) {
         super(socket, acceptMessage);
 
     }
 
-    public Connection(Socket socket) {
+    public Connection(SafeSocket socket) {
         super(socket, Connection::doNothing);
 
     }
@@ -36,20 +35,20 @@ public class Connection extends ConnectionBase {
 
     static private boolean doNothing(Connection source) {return false;}
 
-    static private Socket createSocket(String address, int port) {
+    static private SafeSocket createSocket(String address, int port) {
         try {
-            return new Socket(address, port);
+            return new SafeSocket(new Socket(address, port));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public synchronized void bindFunction(Predicate<Connection> acceptMessage) {
-        this.acceptMessage = acceptMessage;
+    public void bindFunction(Predicate<Connection> acceptMessage) {
+        this.acceptMessage.set(acceptMessage);
     }
 
     protected void listenMessages() {
-        System.out.println("Listening for new messages from: " + targetAddress);
+        System.out.println("Listening for new messages from: " + socket.getInetAddress());
         while (isRunning()) {
             try {
                 Message msg = (Message) reader.readObject();
@@ -74,10 +73,10 @@ public class Connection extends ConnectionBase {
     If on message is missing stops processing and will continue from there on the next call
      */
     private synchronized void updateQueue(Message newMessage) {
-        messageQueue.add(newMessage);
-        while (messageQueue.peek() != null && messageQueue.peek().getNumber() == receivedCount) {
-            Message msg = messageQueue.poll();
-            receivedCount++;
+        receivedQueue.add(newMessage);
+        while (receivedQueue.peek() != null && receivedQueue.peek().getNumber() == receivedCount.get()) {
+            Message msg = receivedQueue.poll();
+            receivedCount.increment();
             if (msg != null)
                 processMessage(msg);
         }
@@ -88,10 +87,10 @@ public class Connection extends ConnectionBase {
     }
 
     private synchronized void processMessageContent(MessageContent message) {
-        System.out.println("Received new object from " + targetAddress + ": " + message);
+        System.out.println("Received new object from " + socket.getInetAddress() + ": " + message);
         messagesToProcess.add(message);
         if(acceptMessage.test(this)) {
-            removeLastMessage();  // remove the only message accessible by acceptMessage
+            messagesToProcess.poll();  // remove the only message accessible by acceptMessage
         }
         notifyAll();
     }
@@ -117,6 +116,7 @@ public class Connection extends ConnectionBase {
     public synchronized MessageContent waitMessage(List<Class> filter) {
         for (MessageContent m: messagesToProcess) {  // if message was received before the call of waitMessage
             if(matchFileter(m, filter)) {
+                messagesToProcess.remove(m);
                 return m;
             }
         }
@@ -127,44 +127,27 @@ public class Connection extends ConnectionBase {
                 throw new RuntimeException(e);
             }
         }
-        MessageContent result = getLastMessage();
-        removeLastMessage();
-        return result;
+        return messagesToProcess.poll();
     }
 
     public synchronized MessageContent getLastMessage () {
-        if (messagesToProcess.size() > 0) {
-            return messagesToProcess.get(messagesToProcess.size() - 1);
-        }
-        return null;
-    }
-
-    private synchronized void removeLastMessage() {
-        if (messagesToProcess.size() > 0) {
-            messagesToProcess.remove(messagesToProcess.size() - 1);
-        }
+        return messagesToProcess.peek();
     }
 
     public void send(MessageContent message) {
         try {
-            synchronized (sentCountLock) {
-                writer.writeObject(new Message(sentCount, message));
-                sentCount++;
-            }
+            int next = sentCount.increment();
+            writer.writeObject(new Message(next-1, message));
         } catch (IOException ignored) {}
     }
 
     boolean isRunning() {
-        synchronized (socket) {
-            return !socket.isClosed();
-        }
+        return !socket.isClosed();
     }
 
     void stop() {
         try {
-            synchronized (socket) {
-                socket.close();
-            }
+            socket.close();
         } catch (IOException ignored) {}
     }
 

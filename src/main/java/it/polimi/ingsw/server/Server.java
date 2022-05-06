@@ -8,27 +8,28 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 import java.util.stream.Collectors;
 
 public abstract class Server {
-    protected final List<Connection> connecting;
-    protected final List<User> connectedUser;
+    // using Vector instead of ArrayList because Vector class is thread-safe
+    protected final Vector<Connection> connecting;
+    protected final UniqueUserVector connectedUser;
     protected int maxUsers = Integer.MAX_VALUE;
     protected ServerSocket socket;
     protected int port;
 
-    int portToBind() {
+    int getPortToBind() {
         return 0;
     }
 
     // initialize variables but don't run server code yet
     public Server() {
-        connectedUser = new ArrayList<>();
-        connecting = new ArrayList<>();
+        connectedUser = new UniqueUserVector();
+        connecting = new Vector<>();
         try {
-            socket = new ServerSocket(portToBind());
+            socket = new ServerSocket(getPortToBind());
             port = socket.getLocalPort();
         } catch (IOException e) {
             System.out.println("Unable to open server socket:");
@@ -82,9 +83,7 @@ public abstract class Server {
                 Socket socket;
                 socket = this.socket.accept();
                 System.out.println("Accepted new connection from: " + socket.getInetAddress());
-                synchronized (connecting) {
-                    connecting.add(new Connection(socket, this::userLogin));
-                }
+                connecting.add(new Connection(socket, this::userLogin));
             } catch (IOException e) {
                 if (e instanceof SocketException) {
                     return;
@@ -97,37 +96,48 @@ public abstract class Server {
 
     abstract void onNewUserConnect(User user, Login info);
 
+    boolean isUserAllowed(Login info) {
+        return true;
+    }
+
     public boolean userLogin(Connection source) {
         Login login;
         try {
             login = (Login) source.getLastMessage();
         } catch (ClassCastException e) {
-            source.close();
-            removeConnecting(source);
+            abortConnection(source);
             return false;
         }
-        if (usernames().contains(login.getUsername())) {
-            for (User u : getConnectedUser()) {
-                if (u.getName().equals(login.getUsername())) {
-                    u.replaceConnection(source);
-                    removeConnecting(source);
-                    System.out.println("User " + login.getUsername() + " reconnected");
-                    onUserReconnected(u);
-                    return true;
-                }
-            }
-        } else {
-            if (getConnectedUser().size() < maxUsers) {
-                User user = createUser(login.getUsername(), source);
-                synchronized (connectedUser) {
-                    connectedUser.add(user);
-                }
-                removeConnecting(source);
-                System.out.println("New user logged in: " + user.getName());
-                onNewUserConnect(user, login);
-            }
+        if(isUserAllowed(login)) {
+            connectNewUser(source, login);
+        }
+        else {
+            abortConnection(source);
         }
         return true;
+    }
+
+    void connectNewUser(Connection connection, Login login) {
+        User user = createUser(login.getUsername(), connection);
+        if(connectedUser.addWithLimit(user, maxUsers)) {
+            connecting.remove(connection);
+            System.out.println("New user logged in: " + user.getName());
+            onNewUserConnect(user, login);
+        }
+        else {
+            reconnectUser(connection, login);
+        }
+    }
+
+    void reconnectUser(Connection connection, Login login) {
+        for (User u : getConnectedUser()) {
+            if (u.getName().equals(login.getUsername())) {
+                u.replaceConnection(connection);
+                connecting.remove(connection);
+                System.out.println("User " + login.getUsername() + " reconnected");
+                onUserReconnected(u);
+            }
+        }
     }
     
     User createUser(String name, Connection connection) {
@@ -135,42 +145,33 @@ public abstract class Server {
     }
 
     public User userFromConnection(Connection connection) {
-        synchronized (connectedUser) {
-            for (User u: connectedUser) {
-                if (u.getConnection().equals(connection)) {
-                    return u;
-                }
+        for (User u: connectedUser) {
+            if (u.getConnection().equals(connection)) {
+                return u;
             }
-            return null;
         }
+        return null;
+    }
+
+    public void abortConnection(Connection connection) {
+        connection.close();
+        connecting.remove(connection);
     }
 
     public void disconnectUser(User user) {
-        synchronized (connectedUser) {
-            user.getConnection().close();
-            connectedUser.remove(user);
-        }
-    }
-
-    public void removeConnecting(Connection connection) {
-        synchronized (connecting) {
-            connecting.remove(connection);
-        }
+        user.getConnection().close();
+        connectedUser.remove(user);
     }
 
     public List<User> getConnectedUser() {
-        synchronized (connectedUser) {
-            return new ArrayList<>(connectedUser);
-        }
+        return connectedUser;
     }
 
     public List<Connection> getConnecting() {
-        synchronized (connecting) {
-            return new ArrayList<>(connecting);
-        }
+        return connecting;
     }
 
-    public boolean allConnected() {
+    public boolean isEveryoneConnected() {
         return connectedUser.size() >= maxUsers;
     }
 

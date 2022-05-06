@@ -4,23 +4,21 @@ import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.enums.GameMode;
 import it.polimi.ingsw.model.enums.PlayerNumber;
-import it.polimi.ingsw.model.enums.Tower;
 import it.polimi.ingsw.model.enums.Type;
 import it.polimi.ingsw.utils.*;
 import it.polimi.ingsw.utils.InitialState;
 import it.polimi.ingsw.utils.moves.Move;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GameServer extends Server{
-    private final List<String> assignedUsernames;
+    private final CapacityVector<String> assignedUsernames;
 
     private final Game game;
 
     public GameServer(PlayerNumber playerNumber, GameMode mode) {
         maxUsers = playerNumber.getWizardNumber();
-        this.assignedUsernames = new ArrayList<>();
+        this.assignedUsernames = new CapacityVector<>(maxUsers);
         int id = Game.gameEntityFactory(mode, playerNumber, Type.SERVER);
         game = Game.request(id);
     }
@@ -66,7 +64,7 @@ public class GameServer extends Server{
     @Override
     void onUserReconnected(User user) {
         user.getConnection().bindFunction(this::receiveMessage);
-        if (allConnected()) {
+        if (isEveryoneConnected()) {
             user.getConnection().send(new InitialState(game.serializeGame(), usernames()));
         }
     }
@@ -74,28 +72,25 @@ public class GameServer extends Server{
     @Override
     void onNewUserConnect(User user, Login info) {
         user.getConnection().bindFunction(this::receiveMessage);
-        if (allConnected()) {
+        if (isEveryoneConnected()) {
             broadcast(new InitialState(game.serializeGame(), usernames()));
         }
     }
 
     @Override
+    boolean isUserAllowed(Login info) {
+        return assignedUsernames.contains(info.getUsername());
+    }
+
+    @Override
     User createUser(String name, Connection connection) {
         int id;
-        synchronized (connectedUser) {
-            id = connectedUser.size();
-        }
+        id = connectedUser.size();
         return new GameUser(name, connection, game.getWizard(id));
     }
 
-    public boolean acceptsAssign() {
-        return assignedUsernames.size() < maxUsers;
-    }
-
-    public void assignUser(String name) {
-        if (acceptsAssign()) {
-            assignedUsernames.add(name);
-        }
+    public boolean assignUser(String name) {
+        return assignedUsernames.add(name);
     }
 
     public List<String> getAssignedUsernames() {

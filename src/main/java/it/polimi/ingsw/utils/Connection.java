@@ -5,6 +5,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.util.*;
 import java.util.function.Predicate;
 
@@ -59,7 +60,10 @@ public class Connection extends ConnectionBase {
                     processMessage(msg);
                 }
             } catch (IOException e) {
-                if (e instanceof EOFException) {  // EOF means that the connection was closed from the other end
+                // EOF means that the connection was closed from the other end
+                // SocketTimeout means is not receiving the expected ping, so it means the connection is lost
+                if (e instanceof EOFException || e instanceof SocketTimeoutException) {
+                    stop();
                     processMessage(new Disconnected());
                     return;
                 } else if (e instanceof SocketException) {  // SocketException I called close() on this socket
@@ -139,7 +143,9 @@ public class Connection extends ConnectionBase {
             move.setNumber(next-1);
         } catch (ClassCastException ignored) {}
         try {
-            writer.writeObject(message);
+            synchronized (writer) {
+                writer.writeObject(message);
+            }
         } catch (IOException ignored) {}
     }
 
@@ -151,6 +157,7 @@ public class Connection extends ConnectionBase {
         try {
             socket.close();
         } catch (IOException ignored) {}
+        pingTimer.cancel();
     }
 
     public void close() {

@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.InetAddress;
+import java.net.SocketException;
 
 /*
     Thread-safe decorator for Socket class
@@ -35,6 +36,10 @@ public class SafeSocket {
 
     public synchronized InputStream getInputStream() throws IOException {
         return socket.getInputStream();
+    }
+
+    public synchronized void setSoTimeout(int timeout) throws SocketException {
+        socket.setSoTimeout(timeout);
     }
 
 }

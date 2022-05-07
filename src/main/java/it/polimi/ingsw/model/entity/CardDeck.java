@@ -18,7 +18,7 @@ public class CardDeck {
     public CardDeck() {
         this.assistantCards = new ArrayList<>();
         for(int i=1; i<=10; i++) {
-            this.assistantCards.add(new AssistantCard(i));
+            this.assistantCards.add(AssistantCard.getFromValue(i));
         }
     }
 

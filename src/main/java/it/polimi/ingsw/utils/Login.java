@@ -1,25 +1,28 @@
 package it.polimi.ingsw.utils;
 
+import it.polimi.ingsw.model.enums.GameMode;
+import it.polimi.ingsw.model.enums.PlayerNumber;
+
 public class Login extends MessageContent {
     final String username;
-    final int playerNumber;
-    final boolean advancedRules;
+    final PlayerNumber playerNumber;
+    final GameMode mode;
 
-    public Login(String username, int playerNumber, boolean advancedRules) {
+    public Login(String username, PlayerNumber playerNumber, GameMode advancedRules) {
         this.username = username;
         this.playerNumber = playerNumber;
-        this.advancedRules = advancedRules;
+        this.mode = advancedRules;
     }
 
     public String getUsername() {
         return username;
     }
 
-    public int getPlayerNumber() {
+    public PlayerNumber getPlayerNumber() {
         return playerNumber;
     }
 
-    public boolean isAdvancedRules() {
-        return advancedRules;
+    public GameMode getGameMode() {
+        return mode;
     }
 }

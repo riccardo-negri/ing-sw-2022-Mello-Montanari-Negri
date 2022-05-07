@@ -1,7 +1,5 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.model.entity;
 
-import it.polimi.ingsw.model.entity.bag.Bag;
-import it.polimi.ingsw.model.entity.bag.ServerBag;
 import it.polimi.ingsw.model.enums.StudentColor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,7 +13,7 @@ public class BagTest {
 
     @BeforeEach
     void setBag() {
-        bag = new ServerBag(new Random());
+        bag = new Bag(new Random());
     }
 
     @Test

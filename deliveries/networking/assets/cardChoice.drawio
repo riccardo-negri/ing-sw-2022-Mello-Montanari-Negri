@@ -1,0 +1,94 @@
+<mxfile host="65bd71144e">
+    <diagram id="UgKgn7SuaiYXbKQOjJQG" name="Page-1">
+        <mxGraphModel dx="1021" dy="504" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="116" value="Client View" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;" vertex="1" parent="1">
+                    <mxGeometry x="200" y="270" width="100" height="210" as="geometry"/>
+                </mxCell>
+                <mxCell id="118" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;" vertex="1" parent="116">
+                    <mxGeometry x="44.89" y="70" width="10" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="123" value="Client Connection" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;" vertex="1" parent="1">
+                    <mxGeometry x="380" y="270" width="100" height="210" as="geometry"/>
+                </mxCell>
+                <mxCell id="128" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;" vertex="1" parent="123">
+                    <mxGeometry x="44.89" y="80.15999999999997" width="10" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="129" value="Game Server&lt;br&gt;Connection" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;" vertex="1" parent="1">
+                    <mxGeometry x="910" y="270" width="100" height="210" as="geometry"/>
+                </mxCell>
+                <mxCell id="131" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;" vertex="1" parent="129">
+                    <mxGeometry x="44.89" y="90.16" width="10" height="69.84" as="geometry"/>
+                </mxCell>
+                <mxCell id="132" value="Game Server" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;" vertex="1" parent="1">
+                    <mxGeometry x="1090" y="270" width="100" height="210" as="geometry"/>
+                </mxCell>
+                <mxCell id="134" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;" vertex="1" parent="132">
+                    <mxGeometry x="44.89" y="110" width="10" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="154" value="cardChoice" style="html=1;verticalAlign=bottom;endArrow=block;entryX=0.041;entryY=-0.029;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="128" target="131">
+                    <mxGeometry width="80" relative="1" as="geometry">
+                        <mxPoint x="799.89" y="358.15999999999997" as="sourcePoint"/>
+                        <mxPoint x="679.89" y="320.15999999999997" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="155" value="cardChoice" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;entryX=0.906;entryY=0.867;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" target="128">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="950" y="420" as="sourcePoint"/>
+                        <mxPoint x="509.89" y="380.15999999999997" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="156" value="send(cardChoice)" style="html=1;verticalAlign=bottom;endArrow=block;entryX=0.041;entryY=-0.002;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="118" target="128">
+                    <mxGeometry width="80" relative="1" as="geometry">
+                        <mxPoint x="309.89" y="350" as="sourcePoint"/>
+                        <mxPoint x="384.89" y="360.15999999999997" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="157" value="cardChoice" style="html=1;verticalAlign=bottom;endArrow=block;entryX=0.084;entryY=0.056;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="131" target="134">
+                    <mxGeometry width="80" relative="1" as="geometry">
+                        <mxPoint x="1484.8900000000003" y="380.15999999999997" as="sourcePoint"/>
+                        <mxPoint x="1324.89" y="369.15999999999997" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="158" value="send(cardChoice)" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;exitX=1.022;exitY=0.995;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="134" target="131">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="1344.89" y="410.15999999999997" as="sourcePoint"/>
+                        <mxPoint x="1454.89" y="410.15999999999997" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="159" value="cardChoice" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;exitX=0.041;exitY=1.002;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="128" target="118">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="474.89" y="430.15999999999997" as="sourcePoint"/>
+                        <mxPoint x="309.89" y="430.32000000000005" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="163" value="Client2 View" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;" vertex="1" parent="1">
+                    <mxGeometry x="560" y="270" width="100" height="210" as="geometry"/>
+                </mxCell>
+                <mxCell id="169" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;" vertex="1" parent="163">
+                    <mxGeometry x="45" y="170" width="10" height="10" as="geometry"/>
+                </mxCell>
+                <mxCell id="164" value="Client2 Connection" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;" vertex="1" parent="1">
+                    <mxGeometry x="730" y="270" width="100" height="210" as="geometry"/>
+                </mxCell>
+                <mxCell id="166" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;" vertex="1" parent="164">
+                    <mxGeometry x="45" y="160" width="10" height="10" as="geometry"/>
+                </mxCell>
+                <mxCell id="165" value="cardChoice" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;entryX=0.848;entryY=0.005;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="131" target="166">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="960" y="430" as="sourcePoint"/>
+                        <mxPoint x="880" y="420" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="168" value="cardChoice" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;" edge="1" parent="1" source="166" target="169">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="780" y="440" as="sourcePoint"/>
+                        <mxPoint x="700" y="440" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

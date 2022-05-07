@@ -24,20 +24,21 @@ public class Client {
     public Connection connection;
     public Login login;
 
-    public Client(boolean hasGUI) {
-        if(hasGUI) {
+    public Client (boolean hasGUI) {
+        if (hasGUI) {
             ui = null;
         }
         else {
             ui = new CLI();
+            ((CLI) ui).init();
         }
         nextState = ClientState.WELCOME_PAGE;
         newState = true;
 
     }
 
-    public void start() {
-        while(nextState != null) {
+    public void start () {
+        while (nextState != null) {
             currState = ui.getState(this, nextState);
             currState.draw(this);
         }

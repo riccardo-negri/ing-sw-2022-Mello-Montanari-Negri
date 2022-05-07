@@ -15,9 +15,9 @@ class GameTest {
 
     Game game;
     @Test
-    void SerializationTest() {
-        //Game game = Game.request(Game.gameEntityFactory(GameMode.COMPLETE, PlayerNumber.FOUR, Type.SERVER));
-        //game.serializeGame("./data/Test1Before.json");
+    void SerializationTest() throws Exception {
+        //Game game = Game.request(Game.gameEntityFactory(GameMode.COMPLETE, PlayerNumber.FOUR));
+        //game.serializeGame("./test1Before.json");
     }
 
     @Test

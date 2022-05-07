@@ -10,13 +10,12 @@ import java.util.List;
 public class CharacterOne extends Character{
 
     private final transient Bag bag;
-    private List<StudentColor> studentColorList;
+    private final List<StudentColor> studentColorList;
 
     public CharacterOne(Integer gameId, Integer characterId, Bag bag) {
         super(gameId, characterId,1);
         this.bag = bag;
-        try { studentColorList = bag.requestStudents(4);
-        } catch (Exception e) {}
+        studentColorList = bag.requestStudents(4);
     }
 
     /**

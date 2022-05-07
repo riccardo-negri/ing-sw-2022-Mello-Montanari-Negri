@@ -5,16 +5,16 @@ import it.polimi.ingsw.model.entity.Bag;
 import it.polimi.ingsw.model.enums.StudentColor;
 import it.polimi.ingsw.model.enums.Tower;
 
+import java.util.HashSet;
 import java.util.List;
 
 public class CharacterSeven extends Character{
 
-    private List<StudentColor> studentColorList;
+    private final List<StudentColor> studentColorList;
 
     public CharacterSeven (Integer gameId, Integer characterId, Bag bag) {
         super(gameId, characterId, 1);
-        try { studentColorList = bag.requestStudents(6);
-        } catch (Exception e) { }
+        studentColorList = bag.requestStudents(6);
 
     }
 
@@ -43,8 +43,8 @@ public class CharacterSeven extends Character{
      */
     public void characterSevenValidator(Integer playingWizard, List<StudentColor> take, List<StudentColor> give) throws Exception {
         characterValidator(playingWizard);
-        if (!studentColorList.containsAll(take)) throw new Exception("Students not available on the card");
-        if (!Game.request(gameId).getWizard(playingWizard).getEntranceStudents().containsAll(give))
+        if (!new HashSet<>(studentColorList).containsAll(take)) throw new Exception("Students not available on the card");
+        if (!new HashSet<>(Game.request(gameId).getWizard(playingWizard).getEntranceStudents()).containsAll(give))
             throw new Exception("Students not available in the entrance");
         if(give.size()>3 || give.size() != take.size()) throw new Exception("Inexact number of students");
     }

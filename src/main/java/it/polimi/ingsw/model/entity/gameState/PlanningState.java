@@ -3,9 +3,11 @@ package it.polimi.ingsw.model.entity.gameState;
 import it.polimi.ingsw.model.entity.Cloud;
 import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Wizard;
+import it.polimi.ingsw.model.enums.AssistantCard;
 import it.polimi.ingsw.model.enums.Tower;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class PlanningState extends GameState {
 
@@ -18,12 +20,7 @@ public class PlanningState extends GameState {
         super(playerList, gameId);
         gameState = "PS";
         Collections.shuffle(playerOrder, randomGenerator);
-        try { for(Cloud c : Game.request(gameId).getCloudList()) c.fillCloud();
-        } catch (Exception e) {
-            System.err.println("Passato da qua");
-            System.err.println(e.getMessage());
-            //TODO codice per gestire la fine degli studenti nella bag, condizione di fine partita
-        }
+        for(Cloud c : Game.request(gameId).getCloudList()) c.fillCloud();
     }
 
     /**
@@ -32,12 +29,13 @@ public class PlanningState extends GameState {
      */
     public PlanningState(GameState oldState) {
         super(oldState);
+
+        if (Game.request(gameId).getBag().isEmpty() ||
+                !Game.request(gameId).getWizard(0).getCardDeck().checkAvailableCards(Arrays.asList(1,2,3,4,5,6,7,8,9,10)))
+            Game.request(gameId).endGame();
+
         gameState = "PS";
-        try { for(Cloud c : Game.request(gameId).getCloudList()) c.fillCloud();
-        } catch (Exception e) {
-            System.err.println("Passato da qua");
-            //TODO codice per gestire la fine degli studenti nella bag, condizione di fine partita
-        }
+        for(Cloud c : Game.request(gameId).getCloudList()) c.fillCloud();
     }
 
     /**
@@ -78,13 +76,8 @@ public class PlanningState extends GameState {
      */
     private void checkState() {
         if (currentlyPlaying == playerOrder.size()) {
-            playerOrder.stream().sorted((x, y) -> {
-                int valX = Game.request(gameId).getWizard(x).getCardDeck().getCurrentCard().getNumber();
-                int valY = Game.request(gameId).getWizard(y).getCardDeck().getCurrentCard().getNumber();
-                if(valX > valY) return 1;
-                else if (valX < valY) return -1;
-                else return 0;
-            });
+            playerOrder = playerOrder.stream().sorted((x, y) ->
+                Integer.compare(Game.request(gameId).getWizard(x).getCardDeck().getCurrentCard().getNumber(), Game.request(gameId).getWizard(y).getCardDeck().getCurrentCard().getNumber())).collect(Collectors.toList());
             Game.request(gameId).updateGameState(new MoveStudentActionState(this));
         }
     }

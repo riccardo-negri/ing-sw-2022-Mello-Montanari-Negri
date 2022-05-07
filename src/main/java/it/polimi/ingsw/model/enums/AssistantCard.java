@@ -1,8 +1,4 @@
-package it.polimi.ingsw.model.entity;
-
-import it.polimi.ingsw.model.enums.StudentColor;
-
-import java.util.Arrays;
+package it.polimi.ingsw.model.enums;
 
 /**
  * Assistant card, to be deleted from the list after being used

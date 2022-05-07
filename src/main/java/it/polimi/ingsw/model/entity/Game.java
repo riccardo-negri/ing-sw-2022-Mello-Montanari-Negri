@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  * Main class of the single game, with a factory method to create a new game
  * The objects in the class are saved into a static list, and can be retrieved from their id
  */
-public class Game implements Serializable {
+public class Game {
 
     private static Gson serializationGson, deserializationGson;
     private static Integer idCount = 0;
@@ -195,8 +195,8 @@ public class Game implements Serializable {
     public void unifyIslands() {
         for (int i=0; i<islandGroupList.size(); i++) {
             if (islandGroupList.get(i).getTower() != null && islandGroupList.get(i).getTower() == islandGroupList.get((i+1)%islandGroupList.size()).getTower()) {
-                islandGroupList.get(i).getIslandList().addAll(islandGroupList.get((i+1)%islandGroupList.size()).getIslandList());
-                islandGroupList.remove((i+1)%islandGroupList.size());
+                islandGroupList.get((i+1)%islandGroupList.size()).getIslandList().addAll(0, islandGroupList.get(i).getIslandList());
+                islandGroupList.remove(i);
                 i--;
             }
         }

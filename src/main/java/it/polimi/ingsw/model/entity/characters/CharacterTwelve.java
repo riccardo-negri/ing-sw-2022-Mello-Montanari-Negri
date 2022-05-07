@@ -13,23 +13,23 @@ public class CharacterTwelve extends Character{
 
     /**
      * All the player have to remove three students of the color (if present) from the dining room
-     * @param playingTower the player playing the card
+     * @param playingWizard the player playing the card
      * @param studentColor the color of the student to remove from the dining room
      */
-    public void useEffect(Tower playingTower, StudentColor studentColor) throws Exception {
-        characterTwelveValidator(playingTower);
-        useCard(playingTower);
+    public void useEffect(Integer playingWizard, StudentColor studentColor) throws Exception {
+        characterTwelveValidator(playingWizard);
+        useCard(playingWizard);
         for (int i=0; i<Game.request(gameId).getPlayerNumber().getTowerNumber(); i++)
             for(int j=0; j<3; j++)
-                Game.request(gameId).getWizard(Tower.fromNumber(i)).takeDiningStudent(studentColor);
+                Game.request(gameId).getWizard(i).takeDiningStudent(studentColor);
     }
 
     /**
      * All the player have to remove three students of the color (if present) from the dining room
-     * @param playingTower the player playing the card
+     * @param playingWizard the player playing the card
      * @throws Exception if it is not the player turn, or he does not have enough money to activate the card
      */
-    public void characterTwelveValidator(Tower playingTower) throws Exception {
-        characterValidator(playingTower);
+    public void characterTwelveValidator(Integer playingWizard) throws Exception {
+        characterValidator(playingWizard);
     }
 }

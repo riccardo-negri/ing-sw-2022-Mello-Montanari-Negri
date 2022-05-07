@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.entity.gameState;
 
 import it.polimi.ingsw.model.entity.Game;
-import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.enums.Tower;
 
 import java.util.List;
@@ -12,14 +11,14 @@ import java.util.List;
 public abstract class GameState {
 
     protected String gameState;
-    protected List<Tower> towerOrder;
+    protected List<Integer> playerOrder;
     protected Integer currentlyPlaying;
-    protected Integer gameId;
+    protected transient Integer gameId;
 
-    public GameState (List<Tower> towerOrder, Integer gameId) {
+    public GameState (List<Integer> playerOrder, Integer gameId) {
         this.currentlyPlaying = 0;
         this.gameId = gameId;
-        this.towerOrder = towerOrder;
+        this.playerOrder = playerOrder;
     }
 
     public GameState (GameState oldGameState) {
@@ -27,8 +26,10 @@ public abstract class GameState {
         else this.currentlyPlaying = oldGameState.currentlyPlaying;
 
         this.gameId = oldGameState.gameId;
-        this.towerOrder = oldGameState.towerOrder;
+        this.playerOrder = oldGameState.playerOrder;
     }
 
-    public Tower getCurrentPlayer() { return towerOrder.get(currentlyPlaying); }
+    public void refreshGameId(Game game) { this.gameId = game.getId(); }
+
+    public Integer getCurrentPlayer() { return playerOrder.get(currentlyPlaying); }
 }

@@ -21,26 +21,26 @@ public class CharacterEleven extends Character{
 
     /**
      * one student from the card can be taken and put in the dining room
-     * @param playingTower the player playing the card
+     * @param playingWizard the player playing the card
      * @param studentColor the color of the student to take
      */
-    public void useEffect(Tower playingTower, StudentColor studentColor) throws Exception{
-        characterElevenValidator(playingTower, studentColor);
-        useCard(playingTower);
+    public void useEffect(Integer playingWizard, StudentColor studentColor) throws Exception{
+        characterElevenValidator(playingWizard, studentColor);
+        useCard(playingWizard);
         studentColorList.remove(studentColor);
-        Game.request(gameId).getWizard(playingTower).putDiningStudent(studentColor);
+        Game.request(gameId).getWizard(playingWizard).putDiningStudent(studentColor);
         studentColorList.addAll(bag.requestStudents(1));
     }
 
     /**
      * one student from the card can be taken and put in the dining room
-     * @param playingTower the player playing the card
+     * @param playingWizard the player playing the card
      * @param studentColor the color of the student to take
      * @throws Exception if it is not the player turn, he does not have enough money to activate the card,
      * or if the student is not present on the card
      */
-    public void characterElevenValidator(Tower playingTower, StudentColor studentColor) throws Exception{
-        characterValidator(playingTower);
+    public void characterElevenValidator(Integer playingWizard, StudentColor studentColor) throws Exception{
+        characterValidator(playingWizard);
         if (!studentColorList.contains(studentColor)) throw new Exception("Student color not present on the card");
     }
 

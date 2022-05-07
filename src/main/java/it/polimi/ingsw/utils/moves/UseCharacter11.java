@@ -8,19 +8,20 @@ import it.polimi.ingsw.model.enums.StudentColor;
 public class UseCharacter11 extends UseCharacter {
     private final StudentColor student;
 
-    public UseCharacter11(StudentColor student) {
+    public UseCharacter11(Wizard author, StudentColor student) {
+        super(author);
         this.student = student;
     }
 
     @Override
-    protected void applyEffect(Game game, Wizard wizard) throws Exception {
+    protected void applyEffect(Game game) throws Exception {
         CharacterEleven character = ((CharacterEleven) game.getCharacter(11));
-        character.useEffect(wizard.getTowerColor(), student);
+        character.useEffect(authorId, student);
     }
 
     @Override
-    public void validate(Game game, Wizard wizard) throws Exception {
+    public void validate(Game game) throws Exception {
         CharacterEleven character = ((CharacterEleven) game.getCharacter(11));
-        character.characterElevenValidator(wizard.getTowerColor(), student);
+        character.characterElevenValidator(authorId, student);
     }
 }

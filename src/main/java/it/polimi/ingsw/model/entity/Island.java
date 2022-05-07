@@ -36,7 +36,7 @@ public class Island {
         characterFive.addOneCard();
     }
 
-    public boolean isStopCard() { return stopCard; }
+    public boolean hasStopCard() { return stopCard; }
 
     public Integer getId() { return islandId; }
 }

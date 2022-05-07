@@ -7,19 +7,20 @@ import it.polimi.ingsw.model.entity.characters.CharacterThree;
 public class UseCharacter3 extends UseCharacter {
     private final int islandGroupId;
 
-    public UseCharacter3(int islandGroupId) {
+    public UseCharacter3(Wizard author, int islandGroupId) {
+        super(author);
         this.islandGroupId = islandGroupId;
     }
 
     @Override
-    protected void applyEffect(Game game, Wizard wizard) throws Exception {
+    protected void applyEffect(Game game) throws Exception {
         CharacterThree character = ((CharacterThree) game.getCharacter(3));
-        character.useEffect(wizard.getTowerColor(), islandGroupId);
+        character.useEffect(authorId, islandGroupId);
     }
 
     @Override
-    public void validate(Game game, Wizard wizard) throws Exception {
+    public void validate(Game game) throws Exception {
         CharacterThree character = ((CharacterThree) game.getCharacter(3));
-        character.characterThreeValidator(wizard.getTowerColor(), islandGroupId);
+        character.characterThreeValidator(authorId, islandGroupId);
     }
 }

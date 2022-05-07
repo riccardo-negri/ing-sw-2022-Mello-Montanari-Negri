@@ -45,11 +45,10 @@ public class Wizard {
 
     public void takeDiningStudent (StudentColor studentColor) { diningStudents[studentColor.getValue()] -= diningStudents[studentColor.getValue()]>0 ? 1 : 0; }
 
-    public void changeTowerNumber(Integer difference) {
+    public void changeTowerNumber(Game game, Integer difference) {
         towerNumber += difference;
-        if(towerNumber <= 0) {
-            //TODO end game condition
-        }
+        if(towerNumber <= 0)
+            game.endGame();
     }
 
     public void payEffect(Integer price) throws Exception{
@@ -66,6 +65,8 @@ public class Wizard {
     public List<StudentColor> getEntranceStudents() { return entranceStudents; }
 
     public Integer getId() { return wizardId; }
+
+    public Integer getTowerNumber() { return towerNumber; }
 }
 
 

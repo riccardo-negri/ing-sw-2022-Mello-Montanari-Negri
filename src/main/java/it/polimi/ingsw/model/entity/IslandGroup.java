@@ -78,8 +78,8 @@ public class IslandGroup {
      * @param game game, used to reach the wizards
      */
     private void changeTower(Tower newOwner, Game game) {
-        game.getWizardsFromTower(tower).stream().forEach(x -> x.changeTowerNumber(islandList.size()));
-        game.getWizardsFromTower(newOwner).stream().forEach(x -> x.changeTowerNumber(-islandList.size()));
+        game.getWizardsFromTower(tower).forEach(x -> x.changeTowerNumber(game, islandList.size()));
+        game.getWizardsFromTower(newOwner).forEach(x -> x.changeTowerNumber(game, -islandList.size()));
         tower = newOwner;
     }
 

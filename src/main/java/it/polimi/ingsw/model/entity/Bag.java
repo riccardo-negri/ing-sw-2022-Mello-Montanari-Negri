@@ -17,12 +17,14 @@ public class Bag {
     private List<StudentColor> studentListOut;
     private final Integer[] colorNumber;
     private Integer total;
+    private boolean empty;
 
     public Bag (Random randomGenerator) {
         colorNumber = new Integer[5];
         for (int i=0; i<5; i++)
             colorNumber[i] = 26;
         total = 130;
+        empty = false;
         this.randomGenerator = randomGenerator;
         studentListOut = new ArrayList<>();
         studentListIn = new ArrayList<>();
@@ -32,10 +34,12 @@ public class Bag {
      * To randomly extract num students from bag
      * @param num Number of students to extract
      * @return List of StudentColor containing extracted students
-     * @throws Exception not enough students in the bag
      */
-    public List<StudentColor> requestStudents(int num) throws Exception {
-        if (total < num) throw new Exception("Not enough students in bag");
+    public List<StudentColor> requestStudents(int num) {
+        if (total < num) {
+            num = total;
+            empty = true;
+        }
         List<StudentColor> students = new ArrayList<>();
         if (studentListIn.isEmpty()) {
             if (randomGenerator==null) randomGenerator = new Random();
@@ -50,7 +54,6 @@ public class Bag {
                     }
             }
         } else {
-            if (num > studentListIn.size()) throw new Exception("Too many students selected");
             total -= num;
             students = studentListIn.subList(0,num);
             studentListIn = studentListIn.subList(num,studentListIn.size());
@@ -67,5 +70,9 @@ public class Bag {
 
     public void putRecentlySelected(List<StudentColor> studentColorList) {
         studentListIn.addAll(studentColorList);
+    }
+
+    public boolean isEmpty() {
+        return empty;
     }
 }

@@ -4,8 +4,6 @@ import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.enums.GameMode;
 import it.polimi.ingsw.model.enums.PlayerNumber;
-import it.polimi.ingsw.model.enums.Tower;
-import it.polimi.ingsw.model.enums.Type;
 import it.polimi.ingsw.utils.*;
 import it.polimi.ingsw.utils.InitialState;
 import it.polimi.ingsw.utils.moves.Move;
@@ -21,7 +19,7 @@ public class GameServer extends Server{
     public GameServer(PlayerNumber playerNumber, GameMode mode) {
         maxUsers = playerNumber.getWizardNumber();
         this.assignedUsernames = new ArrayList<>();
-        int id = Game.gameEntityFactory(mode, playerNumber, Type.SERVER);
+        int id = Game.gameEntityFactory(mode, playerNumber);
         game = Game.request(id);
     }
 

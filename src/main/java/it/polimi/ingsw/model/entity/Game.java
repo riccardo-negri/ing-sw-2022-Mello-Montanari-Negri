@@ -33,6 +33,8 @@ public class Game {
     private Bag bag;
 
     private GameState gameState;
+    private boolean gameEnded;
+    private Tower winner;
 
     /**
      * Generates all the components of the game
@@ -46,6 +48,9 @@ public class Game {
         this.playerNumber = playerNumber;
     }
 
+    /**
+     * Launched after the constructor, helps generate the game
+     */
     private void initializeGame() {
         Random randomGenerator = new Random();
         this.bag = new Bag(randomGenerator);
@@ -68,32 +73,26 @@ public class Game {
         }
 
         this.professors = new Professor[5];
-        for (int i=0; i<5; i++) {
+        for (int i=0; i<5; i++)
             professors[i] = new Professor(id, StudentColor.fromNumber(i));
-        }
 
         islandGroupList = new LinkedList<>();
-        for(int i=0; i<12; i++) {
-            try {
-                islandGroupList.add(new IslandGroup(bag.requestStudents((i == 0 || i == 6) ? 0 : 1),i));
-            } catch (Exception e) { System.err.println("Error creating island group"); }
-        }
+        for(int i=0; i<12; i++)
+            islandGroupList.add(new IslandGroup(bag.requestStudents((i == 0 || i == 6) ? 0 : 1),i));
 
         cloudList = new ArrayList<>();
-        for(int i = 0; i<playerNumber.getWizardNumber(); i++) {
+        for(int i = 0; i<playerNumber.getWizardNumber(); i++)
             cloudList.add(new Cloud(i, bag, this.playerNumber));
-        }
 
         wizardList = new ArrayList<>();
-        for (int i=0; i<playerNumber.getWizardNumber(); i++) {
-            try{
-                wizardList.add(new Wizard(i, bag.requestStudents(playerNumber.getEntranceNumber()),
-                        playerNumber == PlayerNumber.FOUR ? Tower.fromNumber(i%2) : Tower.fromNumber(i), playerNumber.getTowerNumber()));
-            } catch (Exception e) { System.err.println(e.getMessage()); }
-        }
+        for (int i=0; i<playerNumber.getWizardNumber(); i++)
+            wizardList.add(new Wizard(i, bag.requestStudents(playerNumber.getEntranceNumber()),
+                    playerNumber == PlayerNumber.FOUR ? Tower.fromNumber(i%2) : Tower.fromNumber(i), playerNumber.getTowerNumber()));
 
         this.gameState = new PlanningState(id, wizardList.stream().map(Wizard::getId).collect(Collectors.toList()), randomGenerator);
 
+        gameEnded = false;
+        winner = null;
     }
 
     /**
@@ -102,7 +101,7 @@ public class Game {
      * @param playerNumber two, three or four players
      * @return Returns the id of the created match
      */
-    public static Integer gameEntityFactory(GameMode gameMode, PlayerNumber playerNumber, Type type) {
+    public static Integer gameEntityFactory(GameMode gameMode, PlayerNumber playerNumber) {
         if (gameEntities == null) gameEntities = new ArrayList<>();
         Game generatedGame = new Game(idCount, gameMode, playerNumber);
         gameEntities.add(generatedGame);
@@ -110,6 +109,10 @@ public class Game {
         return idCount++;
     }
 
+    /**
+     * Method to serialize a game, and save it to the disk
+     * @return string of the serialization
+     */
     public String serializeGame() {
         if (serializationGson == null) serializationGson = new Gson();
         return serializationGson.toJson(this, Game.class);
@@ -157,6 +160,9 @@ public class Game {
         return newGame.id;
     }
 
+    /**
+     * Generate the objects to deserialize the game form json
+     */
     private static void initializeDeserializationGson() {
         GsonBuilder gsonBuilder = new GsonBuilder();
         JsonDeserializerClass.CharacterDeserializer characterDeserializer = new JsonDeserializerClass.CharacterDeserializer();
@@ -200,6 +206,49 @@ public class Game {
                 i--;
             }
         }
+        if (islandGroupList.size() <= 3) endGame();
+    }
+
+    public void endGame() {
+        gameEnded = true;
+        calculateWinner();
+    }
+
+    /**
+     * calculates the winner, and puts it in the winner attribute
+     */
+    private void calculateWinner() {
+        List<Tower> winningTowers = new ArrayList<>();
+        int minValue = 8;
+        for (int i=0; i<playerNumber.getTowerNumber(); i++) {
+            int current = wizardList.get(i).getTowerNumber();
+            if (current < minValue)
+                winningTowers = new ArrayList<>();
+            if (current <= minValue) {
+                winningTowers.add(Tower.fromNumber(i));
+                minValue = current;
+            }
+        }
+        if (winningTowers.size() == 1) {
+            winner = winningTowers.get(0);
+            return;
+        }
+        int[] professorNumber = new int[winningTowers.size()];
+        List<Tower> finalWinners = new ArrayList<>();
+        for (Professor p : professors) {
+            Tower t = p.getMaster(null).getTowerColor();
+            if (winningTowers.contains(t)) professorNumber[winningTowers.indexOf(t)]++;
+        }
+        int maxValue = -1;
+        for (int i=0; i<winningTowers.size(); i++) {
+            if (professorNumber[i] > maxValue)
+                finalWinners = new ArrayList<>();
+            if (professorNumber[i] >= maxValue) {
+                finalWinners.add(winningTowers.get(i));
+                maxValue = professorNumber[i];
+            }
+        }
+        if (finalWinners.size() == 1) winner = finalWinners.get(0);
     }
 
     public Wizard getWizard(Integer wizardId) {

@@ -3,7 +3,6 @@ package it.polimi.ingsw.server;
 import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.enums.GameMode;
 import it.polimi.ingsw.model.enums.PlayerNumber;
-import it.polimi.ingsw.model.enums.Type;
 import it.polimi.ingsw.utils.Connection;
 import it.polimi.ingsw.utils.InitialState;
 import it.polimi.ingsw.utils.Login;
@@ -28,7 +27,7 @@ public class MovesTest {
         System.out.println("Game loaded correctly");
         Game g = Game.request(id);*/
         //TODO: use deserialized game
-        int id = Game.gameEntityFactory(GameMode.COMPLETE, PlayerNumber.TWO, Type.CLIENT);
+        int id = Game.gameEntityFactory(GameMode.COMPLETE, PlayerNumber.TWO);
         Game g = Game.request(id);
         CardChoice client1Choice = new CardChoice(g.getWizard(0), 7);
         CardChoice client2Choice = new CardChoice(g.getWizard(1), 5);

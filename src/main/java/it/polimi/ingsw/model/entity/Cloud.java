@@ -43,9 +43,8 @@ public class Cloud {
 
     /**
      * to fill the cloud with new students at the beginning of the planning phase
-     * @throws Exception if there are not enough students available in the bag
      */
-    public void fillCloud() throws Exception{
+    public void fillCloud() {
             studentColorList = bag.requestStudents(playerNumber.getCloudSize());
             taken = false;
     }

@@ -42,5 +42,9 @@ jobs:
         - run: mvn -B package --file pom.xml -DskipTests
         - uses: actions/upload-artifact@v3
           with:
-            name: Eriantys
-            path: target/Eriantys.jar
+            name: EriantysClient
+            path: target/EriantysClient.jar
+        - uses: actions/upload-artifact@v3
+          with:
+            name: EriantysServer
+            path: target/EriantysServer.jar

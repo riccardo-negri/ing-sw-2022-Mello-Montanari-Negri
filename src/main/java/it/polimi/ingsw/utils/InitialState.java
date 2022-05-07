@@ -3,7 +3,7 @@ package it.polimi.ingsw.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InitialState extends MessageContent {
+public class InitialState extends Message {
     private final String state;
 
     // the list of the usernames of the wizards ordered by wizard id

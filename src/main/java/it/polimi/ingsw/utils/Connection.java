@@ -1,5 +1,6 @@
 package it.polimi.ingsw.utils;
 
+import it.polimi.ingsw.utils.moves.Move;
 import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
@@ -8,11 +9,10 @@ import java.util.*;
 import java.util.function.Predicate;
 
 public class Connection extends ConnectionBase {
-    private final Counter sentCount = new Counter();
-    private final Counter receivedCount = new Counter();
+    private final Counter movesCount = new Counter();
 
-    private final Queue<Message> receivedQueue = new PriorityQueue<>((a, b) -> a.getNumber() - b.getNumber());
-    private final Queue<MessageContent> messagesToProcess = new LinkedList<>();
+    private final MovesQueue movesQueue = new MovesQueue();
+    private final Queue<Message> messagesToProcess = new LinkedList<>();
 
     public Connection(SafeSocket socket, Predicate<Connection> acceptMessage) {
         super(socket, acceptMessage);
@@ -52,10 +52,15 @@ public class Connection extends ConnectionBase {
         while (isRunning()) {
             try {
                 Message msg = (Message) reader.readObject();
-                updateQueue(msg);
+                if (msg instanceof Move) {
+                    updateQueue((Move) msg);
+                }
+                else {
+                    processMessage(msg);
+                }
             } catch (IOException e) {
                 if (e instanceof EOFException) {  // EOF means that the connection was closed from the other end
-                    processMessageContent(new Disconnected());
+                    processMessage(new Disconnected());
                     return;
                 } else if (e instanceof SocketException) {  // SocketException I called close() on this socket
                     return;
@@ -67,26 +72,19 @@ public class Connection extends ConnectionBase {
     }
 
     /*
-    The queue is used to make sure the messages are processed in the correct order, follows this procedure:
-    Add the new message to the queue in the correct position
-    Process all the messages in the queue following the order they were sent, remove them when done
-    If on message is missing stops processing and will continue from there on the next call
+    The queue is used to make sure the moves are processed in the correct order, follows this procedure:
+    Add the new move to the queue in the correct position
+    Process all the moves in the queue following the order they were sent, remove them when done
+    If on move is missing stops processing and will continue from there on the next call
      */
-    private synchronized void updateQueue(Message newMessage) {
-        receivedQueue.add(newMessage);
-        while (receivedQueue.peek() != null && receivedQueue.peek().getNumber() == receivedCount.get()) {
-            Message msg = receivedQueue.poll();
-            receivedCount.increment();
-            if (msg != null)
-                processMessage(msg);
+    void updateQueue(Move move) {
+        movesQueue.add(move);
+        for (Move m: movesQueue.pollAvailable()) {
+            processMessage(m);
         }
     }
 
-    private void processMessage(Message message) {
-        processMessageContent(message.getContent());
-    }
-
-    private synchronized void processMessageContent(MessageContent message) {
+    private synchronized void processMessage(Message message) {
         System.out.println("Received new object from " + socket.getInetAddress() + ": " + message);
         messagesToProcess.add(message);
         if(acceptMessage.test(this)) {
@@ -95,7 +93,7 @@ public class Connection extends ConnectionBase {
         notifyAll();
     }
 
-    static boolean matchFileter(MessageContent message, List<Class> filter) {
+    static boolean matchFileter(Message message, List<Class> filter) {
         for (Class c: filter) {
             if(c.isInstance(message))
                 return true;
@@ -103,18 +101,18 @@ public class Connection extends ConnectionBase {
         return false;
     }
 
-    public MessageContent waitMessage() {
-        return waitMessage(MessageContent.class);
+    public Message waitMessage() {
+        return waitMessage(Message.class);
     }
 
-    public MessageContent waitMessage(Class filter) {
+    public Message waitMessage(Class filter) {
         List<Class> filterList = new ArrayList<>();
         filterList.add(filter);
         return waitMessage(filterList);
     }
 
-    public synchronized MessageContent waitMessage(List<Class> filter) {
-        for (MessageContent m: messagesToProcess) {  // if message was received before the call of waitMessage
+    public synchronized Message waitMessage(List<Class> filter) {
+        for (Message m: messagesToProcess) {  // if message was received before the call of waitMessage
             if(matchFileter(m, filter)) {
                 messagesToProcess.remove(m);
                 return m;
@@ -130,14 +128,18 @@ public class Connection extends ConnectionBase {
         return messagesToProcess.poll();
     }
 
-    public synchronized MessageContent getLastMessage () {
+    public synchronized Message getLastMessage () {
         return messagesToProcess.peek();
     }
 
-    public void send(MessageContent message) {
+    public void send(Message message) {
         try {
-            int next = sentCount.increment();
-            writer.writeObject(new Message(next-1, message));
+            Move move = (Move) message;
+            int next = movesCount.increment();
+            move.setNumber(next-1);
+        } catch (ClassCastException ignored) {}
+        try {
+            writer.writeObject(message);
         } catch (IOException ignored) {}
     }
 

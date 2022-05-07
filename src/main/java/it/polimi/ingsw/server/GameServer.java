@@ -34,7 +34,7 @@ public class GameServer extends Server{
     }
 
     boolean receiveMessage(Connection source) {
-        MessageContent message = source.getLastMessage();
+        Message message = source.getLastMessage();
         if (message instanceof Disconnected) {
             User user = userFromConnection(source);
             if (user != null)
@@ -55,7 +55,7 @@ public class GameServer extends Server{
         } catch (Exception ignored) {}
     }
 
-    void broadcast(MessageContent message) {
+    void broadcast(Message message) {
         for (User user : getConnectedUser()) {
             user.getConnection().send(message);
         }

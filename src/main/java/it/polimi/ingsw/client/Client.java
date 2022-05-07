@@ -32,7 +32,7 @@ public class Client {
             ui = new CLI();
             ((CLI) ui).init();
         }
-        nextState = ClientState.BOARD_PAGE;
+        nextState = ClientState.WELCOME_PAGE;
         newState = true;
 
     }

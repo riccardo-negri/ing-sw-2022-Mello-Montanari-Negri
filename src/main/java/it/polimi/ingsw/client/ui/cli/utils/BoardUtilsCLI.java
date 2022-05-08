@@ -47,11 +47,11 @@ public class BoardUtilsCLI {
 
     private static Ansi translateTowerColor (String tower) {
         switch (tower) {
-            case "white":
+            case "WHITE":
                 return ansi().fgRgb(255, 255, 255).a("W-Tower");
-            case "black":
+            case "BLACK":
                 return ansi().fgBrightBlack().a("B-Tower");
-            case "grey":
+            case "GREY":
                 return ansi().fgRgb(180, 180, 180).a("G-Tower");
             default:
                 return ansi().a("       ");
@@ -60,11 +60,11 @@ public class BoardUtilsCLI {
 
     private static Ansi translateTowerNumberColor (String tower, int number) {
         switch (tower) {
-            case "white":
+            case "WHITE":
                 return ansi().fgRgb(255, 255, 255).a(number + " W-Tower");
-            case "black":
+            case "BLACK":
                 return ansi().fgBrightBlack().a(number + " B-Tower");
-            case "grey":
+            case "GREY":
                 return ansi().fgRgb(180, 180, 180).a(number + " G-Tower");
             default:
                 return ansi().a("       ");
@@ -109,7 +109,7 @@ public class BoardUtilsCLI {
         terminal.writer().println(ansi().cursor(baseRow + 8, baseCol).a(R9));
     }
 
-    public static void drawCloud (Terminal terminal, int ID, int baseRow, int baseCol, int numOfPlayer, Integer yellow, Integer blue, Integer green, Integer red, Integer pink) {
+    public static void drawCloud (Terminal terminal, int ID, int baseRow, int baseCol, Integer yellow, Integer blue, Integer green, Integer red, Integer pink) {
         final String R1 = "   .-\"-.";
         final String R2 = " /` C-{0} `\\";
         final String R3 = ";  {0}   {1}  ;";
@@ -269,7 +269,7 @@ public class BoardUtilsCLI {
         terminal.writer().println(ansi().cursor(baseRow + cards.length + 1, baseCol).a(InfoR1));
     }
 
-    public static void drawInfoSection (Terminal terminal, int baseRow, int baseCol, String gameID, String serverIP, int serverPort, String gameMode, int playersNumber, int round, String currPlayer, String currPhase, String[] characters, int[] charactersCost) {
+    public static void drawInfoSection (Terminal terminal, int baseRow, int baseCol, String gameID, String serverIP, int serverPort, String gameMode, int playersNumber, int round, String currPlayer, String currPhase, String[] characters, int[] charactersCost, int[] deck) {
         final String INFO = "Game Info";
         final String STATUS = "Game Status";
         final String CHARACTER = "Characters";
@@ -286,7 +286,7 @@ public class BoardUtilsCLI {
         drawGameCharactersSection(terminal, baseRow + 16, baseCol, characters, charactersCost);
         terminal.writer().println(ansi().cursor(baseRow + 16, baseCol + InfoLengthToFill / 2 - CHARACTER.length() / 2 + 1).a(CHARACTER));
 
-        drawDeckSection(terminal, baseRow + 28, baseCol, new int[]{1, 2, 3, 4, 7, 8, 10});
+        drawDeckSection(terminal, baseRow + 28, baseCol, deck);
         terminal.writer().println(ansi().cursor(baseRow + 28, baseCol + InfoLengthToFill / 2 - DECK.length() / 2 + 1).a(DECK));
 
     }

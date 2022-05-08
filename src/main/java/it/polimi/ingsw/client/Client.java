@@ -5,10 +5,15 @@ import it.polimi.ingsw.client.page.ClientState;
 import it.polimi.ingsw.client.ui.UI;
 import it.polimi.ingsw.client.ui.cli.CLI;
 import it.polimi.ingsw.client.ui.cli.WelcomePageCLI;
+import it.polimi.ingsw.model.entity.JsonDeserializerClass;
 import it.polimi.ingsw.model.enums.GameMode;
+import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.enums.PlayerNumber;
 import it.polimi.ingsw.utils.*;
 import it.polimi.ingsw.utils.InitialState;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Client {
     private final UI ui;
@@ -24,6 +29,18 @@ public class Client {
     public Connection connection;
     public Login login;
 
+    public ArrayList<String> getUsernames () {
+        return usernames;
+    }
+
+    public ArrayList<String> usernames;
+
+    public Game getModel () {
+        return model;
+    }
+
+    public Game model;
+
     public Client (boolean hasGUI) {
         if (hasGUI) {
             ui = null;
@@ -32,9 +49,15 @@ public class Client {
             ui = new CLI();
             ((CLI) ui).init();
         }
-        nextState = ClientState.WELCOME_PAGE;
+        nextState = ClientState.BOARD_PAGE;
         newState = true;
 
+        //TODO connect to server
+        try{ model = Game.request(Game.deserializeGame("./../src/main/java/it/polimi/ingsw/client/serialized_states/s1.json"));
+        } catch (Exception e) { System.out.println(e.toString()); }
+        usernames = new ArrayList<>(Arrays.asList("Ric", "Tom", "Pietro", "Sanp"));
+        IPAddress = "testnet";
+        port = 1000;
     }
 
     public void start () {
@@ -63,6 +86,7 @@ public class Client {
         connection = new Connection(IPAddress, redirect.getPort());
         connection.send(login);
         connection.waitMessage(InitialState.class);
+
         // waiting for players
     }
 

@@ -91,11 +91,11 @@ public class BoardPageCLI extends AbstractWelcomePage {
                     w.getTowerColor().toString(),
                     w.getTowerNumber(),
                     new boolean[]{
-                            true, //TODO getter su porfessore per vedere a chi è assegnato, oppure metodo su wizard per vedere se ha un professore
-                            false,
-                            true,
-                            true,
-                            false
+                            model.getProfessor(StudentColor.YELLOW).getMaster(null) != null && model.getProfessor(StudentColor.YELLOW).getMaster(null).equals(w),
+                            model.getProfessor(StudentColor.BLUE).getMaster(null) != null && model.getProfessor(StudentColor.BLUE).getMaster(null).equals(w),
+                            model.getProfessor(StudentColor.GREEN).getMaster(null) != null && model.getProfessor(StudentColor.GREEN).getMaster(null).equals(w),
+                            model.getProfessor(StudentColor.RED).getMaster(null) != null && model.getProfessor(StudentColor.RED).getMaster(null).equals(w),
+                            model.getProfessor(StudentColor.PINK).getMaster(null) != null && model.getProfessor(StudentColor.PINK).getMaster(null).equals(w)
                     },
                     new int[]{
                             w.getDiningStudents(StudentColor.YELLOW),

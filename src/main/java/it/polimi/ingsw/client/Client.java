@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.FileHandler;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
@@ -65,10 +66,10 @@ public class Client {
 
         logger = Logger.getLogger("MyLog");
         FileHandler fh;
-
         try {
             logger.setUseParentHandlers(false);
             fh = new FileHandler("./log.txt");
+            logger.setLevel(Level.ALL);
             logger.addHandler(fh);
             SimpleFormatter formatter = new SimpleFormatter();
             fh.setFormatter(formatter);

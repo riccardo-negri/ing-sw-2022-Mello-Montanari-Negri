@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.ui.cli.utils;
 
+import it.polimi.ingsw.client.ui.cli.BoardPageCLI;
 import org.jline.builtins.Completers;
 import org.jline.console.impl.JlineCommandRegistry;
 import org.jline.reader.Completer;
@@ -15,13 +16,14 @@ import org.jline.widget.TailTipWidgets;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import static org.fusesource.jansi.Ansi.ansi;
 
 
 public class MoveUtilsCLI {
 
-    public static void askForMove (Terminal terminal, Completer completer, String move, Object lock) {
+    public static void askForMove (Terminal terminal, Completer completer, List<String> list) {
         LineReader reader = LineReaderBuilder.builder()
                 .terminal(terminal)
                 .completer(completer)
@@ -33,17 +35,11 @@ public class MoveUtilsCLI {
 
         autosuggestionWidgets.enable();
         tailtipWidgets.enable();
-        synchronized (lock) { //TODO delete this, just for developing
-            move = "lol";
-        }
         String temp = reader.readLine(String.valueOf(ansi().fgRgb(255, 128, 0).a("Tom").fgDefault().a(":").fgBlue().a("~").fgGreen().a("$ ").fgDefault()));
-        synchronized (lock) {
-            move =  temp;
-            move.notifyAll();
-        }
+        list.add(temp);
     }
 
-    public static void getMoveStudentToIsland (Terminal terminal, String move, Object lock) {
+    public static void getMoveStudentToIsland (Terminal terminal,  List<String> list) {
         ArgumentCompleter completer = new ArgumentCompleter(
                 new StringsCompleter("move"),
                 new Completers.OptionCompleter(Arrays.asList(
@@ -54,10 +50,10 @@ public class MoveUtilsCLI {
                         JlineCommandRegistry.compileCommandOptions(""), 1)
         );
 
-        askForMove(terminal, completer, move, lock);
+        askForMove(terminal, completer, list);
     }
 
-    public static void getMoveMotherNature (Terminal terminal, String move, Object lock) {
+    public static void getMoveMotherNature (Terminal terminal,  List<String> list) {
         ArgumentCompleter completer = new ArgumentCompleter(
                 new StringsCompleter("move"),
                 new Completers.OptionCompleter(Arrays.asList(
@@ -68,10 +64,10 @@ public class MoveUtilsCLI {
                         JlineCommandRegistry.compileCommandOptions(""), 1)
         );
 
-        askForMove(terminal, completer, move, lock);
+        askForMove(terminal, completer, list);
     }
 
-    public static void getMoveSelectCloud (Terminal terminal, String move, Object lock) {
+    public static void getMoveSelectCloud (Terminal terminal,  List<String> list) {
         ArgumentCompleter completer = new ArgumentCompleter(
                 new StringsCompleter("select"),
                 new Completers.OptionCompleter(Arrays.asList(
@@ -80,10 +76,10 @@ public class MoveUtilsCLI {
                         JlineCommandRegistry.compileCommandOptions(""), 1)
         );
 
-        askForMove(terminal, completer, move, lock);
+        askForMove(terminal, completer, list);
     }
 
-    public static void getMovePlayAssistant (Terminal terminal, String move, Object lock) {
+    public static void getMovePlayAssistant (Terminal terminal,  List<String> list) {
         ArgumentCompleter completer = new ArgumentCompleter(
                 new StringsCompleter("play"),
                 new Completers.OptionCompleter(Arrays.asList(
@@ -92,6 +88,6 @@ public class MoveUtilsCLI {
                         JlineCommandRegistry.compileCommandOptions(""), 1)
         );
 
-        askForMove(terminal, completer, move, lock);
+        askForMove(terminal, completer, list);
     }
 }

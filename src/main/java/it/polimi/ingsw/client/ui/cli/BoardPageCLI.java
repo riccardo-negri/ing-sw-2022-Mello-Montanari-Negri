@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -28,93 +29,71 @@ import static org.fusesource.jansi.Ansi.ansi;
 
 public class BoardPageCLI extends AbstractBoardPage {
 
+    volatile List<String> moveRead = new ArrayList<>();
+
     public BoardPageCLI (Client client) {
         super(client);
     }
 
     @Override
     public void draw (Client client) {
-        CLI cli = (CLI) client.getUI();
-        Terminal terminal = cli.getTerminal();
-        Game model = client.getModel();
+        final CLI cli = (CLI) client.getUI();
+        final Terminal terminal = cli.getTerminal();
+        final Game model = client.getModel();
+        final Logger LOGGER = client.getLogger();
 
-        while(!client.getModel().isGameEnded()) {
+        while(!client.getModel().isGameEnded()) { //TODO refactor
             drawGameBoard(terminal, model, client.getUsernames(), client.getUsername(), client.getIPAddress(), client.getPort());
-
             drawConsoleArea(terminal, 48);
-            System.out.println("HERE");
-            final Object moveReadLock = new Object();
-            String moveRead = null;
+            LOGGER.log(Level.INFO, "Drew game board and console area");
+
+            moveRead = new ArrayList<>();
             Thread t = new Thread(new Runnable() {
                 public void run() {
                     try {
-                        getMovePlayAssistant(terminal, moveRead, moveReadLock);
+                        getMovePlayAssistant(terminal, moveRead);
                     }
                     catch (UserInterruptException e) {
-                        System.err.println(e.getMessage());
+                        LOGGER.log(Level.SEVERE, e.toString());
                     }
                 }
             });
             t.start();
-            client.getLogger().log(Level.INFO, "Test");
-            synchronized(moveReadLock){
-                while (moveRead == null && !client.getConnection().hasMessagesToProcess()){
+
+            while (moveRead.size() == 0 && !client.getConnection().hasMessagesToProcess()){ //TODO check with Tommaso
                     try {
-                        moveReadLock.wait();
+                        sleep(1000);
+                        //LOGGER.log(Level.FINE, "Test: " + moveRead);
                     } catch (InterruptedException e) {
+                        LOGGER.log(Level.SEVERE, e.toString());
+                    }
+            }
+
+            if (moveRead != null) {
+                LOGGER.log(Level.FINE, "Processing input move: " + moveRead);
+                if (model.getGameState().getClass().equals(PlanningState.class)) {
+                    Matcher matcher;
+                    String move;
+                    do {
+                        Pattern pattern = Pattern.compile("play assistant [0-9]", Pattern.CASE_INSENSITIVE);
+                        matcher = pattern.matcher(moveRead.get(0));
+                    }
+                    while (!matcher.find());
+                    try {
+                        doCardChoice(Integer.parseInt(moveRead.get(0).split(" ")[2]));
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
-            }
-            System.out.println("HERE1");
-
-            //////////////////////////
-            try {
-                sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            t.interrupt();
-            try {
-                sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println(t.isAlive());
-
-            System.out.println("HERE");
-            waitEnterPressed();
-            System.out.println("AFTERENTERPRESSED");
-
-            while ( moveRead == null) {
-                try {
-                    sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            if (model.getGameState().getClass().equals(PlanningState.class)) {
-                Matcher matcher;
-                String move;
-                do {
-                    getMovePlayAssistant(terminal, moveRead, moveReadLock);
-                    Pattern pattern = Pattern.compile("play assistant [0-9]", Pattern.CASE_INSENSITIVE);
-                    matcher = pattern.matcher(moveRead);
-                }
-                while (!matcher.find());
-                try {
-                    doCardChoice(Integer.parseInt(moveRead.split(" ")[2]));
-                } catch (Exception e) {
-                    e.printStackTrace();
+                else {
+                    //TODO here
                 }
             }
             else {
-                getMoveStudentToIsland(terminal, moveRead, moveReadLock);
-                getMoveMotherNature(terminal, moveRead, moveReadLock);
-                getMoveSelectCloud(terminal, moveRead, moveReadLock);
+                LOGGER.log(Level.FINE, "Handling a message received while waiting for input, interrupting thread that is waiting for input");
+                t.interrupt();
             }
-            waitEnterPressed();
+
         }
 
         onEnd();

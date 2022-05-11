@@ -5,19 +5,20 @@ import it.polimi.ingsw.utils.Redirect;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 public class MatchmakingServer extends Server {
     private static final int wellKnownPort = 50000;
-    private final List<GameServer> startedGames;
+    private final Vector<GameServer> startedGames;
 
     private final List<Thread> gameThreads;
 
     public MatchmakingServer() {
-        startedGames = new ArrayList<>();
-        gameThreads = new ArrayList<>();
+        startedGames = new Vector<>();
+        gameThreads = new Vector<>();
     }
 
-    int portToBind() {
+    int getPortToBind() {
         return wellKnownPort;
     }
 
@@ -27,7 +28,6 @@ public class MatchmakingServer extends Server {
     }
 
     static void moveToGame(User user, GameServer game) {
-        game.assignUser(user.getName());
         user.getConnection().send(new Redirect(game.getPort()));
         System.out.println("Moving user " + user.getName() + " to game " + game + " with port " + game.getPort());
     }
@@ -44,11 +44,13 @@ public class MatchmakingServer extends Server {
                 }
             }
         });
-        synchronized (this) {
-            startedGames.add(server);
-            gameThreads.add(t);
-        }
+        addGameServer(server, t);
         t.start();
+    }
+
+    synchronized void addGameServer(GameServer server, Thread t) {
+        startedGames.add(server);
+        gameThreads.add(t);
     }
 
     @Override
@@ -68,10 +70,8 @@ public class MatchmakingServer extends Server {
     @Override
     void onUserReconnected(User user) {
         for (GameServer g : getStartedGames()) {
-            synchronized (g.getAssignedUsernames()) {
-                if (g.getAssignedUsernames().contains(user.getName())) {
-                    user.getConnection().send(new Redirect(g.getPort()));
-                }
+            if (g.getAssignedUsernames().contains(user.getName())) {
+                user.getConnection().send(new Redirect(g.getPort()));
             }
         }
     }
@@ -80,22 +80,21 @@ public class MatchmakingServer extends Server {
     @Override
     void onNewUserConnect(User user, Login info) {
         for (GameServer g : getStartedGames()) {
-            synchronized (g.getAssignedUsernames()) {
-                if (g.acceptsAssign()) {
-                    if (g.getPlayerNumber() == info.getPlayerNumber() && g.getGameMode() == info.getGameMode()) {
-                        moveToGame(user, g);
-                        return;
-                    }
+            if (g.getPlayerNumber() == info.getPlayerNumber() && g.getGameMode() == info.getGameMode()) {
+                if (g.assignUser(user.getName())) {
+                    moveToGame(user, g);
+                    return;
                 }
             }
         }
         // reach this point only if no compatible game exists
         GameServer game = new GameServer(info.getPlayerNumber(), info.getGameMode());
         runGameServer(game);
+        game.assignUser(user.name);
         moveToGame(user, game);
     }
 
-    public synchronized List<GameServer> getStartedGames() {
-        return new ArrayList<>(startedGames);
+    List<GameServer> getStartedGames() {
+        return startedGames;
     }
 }

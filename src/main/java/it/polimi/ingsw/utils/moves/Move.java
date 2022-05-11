@@ -3,15 +3,16 @@ package it.polimi.ingsw.utils.moves;
 import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.enums.StudentColor;
-import it.polimi.ingsw.utils.MessageContent;
+import it.polimi.ingsw.utils.Message;
 
 import java.util.ArrayList;
 
-public abstract class Move extends MessageContent {
+public abstract class Move extends Message {
     // can be empty if no student is extracted for this move
     // must be ArrayList because it is serializable
     private final ArrayList<StudentColor> extracted = new ArrayList<>();
     protected int authorId;  // the wizard that required this move
+    private int number = 0;
 
     public Move(Wizard author) {
         this.authorId = author.getId();
@@ -33,4 +34,12 @@ public abstract class Move extends MessageContent {
     }
 
     public abstract void validate(Game game) throws Exception;
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
 }

@@ -7,6 +7,10 @@ import it.polimi.ingsw.model.entity.*;
 import it.polimi.ingsw.model.entity.gameState.PlanningState;
 import it.polimi.ingsw.model.enums.GameMode;
 import it.polimi.ingsw.model.enums.StudentColor;
+import it.polimi.ingsw.utils.Connection;
+import it.polimi.ingsw.utils.Message;
+import it.polimi.ingsw.utils.MessageContent;
+import it.polimi.ingsw.utils.UserDisconnected;
 import org.jline.reader.UserInterruptException;
 import org.jline.terminal.Terminal;
 
@@ -16,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -58,15 +63,27 @@ public class BoardPageCLI extends AbstractBoardPage {
                     }
                 }
             });
+
+            client.getConnection().bindFunction(
+                (Connection c) -> {
+                    t.interrupt();
+                    return false;
+                }
+            );
+
             t.start();
 
-            while (moveRead.size() == 0 && !client.getConnection().hasMessagesToProcess()){ //TODO check with Tommaso
-                    try {
-                        sleep(1000);
-                        //LOGGER.log(Level.FINE, "Test: " + moveRead);
-                    } catch (InterruptedException e) {
-                        LOGGER.log(Level.SEVERE, e.toString());
-                    }
+            try {
+                t.join();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+            if (moveRead.size() != 0) {
+                // è arrivata una mossa
+            } else {
+                // è arrivato un messaggio
+                MessageContent m = client.getConnection().waitMessage();
             }
 
             if (moveRead != null) {

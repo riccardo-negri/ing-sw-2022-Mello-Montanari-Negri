@@ -1,22 +1,32 @@
 package it.polimi.ingsw.client.ui.cli;
 
 import it.polimi.ingsw.client.Client;
+import it.polimi.ingsw.client.page.AbstractBoardPage;
 import it.polimi.ingsw.client.page.AbstractWelcomePage;
 import it.polimi.ingsw.model.entity.*;
+import it.polimi.ingsw.model.entity.gameState.PlanningState;
 import it.polimi.ingsw.model.enums.GameMode;
 import it.polimi.ingsw.model.enums.StudentColor;
+import org.jline.reader.UserInterruptException;
 import org.jline.terminal.Terminal;
 
+import javax.imageio.ImageTranscoder;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static it.polimi.ingsw.client.ui.cli.utils.BoardUtilsCLI.*;
 import static it.polimi.ingsw.client.ui.cli.utils.CoreUtilsCLI.*;
 import static it.polimi.ingsw.client.ui.cli.utils.MoveUtilsCLI.*;
+import static java.lang.Thread.sleep;
 import static org.fusesource.jansi.Ansi.ansi;
 
-public class BoardPageCLI extends AbstractWelcomePage {
+public class BoardPageCLI extends AbstractBoardPage {
 
     public BoardPageCLI (Client client) {
         super(client);
@@ -28,16 +38,87 @@ public class BoardPageCLI extends AbstractWelcomePage {
         Terminal terminal = cli.getTerminal();
         Game model = client.getModel();
 
-        drawGameBoard(terminal, model, client.getUsernames(), client.getUsername(), client.getIPAddress(), client.getPort());
+        while(!client.getModel().isGameEnded()) {
+            drawGameBoard(terminal, model, client.getUsernames(), client.getUsername(), client.getIPAddress(), client.getPort());
 
-        drawConsoleArea(terminal, 48);
+            drawConsoleArea(terminal, 48);
+            System.out.println("HERE");
+            final Object moveReadLock = new Object();
+            String moveRead = null;
+            Thread t = new Thread(new Runnable() {
+                public void run() {
+                    try {
+                        getMovePlayAssistant(terminal, moveRead, moveReadLock);
+                    }
+                    catch (UserInterruptException e) {
+                        System.err.println(e.getMessage());
+                    }
+                }
+            });
+            t.start();
+            client.getLogger().log(Level.INFO, "Test");
+            synchronized(moveReadLock){
+                while (moveRead == null && !client.getConnection().hasMessagesToProcess()){
+                    try {
+                        moveReadLock.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            System.out.println("HERE1");
 
-        getMovePlayAssistant(terminal);
-        getMoveStudentToIsland(terminal);
-        getMoveMotherNature(terminal);
-        getMoveSelectCloud(terminal);
+            //////////////////////////
+            try {
+                sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            t.interrupt();
+            try {
+                sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println(t.isAlive());
 
-        waitEnterPressed();
+            System.out.println("HERE");
+            waitEnterPressed();
+            System.out.println("AFTERENTERPRESSED");
+
+            while ( moveRead == null) {
+                try {
+                    sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (model.getGameState().getClass().equals(PlanningState.class)) {
+                Matcher matcher;
+                String move;
+                do {
+                    getMovePlayAssistant(terminal, moveRead, moveReadLock);
+                    Pattern pattern = Pattern.compile("play assistant [0-9]", Pattern.CASE_INSENSITIVE);
+                    matcher = pattern.matcher(moveRead);
+                }
+                while (!matcher.find());
+                try {
+                    doCardChoice(Integer.parseInt(moveRead.split(" ")[2]));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            else {
+                getMoveStudentToIsland(terminal, moveRead, moveReadLock);
+                getMoveMotherNature(terminal, moveRead, moveReadLock);
+                getMoveSelectCloud(terminal, moveRead, moveReadLock);
+            }
+            waitEnterPressed();
+        }
+
+        onEnd();
+
     }
 
     private void drawGameBoard (Terminal terminal, Game model, ArrayList<String> usernames, String username, String IP, int port) {
@@ -61,7 +142,7 @@ public class BoardPageCLI extends AbstractWelcomePage {
                 model.getPlayerNumber().getWizardNumber(),
                 3, //TODO add round to model
                 "Tom", //TODO how do I know who is playing
-                "move students", //TODO add getter for current game phase
+                "move students", //TODO add getters in GameState
                 model.getGameMode().equals(GameMode.COMPLETE) ? new String[]{"Clown", "Wizard", "Knight"} : new String[]{}, //TODO its missing a method to get the characters even if i don't know the ID
                 new int[]{3, 1, 2}, // TODO here
                 new int[]{1, 2, 3, 4, 7, 8, 10} //TODO create getter to find card in a deck model.getWizard(usernames.indexOf(username)).getCardDeck().getCards() for example
@@ -85,7 +166,7 @@ public class BoardPageCLI extends AbstractWelcomePage {
                     baseRow + relativePlacementOfPlayerBoardsBasedOnID.get(i).get(0),
                     baseCol + relativePlacementOfPlayerBoardsBasedOnID.get(i).get(1),
                     usernames.get(i),
-                    w.getCardDeck().getCurrentCard().toString(),
+                    w.getCardDeck().getCurrentCard() != null ? w.getCardDeck().getCurrentCard().toString() : "Not played",
                     w.getMoney(),
                     "9 (clown)", //TODO here
                     w.getTowerColor().toString(),

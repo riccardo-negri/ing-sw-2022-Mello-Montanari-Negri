@@ -13,6 +13,7 @@ import org.jline.reader.impl.completer.StringsCompleter;
 import org.jline.terminal.Terminal;
 
 import java.util.Arrays;
+import java.util.logging.Level;
 
 import static it.polimi.ingsw.client.ui.cli.utils.CoreUtilsCLI.*;
 
@@ -50,8 +51,8 @@ public class WelcomePageCLI extends AbstractWelcomePage {
 
         printTerminalCenteredMultilineText(cli.getTerminal(), WELCOME_TO + "\n" + ERIANTYS + "\nMade by Pietro Mello Rella, Tommaso Montanari and Riccardo Negri\n" + "\nPress enter to continue...");
         //moveCursorToEnd(cli.getTerminal());
+        client.getLogger().log(Level.INFO, "Debug");
         waitEnterPressed();
-        System.out.println("HERE£$");
         //getMoveToIsland(reader);
         onEnd();
     }

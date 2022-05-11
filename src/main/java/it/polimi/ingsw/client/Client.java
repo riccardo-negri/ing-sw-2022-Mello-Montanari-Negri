@@ -12,8 +12,13 @@ import it.polimi.ingsw.model.enums.PlayerNumber;
 import it.polimi.ingsw.utils.*;
 import it.polimi.ingsw.utils.InitialState;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 public class Client {
     private final UI ui;
@@ -28,6 +33,12 @@ public class Client {
     public boolean isAdvancedGame;
     public Connection connection;
     public Login login;
+
+    public Logger getLogger () {
+        return logger;
+    }
+
+    private final Logger logger;
 
     public ArrayList<String> getUsernames () {
         return usernames;
@@ -49,8 +60,22 @@ public class Client {
             ui = new CLI();
             ((CLI) ui).init();
         }
-        nextState = ClientState.BOARD_PAGE;
+        nextState = ClientState.WELCOME_PAGE;
         newState = true;
+
+        logger = Logger.getLogger("MyLog");
+        FileHandler fh;
+
+        try {
+            logger.setUseParentHandlers(false);
+            fh = new FileHandler("./log.txt");
+            logger.addHandler(fh);
+            SimpleFormatter formatter = new SimpleFormatter();
+            fh.setFormatter(formatter);
+
+        } catch (SecurityException | IOException e) {
+            e.printStackTrace();
+        }
 
         //TODO connect to server
         try{ model = Game.request(Game.deserializeGame("./../src/main/java/it/polimi/ingsw/client/serialized_states/s1.json"));
@@ -63,7 +88,7 @@ public class Client {
     public void start () {
         while (nextState != null) {
             currState = ui.getState(this, nextState);
-            currState.draw(this);
+            currState.draw(this);   // draw does everything
         }
     }
 
@@ -78,16 +103,28 @@ public class Client {
     public void setupConnection(){
         GameMode gm = isAdvancedGame ? GameMode.COMPLETE : GameMode.EASY;
         login = new Login(username, PlayerNumber.fromNumber(playerNumber), gm);
-        Connection connection = new Connection(IPAddress, port);
+        connection = new Connection(IPAddress, port);
         connection.send(login);
         Redirect redirect = (Redirect) connection.waitMessage(Redirect.class);
         System.out.println("porta");
         System.out.println(redirect.getPort());
         connection = new Connection(IPAddress, redirect.getPort());
         connection.send(login);
-        connection.waitMessage(InitialState.class);
 
-        // waiting for players
+        // import initial state
+        InitialState initialState = (InitialState) connection.waitMessage(InitialState.class);
+        try {
+            FileWriter myWriter = new FileWriter("test.txt");
+            myWriter.write(initialState.getState());
+            myWriter.close();
+            System.out.println("Successfully wrote to the file.");
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+        try{ model = Game.request(Game.deserializeGame(initialState.getState()));
+        } catch (Exception e) { System.out.println(e.toString()); }
+        usernames = initialState.getUsernames();
     }
 
     public UI getUI () {

@@ -312,4 +312,8 @@ public class Game {
     public Bag getBag() {
         return bag;
     }
+
+    public boolean isGameEnded () {
+        return gameEnded;
+    }
 }

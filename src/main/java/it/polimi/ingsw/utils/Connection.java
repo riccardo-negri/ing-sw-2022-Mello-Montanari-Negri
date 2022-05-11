@@ -139,6 +139,10 @@ public class Connection extends ConnectionBase {
         return null;
     }
 
+    public synchronized boolean hasMessagesToProcess () {
+        return messagesToProcess.size() > 0;
+    }
+
     private synchronized void removeLastMessage() {
         if (messagesToProcess.size() > 0) {
             messagesToProcess.remove(messagesToProcess.size() - 1);

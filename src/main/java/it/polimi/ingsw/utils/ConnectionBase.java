@@ -31,7 +31,7 @@ public abstract class ConnectionBase {
             reader = new ObjectInputStream(socket.getInputStream());
             thread = new Thread(this::listenMessages);
             TimerTask pingTask = new TimerTask() {
-                public void run() {send(new Message());}
+                public void run() {send(new Ping());}
             };
             thread.start();
             pingTimer.scheduleAtFixedRate(pingTask, pingPeriod *1000, pingPeriod *1000);

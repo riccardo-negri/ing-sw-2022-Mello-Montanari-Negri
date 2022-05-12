@@ -7,7 +7,7 @@ import it.polimi.ingsw.model.enums.GameMode;
 import it.polimi.ingsw.model.enums.StudentColor;
 import it.polimi.ingsw.utils.Connection;
 import it.polimi.ingsw.utils.Disconnected;
-import it.polimi.ingsw.utils.MessageContent;
+import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.utils.moves.Move;
 import org.jline.reader.UserInterruptException;
 
@@ -72,7 +72,7 @@ public class BoardPageCLI extends AbstractBoardPage {
             else { // enter here if it's not your turn
                 printConsoleInfo(terminal, "Waiting for other player to do a move...");
 
-                MessageContent message = client.getConnection().waitMessage();
+                Message message = client.getConnection().waitMessage();
 
                 if (message instanceof Disconnected) {
                     printConsoleWarning(terminal, "Received an unsupported message...");

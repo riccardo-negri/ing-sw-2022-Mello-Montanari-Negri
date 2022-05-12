@@ -9,7 +9,7 @@ import it.polimi.ingsw.model.enums.GameMode;
 import it.polimi.ingsw.model.enums.StudentColor;
 import it.polimi.ingsw.utils.Connection;
 import it.polimi.ingsw.utils.Message;
-import it.polimi.ingsw.utils.MessageContent;
+import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.utils.UserDisconnected;
 import org.jline.reader.UserInterruptException;
 import org.jline.terminal.Terminal;
@@ -83,7 +83,7 @@ public class BoardPageCLI extends AbstractBoardPage {
                 // è arrivata una mossa
             } else {
                 // è arrivato un messaggio
-                MessageContent m = client.getConnection().waitMessage();
+                Message m = client.getConnection().waitMessage();
             }
 
             if (moveRead != null) {

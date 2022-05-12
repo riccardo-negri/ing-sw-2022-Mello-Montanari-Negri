@@ -22,8 +22,6 @@ public class StartPageCLI extends AbstractStartPage {
                 "██║ ╚═╝ ██║███████╗██║ ╚████║╚██████╔╝\n" +
                 "╚═╝     ╚═╝╚══════╝╚═╝  ╚═══╝ ╚═════╝ \n";
         String CONTENT = MENU + "\n1) Start the Game" + "\n2) Settings" + "\n 3) Credits and Storyline\n";
-        CLI cli = (CLI) client.getUI();
-        Terminal terminal = cli.getTerminal();
 
         clearTerminal(terminal);
         printTerminalCenteredMultilineText(terminal, CONTENT);

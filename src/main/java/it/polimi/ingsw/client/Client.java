@@ -5,7 +5,6 @@ import it.polimi.ingsw.client.page.ClientState;
 import it.polimi.ingsw.client.ui.UI;
 import it.polimi.ingsw.client.ui.cli.CLI;
 import it.polimi.ingsw.client.ui.cli.WelcomePageCLI;
-import it.polimi.ingsw.model.entity.JsonDeserializerClass;
 import it.polimi.ingsw.model.enums.GameMode;
 import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.enums.PlayerNumber;
@@ -15,7 +14,6 @@ import it.polimi.ingsw.utils.InitialState;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -79,9 +77,9 @@ public class Client {
         }
 
         //TODO connect to server
-        try{ model = Game.request(Game.deserializeGame("./../src/main/java/it/polimi/ingsw/client/serialized_states/s1.json"));
-        } catch (Exception e) { System.out.println(e.toString()); }
-        usernames = new ArrayList<>(Arrays.asList("Ric", "Tom", "Pietro", "Sanp"));
+        //try{ model = Game.request(Game.deserializeGame("./../src/main/java/it/polimi/ingsw/client/serialized_states/s1.json"));
+        //} catch (Exception e) { System.out.println(e.toString()); }
+        //usernames = new ArrayList<>(Arrays.asList("Ric", "Tom", "Pietro", "Sanp"));
         IPAddress = "testnet";
         port = 1000;
     }
@@ -123,7 +121,7 @@ public class Client {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
-        try{ model = Game.request(Game.deserializeGame(initialState.getState()));
+        try{ model = Game.request(Game.deserializeGameFromString(initialState.getState()));
         } catch (Exception e) { System.out.println(e.toString()); }
         usernames = initialState.getUsernames();
     }

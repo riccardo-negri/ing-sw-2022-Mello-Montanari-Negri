@@ -1,6 +1,5 @@
 package it.polimi.ingsw.client.ui.cli.utils;
 
-import it.polimi.ingsw.client.ui.cli.BoardPageCLI;
 import org.jline.builtins.Completers;
 import org.jline.console.impl.JlineCommandRegistry;
 import org.jline.reader.Completer;
@@ -17,13 +16,15 @@ import org.jline.widget.TailTipWidgets;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.fusesource.jansi.Ansi.ansi;
 
 
-public class MoveUtilsCLI {
+public class ReadMoveUtilsCLI {
 
-    public static void askForMove (Terminal terminal, Completer completer, List<String> list) {
+    public static String askForMove (Terminal terminal, Completer completer) {
         LineReader reader = LineReaderBuilder.builder()
                 .terminal(terminal)
                 .completer(completer)
@@ -35,8 +36,7 @@ public class MoveUtilsCLI {
 
         autosuggestionWidgets.enable();
         tailtipWidgets.enable();
-        String temp = reader.readLine(String.valueOf(ansi().fgRgb(255, 128, 0).a("Tom").fgDefault().a(":").fgBlue().a("~").fgGreen().a("$ ").fgDefault()));
-        list.add(temp);
+        return reader.readLine(String.valueOf(ansi().fgRgb(255, 128, 0).a("Tom").fgDefault().a(":").fgBlue().a("~").fgGreen().a("$ ").fgDefault()));
     }
 
     public static void getMoveStudentToIsland (Terminal terminal,  List<String> list) {
@@ -50,7 +50,7 @@ public class MoveUtilsCLI {
                         JlineCommandRegistry.compileCommandOptions(""), 1)
         );
 
-        askForMove(terminal, completer, list);
+        askForMove(terminal, completer);
     }
 
     public static void getMoveMotherNature (Terminal terminal,  List<String> list) {
@@ -64,7 +64,7 @@ public class MoveUtilsCLI {
                         JlineCommandRegistry.compileCommandOptions(""), 1)
         );
 
-        askForMove(terminal, completer, list);
+        askForMove(terminal, completer);
     }
 
     public static void getMoveSelectCloud (Terminal terminal,  List<String> list) {
@@ -76,10 +76,14 @@ public class MoveUtilsCLI {
                         JlineCommandRegistry.compileCommandOptions(""), 1)
         );
 
-        askForMove(terminal, completer, list);
+        askForMove(terminal, completer);
     }
 
     public static void getMovePlayAssistant (Terminal terminal,  List<String> list) {
+        getMovePlayAssistant(terminal,  list, false);
+    }
+
+    public static void getMovePlayAssistant (Terminal terminal,  List<String> list, boolean madeIllegalMove) {
         ArgumentCompleter completer = new ArgumentCompleter(
                 new StringsCompleter("play"),
                 new Completers.OptionCompleter(Arrays.asList(
@@ -87,7 +91,20 @@ public class MoveUtilsCLI {
                         new StringsCompleter("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"), NullCompleter.INSTANCE),
                         JlineCommandRegistry.compileCommandOptions(""), 1)
         );
+        Pattern pattern = Pattern.compile("^(play assistant )([1-9]|1[0])\s?$", Pattern.CASE_INSENSITIVE);
+        Matcher matcher;
+        String move;
 
-        askForMove(terminal, completer, list);
+        do {
+            if(madeIllegalMove) {
+                terminal.writer().println(ansi().fgRgb(255, 0, 0).a("Please type a valid command...").fgDefault());
+            }
+            move = askForMove(terminal, completer);
+            matcher = pattern.matcher(move);
+            madeIllegalMove = true;
+        }
+        while (!matcher.find());
+
+        list.add(move);
     }
 }

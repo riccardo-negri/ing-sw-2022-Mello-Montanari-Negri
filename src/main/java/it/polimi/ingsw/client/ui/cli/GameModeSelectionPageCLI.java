@@ -21,8 +21,6 @@ public class GameModeSelectionPageCLI extends AbstractGameModeSelectionPage {
                         "██║   ██║██╔══██║██║╚██╔╝██║██╔══╝      ██║╚██╔╝██║██║   ██║██║  ██║██╔══╝  \n" +
                         "╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗    ██║ ╚═╝ ██║╚██████╔╝██████╔╝███████╗\n" +
                         " ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝    ╚═╝     ╚═╝ ╚═════╝ ╚═════╝ ╚══════╝\n";
-        CLI cli = (CLI) client.getUI();
-        Terminal terminal = cli.getTerminal();
 
         clearTerminal(terminal);
         printTerminalCenteredMultilineText(terminal, GAME_MODE, 5);

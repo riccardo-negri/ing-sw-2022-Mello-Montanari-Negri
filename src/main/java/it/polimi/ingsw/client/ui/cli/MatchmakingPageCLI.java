@@ -20,8 +20,6 @@ public class MatchmakingPageCLI extends AbstractMatchmakingPage {
                 "██║╚██╔╝██║██╔══██║   ██║   ██║     ██╔══██║██║╚██╔╝██║██╔══██║██╔═██╗ ██║██║╚██╗██║██║   ██║\n" +
                 "██║ ╚═╝ ██║██║  ██║   ██║   ╚██████╗██║  ██║██║ ╚═╝ ██║██║  ██║██║  ██╗██║██║ ╚████║╚██████╔╝\n" +
                 "╚═╝     ╚═╝╚═╝  ╚═╝   ╚═╝    ╚═════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝ \n";
-        CLI cli = (CLI) client.getUI();
-        Terminal terminal = cli.getTerminal();
 
         clearTerminal(terminal);
         printTerminalCenteredMultilineText(terminal, GAME_MODE, 1);

@@ -21,8 +21,6 @@ public class ConnectionPageCLI extends AbstractConnectionPage{
                 "██║     ██║   ██║██║╚██╗██║██║╚██╗██║██╔══╝  ██║        ██║   ██║██║   ██║██║╚██╗██║\n" +
                 "╚██████╗╚██████╔╝██║ ╚████║██║ ╚████║███████╗╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║\n" +
                 " ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝\n";
-        CLI cli = (CLI) client.getUI();
-        Terminal terminal = cli.getTerminal();
 
         clearTerminal(terminal);
         printTerminalCenteredMultilineText(terminal, CONNECTION, 5);

@@ -71,6 +71,16 @@ public class BoardUtilsCLI {
         }
     }
 
+    public static void printConsoleWarning (Terminal terminal, String s) {
+        terminal.writer().println(ansi().fgRgb(255, 0, 0).a(s).fgDefault());
+        terminal.writer().flush();
+    }
+
+    public static void printConsoleInfo (Terminal terminal, String s) {
+        terminal.writer().println(ansi().fgRgb(0, 0, 125).a(s).fgDefault());
+        terminal.writer().flush();
+    }
+
     public static void drawIsland (Terminal terminal, int ID, int baseRow, int baseCol, String tower, Integer yellow, Integer blue, Integer green, Integer red, Integer pink, boolean hasMotherNature) {
         final String R1 = "    _________\n";
         final String R2 = "   /         \\\n";
@@ -290,16 +300,16 @@ public class BoardUtilsCLI {
         terminal.writer().println(ansi().cursor(baseRow + 28, baseCol + InfoLengthToFill / 2 - DECK.length() / 2 + 1).a(DECK));
 
     }
-    
-    public static void drawConsoleArea(Terminal terminal, int baseRow) {
+
+    public static void drawConsoleArea (Terminal terminal, int baseRow) {
         final String CONSOLE = "Your Console";
         final String INSTRUCTIONS = "Write here your commands to interact with the game... (press TAB to get suggestions and autocompletion)";
         final String R = "+-----------------+";
         final String minus = "-";
-        terminal.writer().println(ansi().cursor(baseRow,0).a(minus.repeat(terminal.getWidth())));
+        terminal.writer().println(ansi().cursor(baseRow, 0).a(minus.repeat(terminal.getWidth())));
         terminal.writer().println(ansi().cursor(baseRow, 0).a("+").cursor(baseRow, terminal.getWidth()).a("+"));
-        terminal.writer().println(ansi().cursor(baseRow, (terminal.getWidth()-CONSOLE.length()) / 2).fgRed().a(CONSOLE).fgDefault());
-        terminal.writer().println(ansi().cursor(baseRow+1,(terminal.getWidth()-INSTRUCTIONS.length()) / 2).a(INSTRUCTIONS));
+        terminal.writer().println(ansi().cursor(baseRow, (terminal.getWidth() - CONSOLE.length()) / 2).fgRed().a(CONSOLE).fgDefault());
+        terminal.writer().println(ansi().cursor(baseRow + 1, (terminal.getWidth() - INSTRUCTIONS.length()) / 2).a(INSTRUCTIONS));
         terminal.writer().flush();
     }
 }

@@ -2,113 +2,92 @@ package it.polimi.ingsw.client.ui.cli;
 
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.page.AbstractBoardPage;
-import it.polimi.ingsw.client.page.AbstractWelcomePage;
 import it.polimi.ingsw.model.entity.*;
-import it.polimi.ingsw.model.entity.gameState.PlanningState;
 import it.polimi.ingsw.model.enums.GameMode;
 import it.polimi.ingsw.model.enums.StudentColor;
 import it.polimi.ingsw.utils.Connection;
-import it.polimi.ingsw.utils.Message;
-import it.polimi.ingsw.utils.Message;
-import it.polimi.ingsw.utils.UserDisconnected;
+import it.polimi.ingsw.utils.Disconnected;
+import it.polimi.ingsw.utils.MessageContent;
+import it.polimi.ingsw.utils.moves.Move;
 import org.jline.reader.UserInterruptException;
-import org.jline.terminal.Terminal;
 
-import javax.imageio.ImageTranscoder;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Predicate;
 import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static it.polimi.ingsw.client.ui.cli.utils.BoardUtilsCLI.*;
 import static it.polimi.ingsw.client.ui.cli.utils.CoreUtilsCLI.*;
-import static it.polimi.ingsw.client.ui.cli.utils.MoveUtilsCLI.*;
-import static java.lang.Thread.sleep;
+import static it.polimi.ingsw.client.ui.cli.utils.ReadMoveUtilsCLI.*;
 import static org.fusesource.jansi.Ansi.ansi;
 
 public class BoardPageCLI extends AbstractBoardPage {
 
-    volatile List<String> moveRead = new ArrayList<>();
+    volatile List<String> moveFromStdin = new ArrayList<>();
 
     public BoardPageCLI (Client client) {
         super(client);
     }
 
+    /**
+     * In short, here is all the controller of the CLI
+     */
     @Override
     public void draw (Client client) {
-        final CLI cli = (CLI) client.getUI();
-        final Terminal terminal = cli.getTerminal();
-        final Game model = client.getModel();
-        final Logger LOGGER = client.getLogger();
 
-        while(!client.getModel().isGameEnded()) { //TODO refactor
-            drawGameBoard(terminal, model, client.getUsernames(), client.getUsername(), client.getIPAddress(), client.getPort());
+
+        while (!client.getModel().isGameEnded()) { //TODO refactor
+            drawGameBoard(client.getUsernames(), client.getUsername(), client.getIPAddress(), client.getPort());
             drawConsoleArea(terminal, 48);
-            LOGGER.log(Level.INFO, "Drew game board and console area");
+            LOGGER.log(Level.FINE, "Drew game board and console area");
 
-            moveRead = new ArrayList<>();
-            Thread t = new Thread(new Runnable() {
-                public void run() {
-                    try {
-                        getMovePlayAssistant(terminal, moveRead);
-                    }
-                    catch (UserInterruptException e) {
-                        LOGGER.log(Level.SEVERE, e.toString());
+            if (model.getGameState().getCurrentPlayer() == client.getUsernames().indexOf(client.getUsername())) { // enter if it's your turn
+
+                moveFromStdin = new ArrayList<>();
+                waitForMoveOrMessage();
+
+                if (moveFromStdin.size() != 0) { // a move has have been read
+                    LOGGER.log(Level.FINE, "Processing input move: " + moveFromStdin + " Game state: " + model.getGameState().getGameStateName());
+                    switch (model.getGameState().getGameStateName()) {
+
+                        case "PS":
+                            try {
+                                doCardChoice(Integer.parseInt(moveFromStdin.get(0).split(" ")[2]));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                printConsoleWarning(terminal, "Please type a valid command...");
+                            }
+
+                        case "MSS":
+
+                        case "MMNS":
+
+                        case "CCS":
                     }
                 }
-            });
-
-            client.getConnection().bindFunction(
-                (Connection c) -> {
-                    t.interrupt();
-                    return false;
+                else { // no move was made, so it's a message about some disconnection events
+                    handleMessageNotMove();
                 }
-            );
-
-            t.start();
-
-            try {
-                t.join();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
             }
+            else { // enter here if it's not your turn
+                printConsoleInfo(terminal, "Waiting for other player to do a move...");
 
-            if (moveRead.size() != 0) {
-                // è arrivata una mossa
-            } else {
-                // è arrivato un messaggio
-                Message m = client.getConnection().waitMessage();
-            }
+                MessageContent message = client.getConnection().waitMessage();
 
-            if (moveRead != null) {
-                LOGGER.log(Level.FINE, "Processing input move: " + moveRead);
-                if (model.getGameState().getClass().equals(PlanningState.class)) {
-                    Matcher matcher;
-                    String move;
-                    do {
-                        Pattern pattern = Pattern.compile("play assistant [0-9]", Pattern.CASE_INSENSITIVE);
-                        matcher = pattern.matcher(moveRead.get(0));
-                    }
-                    while (!matcher.find());
+                if (message instanceof Disconnected) {
+                    printConsoleWarning(terminal, "Received an unsupported message...");
+                }
+                else if (message instanceof Move) {
                     try {
-                        doCardChoice(Integer.parseInt(moveRead.get(0).split(" ")[2]));
+                        applyOtherPlayersMove((Move) message);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
                 else {
-                    //TODO here
+                    printConsoleWarning(terminal, "Received an unsupported message...");
                 }
-            }
-            else {
-                LOGGER.log(Level.FINE, "Handling a message received while waiting for input, interrupting thread that is waiting for input");
-                t.interrupt();
+
             }
 
         }
@@ -117,7 +96,59 @@ public class BoardPageCLI extends AbstractBoardPage {
 
     }
 
-    private void drawGameBoard (Terminal terminal, Game model, ArrayList<String> usernames, String username, String IP, int port) {
+    private void handleMessageNotMove () {
+        LOGGER.log(Level.FINE, "Handling a message received while waiting for input, interrupting thread that is waiting for input");
+        terminal.writer().println(ansi().fgRgb(255, 0, 0).a("Received some message that is not a move...").fgDefault());
+        waitEnterPressed();
+    }
+
+    private void askForMoveBasedOnState() {
+        switch (model.getGameState().getGameStateName()) {
+
+            case "PS":
+                getMovePlayAssistant(terminal, moveFromStdin);
+
+            case "MSS":
+
+            case "MMNS":
+
+            case "CCS":
+        }
+    }
+
+    private void waitForMoveOrMessage () {
+        Thread t = new Thread(new Runnable() {
+            public void run () {
+                try {
+                    LOGGER.log(Level.SEVERE, "Thread: starting to read from stdin");
+                    askForMoveBasedOnState();
+
+                } catch (UserInterruptException e) {
+                    LOGGER.log(Level.SEVERE, "Thread: Got interrupted signal in thread");
+                    LOGGER.log(Level.SEVERE, e.toString());
+                }
+            }
+        });
+
+        client.getConnection().bindFunction(
+                (Connection c) -> {
+                    t.interrupt();
+                    LOGGER.log(Level.SEVERE, "Sent interrupted signal to thread");
+                    return false;
+                }
+        );
+
+        t.start();
+
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            LOGGER.log(Level.SEVERE, "Got InterruptedException while waiting for thread to join");
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void drawGameBoard (ArrayList<String> usernames, String username, String IP, int port) {
         int baseCol = terminal.getWidth() / 2 - 200 / 2;
         int baseRow = 1;
 
@@ -144,12 +175,12 @@ public class BoardPageCLI extends AbstractBoardPage {
                 new int[]{1, 2, 3, 4, 7, 8, 10} //TODO create getter to find card in a deck model.getWizard(usernames.indexOf(username)).getCardDeck().getCards() for example
         );
 
-        drawTilesAndClouds(terminal, baseCol + 61, baseRow + 3, model);
+        drawTilesAndClouds(baseCol + 61, baseRow + 3, model);
 
-        drawPlayerBoards(terminal, baseCol + 155, baseRow + 4, model, usernames);
+        drawPlayerBoards(baseCol + 155, baseRow + 4, model, usernames);
     }
 
-    private void drawPlayerBoards (Terminal terminal, int baseCol, int baseRow, Game model, ArrayList<String> usernames) {
+    private void drawPlayerBoards (int baseCol, int baseRow, Game model, ArrayList<String> usernames) {
         HashMap<Integer, List<Integer>> relativePlacementOfPlayerBoardsBasedOnID = new HashMap<>(); // first int of list is row offset, second int is column offset
         relativePlacementOfPlayerBoardsBasedOnID.put(0, List.of(0, 0));
         relativePlacementOfPlayerBoardsBasedOnID.put(1, List.of(getSchoolBoardHeight() + 2, 0));
@@ -197,7 +228,7 @@ public class BoardPageCLI extends AbstractBoardPage {
         */
     }
 
-    private void drawTilesAndClouds (Terminal terminal, int baseCol, int baseRow, Game model) {
+    private void drawTilesAndClouds (int baseCol, int baseRow, Game model) {
         HashMap<Integer, List<Integer>> relativePlacementOfIslandBasedOnID = new HashMap<>(); // first int of list is row offset, second int is column offset
         relativePlacementOfIslandBasedOnID.put(0, List.of(0, 0));
         relativePlacementOfIslandBasedOnID.put(1, List.of(0, (getIslandWidth() + 2)));

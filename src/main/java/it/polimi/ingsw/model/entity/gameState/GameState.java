@@ -32,4 +32,12 @@ public abstract class GameState {
     public void refreshGameId(Game game) { this.gameId = game.getId(); }
 
     public Integer getCurrentPlayer() { return playerOrder.get(currentlyPlaying); }
+
+    public List<Integer> getPlayerOrder () {
+        return playerOrder;
+    }
+
+    public String getGameStateName () {
+        return gameState;
+    }
 }

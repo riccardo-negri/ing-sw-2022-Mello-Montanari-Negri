@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.entity.gameState;
 
 import it.polimi.ingsw.model.entity.Game;
-import it.polimi.ingsw.model.enums.Tower;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +15,7 @@ class PlanningStateTest {
 
     @BeforeEach
     void initializeGame() {
-        try{ game = Game.request(Game.deserializeGame("./src/test/java/it/polimi/ingsw/model/entity/serialized_tests/planning_state_test/Test1Before.json"));
+        try{ game = Game.request(Game.deserializeGameFromFile("./src/test/java/it/polimi/ingsw/model/entity/serialized_tests/planning_state_test/Test1Before.json"));
         } catch (Exception e) { System.err.println("Can't find file in test initialization..."); }
     }
 

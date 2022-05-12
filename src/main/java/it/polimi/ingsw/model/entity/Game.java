@@ -138,16 +138,20 @@ public class Game {
      * @return the index of the game
      * @throws Exception if the file can't be found, or the index of the game already exists
      */
-    public static Integer deserializeGame(String fileName) throws Exception {
-        if (deserializationGson == null) initializeDeserializationGson();
-
-        if (gameEntities == null) gameEntities = new ArrayList<>();
-
+    public static Integer deserializeGameFromFile (String fileName) throws Exception {
         BufferedReader reader = new BufferedReader(new FileReader(fileName));
         String in = reader.readLine();
         reader.close();
 
-        Game newGame = JsonDeserializerClass.getGson().fromJson(in, Game.class);
+        return deserializeGameFromString(in);
+    }
+
+    public static Integer deserializeGameFromString(String string) throws Exception {
+        if (deserializationGson == null) initializeDeserializationGson();
+
+        if (gameEntities == null) gameEntities = new ArrayList<>();
+
+        Game newGame = JsonDeserializerClass.getGson().fromJson(string, Game.class);
 
         newGame.id = idCount++;
         Arrays.stream(newGame.professors).forEach(x -> x.refreshGameId(newGame));

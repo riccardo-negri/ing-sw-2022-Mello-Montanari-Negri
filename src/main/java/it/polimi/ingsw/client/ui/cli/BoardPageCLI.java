@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.ui.cli;
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.page.AbstractBoardPage;
 import it.polimi.ingsw.model.entity.*;
+import it.polimi.ingsw.model.entity.characters.Character;
 import it.polimi.ingsw.model.enums.GameMode;
 import it.polimi.ingsw.model.enums.StudentColor;
 import it.polimi.ingsw.utils.Connection;
@@ -35,7 +36,6 @@ public class BoardPageCLI extends AbstractBoardPage {
     @Override
     public void draw (Client client) {
 
-
         while (!client.getModel().isGameEnded()) { //TODO refactor
             drawGameBoard(client.getUsernames(), client.getUsername(), client.getIPAddress(), client.getPort());
             drawConsoleArea(terminal, 48);
@@ -50,19 +50,56 @@ public class BoardPageCLI extends AbstractBoardPage {
                     LOGGER.log(Level.FINE, "Processing input move: " + moveFromStdin + " Game state: " + model.getGameState().getGameStateName());
                     switch (model.getGameState().getGameStateName()) {
 
-                        case "PS":
+                        case "PS" -> {
                             try {
                                 doCardChoice(Integer.parseInt(moveFromStdin.get(0).split(" ")[2]));
                             } catch (Exception e) {
-                                e.printStackTrace();
-                                printConsoleWarning(terminal, "Please type a valid command...");
+                                LOGGER.log(Level.WARNING, "Got an invalid move (that passed regex check), asking for it again");
+                                printConsoleWarning(terminal, "Please type a valid command..." + e.toString());
                             }
+                        }
 
-                        case "MSS":
+                        case "MSS" -> {
+                            try {
+                                if (!moveFromStdin.get(0).contains("character")) {
+                                    doStudentMovement(getStudentColorFromString(moveFromStdin.get(0).split(" ")[2]), moveFromStdin.get(0).split(" ")[4]);
+                                }
+                                else {
 
-                        case "MMNS":
+                                }
+                            } catch (Exception e) {
+                                LOGGER.log(Level.WARNING, "Got an invalid move (that passed regex check), asking for it again. Exception: " + e.toString());
+                                printConsoleWarning(terminal, "Please type a valid command..." + e.toString());
+                            }
+                        }
 
-                        case "CCS":
+                        case "MMNS" -> {
+                            try {
+                                if (!moveFromStdin.get(0).contains("character")) {
+                                    doMotherNatureMovement(Integer.parseInt(moveFromStdin.get(0).split(" ")[4]));
+                                }
+                                else {
+
+                                }
+                            } catch (Exception e) {
+                                LOGGER.log(Level.WARNING, "Got an invalid move (that passed regex check), asking for it again. Exception: " + e.toString());
+                                printConsoleWarning(terminal, "Please type a valid command..." + e.toString());
+                            }
+                        }
+
+                        case "CCS" -> {
+                            try {
+                                if (!moveFromStdin.get(0).contains("character")) {
+                                    doCloudChoice(Integer.parseInt(moveFromStdin.get(0).split(" ")[2]));
+                                }
+                                else {
+
+                                }
+                            } catch (Exception e) {
+                                LOGGER.log(Level.WARNING, "Got an invalid move (that passed regex check), asking for it again. Exception: " + e.toString());
+                                printConsoleWarning(terminal, "Please type a valid command..." + e.toString());
+                            }
+                        }
                     }
                 }
                 else { // no move was made, so it's a message about some disconnection events
@@ -96,23 +133,40 @@ public class BoardPageCLI extends AbstractBoardPage {
 
     }
 
+    private StudentColor getStudentColorFromString (String color) {
+        switch (color) {
+            case "yellow":
+                return StudentColor.YELLOW;
+            case "blue":
+                return StudentColor.BLUE;
+            case "green":
+                return StudentColor.GREEN;
+            case "red":
+                return StudentColor.RED;
+            case "pink":
+                return StudentColor.PINK;
+            default:
+                return null;
+        }
+    }
+
     private void handleMessageNotMove () {
         LOGGER.log(Level.FINE, "Handling a message received while waiting for input, interrupting thread that is waiting for input");
         terminal.writer().println(ansi().fgRgb(255, 0, 0).a("Received some message that is not a move...").fgDefault());
+        terminal.writer().flush();
         waitEnterPressed();
     }
 
-    private void askForMoveBasedOnState() {
+    private void askForMoveBasedOnState () {
         switch (model.getGameState().getGameStateName()) {
 
-            case "PS":
-                getMovePlayAssistant(terminal, moveFromStdin);
+            case "PS" -> getMovePlayAssistant(terminal, commandsHistory, client.getUsername(), moveFromStdin);
 
-            case "MSS":
+            case "MSS" -> getMoveStudentToIsland(terminal, commandsHistory, client.getUsername(),getCharactersID(), moveFromStdin);
 
-            case "MMNS":
+            case "MMNS" -> getMoveMotherNature(terminal, commandsHistory, client.getUsername(),getCharactersID(),  moveFromStdin);
 
-            case "CCS":
+            case "CCS" -> getMoveSelectCloud(terminal, commandsHistory, client.getUsername(),getCharactersID(),  moveFromStdin);
         }
     }
 
@@ -148,6 +202,34 @@ public class BoardPageCLI extends AbstractBoardPage {
         }
     }
 
+    private int findRoundNumber() {
+        if(model.getGameState().getGameStateName().equals("PS")) {
+            return 11 - model.getWizard(model.getGameState().getCurrentPlayer()).getCardDeck().getDeckCards().length;
+        }
+        return 10 - model.getWizard(model.getGameState().getCurrentPlayer()).getCardDeck().getDeckCards().length;
+    }
+
+    private int[] getCharactersCost() {
+        Character[] characters = model.getCharacters();
+        int[] cost = new int[characters.length];
+        for (int i=0; i < characters.length; i++) {
+            cost[i] = characters[i].getPrize();
+        }
+        return cost;
+    }
+
+    private int[] getCharactersID() {
+        if(model.getGameMode().equals(GameMode.COMPLETE)) {
+            Character[] characters = model.getCharacters();
+            int[] id = new int[characters.length];
+            for (int i=0; i < characters.length; i++) {
+                id[i] = characters[i].getId();
+            }
+            return id;
+        }
+        return new int[0];
+    }
+
     private void drawGameBoard (ArrayList<String> usernames, String username, String IP, int port) {
         int baseCol = terminal.getWidth() / 2 - 200 / 2;
         int baseRow = 1;
@@ -162,17 +244,16 @@ public class BoardPageCLI extends AbstractBoardPage {
                 terminal,
                 baseRow + 4,
                 baseCol + 6,
-                "7", // TODO how do i find this
                 IP,
                 port,
                 model.getGameMode().toString(),
                 model.getPlayerNumber().getWizardNumber(),
-                3, //TODO add round to model
-                "Tom", //TODO how do I know who is playing
-                "move students", //TODO add getters in GameState
-                model.getGameMode().equals(GameMode.COMPLETE) ? new String[]{"Clown", "Wizard", "Knight"} : new String[]{}, //TODO its missing a method to get the characters even if i don't know the ID
-                new int[]{3, 1, 2}, // TODO here
-                new int[]{1, 2, 3, 4, 7, 8, 10} //TODO create getter to find card in a deck model.getWizard(usernames.indexOf(username)).getCardDeck().getCards() for example
+                findRoundNumber(),
+                client.getUsernames().get(model.getGameState().getCurrentPlayer()),
+                model.getGameState().getGameStateName(),
+                model.getGameMode().equals(GameMode.COMPLETE) ? getCharactersID() : null,
+                getCharactersCost(),
+                model.getWizard(client.getUsernames().indexOf(client.getUsername())).getCardDeck().getDeckCards()
         );
 
         drawTilesAndClouds(baseCol + 61, baseRow + 3, model);
@@ -199,33 +280,27 @@ public class BoardPageCLI extends AbstractBoardPage {
                     w.getTowerColor().toString(),
                     w.getTowerNumber(),
                     new boolean[]{
-                            model.getProfessor(StudentColor.YELLOW).getMaster(null) != null && model.getProfessor(StudentColor.YELLOW).getMaster(null).equals(w),
-                            model.getProfessor(StudentColor.BLUE).getMaster(null) != null && model.getProfessor(StudentColor.BLUE).getMaster(null).equals(w),
                             model.getProfessor(StudentColor.GREEN).getMaster(null) != null && model.getProfessor(StudentColor.GREEN).getMaster(null).equals(w),
                             model.getProfessor(StudentColor.RED).getMaster(null) != null && model.getProfessor(StudentColor.RED).getMaster(null).equals(w),
-                            model.getProfessor(StudentColor.PINK).getMaster(null) != null && model.getProfessor(StudentColor.PINK).getMaster(null).equals(w)
+                            model.getProfessor(StudentColor.YELLOW).getMaster(null) != null && model.getProfessor(StudentColor.YELLOW).getMaster(null).equals(w),
+                            model.getProfessor(StudentColor.PINK).getMaster(null) != null && model.getProfessor(StudentColor.PINK).getMaster(null).equals(w),
+                            model.getProfessor(StudentColor.BLUE).getMaster(null) != null && model.getProfessor(StudentColor.BLUE).getMaster(null).equals(w)
                     },
                     new int[]{
-                            w.getDiningStudents(StudentColor.YELLOW),
-                            w.getDiningStudents(StudentColor.BLUE),
                             w.getDiningStudents(StudentColor.GREEN),
                             w.getDiningStudents(StudentColor.RED),
-                            w.getDiningStudents(StudentColor.PINK)
+                            w.getDiningStudents(StudentColor.YELLOW),
+                            w.getDiningStudents(StudentColor.PINK),
+                            w.getDiningStudents(StudentColor.BLUE)
                     },
                     new int[]{
-                            (int) w.getEntranceStudents().stream().filter(s -> s.getValue().equals(0)).count(), // yellow
-                            (int) w.getEntranceStudents().stream().filter(s -> s.getValue().equals(1)).count(), // blue
                             (int) w.getEntranceStudents().stream().filter(s -> s.getValue().equals(2)).count(), // green
                             (int) w.getEntranceStudents().stream().filter(s -> s.getValue().equals(3)).count(), // red
+                            (int) w.getEntranceStudents().stream().filter(s -> s.getValue().equals(0)).count(), // yellow
                             (int) w.getEntranceStudents().stream().filter(s -> s.getValue().equals(4)).count(), // pink
+                            (int) w.getEntranceStudents().stream().filter(s -> s.getValue().equals(1)).count(), // blue
                     });
         }
-
-        /*drawSinglePlayerArea(terminal, baseRow, baseCol, "Ric", "10 (5 steps)", 1, "9 (clown)", "WHITE", 4, new boolean[]{true, false, true, true, false}, new int[]{3, 0, 2, 1, 0}, new int[]{1, 2, 1, 0, 3});
-        drawSinglePlayerArea(terminal, baseRow + getSchoolBoardHeight() + 2, baseCol, "Tom", "4 (2 steps)", 1, "9 (clown)", "BLACK", 4, new boolean[]{true, false, true, true, false}, new int[]{3, 0, 2, 1, 0}, new int[]{1, 2, 1, 0, 3});
-        drawSinglePlayerArea(terminal, baseRow + 2 * (getSchoolBoardHeight() + 2), baseCol, "Pietro", "3 (2 steps)", 1, "9 (clown)", "BLACK", 4, new boolean[]{true, false, true, true, false}, new int[]{3, 0, 2, 1, 0}, new int[]{1, 2, 1, 0, 3});
-        drawSinglePlayerArea(terminal, baseRow + 3 * (getSchoolBoardHeight() + 2), baseCol, "Sanp", "6 (3 steps)", 1, "", "WHITE", 4, new boolean[]{true, false, true, true, false}, new int[]{3, 0, 2, 1, 0}, new int[]{1, 2, 1, 0, 3});
-        */
     }
 
     private void drawTilesAndClouds (int baseCol, int baseRow, Game model) {
@@ -260,19 +335,6 @@ public class BoardPageCLI extends AbstractBoardPage {
 
             }
         }
-        /*
-        drawIsland(terminal, baseRow, baseCol, 1, "none", 3, 1, 2, 4, 1, true);
-        drawIsland(terminal, baseRow, baseCol + (getIslandWidth() + 2), 2, "black", 0, 1, 2, 0, 1, false);
-        drawIsland(terminal, baseRow, baseCol + 2 * (getIslandWidth() + 2), 3, "none", 1, 0, 1, 0, 0, false);
-        drawIsland(terminal, baseRow, baseCol + 3 * (getIslandWidth() + 2), 4, "none", 0, 1, 2, 0, 1, false);
-        drawIsland(terminal, baseRow + (getIslandHeight() + 1), baseCol + 3 * (getIslandWidth() + 2), 5, "grey", 0, 1, 2, 0, 1, false);
-        drawIsland(terminal, baseRow + 2 * (getIslandHeight() + 1), baseCol + 3 * (getIslandWidth() + 2), 6, "white", 0, 1, 2, 0, 1, false);
-        drawIsland(terminal, baseRow + 3 * (getIslandHeight() + 1), baseCol + 3 * (getIslandWidth() + 2), 7, "none", 1, 1, 2, 1, 1, false);
-        drawIsland(terminal, baseRow + 3 * (getIslandHeight() + 1), baseCol + 2 * (getIslandWidth() + 2), 8, "white", 0, 1, 2, 0, 1, false);
-        drawIsland(terminal, baseRow + 3 * (getIslandHeight() + 1), baseCol + (getIslandWidth() + 2), 9, "none", 0, 1, 2, 0, 1, false);
-        drawIsland(terminal, baseRow + 3 * (getIslandHeight() + 1), baseCol, 10, "black", 0, 0, 0, 1, 1, false);
-        drawIsland(terminal, baseRow + 2 * (getIslandHeight() + 1), baseCol, 11, "none", 0, 1, 2, 0, 1, false);
-        drawIsland(terminal, baseRow + (getIslandHeight() + 1), baseCol, 12, "black", 0, 1, 2, 0, 1, false);*/
 
         HashMap<Integer, List<Integer>> relativePlacementOfCloudBasedOnID = new HashMap<>(); // first int of list is row offset, second int is column offset
         relativePlacementOfCloudBasedOnID.put(0, List.of(2 + (getIslandHeight() + 1), 3 + (getIslandWidth() + 2)));
@@ -292,10 +354,6 @@ public class BoardPageCLI extends AbstractBoardPage {
                     (int) c.getCloudContent().stream().filter(s -> s.getValue().equals(4)).count() // pink
             );
         }
-        /*drawCloud(terminal, 1, baseRow + 2 + (getIslandHeight() + 1), baseCol + 3 + (getIslandWidth() + 2), 1, 1, 1, 1, 1);
-        drawCloud(terminal, 2, baseRow + 2 + 2 * (getIslandHeight() + 1), baseCol + 3 + (getIslandWidth() + 2), 1, 1, 0, 1, 1);
-        drawCloud(terminal, 3, baseRow + 2 + (getIslandHeight() + 1), baseCol + 3 + 2 * (getIslandWidth() + 2), 4, 0, 0, 0, 1);
-        drawCloud(terminal, 4, baseRow + 2 + 2 * (getIslandHeight() + 1), baseCol + 3 + 2 * (getIslandWidth() + 2), 1, 0, 2, 2, 0);*/
     }
 
 }

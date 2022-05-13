@@ -69,19 +69,19 @@ public class Client {
             fh = new FileHandler("./log.txt");
             logger.setLevel(Level.ALL);
             logger.addHandler(fh);
-            SimpleFormatter formatter = new SimpleFormatter();
+            LogFormatter formatter = new LogFormatter();
             fh.setFormatter(formatter);
 
         } catch (SecurityException | IOException e) {
             e.printStackTrace();
         }
 
-        //TODO connect to server
+        //TODO cancel
         //try{ model = Game.request(Game.deserializeGame("./../src/main/java/it/polimi/ingsw/client/serialized_states/s1.json"));
         //} catch (Exception e) { System.out.println(e.toString()); }
         //usernames = new ArrayList<>(Arrays.asList("Ric", "Tom", "Pietro", "Sanp"));
-        IPAddress = "testnet";
-        port = 1000;
+        //IPAddress = "testnet";
+        //port = 1000;
     }
 
     public void start () {
@@ -107,7 +107,8 @@ public class Client {
         Redirect redirect = (Redirect) connection.waitMessage(Redirect.class);
         System.out.println("porta");
         System.out.println(redirect.getPort());
-        connection = new Connection(IPAddress, redirect.getPort());
+        port = redirect.getPort();
+        connection = new Connection(IPAddress, port);
         connection.send(login);
 
         // import initial state

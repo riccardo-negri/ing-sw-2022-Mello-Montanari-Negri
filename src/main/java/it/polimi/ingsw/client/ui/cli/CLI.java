@@ -6,12 +6,14 @@ import it.polimi.ingsw.client.page.ClientState;
 import it.polimi.ingsw.client.ui.UI;
 import org.jline.builtins.Completers;
 import org.jline.console.impl.JlineCommandRegistry;
+import org.jline.reader.History;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
 import org.jline.reader.impl.DefaultParser;
 import org.jline.reader.impl.completer.ArgumentCompleter;
 import org.jline.reader.impl.completer.NullCompleter;
 import org.jline.reader.impl.completer.StringsCompleter;
+import org.jline.reader.impl.history.DefaultHistory;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 
@@ -22,6 +24,7 @@ import java.util.Scanner;
 public class CLI implements UI {
     Scanner scanner = new Scanner(System.in);
     private Terminal terminal;
+    private History commandsHistory;
 
     public void init () {
 
@@ -30,6 +33,8 @@ public class CLI implements UI {
         //AnsiConsole.systemInstall();
         try {
             terminal = TerminalBuilder.terminal();
+            commandsHistory = new DefaultHistory();
+            commandsHistory.add("play assistant 1");
             System.out.println(terminal.getName());
         } catch (IOException e) {
             e.printStackTrace();
@@ -57,6 +62,10 @@ public class CLI implements UI {
 
     public Terminal getTerminal () {
         return terminal;
+    }
+
+    public History getCommandsHistory () {
+        return commandsHistory;
     }
 
     public void setTerminal (Terminal terminal) {

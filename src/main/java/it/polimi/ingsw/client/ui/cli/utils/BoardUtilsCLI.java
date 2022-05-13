@@ -77,7 +77,7 @@ public class BoardUtilsCLI {
     }
 
     public static void printConsoleInfo (Terminal terminal, String s) {
-        terminal.writer().println(ansi().fgRgb(0, 0, 125).a(s).fgDefault());
+        terminal.writer().print(ansi().fgBlue().a(s).fgDefault());
         terminal.writer().flush();
     }
 
@@ -215,25 +215,22 @@ public class BoardUtilsCLI {
         terminal.writer().print(ansi().cursor(baseRow + 6, baseCol + getSchoolBoardWidth() + 2).a("Character: " + playedCharacter));
     }
 
-    public static void drawGameInfoSection (Terminal terminal, int baseRow, int baseCol, String gameID, String serverIP, int serverPort, String gameMode, int playersNumber) {
+    public static void drawGameInfoSection (Terminal terminal, int baseRow, int baseCol, String serverIP, int serverPort, String gameMode, int playersNumber) {
         terminal.writer().println(ansi().cursor(baseRow, baseCol).a(InfoR1));
         terminal.writer().println(ansi().cursor(baseRow + 1, baseCol).a(InfoR3));
         terminal.writer().println(ansi().cursor(baseRow + 2, baseCol).a(
-                MessageFormat.format(InfoR2, "GameID: " + gameID, s.repeat(InfoLengthToFill - 8 - gameID.length()))
-        ));
-        terminal.writer().println(ansi().cursor(baseRow + 3, baseCol).a(
                 MessageFormat.format(InfoR2, "Server IP: " + serverIP, s.repeat(InfoLengthToFill - 11 - serverIP.length()))
         ));
-        terminal.writer().println(ansi().cursor(baseRow + 4, baseCol).a(
+        terminal.writer().println(ansi().cursor(baseRow + 3, baseCol).a(
                 MessageFormat.format(InfoR2, "Server Port: " + serverPort, s.repeat(InfoLengthToFill - 13 - Integer.toString(serverPort).length()))
         ));
-        terminal.writer().println(ansi().cursor(baseRow + 5, baseCol).a(
+        terminal.writer().println(ansi().cursor(baseRow + 4, baseCol).a(
                 MessageFormat.format(InfoR2, "Game Mode: " + gameMode, s.repeat(InfoLengthToFill - 11 - gameMode.length()))
         ));
-        terminal.writer().println(ansi().cursor(baseRow + 6, baseCol).a(
+        terminal.writer().println(ansi().cursor(baseRow + 5, baseCol).a(
                 MessageFormat.format(InfoR2, "Players: " + playersNumber, s.repeat(InfoLengthToFill - 10))
         ));
-        terminal.writer().println(ansi().cursor(baseRow + 7, baseCol).a(InfoR1));
+        terminal.writer().println(ansi().cursor(baseRow + 6, baseCol).a(InfoR1));
     }
 
     public static void drawGameStatusSection (Terminal terminal, int baseRow, int baseCol, int round, String currPlayer, String currPhase) {
@@ -251,12 +248,12 @@ public class BoardUtilsCLI {
         terminal.writer().println(ansi().cursor(baseRow + 5, baseCol).a(InfoR1));
     }
 
-    public static void drawGameCharactersSection (Terminal terminal, int baseRow, int baseCol, String[] characters, int[] charactersCost) {
+    public static void drawGameCharactersSection (Terminal terminal, int baseRow, int baseCol, int[] characters, int[] charactersCost) {
         terminal.writer().println(ansi().cursor(baseRow, baseCol).a(InfoR1));
         terminal.writer().println(ansi().cursor(baseRow + 1, baseCol).a(InfoR3));
         IntStream.range(0, 3).forEach(i -> {
             terminal.writer().println(ansi().cursor(baseRow + 2 + (3 * i), baseCol).a(
-                    MessageFormat.format(InfoR2, "Character " + (i + 1) + ": " + characters[i], s.repeat(InfoLengthToFill - 13 - characters[i].length()))
+                    MessageFormat.format(InfoR2, "Character " + characters[i], s.repeat(InfoLengthToFill - 10 - Integer.toString(characters[i]).length()))
             ));
             terminal.writer().println(ansi().cursor(baseRow + 3 + (3 * i), baseCol).a(
                     MessageFormat.format(InfoR2, "Cost: " + ansi().fgRgb(218, 165, 32).a(charactersCost[i]).fgDefault(), s.repeat(InfoLengthToFill - 7))
@@ -279,25 +276,25 @@ public class BoardUtilsCLI {
         terminal.writer().println(ansi().cursor(baseRow + cards.length + 1, baseCol).a(InfoR1));
     }
 
-    public static void drawInfoSection (Terminal terminal, int baseRow, int baseCol, String gameID, String serverIP, int serverPort, String gameMode, int playersNumber, int round, String currPlayer, String currPhase, String[] characters, int[] charactersCost, int[] deck) {
+    public static void drawInfoSection (Terminal terminal, int baseRow, int baseCol, String serverIP, int serverPort, String gameMode, int playersNumber, int round, String currPlayer, String currPhase, int[] characters, int[] charactersCost, int[] deck) {
         final String INFO = "Game Info";
         final String STATUS = "Game Status";
         final String CHARACTER = "Characters";
         final String DECK = "Your Deck";
 
-        drawGameInfoSection(terminal, baseRow, baseCol, gameID, serverIP, serverPort, gameMode, playersNumber);
+        drawGameInfoSection(terminal, baseRow, baseCol, serverIP, serverPort, gameMode, playersNumber);
         terminal.writer().println(ansi().cursor(baseRow, baseCol + InfoLengthToFill / 2 - INFO.length() / 2 + 1).a(INFO));
 
 
-        drawGameStatusSection(terminal, baseRow + 9, baseCol, round, currPlayer, currPhase);
-        terminal.writer().println(ansi().cursor(baseRow + 9, baseCol + InfoLengthToFill / 2 - STATUS.length() / 2 + 1).a(STATUS));
+        drawGameStatusSection(terminal, baseRow + 8, baseCol, round, currPlayer, currPhase);
+        terminal.writer().println(ansi().cursor(baseRow + 8, baseCol + InfoLengthToFill / 2 - STATUS.length() / 2 + 1).a(STATUS));
 
 
-        drawGameCharactersSection(terminal, baseRow + 16, baseCol, characters, charactersCost);
-        terminal.writer().println(ansi().cursor(baseRow + 16, baseCol + InfoLengthToFill / 2 - CHARACTER.length() / 2 + 1).a(CHARACTER));
+        drawGameCharactersSection(terminal, baseRow + 15, baseCol, characters, charactersCost);
+        terminal.writer().println(ansi().cursor(baseRow + 15, baseCol + InfoLengthToFill / 2 - CHARACTER.length() / 2 + 1).a(CHARACTER));
 
-        drawDeckSection(terminal, baseRow + 28, baseCol, deck);
-        terminal.writer().println(ansi().cursor(baseRow + 28, baseCol + InfoLengthToFill / 2 - DECK.length() / 2 + 1).a(DECK));
+        drawDeckSection(terminal, baseRow + 27, baseCol, deck);
+        terminal.writer().println(ansi().cursor(baseRow + 27, baseCol + InfoLengthToFill / 2 - DECK.length() / 2 + 1).a(DECK));
 
     }
 

@@ -61,4 +61,6 @@ public abstract class Character {
     public Wizard getActivator() { return Game.request(gameId).getWizard(activator); }
 
     public Integer getId() { return characterId; }
+
+    public int getPrize() { return price; }
 }

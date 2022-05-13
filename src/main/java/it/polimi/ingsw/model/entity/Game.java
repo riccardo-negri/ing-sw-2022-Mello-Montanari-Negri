@@ -320,4 +320,8 @@ public class Game {
     public boolean isGameEnded () {
         return gameEnded;
     }
+
+    public Character[] getCharacters () {
+        return characters;
+    }
 }

@@ -41,4 +41,12 @@ public class CardDeck {
     }
 
     public AssistantCard getCurrentCard() { return currentCard; }
+
+    public int[] getDeckCards() {
+        int[] cards = new int[assistantCards.size()];
+        for (int i = 0; i < assistantCards.size(); i++) {
+            cards[i] = assistantCards.get(i).getNumber();
+        }
+        return  cards;
+    }
 }

@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.page.AbstractBoardPage;
 import it.polimi.ingsw.model.entity.*;
 import it.polimi.ingsw.model.entity.characters.Character;
+import it.polimi.ingsw.model.entity.gameState.ActionState;
 import it.polimi.ingsw.model.enums.GameMode;
 import it.polimi.ingsw.model.enums.StudentColor;
 import it.polimi.ingsw.utils.Connection;
@@ -52,7 +53,7 @@ public class BoardPageCLI extends AbstractBoardPage {
 
                         case "PS" -> {
                             try {
-                                doCardChoice(Integer.parseInt(moveFromStdin.get(0).split(" ")[2]));
+                                doCardChoice(Integer.parseInt(moveFromStdin.get(0).split(" ")[1]));
                             } catch (Exception e) {
                                 LOGGER.log(Level.WARNING, "Got an invalid move (that passed regex check), asking for it again");
                                 printConsoleWarning(terminal, "Please type a valid command..." + e.toString());
@@ -62,7 +63,7 @@ public class BoardPageCLI extends AbstractBoardPage {
                         case "MSS" -> {
                             try {
                                 if (!moveFromStdin.get(0).contains("character")) {
-                                    doStudentMovement(getStudentColorFromString(moveFromStdin.get(0).split(" ")[2]), moveFromStdin.get(0).split(" ")[4]);
+                                    doStudentMovement(getStudentColorFromString(moveFromStdin.get(0).split(" ")[1]), moveFromStdin.get(0).split(" ")[3]);
                                 }
                                 else {
 
@@ -76,7 +77,7 @@ public class BoardPageCLI extends AbstractBoardPage {
                         case "MMNS" -> {
                             try {
                                 if (!moveFromStdin.get(0).contains("character")) {
-                                    doMotherNatureMovement(Integer.parseInt(moveFromStdin.get(0).split(" ")[4]));
+                                    doMotherNatureMovement(Integer.parseInt(moveFromStdin.get(0).split(" ")[2]));
                                 }
                                 else {
 
@@ -90,7 +91,7 @@ public class BoardPageCLI extends AbstractBoardPage {
                         case "CCS" -> {
                             try {
                                 if (!moveFromStdin.get(0).contains("character")) {
-                                    doCloudChoice(Integer.parseInt(moveFromStdin.get(0).split(" ")[2]));
+                                    doCloudChoice(Integer.parseInt(moveFromStdin.get(0).split(" ")[1]));
                                 }
                                 else {
 
@@ -276,7 +277,7 @@ public class BoardPageCLI extends AbstractBoardPage {
                     usernames.get(i),
                     w.getCardDeck().getCurrentCard() != null ? w.getCardDeck().getCurrentCard().toString() : "Not played",
                     w.getMoney(),
-                    "9 (clown)", //TODO here
+                    model.getGameState() instanceof ActionState ? (((ActionState) model.getGameState()).getActivatedCharacter() != null ? ((ActionState) model.getGameState()).getActivatedCharacter().getId() : -1) : -1,
                     w.getTowerColor().toString(),
                     w.getTowerNumber(),
                     new boolean[]{

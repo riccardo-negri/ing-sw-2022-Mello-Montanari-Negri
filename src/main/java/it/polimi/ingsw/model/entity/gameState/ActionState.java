@@ -3,7 +3,6 @@ package it.polimi.ingsw.model.entity.gameState;
 import it.polimi.ingsw.model.entity.characters.Character;
 
 public abstract class ActionState extends GameState {
-
     protected Character activatedCharacter;
 
     public ActionState(GameState oldState) {
@@ -20,4 +19,7 @@ public abstract class ActionState extends GameState {
         this.activatedCharacter = activatedCharacter;
     }
 
+    public Character getActivatedCharacter () {
+        return activatedCharacter;
+    }
 }

@@ -34,10 +34,10 @@ public class Client {
     public Login login;
 
     public Logger getLogger () {
-        return logger;
+        return LOGGER;
     }
 
-    private final Logger logger;
+    private final Logger LOGGER;
 
     public ArrayList<String> getUsernames () {
         return usernames;
@@ -62,13 +62,13 @@ public class Client {
         nextState = ClientState.WELCOME_PAGE;
         newState = true;
 
-        logger = Logger.getLogger("MyLog");
+        LOGGER = Logger.getLogger("MyLog");
         FileHandler fh;
         try {
-            logger.setUseParentHandlers(false);
+            LOGGER.setUseParentHandlers(false);
             fh = new FileHandler("./log.txt");
-            logger.setLevel(Level.ALL);
-            logger.addHandler(fh);
+            LOGGER.setLevel(Level.ALL);
+            LOGGER.addHandler(fh);
             LogFormatter formatter = new LogFormatter();
             fh.setFormatter(formatter);
 
@@ -122,8 +122,13 @@ public class Client {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
-        try{ model = Game.request(Game.deserializeGameFromString(initialState.getState()));
-        } catch (Exception e) { System.out.println(e.toString()); }
+        try{
+            model = Game.request(Game.deserializeGameFromString(initialState.getState()));
+            LOGGER.log(Level.FINE, "Successfully loaded model sent by the server");
+        }
+        catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Couldn't load model sent by the server. Exception: " + e.toString());
+        }
         usernames = initialState.getUsernames();
     }
 

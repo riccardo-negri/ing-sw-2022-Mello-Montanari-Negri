@@ -207,12 +207,12 @@ public class BoardUtilsCLI {
 
     }
 
-    public static void drawSinglePlayerArea (Terminal terminal, int baseRow, int baseCol, String playerName, String playedCard, int coins, String playedCharacter, String towerColor, int towerNumber, boolean[] professors, int[] diningColors, int[] entranceColors) {
+    public static void drawSinglePlayerArea (Terminal terminal, int baseRow, int baseCol, String playerName, String playedCard, int coins, int playedCharacter, String towerColor, int towerNumber, boolean[] professors, int[] diningColors, int[] entranceColors) {
         drawSchoolBoard(terminal, baseRow, baseCol, towerColor, towerNumber, professors, diningColors, entranceColors);
         terminal.writer().println(ansi().cursor(baseRow + 1, baseCol + getSchoolBoardWidth() + 2).fgRgb(255, 128, 0).a(playerName).fgDefault());
         terminal.writer().print(ansi().cursor(baseRow + 3, baseCol + getSchoolBoardWidth() + 2).a("Assistant: " + playedCard));
         terminal.writer().print(ansi().cursor(baseRow + 4, baseCol + getSchoolBoardWidth() + 2).a("Coins: ").fgRgb(218, 165, 32).a(coins).fgDefault());
-        terminal.writer().print(ansi().cursor(baseRow + 6, baseCol + getSchoolBoardWidth() + 2).a("Character: " + playedCharacter));
+        if (playedCharacter != -1) {terminal.writer().print(ansi().cursor(baseRow + 6, baseCol + getSchoolBoardWidth() + 2).a("Character: " + playedCharacter));};
     }
 
     public static void drawGameInfoSection (Terminal terminal, int baseRow, int baseCol, String serverIP, int serverPort, String gameMode, int playersNumber) {

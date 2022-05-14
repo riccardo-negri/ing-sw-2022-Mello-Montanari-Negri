@@ -1,7 +1,7 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.client.page.AbstractClientState;
-import it.polimi.ingsw.client.page.ClientState;
+import it.polimi.ingsw.client.page.AbstractPage;
+import it.polimi.ingsw.client.page.ClientPage;
 import it.polimi.ingsw.client.ui.UI;
 import it.polimi.ingsw.client.ui.cli.CLI;
 import it.polimi.ingsw.client.ui.cli.WelcomePageCLI;
@@ -17,14 +17,13 @@ import java.util.ArrayList;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 
 public class Client {
     private final UI ui;
-    private ClientState nextState;
+    private ClientPage nextState;
     private boolean newState;
     private WelcomePageCLI temp;
-    private AbstractClientState currState;
+    private AbstractPage currState;
     public String IPAddress;
     public int port;
     public String username;
@@ -59,7 +58,7 @@ public class Client {
             ui = new CLI();
             ((CLI) ui).init();
         }
-        nextState = ClientState.WELCOME_PAGE;
+        nextState = ClientPage.WELCOME_PAGE;
         newState = true;
 
         LOGGER = Logger.getLogger("MyLog");
@@ -91,11 +90,11 @@ public class Client {
         }
     }
 
-    public ClientState getNextState () {
+    public ClientPage getNextState () {
         return nextState;
     }
 
-    public void setNextState (ClientState nextState) {
+    public void setNextState (ClientPage nextState) {
         this.nextState = nextState;
     }
 

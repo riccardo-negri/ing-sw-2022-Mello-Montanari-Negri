@@ -8,7 +8,7 @@ import org.jline.terminal.Terminal;
 
 import java.util.logging.Logger;
 
-public abstract class AbstractClientState {
+public abstract class AbstractPage {
     protected Client client;
     protected CLI cli;
     protected Terminal terminal;
@@ -16,7 +16,7 @@ public abstract class AbstractClientState {
     protected Logger LOGGER;
     protected History commandsHistory;
 
-    public AbstractClientState (Client client) {
+    public AbstractPage (Client client) {
         this.client = client;
         model = client.getModel();
         LOGGER = client.getLogger();

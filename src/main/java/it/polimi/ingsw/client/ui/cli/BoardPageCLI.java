@@ -66,7 +66,7 @@ public class BoardPageCLI extends AbstractBoardPage {
                                     doStudentMovement(getStudentColorFromString(moveFromStdin.get(0).split(" ")[1]), moveFromStdin.get(0).split(" ")[3]);
                                 }
                                 else {
-
+                                    parseAndDoCharacterMove(moveFromStdin.get(0));
                                 }
                             } catch (Exception e) {
                                 LOGGER.log(Level.WARNING, "Got an invalid move (that passed regex check), asking for it again. Exception: " + e.toString());
@@ -80,7 +80,7 @@ public class BoardPageCLI extends AbstractBoardPage {
                                     doMotherNatureMovement(Integer.parseInt(moveFromStdin.get(0).split(" ")[2]));
                                 }
                                 else {
-
+                                    parseAndDoCharacterMove(moveFromStdin.get(0));
                                 }
                             } catch (Exception e) {
                                 LOGGER.log(Level.WARNING, "Got an invalid move (that passed regex check), asking for it again. Exception: " + e.toString());
@@ -94,7 +94,7 @@ public class BoardPageCLI extends AbstractBoardPage {
                                     doCloudChoice(Integer.parseInt(moveFromStdin.get(0).split(" ")[1]));
                                 }
                                 else {
-
+                                    parseAndDoCharacterMove(moveFromStdin.get(0));
                                 }
                             } catch (Exception e) {
                                 LOGGER.log(Level.WARNING, "Got an invalid move (that passed regex check), asking for it again. Exception: " + e.toString());
@@ -112,7 +112,7 @@ public class BoardPageCLI extends AbstractBoardPage {
 
                 Message message = client.getConnection().waitMessage();
 
-                if (message instanceof Disconnected) {
+                if (message instanceof Disconnected) { //TODO support this
                     printConsoleWarning(terminal, "Received an unsupported message...");
                 }
                 else if (message instanceof Move) {
@@ -132,6 +132,63 @@ public class BoardPageCLI extends AbstractBoardPage {
 
         onEnd();
 
+    }
+
+    private void parseAndDoCharacterMove (String move) throws Exception {
+        int ID = Integer.parseInt(move.split(" ")[0].split("-")[2]);
+        ;
+        ArrayList<Object> parameters = new ArrayList<>();
+        switch (move.split(" ")[0]) { // adding parameters only where needed
+            case "use-character-1" -> {
+                parameters.add(getStudentColorFromString(move.split(" ")[2]));
+                parameters.add(Integer.parseInt(move.split(" ")[4].split("-")[1]));
+            }
+            case "use-character-3", "use-character-5" -> {
+                parameters.add(Integer.parseInt(move.split(" ")[2].split("-")[1]));
+            }
+            case "use-character-7" -> {
+                List<StudentColor> temp1 = new ArrayList<>();
+                List<StudentColor> temp2 = new ArrayList<>();
+
+                temp1.add(getStudentColorFromString(move.split(" ")[2]));
+                if (!move.split(" ")[3].contains("nothing")) {
+                    temp1.add(getStudentColorFromString(move.split(" ")[3]));
+                }
+                if (!move.split(" ")[4].contains("nothing")) {
+                    temp1.add(getStudentColorFromString(move.split(" ")[4]));
+                }
+                parameters.add(temp1);
+
+                temp2.add(getStudentColorFromString(move.split(" ")[6]));
+                if (!move.split(" ")[7].contains("nothing")) {
+                    temp2.add(getStudentColorFromString(move.split(" ")[7]));
+                }
+                if (!move.split(" ")[8].contains("nothing")) {
+                    temp2.add(getStudentColorFromString(move.split(" ")[8]));
+                }
+                parameters.add(temp2);
+            }
+            case "use-character-9", "use-character-11", "use-character-12" -> {
+                parameters.add(getStudentColorFromString(move.split(" ")[2]));
+            }
+            case "use-character-10" -> {
+                List<StudentColor> temp1 = new ArrayList<>();
+                List<StudentColor> temp2 = new ArrayList<>();
+
+                temp1.add(getStudentColorFromString(move.split(" ")[2]));
+                if (!move.split(" ")[3].contains("nothing")) {
+                    temp1.add(getStudentColorFromString(move.split(" ")[3]));
+                }
+                parameters.add(temp1);
+
+                temp2.add(getStudentColorFromString(move.split(" ")[5]));
+                if (!move.split(" ")[6].contains("nothing")) {
+                    temp2.add(getStudentColorFromString(move.split(" ")[6]));
+                }
+                parameters.add(temp2);
+            }
+        }
+        doCharacterMove(ID, parameters);
     }
 
     private StudentColor getStudentColorFromString (String color) {
@@ -163,11 +220,11 @@ public class BoardPageCLI extends AbstractBoardPage {
 
             case "PS" -> getMovePlayAssistant(terminal, commandsHistory, client.getUsername(), moveFromStdin);
 
-            case "MSS" -> getMoveStudentToIsland(terminal, commandsHistory, client.getUsername(),getCharactersID(), moveFromStdin);
+            case "MSS" -> getMoveStudentToIsland(terminal, commandsHistory, client.getUsername(), getCharactersID(), moveFromStdin);
 
-            case "MMNS" -> getMoveMotherNature(terminal, commandsHistory, client.getUsername(),getCharactersID(),  moveFromStdin);
+            case "MMNS" -> getMoveMotherNature(terminal, commandsHistory, client.getUsername(), getCharactersID(), moveFromStdin);
 
-            case "CCS" -> getMoveSelectCloud(terminal, commandsHistory, client.getUsername(),getCharactersID(),  moveFromStdin);
+            case "CCS" -> getMoveSelectCloud(terminal, commandsHistory, client.getUsername(), getCharactersID(), moveFromStdin);
         }
     }
 
@@ -203,27 +260,27 @@ public class BoardPageCLI extends AbstractBoardPage {
         }
     }
 
-    private int findRoundNumber() {
-        if(model.getGameState().getGameStateName().equals("PS")) {
+    private int findRoundNumber () {
+        if (model.getGameState().getGameStateName().equals("PS")) {
             return 11 - model.getWizard(model.getGameState().getCurrentPlayer()).getCardDeck().getDeckCards().length;
         }
         return 10 - model.getWizard(model.getGameState().getCurrentPlayer()).getCardDeck().getDeckCards().length;
     }
 
-    private int[] getCharactersCost() {
+    private int[] getCharactersCost () {
         Character[] characters = model.getCharacters();
         int[] cost = new int[characters.length];
-        for (int i=0; i < characters.length; i++) {
+        for (int i = 0; i < characters.length; i++) {
             cost[i] = characters[i].getPrize();
         }
         return cost;
     }
 
-    private int[] getCharactersID() {
-        if(model.getGameMode().equals(GameMode.COMPLETE)) {
+    private int[] getCharactersID () {
+        if (model.getGameMode().equals(GameMode.COMPLETE)) {
             Character[] characters = model.getCharacters();
             int[] id = new int[characters.length];
-            for (int i=0; i < characters.length; i++) {
+            for (int i = 0; i < characters.length; i++) {
                 id[i] = characters[i].getId();
             }
             return id;
@@ -252,14 +309,14 @@ public class BoardPageCLI extends AbstractBoardPage {
                 findRoundNumber(),
                 client.getUsernames().get(model.getGameState().getCurrentPlayer()),
                 model.getGameState().getGameStateName(),
-                model.getGameMode().equals(GameMode.COMPLETE) ? getCharactersID() : null,
+                model.getGameMode().equals(GameMode.COMPLETE) ? getCharactersID() : null, // TODO support students on character
                 getCharactersCost(),
                 model.getWizard(client.getUsernames().indexOf(client.getUsername())).getCardDeck().getDeckCards()
         );
 
         drawTilesAndClouds(baseCol + 61, baseRow + 3, model);
 
-        drawPlayerBoards(baseCol + 155, baseRow + 4, model, usernames);
+        drawPlayerBoards(baseCol + 155, baseRow + 4, model, usernames); // TODO add support for groups of islands support blocking tiles (character 5)
     }
 
     private void drawPlayerBoards (int baseCol, int baseRow, Game model, ArrayList<String> usernames) {
@@ -277,7 +334,7 @@ public class BoardPageCLI extends AbstractBoardPage {
                     usernames.get(i),
                     w.getCardDeck().getCurrentCard() != null ? w.getCardDeck().getCurrentCard().toString() : "Not played",
                     w.getMoney(),
-                    model.getGameState() instanceof ActionState ? (((ActionState) model.getGameState()).getActivatedCharacter() != null ? ((ActionState) model.getGameState()).getActivatedCharacter().getId() : -1) : -1,
+                    model.getGameState().getCurrentPlayer() == client.getUsernames().indexOf(client.getUsername()) ? (model.getGameState() instanceof ActionState ? (((ActionState) model.getGameState()).getActivatedCharacter() != null ? ((ActionState) model.getGameState()).getActivatedCharacter().getId() : -1) : -1) : -1,
                     w.getTowerColor().toString(),
                     w.getTowerNumber(),
                     new boolean[]{

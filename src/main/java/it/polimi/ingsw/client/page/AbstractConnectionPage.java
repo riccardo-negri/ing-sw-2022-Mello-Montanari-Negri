@@ -1,12 +1,10 @@
 package it.polimi.ingsw.client.page;
 
 import it.polimi.ingsw.client.Client;
-import it.polimi.ingsw.utils.Connection;
-import it.polimi.ingsw.utils.Login;
 
-import static it.polimi.ingsw.client.page.ClientState.GAME_MODE_SELECTION_PAGE;
+import static it.polimi.ingsw.client.page.ClientPage.GAME_MODE_SELECTION_PAGE;
 
-public abstract class AbstractConnectionPage extends AbstractClientState{
+public abstract class AbstractConnectionPage extends AbstractPage {
     public AbstractConnectionPage (Client client) {
         super(client);
     }

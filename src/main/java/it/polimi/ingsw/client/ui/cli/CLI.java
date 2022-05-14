@@ -1,24 +1,15 @@
 package it.polimi.ingsw.client.ui.cli;
 
 import it.polimi.ingsw.client.Client;
-import it.polimi.ingsw.client.page.AbstractClientState;
-import it.polimi.ingsw.client.page.ClientState;
+import it.polimi.ingsw.client.page.AbstractPage;
+import it.polimi.ingsw.client.page.ClientPage;
 import it.polimi.ingsw.client.ui.UI;
-import org.jline.builtins.Completers;
-import org.jline.console.impl.JlineCommandRegistry;
 import org.jline.reader.History;
-import org.jline.reader.LineReader;
-import org.jline.reader.LineReaderBuilder;
-import org.jline.reader.impl.DefaultParser;
-import org.jline.reader.impl.completer.ArgumentCompleter;
-import org.jline.reader.impl.completer.NullCompleter;
-import org.jline.reader.impl.completer.StringsCompleter;
 import org.jline.reader.impl.history.DefaultHistory;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class CLI implements UI {
@@ -42,7 +33,7 @@ public class CLI implements UI {
     }
 
     @Override
-    public AbstractClientState getState (Client client, ClientState nextState) {
+    public AbstractPage getState (Client client, ClientPage nextState) {
         switch (nextState) {
             case WELCOME_PAGE:
                 return new WelcomePageCLI(client);

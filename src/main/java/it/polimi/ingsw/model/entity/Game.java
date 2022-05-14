@@ -158,7 +158,7 @@ public class Game {
 
         newGame.id = idCount++;
         Arrays.stream(newGame.professors).forEach(x -> x.refreshGameId(newGame));
-        Arrays.stream(newGame.characters).forEach(x -> x.refreshGameId(newGame));
+        if (newGame.characters != null) Arrays.stream(newGame.characters).forEach(x -> x.refreshGameId(newGame));
         newGame.gameState.refreshGameId(newGame);
 
         newGame.cloudList.forEach(x -> x.setBag(newGame.bag));

@@ -62,6 +62,34 @@ public class Bag {
         return students;
     }
 
+    /**
+     * Method to initialize the island students (needs to be done separately to avoid having more
+     * than two students in the same color (imperfect probability but good enough for the scope)
+     * @return null if the method is called after the beginning of the game, the list of 10 students otherwise
+     */
+    public List<StudentColor> requestStartingBoard() {
+        if (total != 130) return null;
+        List<StudentColor> students = new ArrayList<>();
+        if (studentListIn.isEmpty()) {
+            if (randomGenerator==null) randomGenerator = new Random();
+            for (int i = 0; i < 10; i++) {
+                int value = 0;
+                boolean flag = true;
+                while (flag) {
+                    flag = false;
+                    value = randomGenerator.nextInt(5);
+                    for (StudentColor s : StudentColor.values())
+                        if (students.stream().filter(x -> x==s).count()==2 && value == s.getValue()) flag = true;
+                }
+                students.add(StudentColor.fromNumber(value));
+                colorNumber[value]--;
+                studentListOut.add(StudentColor.fromNumber(value));
+            }
+        } else
+            students = requestStudents(10);
+        return students;
+    }
+
     public List<StudentColor> takeRecentlySelected() {
         List<StudentColor> out = studentListOut;
         studentListOut = new ArrayList<>();

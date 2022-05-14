@@ -55,6 +55,17 @@ public class Game {
         Random randomGenerator = new Random();
         this.bag = new Bag(randomGenerator);
 
+        islandGroupList = new LinkedList<>();
+        Iterator<StudentColor> studentsIterator = bag.requestStartingBoard().listIterator();
+        for(int i=0; i<12; i++) {
+            if (i != 0 && i != 6) {
+                List<StudentColor> list = new ArrayList<>();
+                list.add(studentsIterator.next());
+                islandGroupList.add(new IslandGroup(list, i));
+            } else
+                islandGroupList.add(new IslandGroup(new ArrayList<>(), i));
+        }
+
         if(gameMode == GameMode.COMPLETE) {
             characters = new Character[3];
             for(int i=0; i<3; i++) {
@@ -79,9 +90,6 @@ public class Game {
         for (int i=0; i<5; i++)
             professors[i] = new Professor(id, StudentColor.fromNumber(i));
 
-        islandGroupList = new LinkedList<>();
-        for(int i=0; i<12; i++)
-            islandGroupList.add(new IslandGroup(bag.requestStudents((i == 0 || i == 6) ? 0 : 1),i));
 
         cloudList = new ArrayList<>();
         for(int i = 0; i<playerNumber.getWizardNumber(); i++)

@@ -5,6 +5,7 @@ import org.jline.terminal.Terminal;
 
 import java.text.MessageFormat;
 import java.lang.String;
+import java.util.List;
 import java.util.stream.IntStream;
 
 import static org.fusesource.jansi.Ansi.ansi;
@@ -307,6 +308,44 @@ public class BoardUtilsCLI {
         terminal.writer().println(ansi().cursor(baseRow, 0).a("+").cursor(baseRow, terminal.getWidth()).a("+"));
         terminal.writer().println(ansi().cursor(baseRow, (terminal.getWidth() - CONSOLE.length()) / 2).fgRed().a(CONSOLE).fgDefault());
         terminal.writer().println(ansi().cursor(baseRow + 1, (terminal.getWidth() - INSTRUCTIONS.length()) / 2).a(INSTRUCTIONS));
+        terminal.writer().flush();
+    }
+
+    public static void drawConnectionWtoE (Terminal terminal, int baseRow, int baseCol) {
+        final String CONNECTION_1 = "-----";
+        final String CONNECTION_2 = "---";
+
+        terminal.writer().print(ansi().cursor(baseRow, baseCol).a(CONNECTION_1));
+        terminal.writer().print(ansi().cursor(baseRow+1, baseCol+1).a(CONNECTION_2));
+        terminal.writer().print(ansi().cursor(baseRow+2, baseCol+1).a(CONNECTION_2));
+        terminal.writer().print(ansi().cursor(baseRow+3, baseCol).a(CONNECTION_1));
+        terminal.writer().flush();
+    }
+
+    public static void drawConnectionNWtoSE (Terminal terminal, int baseRow, int baseCol) {
+        final String CONNECTION = "----";
+
+        terminal.writer().print(ansi().cursor(baseRow, baseCol).a(CONNECTION));
+        terminal.writer().print(ansi().cursor(baseRow+1, baseCol-1).a(CONNECTION));
+        terminal.writer().print(ansi().cursor(baseRow+2, baseCol-2).a(CONNECTION));
+        terminal.writer().flush();
+    }
+
+    public static void drawConnectionNtoS (Terminal terminal, int baseRow, int baseCol) {
+        final String CONNECTION_1 = "| | |";
+        final String CONNECTION_2 = "|_|_|";
+
+        terminal.writer().print(ansi().cursor(baseRow, baseCol).a(CONNECTION_1));
+        terminal.writer().print(ansi().cursor(baseRow+1, baseCol).a(CONNECTION_2));
+        terminal.writer().flush();
+    }
+
+    public static void drawConnectionSWtoNE (Terminal terminal, int baseRow, int baseCol) {
+        final String CONNECTION = "----";
+
+        terminal.writer().print(ansi().cursor(baseRow, baseCol).a(CONNECTION));
+        terminal.writer().print(ansi().cursor(baseRow+1, baseCol+1).a(CONNECTION));
+        terminal.writer().print(ansi().cursor(baseRow+2, baseCol+2).a(CONNECTION));
         terminal.writer().flush();
     }
 }

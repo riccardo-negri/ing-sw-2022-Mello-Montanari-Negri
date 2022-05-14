@@ -314,12 +314,12 @@ public class BoardPageCLI extends AbstractBoardPage {
                 model.getWizard(client.getUsernames().indexOf(client.getUsername())).getCardDeck().getDeckCards()
         );
 
-        drawTilesAndClouds(baseCol + 61, baseRow + 3, model);
+        drawTilesAndClouds(baseRow + 3, baseCol + 47, model);
 
-        drawPlayerBoards(baseCol + 155, baseRow + 4, model, usernames); // TODO add support for groups of islands support blocking tiles (character 5)
+        drawPlayerBoards(baseRow + 4, baseCol + 155, model, usernames); // TODO add support for groups of islands support blocking tiles (character 5)
     }
 
-    private void drawPlayerBoards (int baseCol, int baseRow, Game model, ArrayList<String> usernames) {
+    private void drawPlayerBoards (int baseRow, int baseCol, Game model, ArrayList<String> usernames) {
         HashMap<Integer, List<Integer>> relativePlacementOfPlayerBoardsBasedOnID = new HashMap<>(); // first int of list is row offset, second int is column offset
         relativePlacementOfPlayerBoardsBasedOnID.put(0, List.of(0, 0));
         relativePlacementOfPlayerBoardsBasedOnID.put(1, List.of(getSchoolBoardHeight() + 2, 0));
@@ -361,20 +361,20 @@ public class BoardPageCLI extends AbstractBoardPage {
         }
     }
 
-    private void drawTilesAndClouds (int baseCol, int baseRow, Game model) {
+    private void drawTilesAndClouds (int baseRow, int baseCol, Game model) {
         HashMap<Integer, List<Integer>> relativePlacementOfIslandBasedOnID = new HashMap<>(); // first int of list is row offset, second int is column offset
-        relativePlacementOfIslandBasedOnID.put(0, List.of(0, 0));
-        relativePlacementOfIslandBasedOnID.put(1, List.of(0, (getIslandWidth() + 2)));
-        relativePlacementOfIslandBasedOnID.put(2, List.of(0, 2 * (getIslandWidth() + 2)));
-        relativePlacementOfIslandBasedOnID.put(3, List.of(0, 3 * (getIslandWidth() + 2)));
-        relativePlacementOfIslandBasedOnID.put(4, List.of((getIslandHeight() + 1), 3 * (getIslandWidth() + 2)));
-        relativePlacementOfIslandBasedOnID.put(5, List.of(2 * (getIslandHeight() + 1), 3 * (getIslandWidth() + 2)));
-        relativePlacementOfIslandBasedOnID.put(6, List.of(3 * (getIslandHeight() + 1), 3 * (getIslandWidth() + 2)));
-        relativePlacementOfIslandBasedOnID.put(7, List.of(3 * (getIslandHeight() + 1), 2 * (getIslandWidth() + 2)));
-        relativePlacementOfIslandBasedOnID.put(8, List.of(3 * (getIslandHeight() + 1), (getIslandWidth() + 2)));
-        relativePlacementOfIslandBasedOnID.put(9, List.of(3 * (getIslandHeight() + 1), 0));
-        relativePlacementOfIslandBasedOnID.put(10, List.of(2 * (getIslandHeight() + 1), 0));
-        relativePlacementOfIslandBasedOnID.put(11, List.of((getIslandHeight() + 1), 0));
+        relativePlacementOfIslandBasedOnID.put(0, List.of(-1, 34));
+        relativePlacementOfIslandBasedOnID.put(1, List.of(-1, 54));
+        relativePlacementOfIslandBasedOnID.put(2, List.of(4, 71));
+        relativePlacementOfIslandBasedOnID.put(3, List.of(9, 88));
+        relativePlacementOfIslandBasedOnID.put(4, List.of(19, 88));
+        relativePlacementOfIslandBasedOnID.put(5, List.of(24, 71));
+        relativePlacementOfIslandBasedOnID.put(6, List.of(29, 54));
+        relativePlacementOfIslandBasedOnID.put(7, List.of(29, 34));
+        relativePlacementOfIslandBasedOnID.put(8, List.of(24, 17));
+        relativePlacementOfIslandBasedOnID.put(9, List.of(19, 0));
+        relativePlacementOfIslandBasedOnID.put(10, List.of(9, 0));
+        relativePlacementOfIslandBasedOnID.put(11, List.of(4, 17));
 
         for (IslandGroup g : model.getIslandGroupList()) {
             for (Island isl : g.getIslandList()) {
@@ -394,11 +394,27 @@ public class BoardPageCLI extends AbstractBoardPage {
             }
         }
 
+        drawTilesBridges(baseRow, baseCol, model);
+
         HashMap<Integer, List<Integer>> relativePlacementOfCloudBasedOnID = new HashMap<>(); // first int of list is row offset, second int is column offset
-        relativePlacementOfCloudBasedOnID.put(0, List.of(2 + (getIslandHeight() + 1), 3 + (getIslandWidth() + 2)));
-        relativePlacementOfCloudBasedOnID.put(1, List.of(2 + 2 * (getIslandHeight() + 1), 3 + (getIslandWidth() + 2)));
-        relativePlacementOfCloudBasedOnID.put(2, List.of(2 + (getIslandHeight() + 1), 3 + 2 * (getIslandWidth() + 2)));
-        relativePlacementOfCloudBasedOnID.put(3, List.of(2 + 2 * (getIslandHeight() + 1), 3 + 2 * (getIslandWidth() + 2)));
+        switch (model.getPlayerNumber().getWizardNumber()) {
+            case 2 -> {
+                relativePlacementOfCloudBasedOnID.put(0, List.of(16, 37)); // row offset, column offset
+                relativePlacementOfCloudBasedOnID.put(1, List.of(16, 57));
+            }
+            case 3 -> {
+                relativePlacementOfCloudBasedOnID.put(0, List.of(16, 31));
+                relativePlacementOfCloudBasedOnID.put(1, List.of(16, 47));
+                relativePlacementOfCloudBasedOnID.put(2, List.of(16, 63));
+            }
+            case 4 -> {
+                relativePlacementOfCloudBasedOnID.put(0, List.of(12, 37));
+                relativePlacementOfCloudBasedOnID.put(1, List.of(12, 57));
+                relativePlacementOfCloudBasedOnID.put(2, List.of(20, 37));
+                relativePlacementOfCloudBasedOnID.put(3, List.of(20, 57));
+            }
+
+        }
 
         for (Cloud c : model.getCloudList()) {
             drawCloud(terminal,
@@ -413,5 +429,68 @@ public class BoardPageCLI extends AbstractBoardPage {
             );
         }
     }
+
+    private boolean areIslandsConnected (Game model, int firstIsl, int secondIsl) {
+        for (IslandGroup g : model.getIslandGroupList()) {
+            if (2 == g.getIslandList().stream().map(island -> island.getId()).filter(integer -> integer == firstIsl || integer == secondIsl).count()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void drawTilesBridges (int baseRow, int baseCol, Game model) {
+        HashMap<String, List<Integer>> relativePlacementOfBridgeBasedOnIDs = new HashMap<>(); // first int of list is row offset, second int is column offset
+        relativePlacementOfBridgeBasedOnIDs.put("0:1", List.of(2, 50)); //SWtoNE
+        relativePlacementOfBridgeBasedOnIDs.put("1:2", List.of(5, 70));
+        relativePlacementOfBridgeBasedOnIDs.put("2:3", List.of(10, 87));
+        relativePlacementOfBridgeBasedOnIDs.put("3:4", List.of(18, 94));
+        relativePlacementOfBridgeBasedOnIDs.put("4:5", List.of(25, 85));
+        relativePlacementOfBridgeBasedOnIDs.put("5:6", List.of(30, 68));
+        relativePlacementOfBridgeBasedOnIDs.put("6:7", List.of(32, 50));
+        relativePlacementOfBridgeBasedOnIDs.put("7:8", List.of(30, 33));
+        relativePlacementOfBridgeBasedOnIDs.put("8:9", List.of(25, 16));
+        relativePlacementOfBridgeBasedOnIDs.put("9:10", List.of(18, 6));
+        relativePlacementOfBridgeBasedOnIDs.put("10:11", List.of(10, 14));
+        relativePlacementOfBridgeBasedOnIDs.put("11:0", List.of(5, 31));
+
+        if (areIslandsConnected(model, 0, 1)) {
+            drawConnectionWtoE(terminal, baseRow + relativePlacementOfBridgeBasedOnIDs.get("0:1").get(0), baseCol + relativePlacementOfBridgeBasedOnIDs.get("0:1").get(1));
+        }
+        if (areIslandsConnected(model, 1, 2)) {
+            drawConnectionNWtoSE(terminal, baseRow + relativePlacementOfBridgeBasedOnIDs.get("1:2").get(0), baseCol + relativePlacementOfBridgeBasedOnIDs.get("1:2").get(1));
+        }
+        if (areIslandsConnected(model, 2, 3)) {
+            drawConnectionNWtoSE(terminal, baseRow + relativePlacementOfBridgeBasedOnIDs.get("2:3").get(0), baseCol + relativePlacementOfBridgeBasedOnIDs.get("2:3").get(1));
+        }
+        if (areIslandsConnected(model, 3, 4)) {
+            drawConnectionNtoS(terminal, baseRow + relativePlacementOfBridgeBasedOnIDs.get("3:4").get(0), baseCol + relativePlacementOfBridgeBasedOnIDs.get("3:4").get(1));
+        }
+        if (areIslandsConnected(model, 4, 5)) {
+            drawConnectionSWtoNE(terminal, baseRow + relativePlacementOfBridgeBasedOnIDs.get("4:5").get(0), baseCol + relativePlacementOfBridgeBasedOnIDs.get("4:5").get(1));
+        }
+        if (areIslandsConnected(model, 5, 6)) {
+            drawConnectionSWtoNE(terminal, baseRow + relativePlacementOfBridgeBasedOnIDs.get("5:6").get(0), baseCol + relativePlacementOfBridgeBasedOnIDs.get("5:6").get(1));
+        }
+        if (areIslandsConnected(model, 6, 7)) {
+            drawConnectionWtoE(terminal, baseRow + relativePlacementOfBridgeBasedOnIDs.get("6:7").get(0), baseCol + relativePlacementOfBridgeBasedOnIDs.get("6:7").get(1));
+        }
+        if (areIslandsConnected(model, 7, 8)) {
+            drawConnectionNWtoSE(terminal, baseRow + relativePlacementOfBridgeBasedOnIDs.get("7:8").get(0), baseCol + relativePlacementOfBridgeBasedOnIDs.get("7:8").get(1));
+        }
+        if (areIslandsConnected(model, 8, 9)) {
+            drawConnectionNWtoSE(terminal, baseRow + relativePlacementOfBridgeBasedOnIDs.get("8:9").get(0), baseCol + relativePlacementOfBridgeBasedOnIDs.get("8:9").get(1));
+        }
+        if (areIslandsConnected(model, 9, 10)) {
+            drawConnectionNtoS(terminal, baseRow + relativePlacementOfBridgeBasedOnIDs.get("9:10").get(0), baseCol + relativePlacementOfBridgeBasedOnIDs.get("9:10").get(1));
+        }
+        if (areIslandsConnected(model, 10, 11)) {
+            drawConnectionSWtoNE(terminal, baseRow + relativePlacementOfBridgeBasedOnIDs.get("10:11").get(0), baseCol + relativePlacementOfBridgeBasedOnIDs.get("10:11").get(1));
+        }
+        if (areIslandsConnected(model, 11, 0)) {
+            drawConnectionSWtoNE(terminal, baseRow + relativePlacementOfBridgeBasedOnIDs.get("11:0").get(0), baseCol + relativePlacementOfBridgeBasedOnIDs.get("11:0").get(1));
+        }
+    }
+
 
 }

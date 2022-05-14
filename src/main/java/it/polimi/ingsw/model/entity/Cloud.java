@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.entity;
 import it.polimi.ingsw.model.enums.PlayerNumber;
 import it.polimi.ingsw.model.enums.StudentColor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Cloud {
@@ -38,15 +39,17 @@ public class Cloud {
     public List<StudentColor> takeStudents() throws Exception {
         if (taken) throw new Exception("Cloud already taken");
         taken = true;
-        return studentColorList;
+        List<StudentColor> out = studentColorList;
+        studentColorList = new ArrayList<>();
+        return out;
     }
 
     /**
      * to fill the cloud with new students at the beginning of the planning phase
      */
     public void fillCloud() {
-            studentColorList = bag.requestStudents(playerNumber.getCloudSize());
-            taken = false;
+        studentColorList = bag.requestStudents(playerNumber.getCloudSize());
+        taken = false;
     }
 
     public boolean isTaken() { return taken; }

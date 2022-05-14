@@ -58,15 +58,18 @@ public class Game {
         if(gameMode == GameMode.COMPLETE) {
             characters = new Character[3];
             for(int i=0; i<3; i++) {
+                int randomNumber = 0;
                 boolean flag = true;
                 while(flag) {
                     flag = false;
-                    characters[i] = Character.generateCharacter(id, randomGenerator.nextInt(12), bag);
-                    for(int j=0; j<i; j++) if (characters[i].equals(characters[j])) {
-                        flag = true;
-                        break;
-                    }
+                    randomNumber = randomGenerator.nextInt(12);
+                    for(int j=0; j<i; j++)
+                        if (randomNumber == characters[j].getId()) {
+                            flag = true;
+                            break;
+                        }
                 }
+                characters[i] = Character.generateCharacter(id, randomNumber, bag);
             }
         } else {
             characters = null;
@@ -146,7 +149,7 @@ public class Game {
         return deserializeGameFromString(in);
     }
 
-    public static Integer deserializeGameFromString(String string) throws Exception {
+    public static Integer deserializeGameFromString(String string) {
         if (deserializationGson == null) initializeDeserializationGson();
 
         if (gameEntities == null) gameEntities = new ArrayList<>();
@@ -184,7 +187,7 @@ public class Game {
      * @throws MissingResourceException if id missing
      */
     public static Game request (Integer gameId) throws MissingResourceException, IllegalStateException {
-        List <Game> result = gameEntities.stream().filter(x -> x.isGameId(gameId)).collect(Collectors.toList());
+        List <Game> result = gameEntities.stream().filter(x -> x.isGameId(gameId)).toList();
         if (result.isEmpty()) throw new MissingResourceException("Game not found", "GameStateEentity", gameId.toString());
         return result.get(0);
     }
@@ -266,7 +269,7 @@ public class Game {
     }
 
     public Island getIsland(Integer islandId) {
-        for(Island i : islandGroupList.stream().flatMap(x -> x.getIslandList().stream()).collect(Collectors.toList()))
+        for(Island i : islandGroupList.stream().flatMap(x -> x.getIslandList().stream()).toList())
             if (Objects.equals(i.getId(), islandId)) return i;
         return null;
     }

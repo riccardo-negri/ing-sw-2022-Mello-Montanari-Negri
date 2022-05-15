@@ -31,7 +31,7 @@ public class PlanningState extends GameState {
         super(oldState);
 
         if (Game.request(gameId).getBag().isEmpty() ||
-                !Game.request(gameId).getWizard(0).getCardDeck().checkAvailableCards(Arrays.asList(1,2,3,4,5,6,7,8,9,10)))
+                !Game.request(gameId).getWizard(0).getCardDeck().checkAvailableCards(new ArrayList<>()))
             Game.request(gameId).endGame();
 
         gameState = "PS";

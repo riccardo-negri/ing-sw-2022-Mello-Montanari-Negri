@@ -109,7 +109,7 @@ public class BoardPageCLI extends AbstractBoardPage {
                 }
             }
             else { // enter here if it's not your turn
-                printConsoleInfo(terminal, "Waiting for other player to do a move...");
+                printConsoleInfo(terminal, "Waiting for the other players to do a move...");
 
                 Message message = client.getConnection().waitMessage();
 
@@ -376,7 +376,7 @@ public class BoardPageCLI extends AbstractBoardPage {
 
         drawTilesAndClouds(baseRow + 4, baseCol + 44, model);
 
-        drawPlayerBoards(baseRow + 4, baseCol + 157, model, usernames); // TODO add support for groups of islands support blocking tiles (character 5)
+        drawPlayerBoards(baseRow + 4, baseCol + 157, model, usernames);
     }
 
     private void drawPlayerBoards (int baseRow, int baseCol, Game model, ArrayList<String> usernames) {
@@ -448,7 +448,8 @@ public class BoardPageCLI extends AbstractBoardPage {
                         (int) isl.getStudentColorList().stream().filter(s -> s.getValue().equals(2)).count(), // green
                         (int) isl.getStudentColorList().stream().filter(s -> s.getValue().equals(3)).count(), // red
                         (int) isl.getStudentColorList().stream().filter(s -> s.getValue().equals(4)).count(), // pink
-                        model.getFistIslandGroup().equals(g)
+                        model.getFistIslandGroup().equals(g),
+                        isl.hasStopCard()
                 );
 
             }

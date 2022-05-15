@@ -48,4 +48,8 @@ public class CharacterSeven extends Character{
             throw new Exception("Students not available in the entrance");
         if(give.size()>3 || give.size() != take.size()) throw new Exception("Inexact number of students");
     }
+
+    public List<StudentColor> getStudentColorList () {
+        return studentColorList;
+    }
 }

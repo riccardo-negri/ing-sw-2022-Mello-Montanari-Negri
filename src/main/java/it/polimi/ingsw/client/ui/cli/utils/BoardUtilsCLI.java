@@ -5,6 +5,8 @@ import org.jline.terminal.Terminal;
 
 import java.text.MessageFormat;
 import java.lang.String;
+import java.util.HashMap;
+import java.util.List;
 import java.util.stream.IntStream;
 
 import static org.fusesource.jansi.Ansi.ansi;
@@ -12,6 +14,7 @@ import static org.fusesource.jansi.Ansi.ansi;
 public class BoardUtilsCLI {
     private static final String InfoR1 = "+----------------------------+";
     private static final String InfoR2 = "| {0}{1} |";
+    private static final String InfoR4 = "| {0} |";
     private static final String InfoR3 = "|                            |";
     private static final String s = " ";
     private static final int InfoLengthToFill = 26;
@@ -212,7 +215,10 @@ public class BoardUtilsCLI {
         terminal.writer().println(ansi().cursor(baseRow + 1, baseCol + getSchoolBoardWidth() + 2).fgRgb(255, 128, 0).a(playerName).fgDefault());
         terminal.writer().print(ansi().cursor(baseRow + 3, baseCol + getSchoolBoardWidth() + 2).a("Assistant: " + playedCard));
         terminal.writer().print(ansi().cursor(baseRow + 4, baseCol + getSchoolBoardWidth() + 2).a("Coins: ").fgRgb(218, 165, 32).a(coins).fgDefault());
-        if (playedCharacter != -1) {terminal.writer().print(ansi().cursor(baseRow + 6, baseCol + getSchoolBoardWidth() + 2).a("Character: " + playedCharacter));};
+        if (playedCharacter != -1) {
+            terminal.writer().print(ansi().cursor(baseRow + 6, baseCol + getSchoolBoardWidth() + 2).a("Character: " + playedCharacter));
+        }
+        ;
     }
 
     public static void drawGameInfoSection (Terminal terminal, int baseRow, int baseCol, String serverIP, int serverPort, String gameMode, int playersNumber) {
@@ -248,16 +254,47 @@ public class BoardUtilsCLI {
         terminal.writer().println(ansi().cursor(baseRow + 5, baseCol).a(InfoR1));
     }
 
-    public static void drawGameCharactersSection (Terminal terminal, int baseRow, int baseCol, int[] characters, int[] charactersCost) {
+    public static void drawGameCharactersSection (Terminal terminal, int baseRow, int baseCol, int[] characters, int[] charactersCost, HashMap<Integer, int[]> characterColorsList, int[] NoEntryTilesList) {
         terminal.writer().println(ansi().cursor(baseRow, baseCol).a(InfoR1));
         terminal.writer().println(ansi().cursor(baseRow + 1, baseCol).a(InfoR3));
         IntStream.range(0, 3).forEach(i -> {
             terminal.writer().println(ansi().cursor(baseRow + 2 + (3 * i), baseCol).a(
                     MessageFormat.format(InfoR2, "Character " + characters[i], s.repeat(InfoLengthToFill - 10 - Integer.toString(characters[i]).length()))
             ));
-            terminal.writer().println(ansi().cursor(baseRow + 3 + (3 * i), baseCol).a(
-                    MessageFormat.format(InfoR2, "Cost: " + ansi().fgRgb(218, 165, 32).a(charactersCost[i]).fgDefault(), s.repeat(InfoLengthToFill - 7))
-            ));
+            if (characterColorsList.get(i).length > 0) {
+                final String COLORS = "{0} {1} {2} {3} {4}";
+                int[] diningColors = characterColorsList.get(i);
+                String colorsFilled = MessageFormat.format(COLORS,
+                        (diningColors[0] > 0 ? getAnsiFromColor("GREEN", diningColors[0]) : " "),
+                        (diningColors[1] > 0 ? getAnsiFromColor("RED", diningColors[1]) : " "),
+                        (diningColors[2] > 0 ? getAnsiFromColor("YELLOW", diningColors[2]) : " "),
+                        (diningColors[3] > 0 ? getAnsiFromColor("PINK", diningColors[3]) : " "),
+                        (diningColors[4] > 0 ? getAnsiFromColor("BLUE", diningColors[4]) : " ")
+                );
+                terminal.writer().println(ansi().cursor(baseRow + 3 + (3 * i), baseCol).a(
+                        MessageFormat.format(InfoR4,
+                                "Cost: " +
+                                        ansi().fgRgb(218, 165, 32).a(charactersCost[i]).fgDefault() +
+                                        " - Studs: " +
+                                        colorsFilled)
+                ));
+            }
+            else if (NoEntryTilesList[i] >= 0) { // set to -1 if not supported by the character
+                terminal.writer().println(ansi().cursor(baseRow + 3 + (3 * i), baseCol).a(
+                        MessageFormat.format(InfoR4,
+                                "Cost: " +
+                                        ansi().fgRgb(218, 165, 32).a(charactersCost[i]).fgDefault() +
+                                        " - NoEntry tiles: " +
+                                        NoEntryTilesList[i]
+                        )
+                ));
+            }
+            else {
+                terminal.writer().println(ansi().cursor(baseRow + 3 + (3 * i), baseCol).a(
+                        MessageFormat.format(InfoR2, "Cost: " + ansi().fgRgb(218, 165, 32).a(charactersCost[i]).fgDefault(), s.repeat(InfoLengthToFill - 7))
+                ));
+            }
+
             if (i != 2) {
                 terminal.writer().println(ansi().cursor(baseRow + 4 + (3 * i), baseCol).a(InfoR3));
             }
@@ -273,10 +310,10 @@ public class BoardUtilsCLI {
                     MessageFormat.format(InfoR2, "Assistant n°" + cards[i] + " - " + (cards[i] + 1) / 2 + " steps", s.repeat(InfoLengthToFill - 22 - Integer.toString(cards[i]).length()))
             ));
         });
-        terminal.writer().println(ansi().cursor(baseRow + cards.length + 1, baseCol).a(InfoR1));
+        terminal.writer().println(ansi().cursor(baseRow + cards.length + 2, baseCol).a(InfoR1));
     }
 
-    public static void drawInfoSection (Terminal terminal, int baseRow, int baseCol, String serverIP, int serverPort, String gameMode, int playersNumber, int round, String currPlayer, String currPhase, int[] characters, int[] charactersCost, int[] deck) {
+    public static void drawInfoSection (Terminal terminal, int baseRow, int baseCol, String serverIP, int serverPort, String gameMode, int playersNumber, int round, String currPlayer, String currPhase, int[] characters, int[] charactersCost, int[] deck, HashMap<Integer, int[]> characterColorsList, int[] NoEntryTilesList) {
         final String INFO = "Game Info";
         final String STATUS = "Game Status";
         final String CHARACTER = "Characters";
@@ -290,8 +327,13 @@ public class BoardUtilsCLI {
         terminal.writer().println(ansi().cursor(baseRow + 8, baseCol + InfoLengthToFill / 2 - STATUS.length() / 2 + 1).a(STATUS));
 
 
-        drawGameCharactersSection(terminal, baseRow + 15, baseCol, characters, charactersCost);
-        terminal.writer().println(ansi().cursor(baseRow + 15, baseCol + InfoLengthToFill / 2 - CHARACTER.length() / 2 + 1).a(CHARACTER));
+        if (characters != null) {
+            drawGameCharactersSection(terminal, baseRow + 15, baseCol, characters, charactersCost, characterColorsList, NoEntryTilesList);
+            terminal.writer().println(ansi().cursor(baseRow + 15, baseCol + InfoLengthToFill / 2 - CHARACTER.length() / 2 + 1).a(CHARACTER));
+        }
+        else {
+            baseRow -= 12;
+        }
 
         drawDeckSection(terminal, baseRow + 27, baseCol, deck);
         terminal.writer().println(ansi().cursor(baseRow + 27, baseCol + InfoLengthToFill / 2 - DECK.length() / 2 + 1).a(DECK));
@@ -307,6 +349,44 @@ public class BoardUtilsCLI {
         terminal.writer().println(ansi().cursor(baseRow, 0).a("+").cursor(baseRow, terminal.getWidth()).a("+"));
         terminal.writer().println(ansi().cursor(baseRow, (terminal.getWidth() - CONSOLE.length()) / 2).fgRed().a(CONSOLE).fgDefault());
         terminal.writer().println(ansi().cursor(baseRow + 1, (terminal.getWidth() - INSTRUCTIONS.length()) / 2).a(INSTRUCTIONS));
+        terminal.writer().flush();
+    }
+
+    public static void drawConnectionWtoE (Terminal terminal, int baseRow, int baseCol) {
+        final String CONNECTION_1 = "-----";
+        final String CONNECTION_2 = "---";
+
+        terminal.writer().print(ansi().cursor(baseRow, baseCol).a(CONNECTION_1));
+        terminal.writer().print(ansi().cursor(baseRow + 1, baseCol + 1).a(CONNECTION_2));
+        terminal.writer().print(ansi().cursor(baseRow + 2, baseCol + 1).a(CONNECTION_2));
+        terminal.writer().print(ansi().cursor(baseRow + 3, baseCol).a(CONNECTION_1));
+        terminal.writer().flush();
+    }
+
+    public static void drawConnectionNWtoSE (Terminal terminal, int baseRow, int baseCol) {
+        final String CONNECTION = "----";
+
+        terminal.writer().print(ansi().cursor(baseRow, baseCol).a(CONNECTION));
+        terminal.writer().print(ansi().cursor(baseRow + 1, baseCol - 1).a(CONNECTION));
+        terminal.writer().print(ansi().cursor(baseRow + 2, baseCol - 2).a(CONNECTION));
+        terminal.writer().flush();
+    }
+
+    public static void drawConnectionNtoS (Terminal terminal, int baseRow, int baseCol) {
+        final String CONNECTION_1 = "| | |";
+        final String CONNECTION_2 = "|_|_|";
+
+        terminal.writer().print(ansi().cursor(baseRow, baseCol).a(CONNECTION_1));
+        terminal.writer().print(ansi().cursor(baseRow + 1, baseCol).a(CONNECTION_2));
+        terminal.writer().flush();
+    }
+
+    public static void drawConnectionSWtoNE (Terminal terminal, int baseRow, int baseCol) {
+        final String CONNECTION = "----";
+
+        terminal.writer().print(ansi().cursor(baseRow, baseCol).a(CONNECTION));
+        terminal.writer().print(ansi().cursor(baseRow + 1, baseCol + 1).a(CONNECTION));
+        terminal.writer().print(ansi().cursor(baseRow + 2, baseCol + 2).a(CONNECTION));
         terminal.writer().flush();
     }
 }

@@ -59,7 +59,7 @@ public class ReadMoveUtilsCLI {
         return move;
     }
 
-    private static AggregateCompleter decorateWithCharacterMove (int[] characters, ArgumentCompleter completer) { //TODO add regex for all these
+    private static AggregateCompleter decorateWithCharacterMove (int[] characters, ArgumentCompleter completer) {
         if (characters.length == 0) {
             return new AggregateCompleter(completer);
         }

@@ -25,8 +25,8 @@ public class GameModeSelectionPageCLI extends AbstractGameModeSelectionPage {
         clearTerminal(terminal);
         printTerminalCenteredMultilineText(terminal, GAME_MODE, 5);
         printEmptyLine(terminal);
-        int playersNumber = readNumber(terminal, "Please select the number of players (min 2 players, max 4 players):", 2, 4, null);
-        boolean isAdvancedGame = readBoolean(terminal, "Do you want to play the advanced game rules (y or n)?");
+        int playersNumber = readNumber(terminal, "Please select the number of players (min 2 players, max 4 players) (default is 2):", 2, 4, 2);
+        boolean isAdvancedGame = readBoolean(terminal, "Do you want to play the advanced game rules (y or n)? (default is y)", true);
         printEmptyLine(terminal);
         printTerminalCenteredLine(terminal, "Press enter to join the matchmaking queue...");
         waitEnterPressed();

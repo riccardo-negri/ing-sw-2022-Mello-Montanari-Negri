@@ -222,12 +222,15 @@ public class CoreUtilsCLI {
         }
     }
 
-    public static boolean readBoolean (Terminal terminal, String requestText) {
+    public static boolean readBoolean (Terminal terminal, String requestText, Boolean defaultValue) {
         String read;
         printTerminalCenteredLine(terminal, requestText, 10);
         terminal.writer().flush();
         read = scanner.nextLine();
-        if (read.equals("y")) {
+        if (defaultValue != null && read.length() == 0) {
+            return defaultValue;
+        }
+        else if (read.equals("y")) {
             return true;
         }
         else if (read.equals("n")) {
@@ -238,7 +241,7 @@ public class CoreUtilsCLI {
             terminal.writer().print(ansi().cursorUp(2));
             terminal.writer().print(ansi().eraseLine());
             terminal.writer().flush();
-            return readBoolean(terminal, requestText);
+            return readBoolean(terminal, requestText, defaultValue);
         }
     }
 

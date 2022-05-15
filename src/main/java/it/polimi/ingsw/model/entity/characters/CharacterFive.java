@@ -41,4 +41,8 @@ public class CharacterFive extends Character{
     public void removeOneCard() { stopNumber -= 1; }
 
     public void addOneCard() { stopNumber += 1; }
+
+    public Integer getStopNumber () {
+        return stopNumber;
+    }
 }

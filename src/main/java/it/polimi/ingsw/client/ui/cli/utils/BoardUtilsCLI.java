@@ -84,7 +84,7 @@ public class BoardUtilsCLI {
         terminal.writer().flush();
     }
 
-    public static void drawIsland (Terminal terminal, int ID, int baseRow, int baseCol, String tower, Integer yellow, Integer blue, Integer green, Integer red, Integer pink, boolean hasMotherNature) {
+    public static void drawIsland (Terminal terminal, int ID, int baseRow, int baseCol, String tower, Integer yellow, Integer blue, Integer green, Integer red, Integer pink, boolean hasMotherNature, boolean hasNoEntryTile) {
         final String R1 = "    _________\n";
         final String R2 = "   /         \\\n";
         final String R3 = "  /   ID-{0}   \\\n";
@@ -120,6 +120,10 @@ public class BoardUtilsCLI {
                 MessageFormat.format(R8, translateTowerColor(tower) + "" + ansi().fgDefault().bgDefault().a(""))
         ));
         terminal.writer().println(ansi().cursor(baseRow + 8, baseCol).a(R9));
+
+        if(hasNoEntryTile) {
+            terminal.writer().print(ansi().cursor(baseRow+1, baseCol+8).fgRgb(255, 0, 0).a("Ø").fgDefault());
+        }
     }
 
     public static void drawCloud (Terminal terminal, int ID, int baseRow, int baseCol, Integer yellow, Integer blue, Integer green, Integer red, Integer pink) {

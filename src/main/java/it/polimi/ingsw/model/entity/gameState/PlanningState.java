@@ -30,6 +30,8 @@ public class PlanningState extends GameState {
     public PlanningState(GameState oldState) {
         super(oldState);
 
+        this.currentlyPlaying = 0;
+
         if (Game.request(gameId).getBag().isEmpty() ||
                 !Game.request(gameId).getWizard(0).getCardDeck().checkAvailableCards(new ArrayList<>()))
             Game.request(gameId).endGame();

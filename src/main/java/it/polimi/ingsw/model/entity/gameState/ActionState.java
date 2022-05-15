@@ -7,6 +7,10 @@ public abstract class ActionState extends GameState {
 
     public ActionState(GameState oldState) {
         super(oldState);
+
+        if (oldState instanceof PlanningState) this.currentlyPlaying = 0;
+        else this.currentlyPlaying = oldState.currentlyPlaying;
+
         if(oldState instanceof ChooseCloudActionState || oldState instanceof PlanningState) {
             activatedCharacter = null;
         } else {

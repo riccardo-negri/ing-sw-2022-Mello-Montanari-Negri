@@ -30,7 +30,7 @@ public class CardDeck {
      * @throws Exception if the card does not have an accepted number or is already played
      */
     public void playCard (Integer cardNumber) throws Exception {
-        List<AssistantCard> card = assistantCards.stream().filter(x -> x.getNumber().equals(cardNumber)).collect(Collectors.toList());
+        List<AssistantCard> card = assistantCards.stream().filter(x -> x.getNumber().equals(cardNumber)).toList();
         if (card.isEmpty()) throw new Exception("Card not available");
         currentCard = card.get(0);
         assistantCards.remove(currentCard);
@@ -41,4 +41,14 @@ public class CardDeck {
     }
 
     public AssistantCard getCurrentCard() { return currentCard; }
+
+    public void removeCurrentCard() { currentCard = null; }
+
+    public int[] getDeckCards() {
+        int[] cards = new int[assistantCards.size()];
+        for (int i = 0; i < assistantCards.size(); i++) {
+            cards[i] = assistantCards.get(i).getNumber();
+        }
+        return  cards;
+    }
 }

@@ -13,7 +13,7 @@ class IslandGroupTest {
     @Test
     void updateTower() {
         Assertions.assertDoesNotThrow(() -> {
-            game = Game.request(Game.deserializeGame("./src/test/java/it/polimi/ingsw/model/entity/serialized_tests/update_tower_test/Test1Before.json"));
+            game = Game.request(Game.deserializeGameFromFile("./src/test/java/it/polimi/ingsw/model/entity/serialized_tests/update_tower_test/Test1Before.json"));
             for (IslandGroup g : game.getIslandGroupList())
                 g.updateTower(game, null);
             //game.serializeGame("./src/test/java/it/polimi/ingsw/model/entity/serialized_tests/update_tower_test/Test1After1.json");

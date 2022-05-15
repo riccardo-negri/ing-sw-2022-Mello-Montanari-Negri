@@ -4,6 +4,8 @@ import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.entity.Bag;
 
+import java.util.Objects;
+
 public abstract class Character {
 
     protected transient Integer gameId;
@@ -14,21 +16,21 @@ public abstract class Character {
 
     public static Character generateCharacter(int gameId, int number, Bag bag) {
 
-        switch (number) {
-            case 0: return new CharacterOne(gameId, 1,bag);
-            case 1: return new CharacterTwo(gameId, 2);
-            case 2: return new CharacterThree(gameId, 3);
-            case 3: return new CharacterFour(gameId, 4);
-            case 4: return new CharacterFive(gameId, 5);
-            case 5: return new CharacterSix(gameId, 6);
-            case 6: return new CharacterSeven(gameId, 7,bag);
-            case 7: return new CharacterEight(gameId, 8);
-            case 8: return new CharacterNine(gameId, 9);
-            case 9: return new CharacterTen(gameId, 10);
-            case 10: return new CharacterEleven(gameId, 11,bag);
-            case 11: return new CharacterTwelve(gameId, 12);
-            default: return null;
-        }
+        return switch (number) {
+            case 1 -> new CharacterOne(gameId, 1, bag);
+            case 2 -> new CharacterTwo(gameId, 2);
+            case 3 -> new CharacterThree(gameId, 3);
+            case 4 -> new CharacterFour(gameId, 4);
+            case 5 -> new CharacterFive(gameId, 5);
+            case 6 -> new CharacterSix(gameId, 6);
+            case 7 -> new CharacterSeven(gameId, 7, bag);
+            case 8 -> new CharacterEight(gameId, 8);
+            case 9 -> new CharacterNine(gameId, 9);
+            case 10 -> new CharacterTen(gameId, 10);
+            case 11 -> new CharacterEleven(gameId, 11, bag);
+            case 12 -> new CharacterTwelve(gameId, 12);
+            default -> null;
+        };
     }
 
     protected Character(Integer gameId, Integer characterId, Integer price) {
@@ -52,7 +54,7 @@ public abstract class Character {
      * @throws Exception if it is not the player turn, or he does not have enough money to activate the card
      */
     protected void characterValidator (Integer playingWizard) throws Exception {
-        if (Game.request(gameId).getGameState().getCurrentPlayer() != playingWizard)
+        if (!Objects.equals(Game.request(gameId).getGameState().getCurrentPlayer(), playingWizard))
             throw new Exception("Wrong player");
         if (price + (used ? 1 : 0) > Game.request(gameId).getWizard(playingWizard).getMoney())
             throw new Exception("Not enough money to activate the effect");
@@ -61,4 +63,6 @@ public abstract class Character {
     public Wizard getActivator() { return Game.request(gameId).getWizard(activator); }
 
     public Integer getId() { return characterId; }
+
+    public int getPrize() { return price; }
 }

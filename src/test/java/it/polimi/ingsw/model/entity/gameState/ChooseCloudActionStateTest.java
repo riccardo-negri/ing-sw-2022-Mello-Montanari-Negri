@@ -8,15 +8,13 @@ import org.junit.jupiter.api.Test;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class ChooseCloudActionStateTest {
 
     Game game;
 
     @BeforeEach
     void initializeGame() {
-        try{ game = Game.request(Game.deserializeGame("./src/test/java/it/polimi/ingsw/model/entity/serialized_tests/choose_cloud_test/Test1Before.json"));
+        try{ game = Game.request(Game.deserializeGameFromFile("./src/test/java/it/polimi/ingsw/model/entity/serialized_tests/choose_cloud_test/Test1Before.json"));
         } catch (Exception e) { System.err.println("Can't find file in test initialization..."); }
     }
 

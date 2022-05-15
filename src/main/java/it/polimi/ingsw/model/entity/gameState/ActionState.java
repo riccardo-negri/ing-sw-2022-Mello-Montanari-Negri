@@ -3,11 +3,14 @@ package it.polimi.ingsw.model.entity.gameState;
 import it.polimi.ingsw.model.entity.characters.Character;
 
 public abstract class ActionState extends GameState {
-
     protected Character activatedCharacter;
 
     public ActionState(GameState oldState) {
         super(oldState);
+
+        if (oldState instanceof PlanningState) this.currentlyPlaying = 0;
+        else this.currentlyPlaying = oldState.currentlyPlaying;
+
         if(oldState instanceof ChooseCloudActionState || oldState instanceof PlanningState) {
             activatedCharacter = null;
         } else {
@@ -20,4 +23,7 @@ public abstract class ActionState extends GameState {
         this.activatedCharacter = activatedCharacter;
     }
 
+    public Character getActivatedCharacter () {
+        return activatedCharacter;
+    }
 }

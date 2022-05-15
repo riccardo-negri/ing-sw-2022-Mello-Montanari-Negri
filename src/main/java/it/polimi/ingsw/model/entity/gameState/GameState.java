@@ -22,9 +22,6 @@ public abstract class GameState {
     }
 
     public GameState (GameState oldGameState) {
-        if (oldGameState instanceof PlanningState) this.currentlyPlaying = 0;
-        else this.currentlyPlaying = oldGameState.currentlyPlaying;
-
         this.gameId = oldGameState.gameId;
         this.playerOrder = oldGameState.playerOrder;
     }
@@ -32,4 +29,12 @@ public abstract class GameState {
     public void refreshGameId(Game game) { this.gameId = game.getId(); }
 
     public Integer getCurrentPlayer() { return playerOrder.get(currentlyPlaying); }
+
+    public List<Integer> getPlayerOrder () {
+        return playerOrder;
+    }
+
+    public String getGameStateName () {
+        return gameState;
+    }
 }

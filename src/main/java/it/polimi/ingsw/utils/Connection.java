@@ -56,7 +56,7 @@ public class Connection extends ConnectionBase {
                 if (msg instanceof Move) {
                     updateQueue((Move) msg);
                 }
-                else {
+                else if(!(msg instanceof Ping)) {
                     processMessage(msg);
                 }
             } catch (IOException e) {

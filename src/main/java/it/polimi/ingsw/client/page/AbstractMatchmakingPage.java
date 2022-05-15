@@ -2,14 +2,14 @@ package it.polimi.ingsw.client.page;
 
 import it.polimi.ingsw.client.Client;
 
-import static it.polimi.ingsw.client.page.ClientState.BOARD_PAGE;
+import static it.polimi.ingsw.client.page.ClientPage.BOARD_PAGE;
 
-public abstract class AbstractMatchmakingPage extends AbstractClientState {
+public abstract class AbstractMatchmakingPage extends AbstractPage {
     public AbstractMatchmakingPage (Client client) {
         super(client);
     }
 
-    public void onEnd() {
+    public void onEnd () {
         client.setupConnection();
         client.setNextState(BOARD_PAGE);
     }

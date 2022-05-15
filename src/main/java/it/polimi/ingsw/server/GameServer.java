@@ -51,7 +51,10 @@ public class GameServer extends Server{
         try {
             move.applyEffectServer(game, wizard);
             broadcast(move);
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) { // TODO here
+            System.out.println("INVALID MOVE: " + ignored.toString());
+            ignored.printStackTrace();
+        }
     }
 
     void broadcast(Message message) {

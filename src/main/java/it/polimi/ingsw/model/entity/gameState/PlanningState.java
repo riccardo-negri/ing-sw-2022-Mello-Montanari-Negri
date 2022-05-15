@@ -19,8 +19,18 @@ public class PlanningState extends GameState {
     public PlanningState (Integer gameId, List<Integer> playerList, Random randomGenerator) {
         super(playerList, gameId);
         gameState = "PS";
-        Collections.shuffle(playerOrder, randomGenerator);
+
+        int playerNumber = playerList.size();
+        int firstPlayer = randomGenerator.nextInt(playerNumber);
+        playerOrder = new ArrayList<>();
+        for (int i=0; i<playerNumber; i++)
+            playerOrder.add((firstPlayer + i) % playerNumber);
+
         for(Cloud c : Game.request(gameId).getCloudList()) c.fillCloud();
+
+        Game game = Game.request(gameId);
+
+
     }
 
     /**
@@ -30,12 +40,26 @@ public class PlanningState extends GameState {
     public PlanningState(GameState oldState) {
         super(oldState);
 
-        if (Game.request(gameId).getBag().isEmpty() ||
-                !Game.request(gameId).getWizard(0).getCardDeck().checkAvailableCards(Arrays.asList(1,2,3,4,5,6,7,8,9,10)))
-            Game.request(gameId).endGame();
+        this.currentlyPlaying = 0;
+
+        int playerNumber = oldState.playerOrder.size();
+        int firstPlayer = oldState.playerOrder.get(0);
+        playerOrder = new ArrayList<>();
+        for (int i=0; i<playerNumber; i++)
+            playerOrder.add((firstPlayer + i) % playerNumber);
+
+        Game game = Game.request(gameId);
+
+        if (game.getBag().isEmpty() || !game.getWizard(0).getCardDeck().checkAvailableCards(new ArrayList<>()))
+            game.endGame();
 
         gameState = "PS";
-        for(Cloud c : Game.request(gameId).getCloudList()) c.fillCloud();
+        for(Cloud c : game.getCloudList()) c.fillCloud();
+
+        for (Integer playerId : playerOrder)
+            game.getWizard(playerId).getCardDeck().removeCurrentCard();
+
+
     }
 
     /**
@@ -63,6 +87,8 @@ public class PlanningState extends GameState {
         if (!Objects.equals(gameState, "PS")) throw new Exception("Wrong game phase");
 
         Wizard player = Game.request(gameId).getWizard(playingWizard);
+
+        if (Arrays.stream(player.getCardDeck().getDeckCards()).noneMatch(x -> x==selected)) throw new Exception("Card not available");
 
         List<Integer> cardNumbers = new ArrayList<>();
         for (int i=0; i<currentlyPlaying; i++)

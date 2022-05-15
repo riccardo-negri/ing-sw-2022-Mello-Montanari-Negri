@@ -1,21 +1,25 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.client.page.AbstractClientState;
-import it.polimi.ingsw.client.page.ClientState;
+import it.polimi.ingsw.client.page.AbstractPage;
+import it.polimi.ingsw.client.page.ClientPage;
 import it.polimi.ingsw.client.ui.UI;
 import it.polimi.ingsw.client.ui.cli.CLI;
-import it.polimi.ingsw.client.ui.cli.WelcomePageCLI;
 import it.polimi.ingsw.model.enums.GameMode;
+import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.enums.PlayerNumber;
 import it.polimi.ingsw.utils.*;
 import it.polimi.ingsw.utils.InitialState;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class Client {
     private final UI ui;
-    private ClientState nextState;
-    private boolean newState;
-    private WelcomePageCLI temp;
-    private AbstractClientState currState;
+    private ClientPage nextState;
     public String IPAddress;
     public int port;
     public String username;
@@ -23,6 +27,24 @@ public class Client {
     public boolean isAdvancedGame;
     public Connection connection;
     public Login login;
+
+    public Logger getLogger () {
+        return LOGGER;
+    }
+
+    private final Logger LOGGER;
+
+    public ArrayList<String> getUsernames () {
+        return usernames;
+    }
+
+    public ArrayList<String> usernames;
+
+    public Game getModel () {
+        return model;
+    }
+
+    public Game model;
 
     public Client (boolean hasGUI) {
         if (hasGUI) {
@@ -32,38 +54,64 @@ public class Client {
             ui = new CLI();
             ((CLI) ui).init();
         }
-        nextState = ClientState.WELCOME_PAGE;
-        newState = true;
+        nextState = ClientPage.WELCOME_PAGE;
 
+        LOGGER = Logger.getLogger("MyLog");
+        FileHandler fh;
+        try {
+            LOGGER.setUseParentHandlers(false);
+            fh = new FileHandler("./log.txt");
+            LOGGER.setLevel(Level.ALL);
+            LOGGER.addHandler(fh);
+            LogFormatter formatter = new LogFormatter();
+            fh.setFormatter(formatter);
+
+        } catch (SecurityException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void start () {
         while (nextState != null) {
-            currState = ui.getState(this, nextState);
-            currState.draw(this);
+            AbstractPage currState = ui.getState(this, nextState);
+            currState.draw(this);   // draw does everything
         }
     }
 
-    public ClientState getNextState () {
+    public ClientPage getNextState () {
         return nextState;
     }
 
-    public void setNextState (ClientState nextState) {
+    public void setNextState (ClientPage nextState) {
         this.nextState = nextState;
     }
 
-    public void setupConnection(){
+    public void setupConnection () {
         GameMode gm = isAdvancedGame ? GameMode.COMPLETE : GameMode.EASY;
         login = new Login(username, PlayerNumber.fromNumber(playerNumber), gm);
-        Connection connection = new Connection(IPAddress, port);
+        connection = new Connection(IPAddress, port);
         connection.send(login);
         Redirect redirect = (Redirect) connection.waitMessage(Redirect.class);
-        System.out.println("porta");
-        System.out.println(redirect.getPort());
-        connection = new Connection(IPAddress, redirect.getPort());
+        port = redirect.getPort();
+        connection = new Connection(IPAddress, port);
         connection.send(login);
-        connection.waitMessage(InitialState.class);
-        // waiting for players
+
+        // import initial state
+        InitialState initialState = (InitialState) connection.waitMessage(InitialState.class);
+        try {
+            FileWriter myWriter = new FileWriter("test.txt");
+            myWriter.write(initialState.getState());
+            myWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            model = Game.request(Game.deserializeGameFromString(initialState.getState()));
+            LOGGER.log(Level.FINE, "Successfully loaded model sent by the server");
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Couldn't load model sent by the server. Exception: " + e);
+        }
+        usernames = initialState.getUsernames();
     }
 
     public UI getUI () {
@@ -96,10 +144,6 @@ public class Client {
 
     public void setPlayerNumber (int playerNumber) {
         this.playerNumber = playerNumber;
-    }
-
-    public boolean isAdvancedGame () {
-        return isAdvancedGame;
     }
 
     public void setAdvancedGame (boolean advancedGame) {

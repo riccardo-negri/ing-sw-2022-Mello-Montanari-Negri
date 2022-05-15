@@ -1,6 +1,6 @@
 package it.polimi.ingsw.client.page;
 
-public enum ClientState {
+public enum ClientPage {
     WELCOME_PAGE,
     START_PAGE,
     CONNECTION_PAGE,

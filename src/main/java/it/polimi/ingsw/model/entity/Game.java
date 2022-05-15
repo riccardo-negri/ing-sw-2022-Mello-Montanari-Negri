@@ -55,18 +55,32 @@ public class Game {
         Random randomGenerator = new Random();
         this.bag = new Bag(randomGenerator);
 
+        islandGroupList = new LinkedList<>();
+        Iterator<StudentColor> studentsIterator = bag.requestStartingBoard().listIterator();
+        for(int i=0; i<12; i++) {
+            if (i != 0 && i != 6) {
+                List<StudentColor> list = new ArrayList<>();
+                list.add(studentsIterator.next());
+                islandGroupList.add(new IslandGroup(list, i));
+            } else
+                islandGroupList.add(new IslandGroup(new ArrayList<>(), i));
+        }
+
         if(gameMode == GameMode.COMPLETE) {
             characters = new Character[3];
             for(int i=0; i<3; i++) {
+                int randomNumber = 0;
                 boolean flag = true;
                 while(flag) {
                     flag = false;
-                    characters[i] = Character.generateCharacter(id, randomGenerator.nextInt(12), bag);
-                    for(int j=0; j<i; j++) if (characters[i].equals(characters[j])) {
-                        flag = true;
-                        break;
-                    }
+                    randomNumber = randomGenerator.nextInt(1,13);
+                    for(int j=0; j<i; j++)
+                        if (randomNumber == characters[j].getId()) {
+                            flag = true;
+                            break;
+                        }
                 }
+                characters[i] = Character.generateCharacter(id, randomNumber, bag);
             }
         } else {
             characters = null;
@@ -76,9 +90,6 @@ public class Game {
         for (int i=0; i<5; i++)
             professors[i] = new Professor(id, StudentColor.fromNumber(i));
 
-        islandGroupList = new LinkedList<>();
-        for(int i=0; i<12; i++)
-            islandGroupList.add(new IslandGroup(bag.requestStudents((i == 0 || i == 6) ? 0 : 1),i));
 
         cloudList = new ArrayList<>();
         for(int i = 0; i<playerNumber.getWizardNumber(); i++)
@@ -138,20 +149,24 @@ public class Game {
      * @return the index of the game
      * @throws Exception if the file can't be found, or the index of the game already exists
      */
-    public static Integer deserializeGame(String fileName) throws Exception {
-        if (deserializationGson == null) initializeDeserializationGson();
-
-        if (gameEntities == null) gameEntities = new ArrayList<>();
-
+    public static Integer deserializeGameFromFile (String fileName) throws Exception {
         BufferedReader reader = new BufferedReader(new FileReader(fileName));
         String in = reader.readLine();
         reader.close();
 
-        Game newGame = JsonDeserializerClass.getGson().fromJson(in, Game.class);
+        return deserializeGameFromString(in);
+    }
+
+    public static Integer deserializeGameFromString(String string) {
+        if (deserializationGson == null) initializeDeserializationGson();
+
+        if (gameEntities == null) gameEntities = new ArrayList<>();
+
+        Game newGame = JsonDeserializerClass.getGson().fromJson(string, Game.class);
 
         newGame.id = idCount++;
         Arrays.stream(newGame.professors).forEach(x -> x.refreshGameId(newGame));
-        Arrays.stream(newGame.characters).forEach(x -> x.refreshGameId(newGame));
+        if (newGame.characters != null) Arrays.stream(newGame.characters).forEach(x -> x.refreshGameId(newGame));
         newGame.gameState.refreshGameId(newGame);
 
         newGame.cloudList.forEach(x -> x.setBag(newGame.bag));
@@ -180,7 +195,7 @@ public class Game {
      * @throws MissingResourceException if id missing
      */
     public static Game request (Integer gameId) throws MissingResourceException, IllegalStateException {
-        List <Game> result = gameEntities.stream().filter(x -> x.isGameId(gameId)).collect(Collectors.toList());
+        List <Game> result = gameEntities.stream().filter(x -> x.isGameId(gameId)).toList();
         if (result.isEmpty()) throw new MissingResourceException("Game not found", "GameStateEentity", gameId.toString());
         return result.get(0);
     }
@@ -262,7 +277,7 @@ public class Game {
     }
 
     public Island getIsland(Integer islandId) {
-        for(Island i : islandGroupList.stream().flatMap(x -> x.getIslandList().stream()).collect(Collectors.toList()))
+        for(Island i : islandGroupList.stream().flatMap(x -> x.getIslandList().stream()).toList())
             if (Objects.equals(i.getId(), islandId)) return i;
         return null;
     }
@@ -311,5 +326,13 @@ public class Game {
 
     public Bag getBag() {
         return bag;
+    }
+
+    public boolean isGameEnded () {
+        return gameEnded;
+    }
+
+    public Character[] getCharacters () {
+        return characters;
     }
 }

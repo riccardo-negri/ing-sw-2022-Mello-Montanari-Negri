@@ -2,9 +2,9 @@ package it.polimi.ingsw.client.page;
 
 import it.polimi.ingsw.client.Client;
 
-import static it.polimi.ingsw.client.page.ClientState.*;
+import static it.polimi.ingsw.client.page.ClientPage.*;
 
-public abstract class AbstractStartPage extends AbstractClientState {
+public abstract class AbstractStartPage extends AbstractPage {
 
     public AbstractStartPage (Client client) {
         super(client);

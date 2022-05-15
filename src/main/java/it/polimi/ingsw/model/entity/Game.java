@@ -73,7 +73,7 @@ public class Game {
                 boolean flag = true;
                 while(flag) {
                     flag = false;
-                    randomNumber = randomGenerator.nextInt(12);
+                    randomNumber = randomGenerator.nextInt(1,13);
                     for(int j=0; j<i; j++)
                         if (randomNumber == characters[j].getId()) {
                             flag = true;

@@ -2,15 +2,14 @@ package it.polimi.ingsw.client.ui.cli;
 
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.page.AbstractBoardPage;
+import it.polimi.ingsw.client.page.ClientPage;
 import it.polimi.ingsw.model.entity.*;
 import it.polimi.ingsw.model.entity.characters.*;
 import it.polimi.ingsw.model.entity.characters.Character;
 import it.polimi.ingsw.model.entity.gameState.ActionState;
 import it.polimi.ingsw.model.enums.GameMode;
 import it.polimi.ingsw.model.enums.StudentColor;
-import it.polimi.ingsw.utils.Connection;
-import it.polimi.ingsw.utils.Disconnected;
-import it.polimi.ingsw.utils.Message;
+import it.polimi.ingsw.utils.*;
 import it.polimi.ingsw.utils.moves.Move;
 import org.jline.reader.UserInterruptException;
 
@@ -20,12 +19,13 @@ import java.util.List;
 import java.util.logging.Level;
 
 import static it.polimi.ingsw.client.ui.cli.utils.BoardUtilsCLI.*;
+import static it.polimi.ingsw.client.ui.cli.utils.BoardUtilsCLI.printConsoleWarning;
 import static it.polimi.ingsw.client.ui.cli.utils.CoreUtilsCLI.*;
 import static it.polimi.ingsw.client.ui.cli.utils.ReadMoveUtilsCLI.*;
 import static org.fusesource.jansi.Ansi.ansi;
 
 public class BoardPageCLI extends AbstractBoardPage {
-
+    private String lastWarning;
     volatile List<String> moveFromStdin = new ArrayList<>();
 
     public BoardPageCLI (Client client) {
@@ -38,9 +38,13 @@ public class BoardPageCLI extends AbstractBoardPage {
     @Override
     public void draw (Client client) {
 
-        while (!client.getModel().isGameEnded()) { //TODO refactor
+        while (!client.getModel().isGameEnded() && client.getNextState() == ClientPage.BOARD_PAGE) { //TODO refactor
             drawGameBoard(client.getUsernames(), client.getUsername(), client.getIPAddress(), client.getPort());
             drawConsoleArea(terminal, 48);
+            if (lastWarning != null) {
+                printConsoleWarning(terminal, lastWarning);
+                lastWarning = null;
+            }
             LOGGER.log(Level.FINE, "Drew game board and console area");
 
             if (model.getGameState().getCurrentPlayer() == client.getUsernames().indexOf(client.getUsername())) { // enter if it's your turn
@@ -50,89 +54,70 @@ public class BoardPageCLI extends AbstractBoardPage {
 
                 if (moveFromStdin.size() != 0) { // a move has have been read
                     LOGGER.log(Level.FINE, "Processing input move: " + moveFromStdin + " Game state: " + model.getGameState().getGameStateName());
-                    switch (model.getGameState().getGameStateName()) {
-
-                        case "PS" -> {
-                            try {
-                                doCardChoice(Integer.parseInt(moveFromStdin.get(0).split(" ")[1]));
-                            } catch (Exception e) {
-                                LOGGER.log(Level.WARNING, "Got an invalid move (that passed regex check), asking for it again");
-                                printConsoleWarning(terminal, "Please type a valid command..." + e.toString());
-                            }
+                    try {
+                        if (moveFromStdin.get(0).contains("character")) {
+                            parseAndDoCharacterMove(moveFromStdin.get(0));
                         }
-
-                        case "MSS" -> {
-                            try {
-                                if (!moveFromStdin.get(0).contains("character")) {
+                        else {
+                            switch (model.getGameState().getGameStateName()) {
+                                case "PS" -> {
+                                    doCardChoice(Integer.parseInt(moveFromStdin.get(0).split(" ")[1]));
+                                }
+                                case "MSS" -> {
                                     doStudentMovement(getStudentColorFromString(moveFromStdin.get(0).split(" ")[1]), moveFromStdin.get(0).split(" ")[3]);
                                 }
-                                else {
-                                    parseAndDoCharacterMove(moveFromStdin.get(0));
-                                }
-                            } catch (Exception e) {
-                                LOGGER.log(Level.WARNING, "Got an invalid move (that passed regex check), asking for it again. Exception: " + e.toString());
-                                printConsoleWarning(terminal, "Please type a valid command..." + e.toString());
-                            }
-                        }
-
-                        case "MMNS" -> {
-                            try {
-                                if (!moveFromStdin.get(0).contains("character")) {
+                                case "MMNS" -> {
                                     doMotherNatureMovement(Integer.parseInt(moveFromStdin.get(0).split(" ")[2]));
                                 }
-                                else {
-                                    parseAndDoCharacterMove(moveFromStdin.get(0));
-                                }
-                            } catch (Exception e) {
-                                LOGGER.log(Level.WARNING, "Got an invalid move (that passed regex check), asking for it again. Exception: " + e.toString());
-                                printConsoleWarning(terminal, "Please type a valid command..." + e.toString());
-                            }
-                        }
-
-                        case "CCS" -> {
-                            try {
-                                if (!moveFromStdin.get(0).contains("character")) {
+                                case "CCS" -> {
                                     doCloudChoice(Integer.parseInt(moveFromStdin.get(0).split(" ")[1]));
                                 }
-                                else {
-                                    parseAndDoCharacterMove(moveFromStdin.get(0));
-                                }
-                            } catch (Exception e) {
-                                LOGGER.log(Level.WARNING, "Got an invalid move (that passed regex check), asking for it again. Exception: " + e.toString());
-                                printConsoleWarning(terminal, "Please type a valid command..." + e.toString());
                             }
                         }
+                    } catch (Exception e) {
+                        LOGGER.log(Level.WARNING, "Got an invalid move (that passed regex check), asking for it again. Exception: " + e.toString());
+                        lastWarning = "Please type a valid command. " + e.getMessage();
                     }
                 }
                 else { // no move was made, so it's a message about some disconnection events
-                    handleMessageNotMove();
+                    Message message = client.getConnection().waitMessage();
+                    handleMessageNotMoveAndPrintStatus(message);
                 }
             }
             else { // enter here if it's not your turn
                 printConsoleInfo(terminal, "Waiting for the other players to do a move...");
-
                 Message message = client.getConnection().waitMessage();
-
-                if (message instanceof Disconnected) { //TODO support this
-                    printConsoleWarning(terminal, "Received an unsupported message...");
-                }
-                else if (message instanceof Move) {
+                if (message instanceof  Move) {
                     try {
                         applyOtherPlayersMove((Move) message);
                     } catch (Exception e) {
                         e.printStackTrace();
-                    }
+                    };
                 }
                 else {
-                    printConsoleWarning(terminal, "Received an unsupported message...");
+                    handleMessageNotMoveAndPrintStatus(message);
                 }
-
             }
-
         }
 
         LOGGER.log(Level.FINE, "Game finished because someone won or surrendered");
         onEnd();
+    }
+
+    private void handleMessageNotMoveAndPrintStatus(Message message) {
+        if (message instanceof  Disconnected) { //TODO see if there's a smarter way to rejoin the game
+            printConsoleWarning(terminal, "You got disconnected from the game, rejoin the game with the same username. Press enter to continue...");
+            waitEnterPressed();
+            onEnd();
+        }
+        else if (message instanceof UserDisconnected) { //TODO make the game not stop immediately, but only when the turn of the one who disconnected starts. Also todo the case in which multiple people disconnect
+            printConsoleWarning(terminal, "Player " + ((UserDisconnected) message).getUsername() + " disconnected from the game. Waiting for him to reconnect...");
+            Message reconnected = client.getConnection().waitMessage(UserReconnected.class);
+            lastWarning = "Player " + ((UserReconnected) reconnected).getUsername() + " reconnected to the game. Now you can keep playing";
+        }
+        else {
+            lastWarning = "Received an unsupported message...";
+        }
 
     }
 
@@ -335,7 +320,7 @@ public class BoardPageCLI extends AbstractBoardPage {
         int[] array = new int[characters.length];
         for (int i = 0; i < characters.length; i++) {
             Character c = characters[i];
-            if(c.getId() == 5) {
+            if (c.getId() == 5) {
                 array[i] = ((CharacterFive) c).getStopNumber();
             }
             else {
@@ -552,6 +537,5 @@ public class BoardPageCLI extends AbstractBoardPage {
             drawConnectionSWtoNE(terminal, baseRow + relativePlacementOfBridgeBasedOnIDs.get("11:0").get(0), baseCol + relativePlacementOfBridgeBasedOnIDs.get("11:0").get(1));
         }
     }
-
 
 }

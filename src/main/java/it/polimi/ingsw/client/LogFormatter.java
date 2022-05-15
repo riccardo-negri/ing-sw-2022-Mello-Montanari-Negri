@@ -7,11 +7,9 @@ import java.util.logging.LogRecord;
 
 import static org.fusesource.jansi.Ansi.ansi;
 
-public class LogFormatter extends Formatter
-{
+public class LogFormatter extends Formatter {
     @Override
-    public String format(LogRecord record)
-    {
+    public String format (LogRecord record) {
         StringBuilder log = new StringBuilder();
 
         log.append(ansi().fgBrightCyan());
@@ -35,11 +33,9 @@ public class LogFormatter extends Formatter
 
         Object[] params = record.getParameters();
 
-        if (params != null)
-        {
+        if (params != null) {
             log.append("\t");
-            for (int i = 0; i < params.length; i++)
-            {
+            for (int i = 0; i < params.length; i++) {
                 log.append(params[i]);
                 if (i < params.length - 1)
                     log.append(", ");
@@ -51,7 +47,7 @@ public class LogFormatter extends Formatter
         return log.toString();
     }
 
-    private String calcDate(long millisecond) {
+    private String calcDate (long millisecond) {
         SimpleDateFormat date_format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date(millisecond);
         return date_format.format(date);

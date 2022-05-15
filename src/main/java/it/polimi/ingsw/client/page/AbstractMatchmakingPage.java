@@ -9,7 +9,7 @@ public abstract class AbstractMatchmakingPage extends AbstractPage {
         super(client);
     }
 
-    public void onEnd() {
+    public void onEnd () {
         client.setupConnection();
         client.setNextState(BOARD_PAGE);
     }

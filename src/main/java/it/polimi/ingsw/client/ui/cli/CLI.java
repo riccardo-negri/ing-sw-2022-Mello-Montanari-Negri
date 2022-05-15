@@ -10,10 +10,8 @@ import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 
 import java.io.IOException;
-import java.util.Scanner;
 
 public class CLI implements UI {
-    Scanner scanner = new Scanner(System.in);
     private Terminal terminal;
     private History commandsHistory;
 
@@ -21,12 +19,9 @@ public class CLI implements UI {
 
         // https://superuser.com/questions/413073/windows-console-with-ansi-colors-handling
         // https://github.com/jline/jline3/issues/779
-        //AnsiConsole.systemInstall();
         try {
             terminal = TerminalBuilder.terminal();
             commandsHistory = new DefaultHistory();
-            commandsHistory.add("play assistant 1");
-            System.out.println(terminal.getName());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -34,21 +29,14 @@ public class CLI implements UI {
 
     @Override
     public AbstractPage getState (Client client, ClientPage nextState) {
-        switch (nextState) {
-            case WELCOME_PAGE:
-                return new WelcomePageCLI(client);
-            case START_PAGE:
-                return new StartPageCLI(client);
-            case CONNECTION_PAGE:
-                return new ConnectionPageCLI(client);
-            case GAME_MODE_SELECTION_PAGE:
-                return new GameModeSelectionPageCLI(client);
-            case MATCHMAKING_PAGE:
-                return new MatchmakingPageCLI(client);
-            case BOARD_PAGE:
-                return new BoardPageCLI(client);
-        }
-        return null;
+        return switch (nextState) {
+            case WELCOME_PAGE -> new WelcomePageCLI(client);
+            case START_PAGE -> new StartPageCLI(client);
+            case CONNECTION_PAGE -> new ConnectionPageCLI(client);
+            case GAME_MODE_SELECTION_PAGE -> new GameModeSelectionPageCLI(client);
+            case MATCHMAKING_PAGE -> new MatchmakingPageCLI(client);
+            case BOARD_PAGE -> new BoardPageCLI(client);
+        };
     }
 
     public Terminal getTerminal () {

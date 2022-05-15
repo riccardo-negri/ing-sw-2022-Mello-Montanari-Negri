@@ -1,32 +1,9 @@
 package it.polimi.ingsw.client.ui.cli.utils;
 
-import org.fusesource.jansi.AnsiConsole;
-import org.jline.builtins.Completers;
-//import org.jline.console.ArgDesc;
-//import org.jline.console.CmdDesc;
-//import org.jline.console.Printer;
-import org.jline.console.CmdDesc;
-import org.jline.console.impl.JlineCommandRegistry;
-import org.jline.reader.LineReader;
-import org.jline.reader.LineReaderBuilder;
-import org.jline.reader.impl.completer.ArgumentCompleter;
-import org.jline.reader.impl.completer.NullCompleter;
-import org.jline.reader.impl.completer.StringsCompleter;
 import org.jline.terminal.Terminal;
-import org.jline.utils.AttributedString;
-import org.jline.reader.impl.DefaultParser;
-import org.jline.terminal.TerminalBuilder;
-import org.jline.widget.AutosuggestionWidgets;
-import org.jline.widget.TailTipWidgets;
-//import org.jline.widget.TailTipWidgets;
 
 import static org.fusesource.jansi.Ansi.ansi;
-import static org.jline.builtins.Completers.TreeCompleter.node;
 
-import java.io.Console;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.Writer;
 import java.util.*;
 import java.util.stream.IntStream;
 import java.util.regex.*;
@@ -37,6 +14,23 @@ public class CoreUtilsCLI {
     public static void clearTerminal (Terminal terminal) {
         terminal.writer().println(ansi().reset().eraseScreen());
         terminal.writer().flush();
+    }
+
+    public static void moveCursorToEnd (Terminal terminal) {
+        terminal.writer().println(ansi().cursor(terminal.getHeight() - 1, 0));
+        terminal.writer().flush();
+    }
+
+    public static void resetCursorColors (Terminal terminal) {
+        terminal.writer().print(ansi().fgDefault().bgDefault());
+        terminal.writer().flush();
+    }
+
+    public static void waitEnterPressed () {
+        try {
+            System.in.read();
+        } catch (Exception ignored) {
+        }
     }
 
     public static void printTerminalCenteredMultilineText (Terminal terminal, String s) {
@@ -72,36 +66,9 @@ public class CoreUtilsCLI {
         terminal.writer().flush();
     }
 
-    public static void moveCursorToEnd (Terminal terminal) {
-        terminal.writer().println(ansi().cursor(terminal.getHeight() - 1, 0));
+    public static void printEmptyLine (Terminal terminal) {
+        terminal.writer().println();
         terminal.writer().flush();
-    }
-
-    public static void moveCursorToTop (Terminal terminal) {
-        terminal.writer().print(ansi().cursor(0, 0));
-        terminal.writer().flush();
-    }
-
-    public static void resetCursorColors (Terminal terminal) {
-        terminal.writer().print(ansi().fgDefault().bgDefault());
-        terminal.writer().flush();
-    }
-
-    public static void waitEnterPressed () {
-        try {
-            System.in.read();
-        } catch (Exception ignored) {
-        }
-    }
-
-    public static Integer readNumber () {
-        int num;
-        try {
-            num = Integer.parseInt(scanner.nextLine());
-            return num;
-        } catch (NumberFormatException e) {
-            return -1;
-        }
     }
 
     public static void printTopErrorBanner (Terminal terminal, String warning) {
@@ -120,6 +87,16 @@ public class CoreUtilsCLI {
         );
         terminal.writer().println(ansi().restoreCursorPosition());
         terminal.writer().flush();
+    }
+
+    public static Integer readNumber () {
+        int num;
+        try {
+            num = Integer.parseInt(scanner.nextLine());
+            return num;
+        } catch (NumberFormatException e) {
+            return -1;
+        }
     }
 
     public static String readIPAddress (Terminal terminal) {
@@ -180,11 +157,6 @@ public class CoreUtilsCLI {
             terminal.writer().flush();
             return readGenericString(terminal, requestText, null);
         }
-    }
-
-    public static void printEmptyLine (Terminal terminal) {
-        terminal.writer().println();
-        terminal.writer().flush();
     }
 
     public static int readNumber (Terminal terminal, String requestText, int minValue, int maxValue, Integer defaultValue) {

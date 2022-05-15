@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.ui.cli;
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.page.AbstractBoardPage;
 import it.polimi.ingsw.model.entity.*;
+import it.polimi.ingsw.model.entity.characters.*;
 import it.polimi.ingsw.model.entity.characters.Character;
 import it.polimi.ingsw.model.entity.gameState.ActionState;
 import it.polimi.ingsw.model.enums.GameMode;
@@ -130,6 +131,7 @@ public class BoardPageCLI extends AbstractBoardPage {
 
         }
 
+        LOGGER.log(Level.FINE, "Game finished because someone won or surrendered");
         onEnd();
 
     }
@@ -288,13 +290,68 @@ public class BoardPageCLI extends AbstractBoardPage {
         return new int[0];
     }
 
+    private HashMap<Integer, int[]> getColorsListFromCharacters (Character[] characters) {
+        HashMap<Integer, int[]> hashmap = new HashMap<>();
+        for (int i = 0; i < characters.length; i++) {
+            Character c = characters[i];
+            if (c.getId() == 1) {
+                hashmap.put(i, new int[]{
+                                (int) ((CharacterOne) c).getStudentColorList().stream().filter(s -> s.getValue().equals(2)).count(), // green
+                                (int) ((CharacterOne) c).getStudentColorList().stream().filter(s -> s.getValue().equals(3)).count(), // red
+                                (int) ((CharacterOne) c).getStudentColorList().stream().filter(s -> s.getValue().equals(0)).count(), // yellow
+                                (int) ((CharacterOne) c).getStudentColorList().stream().filter(s -> s.getValue().equals(4)).count(), // pink
+                                (int) ((CharacterOne) c).getStudentColorList().stream().filter(s -> s.getValue().equals(1)).count(), // blue
+                        }
+                );
+            }
+            else if (c.getId() == 7) {
+                hashmap.put(i, new int[]{
+                                (int) ((CharacterSeven) c).getStudentColorList().stream().filter(s -> s.getValue().equals(2)).count(), // green
+                                (int) ((CharacterSeven) c).getStudentColorList().stream().filter(s -> s.getValue().equals(3)).count(), // red
+                                (int) ((CharacterSeven) c).getStudentColorList().stream().filter(s -> s.getValue().equals(0)).count(), // yellow
+                                (int) ((CharacterSeven) c).getStudentColorList().stream().filter(s -> s.getValue().equals(4)).count(), // pink
+                                (int) ((CharacterSeven) c).getStudentColorList().stream().filter(s -> s.getValue().equals(1)).count(), // blue
+                        }
+                );
+            }
+            else if (c.getId() == 11) {
+                hashmap.put(i, new int[]{
+                                (int) ((CharacterEleven) c).getStudentColorList().stream().filter(s -> s.getValue().equals(2)).count(), // green
+                                (int) ((CharacterEleven) c).getStudentColorList().stream().filter(s -> s.getValue().equals(3)).count(), // red
+                                (int) ((CharacterEleven) c).getStudentColorList().stream().filter(s -> s.getValue().equals(0)).count(), // yellow
+                                (int) ((CharacterEleven) c).getStudentColorList().stream().filter(s -> s.getValue().equals(4)).count(), // pink
+                                (int) ((CharacterEleven) c).getStudentColorList().stream().filter(s -> s.getValue().equals(1)).count(), // blue
+                        }
+                );
+            }
+            else {
+                hashmap.put(i, new int[0]);
+            }
+        }
+        return hashmap;
+    }
+
+    private int[] getNoEntryTilesFromCharacters (Character[] characters) {
+        int[] array = new int[characters.length];
+        for (int i = 0; i < characters.length; i++) {
+            Character c = characters[i];
+            if(c.getId() == 5) {
+                array[i] = ((CharacterFive) c).getStopNumber();
+            }
+            else {
+                array[i] = -1;
+            }
+        }
+        return array;
+    }
+
     private void drawGameBoard (ArrayList<String> usernames, String username, String IP, int port) {
-        int baseCol = terminal.getWidth() / 2 - 200 / 2;
+        int baseCol = (terminal.getWidth() - 192) / 2;
         int baseRow = 1;
 
         clearTerminal(terminal);
 
-        terminal.writer().println(ansi().cursor(2, 34).a("Dashboard").cursor(2, 110).a("Eriantys Board").cursor(2, 188).a("Players"));
+        terminal.writer().println(ansi().cursor(2, baseCol + 16).a("Dashboard").cursor(2, baseCol + 89).a("Eriantys Board").cursor(2, baseCol + 172).a("Players"));
 
         resetCursorColors(terminal);
 
@@ -309,14 +366,16 @@ public class BoardPageCLI extends AbstractBoardPage {
                 findRoundNumber(),
                 client.getUsernames().get(model.getGameState().getCurrentPlayer()),
                 model.getGameState().getGameStateName(),
-                model.getGameMode().equals(GameMode.COMPLETE) ? getCharactersID() : null, // TODO support students on character
-                getCharactersCost(),
-                model.getWizard(client.getUsernames().indexOf(client.getUsername())).getCardDeck().getDeckCards()
+                model.getGameMode().equals(GameMode.COMPLETE) ? getCharactersID() : null,
+                model.getGameMode().equals(GameMode.COMPLETE) ? getCharactersCost() : null,
+                model.getWizard(client.getUsernames().indexOf(client.getUsername())).getCardDeck().getDeckCards(),
+                getColorsListFromCharacters(model.getCharacters()),
+                getNoEntryTilesFromCharacters(model.getCharacters())
         );
 
-        drawTilesAndClouds(baseRow + 3, baseCol + 47, model);
+        drawTilesAndClouds(baseRow + 4, baseCol + 44, model);
 
-        drawPlayerBoards(baseRow + 4, baseCol + 155, model, usernames); // TODO add support for groups of islands support blocking tiles (character 5)
+        drawPlayerBoards(baseRow + 4, baseCol + 157, model, usernames); // TODO add support for groups of islands support blocking tiles (character 5)
     }
 
     private void drawPlayerBoards (int baseRow, int baseCol, Game model, ArrayList<String> usernames) {

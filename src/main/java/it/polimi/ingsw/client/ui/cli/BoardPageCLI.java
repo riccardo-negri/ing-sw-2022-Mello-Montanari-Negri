@@ -369,8 +369,9 @@ public class BoardPageCLI extends AbstractBoardPage {
                 model.getGameMode().equals(GameMode.COMPLETE) ? getCharactersID() : null,
                 model.getGameMode().equals(GameMode.COMPLETE) ? getCharactersCost() : null,
                 model.getWizard(client.getUsernames().indexOf(client.getUsername())).getCardDeck().getDeckCards(),
-                getColorsListFromCharacters(model.getCharacters()),
-                getNoEntryTilesFromCharacters(model.getCharacters())
+                model.getGameMode().equals(GameMode.COMPLETE) ? getColorsListFromCharacters(model.getCharacters()) : null,
+                model.getGameMode().equals(GameMode.COMPLETE) ? getNoEntryTilesFromCharacters(model.getCharacters()) : null
+
         );
 
         drawTilesAndClouds(baseRow + 4, baseCol + 44, model);

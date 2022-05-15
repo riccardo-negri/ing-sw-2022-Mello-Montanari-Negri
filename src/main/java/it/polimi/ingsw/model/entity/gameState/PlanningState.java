@@ -66,6 +66,8 @@ public class PlanningState extends GameState {
 
         Wizard player = Game.request(gameId).getWizard(playingWizard);
 
+        if (Arrays.stream(player.getCardDeck().getDeckCards()).noneMatch(x -> x==selected)) throw new Exception("Card not available");
+
         List<Integer> cardNumbers = new ArrayList<>();
         for (int i=0; i<currentlyPlaying; i++)
             cardNumbers.add(Game.request(gameId).getWizard(playerOrder.get(i)).getCardDeck().getCurrentCard().getNumber());

@@ -49,10 +49,8 @@ public class WelcomePageCLI extends AbstractWelcomePage {
 
 
         printTerminalCenteredMultilineText(terminal, WELCOME_TO + "\n" + ERIANTYS + "\nMade by Pietro Mello Rella, Tommaso Montanari and Riccardo Negri\n" + "\nPress enter to continue...");
-        //moveCursorToEnd(cli.getTerminal());
-        client.getLogger().log(Level.INFO, "Debug");
+        moveCursorToEnd(terminal);
         waitEnterPressed();
-        //getMoveToIsland(reader);
         onEnd();
     }
 }

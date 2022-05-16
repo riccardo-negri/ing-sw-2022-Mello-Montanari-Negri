@@ -4,7 +4,6 @@ import it.polimi.ingsw.client.page.AbstractPage;
 import it.polimi.ingsw.client.page.ClientPage;
 import it.polimi.ingsw.client.ui.UI;
 import it.polimi.ingsw.client.ui.cli.CLI;
-import it.polimi.ingsw.client.ui.cli.WelcomePageCLI;
 import it.polimi.ingsw.model.enums.GameMode;
 import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.enums.PlayerNumber;
@@ -21,9 +20,6 @@ import java.util.logging.Logger;
 public class Client {
     private final UI ui;
     private ClientPage nextState;
-    private boolean newState;
-    private WelcomePageCLI temp;
-    private AbstractPage currState;
     public String IPAddress;
     public int port;
     public String username;
@@ -59,7 +55,6 @@ public class Client {
             ((CLI) ui).init();
         }
         nextState = ClientPage.WELCOME_PAGE;
-        newState = true;
 
         LOGGER = Logger.getLogger("MyLog");
         FileHandler fh;
@@ -74,18 +69,11 @@ public class Client {
         } catch (SecurityException | IOException e) {
             e.printStackTrace();
         }
-
-        //TODO cancel
-        //try{ model = Game.request(Game.deserializeGame("./../src/main/java/it/polimi/ingsw/client/serialized_states/s1.json"));
-        //} catch (Exception e) { System.out.println(e.toString()); }
-        //usernames = new ArrayList<>(Arrays.asList("Ric", "Tom", "Pietro", "Sanp"));
-        //IPAddress = "testnet";
-        //port = 1000;
     }
 
     public void start () {
         while (nextState != null) {
-            currState = ui.getState(this, nextState);
+            AbstractPage currState = ui.getState(this, nextState);
             currState.draw(this);   // draw does everything
         }
     }
@@ -98,14 +86,12 @@ public class Client {
         this.nextState = nextState;
     }
 
-    public void setupConnection(){
+    public void setupConnection () {
         GameMode gm = isAdvancedGame ? GameMode.COMPLETE : GameMode.EASY;
         login = new Login(username, PlayerNumber.fromNumber(playerNumber), gm);
         connection = new Connection(IPAddress, port);
         connection.send(login);
         Redirect redirect = (Redirect) connection.waitMessage(Redirect.class);
-        System.out.println("porta");
-        System.out.println(redirect.getPort());
         port = redirect.getPort();
         connection = new Connection(IPAddress, port);
         connection.send(login);
@@ -116,17 +102,14 @@ public class Client {
             FileWriter myWriter = new FileWriter("test.txt");
             myWriter.write(initialState.getState());
             myWriter.close();
-            System.out.println("Successfully wrote to the file.");
         } catch (IOException e) {
-            System.out.println("An error occurred.");
             e.printStackTrace();
         }
-        try{
+        try {
             model = Game.request(Game.deserializeGameFromString(initialState.getState()));
             LOGGER.log(Level.FINE, "Successfully loaded model sent by the server");
-        }
-        catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Couldn't load model sent by the server. Exception: " + e.toString());
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Couldn't load model sent by the server. Exception: " + e);
         }
         usernames = initialState.getUsernames();
     }
@@ -161,10 +144,6 @@ public class Client {
 
     public void setPlayerNumber (int playerNumber) {
         this.playerNumber = playerNumber;
-    }
-
-    public boolean isAdvancedGame () {
-        return isAdvancedGame;
     }
 
     public void setAdvancedGame (boolean advancedGame) {

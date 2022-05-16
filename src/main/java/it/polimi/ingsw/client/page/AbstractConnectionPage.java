@@ -9,11 +9,11 @@ public abstract class AbstractConnectionPage extends AbstractPage {
         super(client);
     }
 
-    public void attemptConnection() {
+    public void attemptConnection () {
 
     }
 
-    public void onEnd(String IP, int port, String username) {
+    public void onEnd (String IP, int port, String username) {
         client.setIPAddress(IP);
         client.setPort(port);
         client.setUsername(username);

@@ -11,21 +11,22 @@ public class LogFormatter extends Formatter {
     @Override
     public String format (LogRecord record) {
         StringBuilder log = new StringBuilder();
-        String s = " ";
+
+        log.append(ansi().fgBrightCyan());
+
+        log.append("[");
+        log.append(calcDate(record.getMillis()));
+        log.append("]");
+
+        log.append(" ");
+        log.append(record.getSourceClassName());
+
+        log.append("\n");
 
         log.append(ansi().fgBrightRed());
         log.append("[");
         log.append(record.getLevel().getName());
-        log.append(s.repeat(9-record.getLevel().getName().length()));
-        log.append("]\t");
-
-        log.append(ansi().fgBrightCyan());
-        log.append("[");
-        log.append(calcDate(record.getMillis()));
-        log.append("]\t");
-        log.append(record.getSourceClassName());
-
-        log.append("\t\t");
+        log.append("] ");
 
         log.append(ansi().fgDefault());
         log.append(record.getMessage());

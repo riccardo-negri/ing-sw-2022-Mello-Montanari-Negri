@@ -64,5 +64,5 @@ public abstract class Character {
 
     public Integer getId() { return characterId; }
 
-    public int getPrize() { return price; }
+    public int getPrize() { return price + (used ? 1 : 0); }
 }

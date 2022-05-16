@@ -235,7 +235,7 @@ public class Game {
     private void calculateWinner() {
         List<Tower> winningTowers = new ArrayList<>();
         int minValue = 8;
-        for (int i=0; i<playerNumber.getTowerNumber(); i++) {
+        for (int i=0; i<playerNumber.getWizardNumber(); i++) {
             int current = wizardList.get(i).getTowerNumber();
             if (current < minValue)
                 winningTowers = new ArrayList<>();

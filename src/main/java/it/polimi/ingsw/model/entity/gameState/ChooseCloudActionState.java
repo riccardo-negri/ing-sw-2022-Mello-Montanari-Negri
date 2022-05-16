@@ -19,7 +19,7 @@ public class ChooseCloudActionState extends ActionState{
     public void chooseCloud(Integer playingWizard, Integer cloudId) throws Exception {
         chooseCloudValidator(playingWizard, cloudId);
         Game game = Game.request(gameId);
-        game.getWizard(playingWizard).getEntranceStudents().addAll(game.getCloud(cloudId).takeStudents());
+        game.getWizard(playingWizard).addEntranceStudents(game.getCloud(cloudId).takeStudents());
         updateGameState();
     }
 

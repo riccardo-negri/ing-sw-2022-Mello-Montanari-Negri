@@ -33,10 +33,12 @@ public class Professor {
     }
 
     public Wizard getMaster(Character activatedCharacter) {
-        if (activatedCharacter instanceof CharacterTwo &&
-                activatedCharacter.getActivator().getDiningStudents(color) >= Game.request(gameId).getWizard(master).getDiningStudents(color))
-            return activatedCharacter.getActivator();
-        else return Game.request(gameId).getWizard(master);
+        if (activatedCharacter instanceof CharacterTwo) {
+            if (master == null) return activatedCharacter.getActivator();
+            else if (activatedCharacter.getActivator().getDiningStudents(color) >= Game.request(gameId).getWizard(master).getDiningStudents(color))
+                return activatedCharacter.getActivator();
+        }
+        return Game.request(gameId).getWizard(master);
     }
 
 }

@@ -165,9 +165,11 @@ public class Game {
         if (gameEntities == null) gameEntities = new ArrayList<>();
 
         Game newGame = JsonDeserializerClass.getGson().fromJson(string, Game.class);
-
+        Game.gameEntities.add(newGame);
         newGame.id = idCount++;
+
         Arrays.stream(newGame.professors).forEach(x -> x.refreshGameId(newGame));
+
         if (newGame.characters != null) {
             for (Character c : newGame.characters) {
                 c.refreshGameId(newGame);
@@ -180,7 +182,6 @@ public class Game {
 
         newGame.cloudList.forEach(x -> x.setBag(newGame.bag));
 
-        Game.gameEntities.add(newGame);
         return newGame.id;
     }
 

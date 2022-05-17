@@ -42,13 +42,13 @@ public class IslandGroup {
                 values[i] = 0;
             }
 
-            if (activatedCharacter instanceof CharacterEight) values[activatedCharacter.getActivator().getTowerColor().getValue()] += 2;
+            if (activatedCharacter != null && activatedCharacter.getId() == 8) values[activatedCharacter.getActivator().getTowerColor().getValue()] += 2;
 
-            if (tower != null && !(activatedCharacter instanceof CharacterSix)) values[tower.getValue()] += islandList.size();
+            if (tower != null && !(activatedCharacter != null && activatedCharacter.getId() == 6)) values[tower.getValue()] += islandList.size();
 
             for (StudentColor color : StudentColor.values()) {
                 Wizard w;
-                if ((!(activatedCharacter instanceof CharacterNine) || ((CharacterNine) activatedCharacter).getStudentColor() != color)
+                if ((!(activatedCharacter != null && activatedCharacter.getId() == 9) || ((CharacterNine) activatedCharacter).getStudentColor() != color)
                         && (w = game.getProfessor(color).getMaster(activatedCharacter)) != null) {
                     values[w.getTowerColor().getValue()] += (int) islandList.stream()
                             .flatMap(x -> x.getStudentColorList().stream())
@@ -56,9 +56,9 @@ public class IslandGroup {
                 }
             }
 
-            for (int i = 0; i < values.length; i++) {
+            for (int i = 0; i < game.getPlayerNumber().getWizardNumber(); i++) {
                 boolean max = true;
-                for (int j = 0; j < values.length; j++) {
+                for (int j = 0; j < game.getPlayerNumber().getWizardNumber(); j++) {
                     if (i != j && values[i] <= values[j]) {
                         max = false;
                         break;

@@ -33,7 +33,7 @@ public class Professor {
     }
 
     public Wizard getMaster(Character activatedCharacter) {
-        if (activatedCharacter instanceof CharacterTwo) {
+        if (activatedCharacter != null && activatedCharacter.getId() == 2) {
             if (master == null) return activatedCharacter.getActivator();
             else if (activatedCharacter.getActivator().getDiningStudents(color) >= Game.request(gameId).getWizard(master).getDiningStudents(color))
                 return activatedCharacter.getActivator();

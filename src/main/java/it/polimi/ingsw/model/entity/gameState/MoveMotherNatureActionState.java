@@ -33,7 +33,7 @@ public class MoveMotherNatureActionState extends ActionState {
      * @throws Exception wrong player, phase or too many steps asked
      */
     public void moveMotherNatureValidator(Integer playingWizard, Integer steps) throws Exception {
-        if (playingWizard != playerOrder.get(currentlyPlaying)) throw new Exception("Wrong player");
+        if (!Objects.equals(playingWizard, playerOrder.get(currentlyPlaying))) throw new Exception("Wrong player");
         if (!Objects.equals(gameState, "MMNS")) throw new Exception("Wrong game phase");
         if (steps > getMaximumSteps(playingWizard)) throw new Exception("Too many steps");
     }
@@ -45,7 +45,7 @@ public class MoveMotherNatureActionState extends ActionState {
      */
     public int getMaximumSteps(Integer playingWizard) {
         int maximumSteps = Game.request(gameId).getWizard(playingWizard).getCardDeck().getCurrentCard().getSteps();
-        maximumSteps += activatedCharacter instanceof CharacterFour ? 2 : 0;
+        maximumSteps += activatedCharacter != null && activatedCharacter.getId() == 4 ? 2 : 0;
         return maximumSteps;
     }
 

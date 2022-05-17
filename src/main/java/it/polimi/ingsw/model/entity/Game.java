@@ -345,4 +345,8 @@ public class Game {
     public Character[] getCharacters () {
         return characters;
     }
+
+    public Tower getWinner () {
+        return winner;
+    }
 }

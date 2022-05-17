@@ -36,6 +36,7 @@ public class CLI implements UI {
             case GAME_MODE_SELECTION_PAGE -> new GameModeSelectionPageCLI(client);
             case MATCHMAKING_PAGE -> new MatchmakingPageCLI(client);
             case BOARD_PAGE -> new BoardPageCLI(client);
+            case END_PAGE -> new EndPageCLI(client);
         };
     }
 
@@ -47,7 +48,4 @@ public class CLI implements UI {
         return commandsHistory;
     }
 
-    public void setTerminal (Terminal terminal) {
-        this.terminal = terminal;
-    }
 }

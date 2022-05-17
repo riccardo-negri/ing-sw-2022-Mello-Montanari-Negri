@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.entity.characters;
 
 import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Bag;
+import it.polimi.ingsw.model.entity.Professor;
 import it.polimi.ingsw.model.enums.StudentColor;
 import it.polimi.ingsw.model.enums.Tower;
 
@@ -29,6 +30,8 @@ public class CharacterEleven extends Character{
         studentColorList.remove(studentColor);
         Game.request(gameId).getWizard(playingWizard).putDiningStudent(studentColor);
         studentColorList.addAll(bag.requestStudents(1));
+        for (StudentColor c : StudentColor.values())
+            Game.request(gameId).getProfessor(c).refreshMaster(playingWizard);
     }
 
     /**

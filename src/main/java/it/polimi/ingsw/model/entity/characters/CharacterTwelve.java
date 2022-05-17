@@ -19,7 +19,7 @@ public class CharacterTwelve extends Character{
     public void useEffect(Integer playingWizard, StudentColor studentColor) throws Exception {
         characterTwelveValidator(playingWizard);
         useCard(playingWizard);
-        for (int i=0; i<Game.request(gameId).getPlayerNumber().getTowerNumber(); i++)
+        for (int i=0; i<Game.request(gameId).getPlayerNumber().getWizardNumber(); i++)
             for(int j=0; j<3; j++)
                 Game.request(gameId).getWizard(i).takeDiningStudent(studentColor);
     }

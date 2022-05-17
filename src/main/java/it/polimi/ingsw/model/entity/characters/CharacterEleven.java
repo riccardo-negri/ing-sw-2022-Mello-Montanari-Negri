@@ -9,7 +9,7 @@ import java.util.List;
 
 public class CharacterEleven extends Character{
 
-    private final transient Bag bag;
+    private transient Bag bag;
     private final List<StudentColor> studentColorList;
 
     public CharacterEleven(Integer gameId, Integer characterId, Bag bag) {
@@ -42,6 +42,8 @@ public class CharacterEleven extends Character{
         characterValidator(playingWizard);
         if (!studentColorList.contains(studentColor)) throw new Exception("Student color not present on the card");
     }
+
+    public void refreshBag (Bag bag) { this.bag = bag; }
 
     public List<StudentColor> getStudentColorList() { return studentColorList; }
 }

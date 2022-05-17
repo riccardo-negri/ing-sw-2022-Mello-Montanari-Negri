@@ -2,6 +2,8 @@ package it.polimi.ingsw.model.entity;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import it.polimi.ingsw.model.entity.characters.CharacterEleven;
+import it.polimi.ingsw.model.entity.characters.CharacterOne;
 import it.polimi.ingsw.model.enums.*;
 import it.polimi.ingsw.model.entity.characters.Character;
 import it.polimi.ingsw.model.entity.gameState.GameState;
@@ -166,7 +168,14 @@ public class Game {
 
         newGame.id = idCount++;
         Arrays.stream(newGame.professors).forEach(x -> x.refreshGameId(newGame));
-        if (newGame.characters != null) Arrays.stream(newGame.characters).forEach(x -> x.refreshGameId(newGame));
+        if (newGame.characters != null) {
+            for (Character c : newGame.characters) {
+                c.refreshGameId(newGame);
+                if (c.getId() == 1) ((CharacterOne) c).refreshBag(newGame.bag);
+                else if (c.getId() == 11) ((CharacterEleven) c).refreshBag(newGame.bag);
+            }
+        }
+
         newGame.gameState.refreshGameId(newGame);
 
         newGame.cloudList.forEach(x -> x.setBag(newGame.bag));

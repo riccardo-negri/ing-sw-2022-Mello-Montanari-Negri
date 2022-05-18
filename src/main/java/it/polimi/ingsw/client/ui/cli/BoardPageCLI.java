@@ -12,6 +12,7 @@ import it.polimi.ingsw.utils.moves.Move;
 import org.jline.reader.UserInterruptException;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -23,6 +24,7 @@ import static org.fusesource.jansi.Ansi.ansi;
 
 public class BoardPageCLI extends AbstractBoardPage {
     private String lastWarning;
+    private Integer lastHelper;
     volatile List<String> moveFromStdin = new ArrayList<>();
 
     public BoardPageCLI (Client client) {
@@ -36,12 +38,22 @@ public class BoardPageCLI extends AbstractBoardPage {
     public void draw (Client client) {
 
         while (!client.getModel().isGameEnded() && client.getNextState() == ClientPage.BOARD_PAGE) { //TODO refactor
-            drawGameAndConsole();
+            try {
+                drawGameAndConsole();
+            } catch (ConcurrentModificationException e) {
+                LOGGER.log(Level.WARNING, new StringBuilder().append("Got a ConcurrentModificationException while trying to draw the CLI: ").append(e).toString());
+                drawGameAndConsole(); //TODO understand if there's a nicer way to handle this
+            }
+
             if (lastWarning != null) {
                 printConsoleWarning(terminal, lastWarning);
                 lastWarning = null;
             }
-            LOGGER.log(Level.FINE, "Drew game board and console area");
+            if(lastHelper != null) {
+                printCharacterHelper(terminal, lastHelper);
+                lastHelper = null;
+            }
+            LOGGER.log(Level.INFO, "Drew game board and console area");
 
             if (model.getGameState().getCurrentPlayer() == client.getUsernames().indexOf(client.getUsername())) { // enter if it's your turn
 
@@ -49,10 +61,13 @@ public class BoardPageCLI extends AbstractBoardPage {
                 waitForMoveOrMessage();
 
                 if (moveFromStdin.size() != 0) { // a move has have been read
-                    LOGGER.log(Level.FINE, "Processing input move: " + moveFromStdin + " Game state: " + model.getGameState().getGameStateName());
+                    LOGGER.log(Level.INFO, "Processing input move: " + moveFromStdin + " Game state: " + model.getGameState().getGameStateName());
                     try {
-                        if (moveFromStdin.get(0).contains("character")) {
+                        if (moveFromStdin.get(0).contains("use-character")) {
                             parseAndDoCharacterMove(moveFromStdin.get(0));
+                        }
+                        else if (moveFromStdin.get(0).contains("character-info")) {
+                            lastHelper = Integer.parseInt(moveFromStdin.get(0).split("-")[2].strip());
                         }
                         else {
                             switch (model.getGameState().getGameStateName()) {
@@ -60,11 +75,14 @@ public class BoardPageCLI extends AbstractBoardPage {
                                 case "MSS" -> doStudentMovement(getStudentColorFromString(moveFromStdin.get(0).split(" ")[1]), moveFromStdin.get(0).split(" ")[3]);
                                 case "MMNS" -> doMotherNatureMovement(Integer.parseInt(moveFromStdin.get(0).split(" ")[2]));
                                 case "CCS" -> doCloudChoice(Integer.parseInt(moveFromStdin.get(0).split(" ")[1]));
+                                default -> {}
                             }
                         }
                     } catch (Exception e) {
                         LOGGER.log(Level.WARNING, "Got an invalid move (that passed regex check), asking for it again. Exception: " + e);
                         lastWarning = "Please type a valid command. " + e.getMessage();
+                        e.printStackTrace();
+                        waitEnterPressed(terminal);
                     }
                 }
                 else { // no move was made, so it's a message about some disconnection events
@@ -79,7 +97,9 @@ public class BoardPageCLI extends AbstractBoardPage {
                     try {
                         applyOtherPlayersMove((Move) message);
                     } catch (Exception e) {
+                        LOGGER.log(Level.WARNING, "Got an invalid move from the server. Exception: " + e);
                         e.printStackTrace();
+                        waitEnterPressed(terminal);
                     }
                 }
                 else {
@@ -89,19 +109,22 @@ public class BoardPageCLI extends AbstractBoardPage {
         }
 
         LOGGER.log(Level.FINE, "Game finished because someone won or surrendered");
-        onEnd();
+        if (client.getNextState() == ClientPage.BOARD_PAGE) onEnd(false);
     }
 
     private void handleMessageNotMoveAndPrintStatus (Message message) {
-        if (message instanceof Disconnected) { //TODO see if there's a smarter way to rejoin the game
+        if (message instanceof Disconnected) {
             printConsoleWarning(terminal, "You got disconnected from the game, rejoin the game with the same username. Press enter to continue...");
-            waitEnterPressed();
-            onEnd();
+            waitEnterPressed(terminal);
+            onEnd(true);
         }
-        else if (message instanceof UserDisconnected) { //TODO make the game not stop immediately, but only when the turn of the one who disconnected starts. Also todo the case in which multiple people disconnect
-            printConsoleWarning(terminal, "Player " + ((UserDisconnected) message).getUsername() + " disconnected from the game. Waiting for him to reconnect...");
-            Message reconnected = client.getConnection().waitMessage(UserReconnected.class);
-            lastWarning = "Player " + ((UserReconnected) reconnected).getUsername() + " reconnected to the game. Now you can keep playing";
+        else if (message instanceof UserDisconnected) {
+            lastWarning = "Player " + ((UserDisconnected) message).getUsername() + " disconnected from the game.";
+            client.getUsernamesDisconnected().add(((UserDisconnected) message).getUsername());
+        }
+        else if (message instanceof UserReconnected) {
+            lastWarning = "Player " + ((UserReconnected) message).getUsername() + " reconnected to the game.";
+            client.getUsernamesDisconnected().remove(((UserReconnected) message).getUsername());
         }
         else {
             lastWarning = "Received an unsupported message...";
@@ -157,31 +180,27 @@ public class BoardPageCLI extends AbstractBoardPage {
                 }
                 parameters.add(temp2);
             }
+            default -> {}
         }
         doCharacterMove(ID, parameters);
     }
 
     private void askForMoveBasedOnState () {
         switch (model.getGameState().getGameStateName()) {
-
-            case "PS" -> getMovePlayAssistant(terminal, commandsHistory, client.getUsername(), moveFromStdin);
-
+            case "PS" -> getMovePlayAssistant(terminal, commandsHistory, client.getUsername(), getCharactersID(), moveFromStdin);
             case "MSS" -> getMoveStudentToIsland(terminal, commandsHistory, client.getUsername(), getCharactersID(), moveFromStdin);
-
             case "MMNS" -> getMoveMotherNature(terminal, commandsHistory, client.getUsername(), getCharactersID(), moveFromStdin);
-
             case "CCS" -> getMoveSelectCloud(terminal, commandsHistory, client.getUsername(), getCharactersID(), moveFromStdin);
+            default -> {}
         }
     }
 
     private void waitForMoveOrMessage () {
         Thread t = new Thread(() -> {
             try {
-                LOGGER.log(Level.SEVERE, "Thread: starting to read from stdin");
                 askForMoveBasedOnState();
 
             } catch (UserInterruptException e) {
-                LOGGER.log(Level.SEVERE, "Thread: Got interrupted signal in thread");
                 LOGGER.log(Level.SEVERE, e.toString());
             }
         });
@@ -189,7 +208,6 @@ public class BoardPageCLI extends AbstractBoardPage {
         client.getConnection().bindFunction(
                 (Connection c) -> {
                     t.interrupt();
-                    LOGGER.log(Level.SEVERE, "Sent interrupted signal to thread");
                     return false;
                 }
         );
@@ -199,7 +217,6 @@ public class BoardPageCLI extends AbstractBoardPage {
         try {
             t.join();
         } catch (InterruptedException e) {
-            LOGGER.log(Level.SEVERE, "Got InterruptedException while waiting for thread to join");
             throw new RuntimeException(e);
         }
     }
@@ -337,7 +354,8 @@ public class BoardPageCLI extends AbstractBoardPage {
                 baseCol + 157,
                 model,
                 client.getUsernames(),
-                client.getUsername()
+                client.getUsername(),
+                client.getUsernamesDisconnected()
         );
 
         drawConsoleArea(

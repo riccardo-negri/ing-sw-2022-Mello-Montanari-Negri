@@ -3,14 +3,16 @@ package it.polimi.ingsw.client.page;
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.enums.StudentColor;
-import it.polimi.ingsw.utils.Disconnected;
 import it.polimi.ingsw.utils.moves.*;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
-import static it.polimi.ingsw.client.page.ClientPage.WELCOME_PAGE;
+import static it.polimi.ingsw.client.page.ClientPage.CONNECTION_PAGE;
+import static it.polimi.ingsw.client.page.ClientPage.END_PAGE;
 
 public abstract class AbstractBoardPage extends AbstractPage {
 
@@ -108,35 +110,47 @@ public abstract class AbstractBoardPage extends AbstractPage {
     }
 
     public void applyOtherPlayersMove (Move move) throws Exception {
+        savePreviousState();
+
+        LOGGER.log(Level.INFO, "Applying effects of the move just received. Move:" + move.toString());
         move.applyEffectClient(client.getModel());
     }
 
     private void validateAndSendMove (Move moveToSend) throws Exception {
-        LOGGER.log(Level.FINEST, "Validating message. Move:" + moveToSend.toString());
+        savePreviousState();
+
+        LOGGER.log(Level.INFO, "Validating message. Move:" + moveToSend.toString());
         moveToSend.validate(client.getModel()); // may throw exception
 
-        LOGGER.log(Level.FINEST, "Sending message after validation. Move:" + moveToSend.toString());
+        LOGGER.log(Level.INFO, "Sending message after validation. Move:" + moveToSend.toString());
         client.getConnection().send(moveToSend);
 
-        LOGGER.log(Level.FINEST, "Waiting for message to come back. Move:" + moveToSend.toString());
+        LOGGER.log(Level.INFO, "Waiting for message to come back. Move:" + moveToSend.toString());
         Move moveToApply = (Move) client.getConnection().waitMessage(Move.class);
 
-        LOGGER.log(Level.FINEST, "Applying effects of message. Move:" + moveToSend.toString());
+        LOGGER.log(Level.INFO, "Applying effects of message. Move:" + moveToSend.toString());
         moveToApply.applyEffectClient(client.getModel());
 
-        LOGGER.log(Level.FINEST, "Applied effect of message. Move:" + moveToSend.toString());
+        LOGGER.log(Level.INFO, "Applied effect of message. Move:" + moveToSend.toString());
     }
 
-    public Class waitAndHandleMessage () {
-        return Disconnected.class;
-
+    private void savePreviousState () {
+        LOGGER.log(Level.INFO, "Saved state to file state.txt");
+        try {
+            FileWriter myWriter = new FileWriter("state_" + client.getUsername() + ".txt");
+            myWriter.write(model.serializeGame());
+            myWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void doDiningRoomMovement () {
-
-    }
-
-    public void onEnd () {
-        client.setNextState(WELCOME_PAGE);
+    public void onEnd (boolean gotDisconnected) {
+        if (gotDisconnected) {
+            client.setNextState(CONNECTION_PAGE);
+        }
+        else {
+            client.setNextState(END_PAGE);
+        }
     }
 }

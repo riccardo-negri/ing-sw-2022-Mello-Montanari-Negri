@@ -31,11 +31,14 @@ public class CLI implements UI {
     public AbstractPage getState (Client client, ClientPage nextState) {
         return switch (nextState) {
             case WELCOME_PAGE -> new WelcomePageCLI(client);
-            case START_PAGE -> new StartPageCLI(client);
+            case MENU_PAGE -> new MenuPageCLI(client);
+            case STORYLINE_PAGE -> new StorylinePageCLI(client);
+            case CREDITS_PAGE -> new CreditsPageCLI(client);
             case CONNECTION_PAGE -> new ConnectionPageCLI(client);
             case GAME_MODE_SELECTION_PAGE -> new GameModeSelectionPageCLI(client);
             case MATCHMAKING_PAGE -> new MatchmakingPageCLI(client);
             case BOARD_PAGE -> new BoardPageCLI(client);
+            case END_PAGE -> new EndPageCLI(client);
         };
     }
 
@@ -47,7 +50,4 @@ public class CLI implements UI {
         return commandsHistory;
     }
 
-    public void setTerminal (Terminal terminal) {
-        this.terminal = terminal;
-    }
 }

@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.entity.characters;
 
 import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Bag;
+import it.polimi.ingsw.model.entity.Professor;
 import it.polimi.ingsw.model.enums.StudentColor;
 import it.polimi.ingsw.model.enums.Tower;
 
@@ -9,7 +10,7 @@ import java.util.List;
 
 public class CharacterEleven extends Character{
 
-    private final transient Bag bag;
+    private transient Bag bag;
     private final List<StudentColor> studentColorList;
 
     public CharacterEleven(Integer gameId, Integer characterId, Bag bag) {
@@ -29,6 +30,8 @@ public class CharacterEleven extends Character{
         studentColorList.remove(studentColor);
         Game.request(gameId).getWizard(playingWizard).putDiningStudent(studentColor);
         studentColorList.addAll(bag.requestStudents(1));
+        for (StudentColor c : StudentColor.values())
+            Game.request(gameId).getProfessor(c).refreshMaster(playingWizard);
     }
 
     /**
@@ -42,6 +45,8 @@ public class CharacterEleven extends Character{
         characterValidator(playingWizard);
         if (!studentColorList.contains(studentColor)) throw new Exception("Student color not present on the card");
     }
+
+    public void refreshBag (Bag bag) { this.bag = bag; }
 
     public List<StudentColor> getStudentColorList() { return studentColorList; }
 }

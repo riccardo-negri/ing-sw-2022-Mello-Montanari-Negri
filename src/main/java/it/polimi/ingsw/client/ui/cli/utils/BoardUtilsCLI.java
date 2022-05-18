@@ -75,6 +75,29 @@ public class BoardUtilsCLI {
         terminal.writer().flush();
     }
 
+    public static void printCharacterHelper(Terminal terminal, int characterID) {
+        String help;
+        help = "Character " + characterID + " description: ";
+        switch (characterID) {
+            case 1 -> help += CharactersDescription.CHARACTER_1;
+            case 2 -> help += CharactersDescription.CHARACTER_2;
+            case 3 -> help += CharactersDescription.CHARACTER_3;
+            case 4 -> help += CharactersDescription.CHARACTER_4;
+            case 5 -> help += CharactersDescription.CHARACTER_5;
+            case 6 -> help += CharactersDescription.CHARACTER_6;
+            case 7 -> help += CharactersDescription.CHARACTER_7;
+            case 8 -> help += CharactersDescription.CHARACTER_8;
+            case 9 -> help += CharactersDescription.CHARACTER_9;
+            case 10 -> help += CharactersDescription.CHARACTER_10;
+            case 11 -> help += CharactersDescription.CHARACTER_11;
+            case 12 -> help += CharactersDescription.CHARACTER_12;
+            default -> help = "";
+        }
+        help += "\n";
+        terminal.writer().print(ansi().fgGreen().a(help).fgDefault());
+        terminal.writer().flush();
+    }
+
     private static int getSchoolBoardWidth () {
         return 19;
     }
@@ -135,8 +158,8 @@ public class BoardUtilsCLI {
         terminal.writer().println(ansi().cursor(baseRow, baseCol).a(R1));
         terminal.writer().println(ansi().cursor(baseRow + 1, baseCol).a(R2));
         terminal.writer().println(ansi().cursor(baseRow + 2, baseCol).a(
-                MessageFormat.format(R3, (hasMotherNature ? ansi().fgRgb(255, 128, 0).a(String.format("%02d", ID)) + "" + ansi().fgDefault().bgDefault().a("") : String.format("%02d", ID)))
-        ));
+                MessageFormat.format(R3, String.format("%02d", ID)))
+        );
         terminal.writer().println(ansi().cursor(baseRow + 3, baseCol).a(R4));
         terminal.writer().println(ansi().cursor(baseRow + 4, baseCol).a(
                 MessageFormat.format(R5,
@@ -158,6 +181,21 @@ public class BoardUtilsCLI {
         ));
         terminal.writer().println(ansi().cursor(baseRow + 8, baseCol).a(R9));
 
+        if(hasMotherNature) {
+            final String R1_M = "_________\n";
+            final String R2_M = "/";
+            final String R3_M = "\\";
+            final String R4_M = "\\_________/\n";
+            terminal.writer().println(ansi().fgRgb(255,128,0).cursor(baseRow, baseCol+4).a(R1_M));
+            terminal.writer().println(ansi().cursor(baseRow+1, baseCol+3).a(R2_M).cursor(baseRow+1, baseCol+13).a(R3_M));
+            terminal.writer().println(ansi().cursor(baseRow+2, baseCol+2).a(R2_M).cursor(baseRow+2, baseCol+14).a(R3_M));
+            terminal.writer().println(ansi().cursor(baseRow+3, baseCol+1).a(R2_M).cursor(baseRow+3, baseCol+15).a(R3_M));
+            terminal.writer().println(ansi().cursor(baseRow+4, baseCol).a(R2_M).cursor(baseRow+4, baseCol+16).a(R3_M));
+            terminal.writer().println(ansi().cursor(baseRow+5, baseCol).a(R3_M).cursor(baseRow+5, baseCol+16).a(R2_M));
+            terminal.writer().println(ansi().cursor(baseRow+6, baseCol+1).a(R3_M).cursor(baseRow+6, baseCol+15).a(R2_M));
+            terminal.writer().println(ansi().cursor(baseRow+7, baseCol+2).a(R3_M).cursor(baseRow+7, baseCol+14).a(R2_M));
+            terminal.writer().println(ansi().cursor(baseRow+8, baseCol+3).a(R4_M).fgDefault());
+        }
         if (hasNoEntryTile) {
             terminal.writer().print(ansi().cursor(baseRow + 1, baseCol + 8).fgRgb(255, 0, 0).a("Ø").fgDefault());
         }
@@ -366,9 +404,9 @@ public class BoardUtilsCLI {
 
     }
 
-    private static void drawSinglePlayerArea (Terminal terminal, int baseRow, int baseCol, String playerName, String playedCard, int coins, int playedCharacter, String towerColor, int towerNumber, boolean[] professors, int[] diningColors, int[] entranceColors) {
+    private static void drawSinglePlayerArea (Terminal terminal, int baseRow, int baseCol, String playerName, String playedCard, int coins, int playedCharacter, String towerColor, int towerNumber, boolean[] professors, int[] diningColors, int[] entranceColors, boolean isDisconnected) {
         drawSchoolBoard(terminal, baseRow, baseCol, towerColor, towerNumber, professors, diningColors, entranceColors);
-        terminal.writer().println(ansi().cursor(baseRow + 1, baseCol + getSchoolBoardWidth() + 2).fgRgb(255, 128, 0).a(playerName).fgDefault());
+        terminal.writer().println(ansi().cursor(baseRow + 1, baseCol + getSchoolBoardWidth() + 2).fgRgb(255, 128, 0).a(playerName).fgRgb(255, 0, 0).a(isDisconnected ? " offline" : "").fgDefault());
         terminal.writer().print(ansi().cursor(baseRow + 3, baseCol + getSchoolBoardWidth() + 2).a("Assistant: " + playedCard));
         terminal.writer().print(ansi().cursor(baseRow + 4, baseCol + getSchoolBoardWidth() + 2).a("Coins: ").fgRgb(218, 165, 32).a(coins).fgDefault());
         if (playedCharacter != -1) {
@@ -376,7 +414,7 @@ public class BoardUtilsCLI {
         }
     }
 
-    public static void drawPlayerBoards (Terminal terminal, int baseRow, int baseCol, Game model, ArrayList<String> usernames, String username) {
+    public static void drawPlayerBoards (Terminal terminal, int baseRow, int baseCol, Game model, ArrayList<String> usernames, String username, ArrayList<String> disconnectedUsernames) {
         HashMap<Integer, List<Integer>> relativePlacementOfPlayerBoardsBasedOnID = new HashMap<>(); // first int of list is row offset, second int is column offset
         relativePlacementOfPlayerBoardsBasedOnID.put(0, List.of(0, 0));
         relativePlacementOfPlayerBoardsBasedOnID.put(1, List.of(getSchoolBoardHeight() + 2, 0));
@@ -414,7 +452,9 @@ public class BoardUtilsCLI {
                             (int) w.getEntranceStudents().stream().filter(s -> s.getValue().equals(0)).count(), // yellow
                             (int) w.getEntranceStudents().stream().filter(s -> s.getValue().equals(4)).count(), // pink
                             (int) w.getEntranceStudents().stream().filter(s -> s.getValue().equals(1)).count(), // blue
-                    });
+                    },
+                    disconnectedUsernames.contains(usernames.get(i))
+            );
         }
     }
 
@@ -437,6 +477,9 @@ public class BoardUtilsCLI {
     }
 
     private static void drawGameStatusSection (Terminal terminal, int baseRow, int baseCol, int round, String currPlayer, String currPhase) {
+        if (currPlayer.length() > 11) {
+            currPlayer = currPlayer.substring(0, 11);
+        }
         terminal.writer().println(ansi().cursor(baseRow, baseCol).a(InfoR1));
         terminal.writer().println(ansi().cursor(baseRow + 1, baseCol).a(InfoR3));
         terminal.writer().println(ansi().cursor(baseRow + 2, baseCol).a(

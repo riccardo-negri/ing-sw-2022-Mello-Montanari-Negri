@@ -2,7 +2,6 @@ package it.polimi.ingsw.client.ui.cli;
 
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.page.AbstractGameModeSelectionPage;
-import org.jline.terminal.Terminal;
 
 import static it.polimi.ingsw.client.ui.cli.utils.CoreUtilsCLI.*;
 
@@ -26,10 +25,10 @@ public class GameModeSelectionPageCLI extends AbstractGameModeSelectionPage {
         printTerminalCenteredMultilineText(terminal, GAME_MODE, 5);
         printEmptyLine(terminal);
         int playersNumber = readNumber(terminal, "Please select the number of players (min 2 players, max 4 players) (default is 2):", 2, 4, 2);
-        boolean isAdvancedGame = readBoolean(terminal, "Do you want to play the advanced game rules (y or n)? (default is y)", true);
+        boolean isAdvancedGame = readBoolean(terminal, "Do you want to play the advanced game rules (y or n)? (default is y):", true);
         printEmptyLine(terminal);
         printTerminalCenteredLine(terminal, "Press enter to join the matchmaking queue...");
-        waitEnterPressed();
+        waitEnterPressed(terminal);
         onEnd(playersNumber, isAdvancedGame);
     }
 }

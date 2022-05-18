@@ -42,9 +42,10 @@ public class ReadMoveUtilsCLI {
         return reader.readLine(String.valueOf(ansi().fgRgb(255, 128, 0).a(username).fgDefault().a(":").fgBlue().a("~").fgGreen().a("$ ").fgDefault()));
     }
 
-    private static String askAndCheckMove (Terminal terminal, History history, Completer completer, String username, Pattern pattern, boolean madeIllegalMove) {
+    private static String askAndCheckMove (Terminal terminal, History history, Completer completer, String username, Pattern pattern) {
         Matcher matcher;
         String move;
+        boolean madeIllegalMove = false;
 
         do {
             if (madeIllegalMove) {
@@ -59,7 +60,16 @@ public class ReadMoveUtilsCLI {
         return move;
     }
 
-    private static AggregateCompleter decorateWithCharacterMove (int[] characters, ArgumentCompleter completer) {
+    private static AggregateCompleter decorateWithCharacterHelper (int[] characters, ArgumentCompleter completer) {
+        if (characters.length == 0) {
+            return new AggregateCompleter(completer);
+        }
+        return new AggregateCompleter(
+                completer,
+                characterHelper(characters)
+        );
+    }
+    private static AggregateCompleter decorateWithCharacterMoveAndHelper (int[] characters, ArgumentCompleter completer) {
         if (characters.length == 0) {
             return new AggregateCompleter(completer);
         }
@@ -67,7 +77,8 @@ public class ReadMoveUtilsCLI {
                 completer,
                 characterCompleter(characters[0]),
                 characterCompleter(characters[1]),
-                characterCompleter(characters[2])
+                characterCompleter(characters[2]),
+                characterHelper(characters)
         );
     }
 
@@ -177,7 +188,24 @@ public class ReadMoveUtilsCLI {
         };
     }
 
-    private static String decorateWithCharacterRegex (int[] characters, String regex) {
+    private static ArgumentCompleter characterHelper (int[] ids) {
+        return new ArgumentCompleter(
+                new StringsCompleter("character-info"),
+                new Completers.OptionCompleter(Arrays.asList(
+                        new StringsCompleter("character-" + ids[0], "character-" + ids[1], "character-" + ids[2]),
+                        NullCompleter.INSTANCE),
+                        JlineCommandRegistry.compileCommandOptions(""), 1));
+    }
+
+    private static String decorateWithHelperRegex (int[] characters, String regex) {
+        if (characters.length != 0) {
+            for (int character : characters) {
+                regex += "|" + Regex.HELPER_CHARACTER_START + character + Regex.HELPER_CHARACTER_END;
+            }
+        }
+        return regex;
+    }
+    private static String decorateWithUseCharacterAndHelperRegex (int[] characters, String regex) {
         if (characters.length == 0) {
             return regex;
         }
@@ -201,15 +229,11 @@ public class ReadMoveUtilsCLI {
             case 11 -> Regex.USE_CHARACTER_11;
             case 12 -> Regex.USE_CHARACTER_12;
             default -> null;
-        };
+        } + "|" + Regex.HELPER_CHARACTER_START + id + Regex.HELPER_CHARACTER_END;
     }
 
     public static void getMoveStudentToIsland (Terminal terminal, History history, String username, int[] characters, List<String> list) {
-        getMoveStudentToIsland(terminal, history, username, characters, list, false);
-    }
-
-    public static void getMoveStudentToIsland (Terminal terminal, History history, String username, int[] characters, List<String> list, boolean madeIllegalMove) {
-        AggregateCompleter completer = decorateWithCharacterMove(characters, new ArgumentCompleter(
+        AggregateCompleter completer = decorateWithCharacterMoveAndHelper(characters, new ArgumentCompleter(
                 new StringsCompleter("move-student"),
                 new Completers.OptionCompleter(Arrays.asList(
                         new StringsCompleter("green", "red", "yellow", "pink", "blue"),
@@ -217,64 +241,52 @@ public class ReadMoveUtilsCLI {
                         new StringsCompleter("dining-room", "island-1", "island-2", "island-3", "island-4", "island-5", "island-6", "island-7", "island-8", "island-9", "island-10", "island-11", "island-0"), NullCompleter.INSTANCE),
                         JlineCommandRegistry.compileCommandOptions(""), 1)
         ));
-        Pattern pattern = Pattern.compile(decorateWithCharacterRegex(characters, Regex.MOVE_STUDENT), Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile(decorateWithUseCharacterAndHelperRegex(characters, Regex.MOVE_STUDENT), Pattern.CASE_INSENSITIVE);
 
-        String move = askAndCheckMove(terminal, history, completer, username, pattern, madeIllegalMove);
+        String move = askAndCheckMove(terminal, history, completer, username, pattern);
 
         list.add(move);
     }
 
     public static void getMoveMotherNature (Terminal terminal, History history, String username, int[] characters, List<String> list) {
-        getMoveMotherNature(terminal, history, username, characters, list, false);
-    }
-
-    public static void getMoveMotherNature (Terminal terminal, History history, String username, int[] characters, List<String> list, boolean madeIllegalMove) {
-        AggregateCompleter completer = decorateWithCharacterMove(characters, new ArgumentCompleter(
+        AggregateCompleter completer = decorateWithCharacterMoveAndHelper(characters, new ArgumentCompleter(
                 new StringsCompleter("move-mother-nature"),
                 new Completers.OptionCompleter(Arrays.asList(
                         new StringsCompleter("steps"),
                         new StringsCompleter("1", "2", "3", "4", "5"), NullCompleter.INSTANCE),
                         JlineCommandRegistry.compileCommandOptions(""), 1)
         ));
-        Pattern pattern = Pattern.compile(decorateWithCharacterRegex(characters, Regex.MOVE_MOTHER_NATURE), Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile(decorateWithUseCharacterAndHelperRegex(characters, Regex.MOVE_MOTHER_NATURE), Pattern.CASE_INSENSITIVE);
 
-        String move = askAndCheckMove(terminal, history, completer, username, pattern, madeIllegalMove);
+        String move = askAndCheckMove(terminal, history, completer, username, pattern);
 
         list.add(move);
     }
 
     public static void getMoveSelectCloud (Terminal terminal, History history, String username, int[] characters, List<String> list) {
-        getMoveSelectCloud(terminal, history, username, characters, list, false);
-    }
-
-    public static void getMoveSelectCloud (Terminal terminal, History history, String username, int[] characters, List<String> list, boolean madeIllegalMove) {
-        AggregateCompleter completer = decorateWithCharacterMove(characters, new ArgumentCompleter(
+        AggregateCompleter completer = decorateWithCharacterMoveAndHelper(characters, new ArgumentCompleter(
                 new StringsCompleter("select-cloud"),
                 new Completers.OptionCompleter(Arrays.asList(
                         new StringsCompleter("0", "1", "2", "3"), NullCompleter.INSTANCE),
                         JlineCommandRegistry.compileCommandOptions(""), 1)
         ));
-        Pattern pattern = Pattern.compile(decorateWithCharacterRegex(characters, Regex.SELECT_CLOUD), Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile(decorateWithUseCharacterAndHelperRegex(characters, Regex.SELECT_CLOUD), Pattern.CASE_INSENSITIVE);
 
-        String move = askAndCheckMove(terminal, history, completer, username, pattern, madeIllegalMove);
+        String move = askAndCheckMove(terminal, history, completer, username, pattern);
 
         list.add(move);
     }
 
-    public static void getMovePlayAssistant (Terminal terminal, History history, String username, List<String> list) {
-        getMovePlayAssistant(terminal, history, username, list, false);
-    }
-
-    public static void getMovePlayAssistant (Terminal terminal, History history, String username, List<String> list, boolean madeIllegalMove) {
-        ArgumentCompleter completer = new ArgumentCompleter(
+    public static void getMovePlayAssistant (Terminal terminal, History history, String username, int[] characters, List<String> list) {
+        AggregateCompleter completer = decorateWithCharacterHelper(characters, new ArgumentCompleter(
                 new StringsCompleter("play-assistant"),
                 new Completers.OptionCompleter(Arrays.asList(
                         new StringsCompleter("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"), NullCompleter.INSTANCE),
                         JlineCommandRegistry.compileCommandOptions(""), 1)
-        );
-        Pattern pattern = Pattern.compile(Regex.PLAY_ASSISTANT, Pattern.CASE_INSENSITIVE);
+        ));
+        Pattern pattern = Pattern.compile(decorateWithHelperRegex(characters, Regex.PLAY_ASSISTANT), Pattern.CASE_INSENSITIVE);
 
-        String move = askAndCheckMove(terminal, history, completer, username, pattern, madeIllegalMove);
+        String move = askAndCheckMove(terminal, history, completer, username, pattern);
 
         list.add(move);
     }

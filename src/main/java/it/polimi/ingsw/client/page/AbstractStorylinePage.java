@@ -4,9 +4,9 @@ import it.polimi.ingsw.client.Client;
 
 import static it.polimi.ingsw.client.page.ClientPage.MENU_PAGE;
 
-public abstract class AbstractWelcomePage extends AbstractPage {
+public abstract class AbstractStorylinePage extends AbstractPage {
 
-    public AbstractWelcomePage (Client client) {
+    public AbstractStorylinePage (Client client) {
         super(client);
     }
 

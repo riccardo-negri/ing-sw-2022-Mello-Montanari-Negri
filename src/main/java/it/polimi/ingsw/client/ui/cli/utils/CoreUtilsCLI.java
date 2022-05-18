@@ -1,5 +1,7 @@
 package it.polimi.ingsw.client.ui.cli.utils;
 
+import org.jline.reader.LineReader;
+import org.jline.reader.LineReaderBuilder;
 import org.jline.terminal.Terminal;
 
 import static org.fusesource.jansi.Ansi.ansi;
@@ -9,10 +11,14 @@ import java.util.stream.IntStream;
 import java.util.regex.*;
 
 public class CoreUtilsCLI {
-    private static final Scanner scanner = new Scanner(System.in);
 
     public static void clearTerminal (Terminal terminal) {
         terminal.writer().println(ansi().reset().eraseScreen());
+        terminal.writer().flush();
+    }
+
+    public static void moveCursorToTop (Terminal terminal) {
+        terminal.writer().println(ansi().cursor(0, 0));
         terminal.writer().flush();
     }
 
@@ -26,9 +32,10 @@ public class CoreUtilsCLI {
         terminal.writer().flush();
     }
 
-    public static void waitEnterPressed () {
+    public static void waitEnterPressed (Terminal terminal) {
+        final LineReader reader = LineReaderBuilder.builder().terminal(terminal).build();
         try {
-            System.in.read();
+            reader.readLine();
         } catch (Exception ignored) {
         }
     }
@@ -89,10 +96,13 @@ public class CoreUtilsCLI {
         terminal.writer().flush();
     }
 
-    public static Integer readNumber () {
+    public static Integer readNumber (Terminal terminal) {
         int num;
+        final LineReader reader = LineReaderBuilder.builder().terminal(terminal).build();
+
         try {
-            num = Integer.parseInt(scanner.nextLine());
+
+            num = Integer.parseInt(reader.readLine());
             return num;
         } catch (NumberFormatException e) {
             return -1;
@@ -105,10 +115,11 @@ public class CoreUtilsCLI {
         String regex = zeroTo255 + "\\." + zeroTo255 + "\\." + zeroTo255 + "\\." + zeroTo255;
         String REQUEST = "Please insert the IP address of the server (default is 127.0.0.1):";
         String DEFAULT = "localhost";
+        final LineReader reader = LineReaderBuilder.builder().terminal(terminal).build();
 
         printTerminalCenteredLine(terminal, REQUEST, 10);
         terminal.writer().flush();
-        IPAddress = scanner.nextLine();
+        IPAddress = reader.readLine();
         if (IPAddress.length() == 0) {
             terminal.writer().print(ansi().cursorUp(1));
             terminal.writer().print(ansi().eraseLine());
@@ -135,10 +146,11 @@ public class CoreUtilsCLI {
 
     public static String readGenericString (Terminal terminal, String requestText, String defaultValue) {
         String s;
+        final LineReader reader = LineReaderBuilder.builder().terminal(terminal).build();
 
         printTerminalCenteredLine(terminal, requestText, 10);
         terminal.writer().flush();
-        s = scanner.nextLine();
+        s = reader.readLine();
         if (defaultValue != null && s.length() == 0) {
             terminal.writer().print(ansi().cursorUp(1));
             terminal.writer().print(ansi().eraseLine());
@@ -161,10 +173,11 @@ public class CoreUtilsCLI {
 
     public static int readNumber (Terminal terminal, String requestText, int minValue, int maxValue, Integer defaultValue) {
         int num;
+        final LineReader reader = LineReaderBuilder.builder().terminal(terminal).build();
         printTerminalCenteredLine(terminal, requestText, 5);
         terminal.writer().flush();
         try {
-            String in = scanner.nextLine();
+            String in = reader.readLine();
             if (defaultValue != null && in.length() == 0) {
                 terminal.writer().print(ansi().cursorUp(1));
                 terminal.writer().print(ansi().eraseLine());
@@ -196,10 +209,17 @@ public class CoreUtilsCLI {
 
     public static boolean readBoolean (Terminal terminal, String requestText, Boolean defaultValue) {
         String read;
-        printTerminalCenteredLine(terminal, requestText, 10);
+        printTerminalCenteredLine(terminal, requestText, 1);
         terminal.writer().flush();
-        read = scanner.nextLine();
+        final LineReader reader = LineReaderBuilder.builder().terminal(terminal).build();
+
+        read = reader.readLine();
         if (defaultValue != null && read.length() == 0) {
+            terminal.writer().print(ansi().cursorUp(1));
+            terminal.writer().print(ansi().eraseLine());
+            printTerminalCenteredLine(terminal, requestText, 1);
+            terminal.writer().print(ansi().fgBlue().a(defaultValue ? "y" : "n").cursorDownLine());
+            terminal.writer().flush();
             return defaultValue;
         }
         else if (read.equals("y")) {

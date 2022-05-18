@@ -2,18 +2,6 @@ package it.polimi.ingsw.client.ui.cli;
 
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.page.AbstractWelcomePage;
-import org.jline.builtins.Completers;
-import org.jline.console.impl.JlineCommandRegistry;
-import org.jline.reader.LineReader;
-import org.jline.reader.LineReaderBuilder;
-import org.jline.reader.impl.DefaultParser;
-import org.jline.reader.impl.completer.ArgumentCompleter;
-import org.jline.reader.impl.completer.NullCompleter;
-import org.jline.reader.impl.completer.StringsCompleter;
-import org.jline.terminal.Terminal;
-
-import java.util.Arrays;
-import java.util.logging.Level;
 
 import static it.polimi.ingsw.client.ui.cli.utils.CoreUtilsCLI.*;
 
@@ -50,7 +38,7 @@ public class WelcomePageCLI extends AbstractWelcomePage {
 
         printTerminalCenteredMultilineText(terminal, WELCOME_TO + "\n" + ERIANTYS + "\nMade by Pietro Mello Rella, Tommaso Montanari and Riccardo Negri\n" + "\nPress enter to continue...");
         moveCursorToEnd(terminal);
-        waitEnterPressed();
+        waitEnterPressed(terminal);
         onEnd();
     }
 }

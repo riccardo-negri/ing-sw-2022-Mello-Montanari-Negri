@@ -11,10 +11,12 @@ public class Regex {
     public final static String USE_CHARACTER_4 = "^(use-character-4)\s?$";
     public final static String USE_CHARACTER_5 = "^(use-character-5 select )((island-)([0-9]|1[0-1]))\s?$";
     public final static String USE_CHARACTER_6 = "^(use-character-6)\s?$";
-    public final static String USE_CHARACTER_7 = "^(use-character-7 take )(green|red|yellow|pink|blue)( )(green|red|yellow|pink|blue|nothing)( )(green|red|yellow|pink|blue|nothing)( remove-from-dining )(green|red|yellow|pink|blue)( )(green|red|yellow|pink|blue|nothing)( )(green|red|yellow|pink|blue|nothing)\s?$";
+    public final static String USE_CHARACTER_7 = "^(use-character-7 take )(green|red|yellow|pink|blue)( )(green|red|yellow|pink|blue|nothing)( )(green|red|yellow|pink|blue|nothing)( remove-from-entrance )(green|red|yellow|pink|blue)( )(green|red|yellow|pink|blue|nothing)( )(green|red|yellow|pink|blue|nothing)\s?$";
     public final static String USE_CHARACTER_8 = "^(use-character-8)\s?$";
     public final static String USE_CHARACTER_9 = "^(use-character-9 select )(green|red|yellow|pink|blue)\s?$";
-    public final static String USE_CHARACTER_10 = "^(use-character-10 take-from-entrance )(green|red|yellow|pink|blue)( )(green|red|yellow|pink|blue|nothing)( exchange-with-from-dining )(green|red|yellow|pink|blue)( )(green|red|yellow|pink|blue|nothing)\s?$";
+    public final static String USE_CHARACTER_10 = "^(use-character-10 take-from-entrance )(green|red|yellow|pink|blue)( )(green|red|yellow|pink|blue|nothing)( exchange-with-from-entrance )(green|red|yellow|pink|blue)( )(green|red|yellow|pink|blue|nothing)\s?$";
     public final static String USE_CHARACTER_11 = "^(use-character-11 take )(green|red|yellow|pink|blue)\s?$";
     public final static String USE_CHARACTER_12 = "^(use-character-12 select )(green|red|yellow|pink|blue)\s?$";
+    public final static String HELPER_CHARACTER_START = "^(character-info character-";
+    public final static String HELPER_CHARACTER_END = ")\s?$";
 }

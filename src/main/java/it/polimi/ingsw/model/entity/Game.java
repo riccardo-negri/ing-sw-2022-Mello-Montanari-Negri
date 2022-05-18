@@ -2,6 +2,8 @@ package it.polimi.ingsw.model.entity;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import it.polimi.ingsw.model.entity.characters.CharacterEleven;
+import it.polimi.ingsw.model.entity.characters.CharacterOne;
 import it.polimi.ingsw.model.enums.*;
 import it.polimi.ingsw.model.entity.characters.Character;
 import it.polimi.ingsw.model.entity.gameState.GameState;
@@ -104,6 +106,8 @@ public class Game {
 
         gameEnded = false;
         winner = null;
+
+        List<StudentColor> flush = bag.takeRecentlySelected();
     }
 
     /**
@@ -163,15 +167,23 @@ public class Game {
         if (gameEntities == null) gameEntities = new ArrayList<>();
 
         Game newGame = JsonDeserializerClass.getGson().fromJson(string, Game.class);
-
+        Game.gameEntities.add(newGame);
         newGame.id = idCount++;
+
         Arrays.stream(newGame.professors).forEach(x -> x.refreshGameId(newGame));
-        if (newGame.characters != null) Arrays.stream(newGame.characters).forEach(x -> x.refreshGameId(newGame));
+
+        if (newGame.characters != null) {
+            for (Character c : newGame.characters) {
+                c.refreshGameId(newGame);
+                if (c.getId() == 1) ((CharacterOne) c).refreshBag(newGame.bag);
+                else if (c.getId() == 11) ((CharacterEleven) c).refreshBag(newGame.bag);
+            }
+        }
+
         newGame.gameState.refreshGameId(newGame);
 
         newGame.cloudList.forEach(x -> x.setBag(newGame.bag));
 
-        Game.gameEntities.add(newGame);
         return newGame.id;
     }
 
@@ -235,7 +247,7 @@ public class Game {
     private void calculateWinner() {
         List<Tower> winningTowers = new ArrayList<>();
         int minValue = 8;
-        for (int i=0; i<playerNumber.getTowerNumber(); i++) {
+        for (int i=0; i<playerNumber.getWizardNumber(); i++) {
             int current = wizardList.get(i).getTowerNumber();
             if (current < minValue)
                 winningTowers = new ArrayList<>();
@@ -334,5 +346,9 @@ public class Game {
 
     public Character[] getCharacters () {
         return characters;
+    }
+
+    public Tower getWinner () {
+        return winner;
     }
 }

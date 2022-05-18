@@ -56,6 +56,8 @@ public class Wizard {
         money -= price;
     }
 
+    public void addEntranceStudents(List<StudentColor> newStudents) { entranceStudents.addAll(newStudents); }
+
     public Integer getMoney() { return money; }
 
     public Integer getDiningStudents (StudentColor studentColor) { return diningStudents[studentColor.getValue()]; }

@@ -366,9 +366,9 @@ public class BoardUtilsCLI {
 
     }
 
-    private static void drawSinglePlayerArea (Terminal terminal, int baseRow, int baseCol, String playerName, String playedCard, int coins, int playedCharacter, String towerColor, int towerNumber, boolean[] professors, int[] diningColors, int[] entranceColors) {
+    private static void drawSinglePlayerArea (Terminal terminal, int baseRow, int baseCol, String playerName, String playedCard, int coins, int playedCharacter, String towerColor, int towerNumber, boolean[] professors, int[] diningColors, int[] entranceColors, boolean isDisconnected) {
         drawSchoolBoard(terminal, baseRow, baseCol, towerColor, towerNumber, professors, diningColors, entranceColors);
-        terminal.writer().println(ansi().cursor(baseRow + 1, baseCol + getSchoolBoardWidth() + 2).fgRgb(255, 128, 0).a(playerName).fgDefault());
+        terminal.writer().println(ansi().cursor(baseRow + 1, baseCol + getSchoolBoardWidth() + 2).fgRgb(255, 128, 0).a(playerName).fgRgb(255, 0, 0).a(isDisconnected ? " offline" : "").fgDefault());
         terminal.writer().print(ansi().cursor(baseRow + 3, baseCol + getSchoolBoardWidth() + 2).a("Assistant: " + playedCard));
         terminal.writer().print(ansi().cursor(baseRow + 4, baseCol + getSchoolBoardWidth() + 2).a("Coins: ").fgRgb(218, 165, 32).a(coins).fgDefault());
         if (playedCharacter != -1) {
@@ -376,7 +376,7 @@ public class BoardUtilsCLI {
         }
     }
 
-    public static void drawPlayerBoards (Terminal terminal, int baseRow, int baseCol, Game model, ArrayList<String> usernames, String username) {
+    public static void drawPlayerBoards (Terminal terminal, int baseRow, int baseCol, Game model, ArrayList<String> usernames, String username, ArrayList<String> disconnectedUsernames) {
         HashMap<Integer, List<Integer>> relativePlacementOfPlayerBoardsBasedOnID = new HashMap<>(); // first int of list is row offset, second int is column offset
         relativePlacementOfPlayerBoardsBasedOnID.put(0, List.of(0, 0));
         relativePlacementOfPlayerBoardsBasedOnID.put(1, List.of(getSchoolBoardHeight() + 2, 0));
@@ -414,7 +414,9 @@ public class BoardUtilsCLI {
                             (int) w.getEntranceStudents().stream().filter(s -> s.getValue().equals(0)).count(), // yellow
                             (int) w.getEntranceStudents().stream().filter(s -> s.getValue().equals(4)).count(), // pink
                             (int) w.getEntranceStudents().stream().filter(s -> s.getValue().equals(1)).count(), // blue
-                    });
+                    },
+                    disconnectedUsernames.contains(usernames.get(i))
+            );
         }
     }
 
@@ -437,7 +439,7 @@ public class BoardUtilsCLI {
     }
 
     private static void drawGameStatusSection (Terminal terminal, int baseRow, int baseCol, int round, String currPlayer, String currPhase) {
-        if(currPlayer.length() > 11) {
+        if (currPlayer.length() > 11) {
             currPlayer = currPlayer.substring(0, 11);
         }
         terminal.writer().println(ansi().cursor(baseRow, baseCol).a(InfoR1));

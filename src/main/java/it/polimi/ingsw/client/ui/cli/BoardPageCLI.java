@@ -67,6 +67,7 @@ public class BoardPageCLI extends AbstractBoardPage {
                                 case "MSS" -> doStudentMovement(getStudentColorFromString(moveFromStdin.get(0).split(" ")[1]), moveFromStdin.get(0).split(" ")[3]);
                                 case "MMNS" -> doMotherNatureMovement(Integer.parseInt(moveFromStdin.get(0).split(" ")[2]));
                                 case "CCS" -> doCloudChoice(Integer.parseInt(moveFromStdin.get(0).split(" ")[1]));
+                                default -> {}
                             }
                         }
                     } catch (Exception e) {
@@ -100,19 +101,22 @@ public class BoardPageCLI extends AbstractBoardPage {
         }
 
         LOGGER.log(Level.FINE, "Game finished because someone won or surrendered");
-        onEnd();
+        if (client.getNextState() == ClientPage.BOARD_PAGE) onEnd(false);
     }
 
     private void handleMessageNotMoveAndPrintStatus (Message message) {
-        if (message instanceof Disconnected) { //TODO see if there's a smarter way to rejoin the game
+        if (message instanceof Disconnected) {
             printConsoleWarning(terminal, "You got disconnected from the game, rejoin the game with the same username. Press enter to continue...");
             waitEnterPressed(terminal);
-            onEnd();
+            onEnd(true);
         }
-        else if (message instanceof UserDisconnected) { //TODO make the game not stop immediately, but only when the turn of the one who disconnected starts. Also todo the case in which multiple people disconnect
-            printConsoleWarning(terminal, "Player " + ((UserDisconnected) message).getUsername() + " disconnected from the game. Waiting for him to reconnect...");
-            Message reconnected = client.getConnection().waitMessage(UserReconnected.class);
-            lastWarning = "Player " + ((UserReconnected) reconnected).getUsername() + " reconnected to the game. Now you can keep playing";
+        else if (message instanceof UserDisconnected) {
+            lastWarning = "Player " + ((UserDisconnected) message).getUsername() + " disconnected from the game.";
+            client.getUsernamesDisconnected().add(((UserDisconnected) message).getUsername());
+        }
+        else if (message instanceof UserReconnected) {
+            lastWarning = "Player " + ((UserReconnected) message).getUsername() + " reconnected to the game.";
+            client.getUsernamesDisconnected().remove(((UserReconnected) message).getUsername());
         }
         else {
             lastWarning = "Received an unsupported message...";
@@ -168,6 +172,7 @@ public class BoardPageCLI extends AbstractBoardPage {
                 }
                 parameters.add(temp2);
             }
+            default -> {}
         }
         doCharacterMove(ID, parameters);
     }
@@ -178,6 +183,7 @@ public class BoardPageCLI extends AbstractBoardPage {
             case "MSS" -> getMoveStudentToIsland(terminal, commandsHistory, client.getUsername(), getCharactersID(), moveFromStdin);
             case "MMNS" -> getMoveMotherNature(terminal, commandsHistory, client.getUsername(), getCharactersID(), moveFromStdin);
             case "CCS" -> getMoveSelectCloud(terminal, commandsHistory, client.getUsername(), getCharactersID(), moveFromStdin);
+            default -> {}
         }
     }
 
@@ -340,7 +346,8 @@ public class BoardPageCLI extends AbstractBoardPage {
                 baseCol + 157,
                 model,
                 client.getUsernames(),
-                client.getUsername()
+                client.getUsername(),
+                client.getUsernamesDisconnected()
         );
 
         drawConsoleArea(

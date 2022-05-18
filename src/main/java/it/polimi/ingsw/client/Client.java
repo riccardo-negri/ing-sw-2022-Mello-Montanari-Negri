@@ -19,31 +19,16 @@ import java.util.logging.Logger;
 public class Client {
     private final UI ui;
     private ClientPage nextState;
-    public String IPAddress;
-    public int port;
-    public String username;
-    public int playerNumber;
-    public boolean isAdvancedGame;
-    public Connection connection;
-    public Login login;
-
-    public Logger getLogger () {
-        return LOGGER;
-    }
-
+    private String IPAddress;
+    private int port;
+    private String username;
+    private int playerNumber;
+    private boolean isAdvancedGame;
+    private Connection connection;
     private final Logger LOGGER;
-
-    public ArrayList<String> getUsernames () {
-        return usernames;
-    }
-
-    public ArrayList<String> usernames;
-
-    public Game getModel () {
-        return model;
-    }
-
-    public Game model;
+    private ArrayList<String> usernames;
+    private ArrayList<String> usernamesDisconnected = new ArrayList<>();
+    private Game model;
 
     public Client (boolean hasGUI) {
         if (hasGUI) {
@@ -87,7 +72,7 @@ public class Client {
 
     public void setupConnection () {
         GameMode gm = isAdvancedGame ? GameMode.COMPLETE : GameMode.EASY;
-        login = new Login(username, PlayerNumber.fromNumber(playerNumber), gm);
+        Login login = new Login(username, PlayerNumber.fromNumber(playerNumber), gm);
         connection = new Connection(IPAddress, port);
         connection.send(login);
         Redirect redirect = (Redirect) connection.waitMessage(Redirect.class);
@@ -153,4 +138,21 @@ public class Client {
     public void setPort (int port) {
         this.port = port;
     }
+
+    public ArrayList<String> getUsernames () {
+        return usernames;
+    }
+
+    public Logger getLogger () {
+        return LOGGER;
+    }
+
+    public Game getModel () {
+        return model;
+    }
+
+    public ArrayList<String> getUsernamesDisconnected () {
+        return usernamesDisconnected;
+    }
+
 }

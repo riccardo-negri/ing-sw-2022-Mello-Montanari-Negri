@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
+import static it.polimi.ingsw.client.page.ClientPage.CONNECTION_PAGE;
 import static it.polimi.ingsw.client.page.ClientPage.END_PAGE;
 
 public abstract class AbstractBoardPage extends AbstractPage {
@@ -144,7 +145,12 @@ public abstract class AbstractBoardPage extends AbstractPage {
         }
     }
 
-    public void onEnd () {
-        client.setNextState(END_PAGE);
+    public void onEnd (boolean gotDisconnected) {
+        if (gotDisconnected) {
+            client.setNextState(CONNECTION_PAGE);
+        }
+        else {
+            client.setNextState(END_PAGE);
+        }
     }
 }

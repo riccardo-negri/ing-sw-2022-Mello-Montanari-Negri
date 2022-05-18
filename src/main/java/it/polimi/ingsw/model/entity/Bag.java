@@ -13,7 +13,7 @@ import java.util.Random;
 public class Bag {
 
     private transient Random randomGenerator;
-    private List<StudentColor> studentListIn;
+    private final List<StudentColor> studentListIn;
     private List<StudentColor> studentListOut;
     private final Integer[] colorNumber;
     private Integer total;
@@ -55,9 +55,11 @@ public class Bag {
             }
         } else {
             total -= num;
-            students = studentListIn.subList(0,num);
-            studentListIn = studentListIn.subList(num,studentListIn.size());
-            students.forEach(x -> colorNumber[x.getValue()]--);
+            for (int i=0; i<num; i++) {
+                StudentColor current = studentListIn.remove(0);
+                students.add(current);
+                colorNumber[current.getValue()]--;
+            }
         }
         return students;
     }

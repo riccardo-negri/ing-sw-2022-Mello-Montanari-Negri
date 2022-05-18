@@ -106,6 +106,8 @@ public class Game {
 
         gameEnded = false;
         winner = null;
+
+        List<StudentColor> flush = bag.takeRecentlySelected();
     }
 
     /**

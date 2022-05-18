@@ -30,7 +30,7 @@ public class ConnectionPageCLI extends AbstractConnectionPage {
         String username = readGenericString(terminal, "What is your username for the game?");
         printEmptyLine(terminal);
         printTerminalCenteredLine(terminal, "Press enter to continue...");
-        waitEnterPressed();
+        waitEnterPressed(terminal);
         onEnd(IPAddress, PortNumber, username);
     }
 }

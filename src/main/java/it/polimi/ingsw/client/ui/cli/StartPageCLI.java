@@ -27,13 +27,13 @@ public class StartPageCLI extends AbstractStartPage {
         printTerminalCenteredMultilineText(terminal, CONTENT);
         printEmptyLine(terminal);
         printTerminalCenteredLine(terminal, "Please select your next page:", 1);
-        Integer temp = readNumber();
+        Integer temp = readNumber(terminal);
         while (temp < 0 || temp > 3) {
             clearTerminal(terminal);
             printTerminalCenteredMultilineText(terminal, CONTENT);
             printTopErrorBanner(terminal, "Please type a correct option!");
             printTerminalCenteredLine(terminal, "Please select your next page:", 1);
-            temp = readNumber();
+            temp = readNumber(terminal);
         }
         onEnd(temp);
     }

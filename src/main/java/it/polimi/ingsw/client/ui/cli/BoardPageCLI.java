@@ -40,7 +40,7 @@ public class BoardPageCLI extends AbstractBoardPage {
             try {
                 drawGameAndConsole();
             } catch (ConcurrentModificationException e) {
-                LOGGER.log(Level.WARNING, "Got a ConcurrentModificationException while trying to draw the CLI: " + e);
+                LOGGER.log(Level.WARNING, new StringBuilder().append("Got a ConcurrentModificationException while trying to draw the CLI: ").append(e).toString());
                 drawGameAndConsole(); //TODO understand if there's a nicer way to handle this
             }
 
@@ -73,7 +73,7 @@ public class BoardPageCLI extends AbstractBoardPage {
                         LOGGER.log(Level.WARNING, "Got an invalid move (that passed regex check), asking for it again. Exception: " + e);
                         lastWarning = "Please type a valid command. " + e.getMessage();
                         e.printStackTrace();
-                        waitEnterPressed();
+                        waitEnterPressed(terminal);
                     }
                 }
                 else { // no move was made, so it's a message about some disconnection events
@@ -90,7 +90,7 @@ public class BoardPageCLI extends AbstractBoardPage {
                     } catch (Exception e) {
                         LOGGER.log(Level.WARNING, "Got an invalid move from the server. Exception: " + e);
                         e.printStackTrace();
-                        waitEnterPressed();
+                        waitEnterPressed(terminal);
                     }
                 }
                 else {
@@ -106,7 +106,7 @@ public class BoardPageCLI extends AbstractBoardPage {
     private void handleMessageNotMoveAndPrintStatus (Message message) {
         if (message instanceof Disconnected) { //TODO see if there's a smarter way to rejoin the game
             printConsoleWarning(terminal, "You got disconnected from the game, rejoin the game with the same username. Press enter to continue...");
-            waitEnterPressed();
+            waitEnterPressed(terminal);
             onEnd();
         }
         else if (message instanceof UserDisconnected) { //TODO make the game not stop immediately, but only when the turn of the one who disconnected starts. Also todo the case in which multiple people disconnect
@@ -174,13 +174,9 @@ public class BoardPageCLI extends AbstractBoardPage {
 
     private void askForMoveBasedOnState () {
         switch (model.getGameState().getGameStateName()) {
-
             case "PS" -> getMovePlayAssistant(terminal, commandsHistory, client.getUsername(), moveFromStdin);
-
             case "MSS" -> getMoveStudentToIsland(terminal, commandsHistory, client.getUsername(), getCharactersID(), moveFromStdin);
-
             case "MMNS" -> getMoveMotherNature(terminal, commandsHistory, client.getUsername(), getCharactersID(), moveFromStdin);
-
             case "CCS" -> getMoveSelectCloud(terminal, commandsHistory, client.getUsername(), getCharactersID(), moveFromStdin);
         }
     }

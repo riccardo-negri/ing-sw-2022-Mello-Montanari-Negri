@@ -36,7 +36,7 @@ public class EndPageCLI extends AbstractEndPage {
             printTerminalCenteredMultilineText(terminal, YOU_LOST + "\nPress enter to continue...");
         }
         moveCursorToEnd(terminal);
-        waitEnterPressed();
+        waitEnterPressed(terminal);
         onEnd();
     }
 }

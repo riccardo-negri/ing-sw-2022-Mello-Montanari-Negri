@@ -35,9 +35,9 @@ public class GameServer extends Server{
     boolean receiveMessage(Connection source) {
         Message message = source.getLastMessage();
         if (message instanceof Disconnected) {
-            User user = userFromConnection(source);
-            if (user != null)
-                broadcast(new UserDisconnected(user.getName()));
+            GameUser user = userFromConnection(source);
+            user.setDisconnected(true);
+            broadcast(new UserDisconnected(user.getName()));
         } else if (message instanceof Move) {
             doMove((Move) message, source);
         } else {
@@ -47,10 +47,13 @@ public class GameServer extends Server{
     }
 
     void doMove(Move move, Connection source) {
-        Wizard wizard = ((GameUser) userFromConnection(source)).getWizard();
+        Wizard wizard = userFromConnection(source).getWizard();
         try {
             move.applyEffectServer(game, wizard);
             broadcast(move);
+            if (game.isGameEnded()) {
+                stop();
+            }
         } catch (Exception ignored) { // TODO here
             System.out.println("INVALID MOVE: " + ignored.toString());
             ignored.printStackTrace();
@@ -58,7 +61,7 @@ public class GameServer extends Server{
     }
 
     void broadcast(Message message) {
-        for (User user : getConnectedUser()) {
+        for (User user : getConnectedUsers()) {
             user.getConnection().send(message);
         }
     }
@@ -66,8 +69,12 @@ public class GameServer extends Server{
     @Override
     void onUserReconnected(User user) {
         user.getConnection().bindFunction(this::receiveMessage);
+        ((GameUser) user).setDisconnected(false);
         if (isEveryoneConnected()) {
+            // In the game server means that everyone joined once, but we don't know if the connection was lost
             user.getConnection().send(new InitialState(game.serializeGame(), usernames()));
+            tellWhoIsDisconnected(user);
+            broadcast(new UserReconnected(user.name));
         }
     }
 
@@ -75,7 +82,17 @@ public class GameServer extends Server{
     void onNewUserConnect(User user, Login info) {
         user.getConnection().bindFunction(this::receiveMessage);
         if (isEveryoneConnected()) {
+            // Game is starting
             broadcast(new InitialState(game.serializeGame(), usernames()));
+            for (User u: connectedUsers)
+                tellWhoIsDisconnected(u);
+        }
+    }
+
+    void tellWhoIsDisconnected(User target) {
+        for (User u: connectedUsers) {
+            if(((GameUser) u).isDisconnected())
+                target.getConnection().send(new UserDisconnected(u.name));
         }
     }
 
@@ -87,7 +104,7 @@ public class GameServer extends Server{
     @Override
     User createUser(String name, Connection connection) {
         int id;
-        id = connectedUser.size();
+        id = connectedUsers.size();
         return new GameUser(name, connection, game.getWizard(id));
     }
 
@@ -97,6 +114,11 @@ public class GameServer extends Server{
 
     public List<String> getAssignedUsernames() {
         return assignedUsernames;
+    }
+
+    @Override
+    public GameUser userFromConnection(Connection connection) {
+        return (GameUser) super.userFromConnection(connection);
     }
 
     public GameMode getGameMode() {

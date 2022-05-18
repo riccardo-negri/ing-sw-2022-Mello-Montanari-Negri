@@ -37,7 +37,7 @@ public class MatchmakingServer extends Server {
         Thread t = new Thread(() -> {
             server.run();
             List<String> usernames = server.usernames();
-            List<User> connectedCopy = new ArrayList<>(getConnectedUser());
+            List<User> connectedCopy = new ArrayList<>(getConnectedUsers());
             for (User u : connectedCopy) {
                 if (usernames.contains(u.getName())) {
                     disconnectUser(u);

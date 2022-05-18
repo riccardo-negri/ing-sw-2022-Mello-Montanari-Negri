@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public abstract class Server {
     // using Vector instead of ArrayList because Vector class is thread-safe
     protected final Vector<Connection> connecting;
-    protected final UniqueUserVector connectedUser;
+    protected final UniqueUserVector connectedUsers;
     protected int maxUsers = Integer.MAX_VALUE;
     protected ServerSocket socket;
     protected int port;
@@ -26,7 +26,7 @@ public abstract class Server {
 
     // initialize variables but don't run server code yet
     public Server() {
-        connectedUser = new UniqueUserVector();
+        connectedUsers = new UniqueUserVector();
         connecting = new Vector<>();
         try {
             socket = new ServerSocket(getPortToBind());
@@ -38,7 +38,7 @@ public abstract class Server {
     }
 
     List<String> usernames() {
-        return getConnectedUser().stream().map(User::getName).collect(Collectors.toList());
+        return getConnectedUsers().stream().map(User::getName).collect(Collectors.toList());
     }
 
     abstract void onStart();
@@ -68,7 +68,7 @@ public abstract class Server {
         for (Connection c : getConnecting()) {
             c.close();
         }
-        for (User u : getConnectedUser()) {
+        for (User u : getConnectedUsers()) {
             u.getConnection().close();
         }
         onQuit();
@@ -119,7 +119,7 @@ public abstract class Server {
 
     void connectNewUser(Connection connection, Login login) {
         User user = createUser(login.getUsername(), connection);
-        if(connectedUser.addWithLimit(user, maxUsers)) {
+        if(connectedUsers.addWithLimit(user, maxUsers)) {
             connecting.remove(connection);
             System.out.println("New user logged in: " + user.getName());
             onNewUserConnect(user, login);
@@ -130,7 +130,7 @@ public abstract class Server {
     }
 
     void reconnectUser(Connection connection, Login login) {
-        for (User u : getConnectedUser()) {
+        for (User u : getConnectedUsers()) {
             if (u.getName().equals(login.getUsername())) {
                 u.replaceConnection(connection);
                 connecting.remove(connection);
@@ -145,7 +145,7 @@ public abstract class Server {
     }
 
     public User userFromConnection(Connection connection) {
-        for (User u: connectedUser) {
+        for (User u: connectedUsers) {
             if (u.getConnection().equals(connection)) {
                 return u;
             }
@@ -160,11 +160,11 @@ public abstract class Server {
 
     public void disconnectUser(User user) {
         user.getConnection().close();
-        connectedUser.remove(user);
+        connectedUsers.remove(user);
     }
 
-    public List<User> getConnectedUser() {
-        return connectedUser;
+    public List<User> getConnectedUsers() {
+        return connectedUsers;
     }
 
     public List<Connection> getConnecting() {
@@ -172,7 +172,7 @@ public abstract class Server {
     }
 
     public boolean isEveryoneConnected() {
-        return connectedUser.size() >= maxUsers;
+        return connectedUsers.size() >= maxUsers;
     }
 
     public int getMaxUsers() {

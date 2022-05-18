@@ -338,7 +338,7 @@ public class BoardPageCLI extends AbstractBoardPage {
                 terminal,
                 baseRow + 4,
                 baseCol + 6,
-                client.getIPAddress(),
+                client.getIpAddress(),
                 client.getPort(),
                 model.getGameMode().toString(),
                 model.getPlayerNumber().getWizardNumber(),

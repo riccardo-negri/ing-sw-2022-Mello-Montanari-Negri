@@ -14,7 +14,7 @@ public abstract class AbstractConnectionPage extends AbstractPage {
     }
 
     public void onEnd (String IP, int port, String username) {
-        client.setIPAddress(IP);
+        client.setIpAddress(IP);
         client.setPort(port);
         client.setUsername(username);
         client.setNextState(GAME_MODE_SELECTION_PAGE);

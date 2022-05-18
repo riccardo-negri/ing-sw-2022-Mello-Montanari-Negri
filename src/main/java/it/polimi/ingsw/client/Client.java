@@ -13,6 +13,7 @@ import it.polimi.ingsw.utils.LogFormatter;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,15 +21,15 @@ import java.util.logging.Logger;
 public class Client {
     private final UI ui;
     private ClientPage nextState;
-    private String IPAddress;
+    private String ipAddress;
     private int port;
     private String username;
     private int playerNumber;
     private boolean isAdvancedGame;
     private Connection connection;
-    private final Logger LOGGER;
+    private final Logger logger;
     private ArrayList<String> usernames;
-    private ArrayList<String> usernamesDisconnected = new ArrayList<>();
+    private final ArrayList<String> usernamesDisconnected = new ArrayList<>();
     private Game model;
 
     public Client (boolean hasGUI) {
@@ -41,13 +42,13 @@ public class Client {
         }
         nextState = ClientPage.WELCOME_PAGE;
 
-        LOGGER = Logger.getLogger("MyLog");
+        logger = Logger.getLogger("MyLog");
         FileHandler fh;
         try {
-            LOGGER.setUseParentHandlers(false);
+            logger.setUseParentHandlers(false);
             fh = new FileHandler("./log.txt");
-            LOGGER.setLevel(Level.ALL);
-            LOGGER.addHandler(fh);
+            logger.setLevel(Level.ALL);
+            logger.addHandler(fh);
             LogFormatter formatter = new LogFormatter();
             fh.setFormatter(formatter);
 
@@ -74,20 +75,20 @@ public class Client {
     public void setupConnection () {
         GameMode gm = isAdvancedGame ? GameMode.COMPLETE : GameMode.EASY;
         Login login = new Login(username, PlayerNumber.fromNumber(playerNumber), gm);
-        connection = new Connection(IPAddress, port);
+        connection = new Connection(ipAddress, port);
         connection.send(login);
         Redirect redirect = (Redirect) connection.waitMessage(Redirect.class);
         port = redirect.getPort();
-        connection = new Connection(IPAddress, port);
+        connection = new Connection(ipAddress, port);
         connection.send(login);
 
         // import initial state
         InitialState initialState = (InitialState) connection.waitMessage(InitialState.class);
         try {
             model = Game.request(Game.deserializeGameFromString(initialState.getState()));
-            LOGGER.log(Level.FINE, "Successfully loaded model sent by the server");
+            logger.log(Level.FINE, "Successfully loaded model sent by the server");
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Couldn't load model sent by the server. Exception: " + e);
+            logger.log(Level.SEVERE, new StringBuilder().append("Couldn't load model sent by the server. Exception: ").append(e).toString());
         }
         usernames = initialState.getUsernames();
     }
@@ -96,12 +97,12 @@ public class Client {
         return ui;
     }
 
-    public String getIPAddress () {
-        return IPAddress;
+    public String getIpAddress () {
+        return ipAddress;
     }
 
-    public void setIPAddress (String IPAddress) {
-        this.IPAddress = IPAddress;
+    public void setIpAddress (String ipAddress) {
+        this.ipAddress = ipAddress;
     }
 
     public int getPort () {
@@ -140,19 +141,19 @@ public class Client {
         this.port = port;
     }
 
-    public ArrayList<String> getUsernames () {
+    public List<String> getUsernames () {
         return usernames;
     }
 
     public Logger getLogger () {
-        return LOGGER;
+        return logger;
     }
 
     public Game getModel () {
         return model;
     }
 
-    public ArrayList<String> getUsernamesDisconnected () {
+    public List<String> getUsernamesDisconnected () {
         return usernamesDisconnected;
     }
 

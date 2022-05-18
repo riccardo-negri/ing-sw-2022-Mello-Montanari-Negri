@@ -437,6 +437,9 @@ public class BoardUtilsCLI {
     }
 
     private static void drawGameStatusSection (Terminal terminal, int baseRow, int baseCol, int round, String currPlayer, String currPhase) {
+        if(currPlayer.length() > 11) {
+            currPlayer = currPlayer.substring(0, 11);
+        }
         terminal.writer().println(ansi().cursor(baseRow, baseCol).a(InfoR1));
         terminal.writer().println(ansi().cursor(baseRow + 1, baseCol).a(InfoR3));
         terminal.writer().println(ansi().cursor(baseRow + 2, baseCol).a(

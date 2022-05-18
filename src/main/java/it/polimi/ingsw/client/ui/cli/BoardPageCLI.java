@@ -7,8 +7,8 @@ import it.polimi.ingsw.model.entity.characters.*;
 import it.polimi.ingsw.model.entity.characters.Character;
 import it.polimi.ingsw.model.enums.GameMode;
 import it.polimi.ingsw.model.enums.StudentColor;
-import it.polimi.ingsw.utils.*;
-import it.polimi.ingsw.utils.moves.Move;
+import it.polimi.ingsw.networking.*;
+import it.polimi.ingsw.networking.moves.Move;
 import org.jline.reader.UserInterruptException;
 
 import java.util.ArrayList;

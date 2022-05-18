@@ -1,9 +1,9 @@
 package it.polimi.ingsw.server;
 
 
-import it.polimi.ingsw.utils.Connection;
-import it.polimi.ingsw.utils.Login;
-import it.polimi.ingsw.utils.SafeSocket;
+import it.polimi.ingsw.networking.Connection;
+import it.polimi.ingsw.networking.Login;
+import it.polimi.ingsw.networking.SafeSocket;
 
 import java.io.IOException;
 import java.net.ServerSocket;

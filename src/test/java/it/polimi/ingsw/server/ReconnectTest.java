@@ -2,10 +2,10 @@ package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.model.enums.GameMode;
 import it.polimi.ingsw.model.enums.PlayerNumber;
-import it.polimi.ingsw.utils.Connection;
-import it.polimi.ingsw.utils.InitialState;
-import it.polimi.ingsw.utils.Login;
-import it.polimi.ingsw.utils.Redirect;
+import it.polimi.ingsw.networking.Connection;
+import it.polimi.ingsw.networking.InitialState;
+import it.polimi.ingsw.networking.Login;
+import it.polimi.ingsw.networking.Redirect;
 import org.junit.jupiter.api.Test;
 
 public class ReconnectTest {

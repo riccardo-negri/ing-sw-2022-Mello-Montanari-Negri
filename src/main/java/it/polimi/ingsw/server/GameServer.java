@@ -4,9 +4,9 @@ import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.enums.GameMode;
 import it.polimi.ingsw.model.enums.PlayerNumber;
-import it.polimi.ingsw.utils.*;
-import it.polimi.ingsw.utils.InitialState;
-import it.polimi.ingsw.utils.moves.Move;
+import it.polimi.ingsw.networking.*;
+import it.polimi.ingsw.networking.InitialState;
+import it.polimi.ingsw.networking.moves.Move;
 
 import java.util.List;
 

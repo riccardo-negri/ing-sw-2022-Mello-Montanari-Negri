@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server;
 
-import it.polimi.ingsw.utils.Login;
-import it.polimi.ingsw.utils.Redirect;
+import it.polimi.ingsw.networking.Login;
+import it.polimi.ingsw.networking.Redirect;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -3,7 +3,7 @@ package it.polimi.ingsw.client.page;
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.enums.StudentColor;
-import it.polimi.ingsw.utils.moves.*;
+import it.polimi.ingsw.networking.moves.*;
 
 import java.io.FileWriter;
 import java.io.IOException;

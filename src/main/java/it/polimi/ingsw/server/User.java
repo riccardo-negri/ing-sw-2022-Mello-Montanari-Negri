@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server;
 
 
-import it.polimi.ingsw.utils.Connection;
+import it.polimi.ingsw.networking.Connection;
 
 public class User {
     protected Connection connection;

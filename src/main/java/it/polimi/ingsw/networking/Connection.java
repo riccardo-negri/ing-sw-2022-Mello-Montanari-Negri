@@ -48,6 +48,20 @@ public class Connection extends ConnectionBase {
         this.acceptMessage.set(acceptMessage);
     }
 
+    public synchronized void bindFunctionAndTestPrevious(Predicate<Connection> acceptMessage) {
+        bindFunction(acceptMessage);
+
+        // process the messages received before the call of bindFunction
+        int steps = messagesToProcess.size();
+        for (int i = 0; i < steps; i++) {  // roll the queue on itself until is back to start
+            if(acceptMessage.test(this)) {  // test last element
+                messagesToProcess.poll();
+            } else {
+                messagesToProcess.add(messagesToProcess.poll());
+            }
+        }
+    }
+
     protected void listenMessages() {
         System.out.println("Listening for new messages from: " + socket.getInetAddress());
         while (isRunning()) {

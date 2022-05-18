@@ -1,11 +1,11 @@
 package it.polimi.ingsw.client.ui.cli;
 
 import it.polimi.ingsw.client.Client;
-import it.polimi.ingsw.client.page.AbstractWelcomePage;
+import it.polimi.ingsw.client.page.AbstractCreditsPage;
 
 import static it.polimi.ingsw.client.ui.cli.utils.CoreUtilsCLI.*;
 
-public class CreditsPageCLI extends AbstractWelcomePage {
+public class CreditsPageCLI extends AbstractCreditsPage {
 
     public CreditsPageCLI (Client client) {
         super(client);

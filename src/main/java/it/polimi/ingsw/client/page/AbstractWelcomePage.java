@@ -10,7 +10,12 @@ public abstract class AbstractWelcomePage extends AbstractPage {
         super(client);
     }
 
-    public void onEnd () {
-        client.setNextState(MENU_PAGE);
+    public void onEnd (boolean isSupported) {
+        if(isSupported) {
+            client.setNextState(MENU_PAGE);
+        }
+        else {
+            client.setNextState(null);
+        }
     }
 }

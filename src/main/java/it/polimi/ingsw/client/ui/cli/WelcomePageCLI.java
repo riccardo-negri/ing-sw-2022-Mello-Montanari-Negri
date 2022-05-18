@@ -29,16 +29,39 @@ public class WelcomePageCLI extends AbstractWelcomePage {
                         "██╔══╝  ██╔══██╗██║██╔══██║██║╚██╗██║   ██║     ╚██╔╝  ╚════██║\n" +
                         "███████╗██║  ██║██║██║  ██║██║ ╚████║   ██║      ██║   ███████║\n" +
                         "╚══════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝   ╚═╝      ╚═╝   ╚══════╝\n";
-        clearTerminal(terminal);
-
+        final String SMALL_MONITORS = """              
+                ███████╗███╗   ███╗ █████╗ ██╗     ██╗         ███╗   ███╗ ██████╗ ███╗   ██╗██╗████████╗ ██████╗ ██████╗ ███████╗
+                ██╔════╝████╗ ████║██╔══██╗██║     ██║         ████╗ ████║██╔═══██╗████╗  ██║██║╚══██╔══╝██╔═══██╗██╔══██╗██╔════╝
+                ███████╗██╔████╔██║███████║██║     ██║         ██╔████╔██║██║   ██║██╔██╗ ██║██║   ██║   ██║   ██║██████╔╝███████╗
+                ╚════██║██║╚██╔╝██║██╔══██║██║     ██║         ██║╚██╔╝██║██║   ██║██║╚██╗██║██║   ██║   ██║   ██║██╔══██╗╚════██║
+                ███████║██║ ╚═╝ ██║██║  ██║███████╗███████╗    ██║ ╚═╝ ██║╚██████╔╝██║ ╚████║██║   ██║   ╚██████╔╝██║  ██║███████║
+                ╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚══════╝    ╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚══════╝
+                """;
+        final String ARE_NOT_SUPPORTED = """     
+                 █████╗ ██████╗ ███████╗    ███╗   ██╗ ██████╗ ████████╗    ███████╗██╗   ██╗██████╗ ██████╗  ██████╗ ██████╗ ████████╗███████╗██████╗
+                ██╔══██╗██╔══██╗██╔════╝    ████╗  ██║██╔═══██╗╚══██╔══╝    ██╔════╝██║   ██║██╔══██╗██╔══██╗██╔═══██╗██╔══██╗╚══██╔══╝██╔════╝██╔══██╗
+                ███████║██████╔╝█████╗      ██╔██╗ ██║██║   ██║   ██║       ███████╗██║   ██║██████╔╝██████╔╝██║   ██║██████╔╝   ██║   █████╗  ██║  ██║
+                ██╔══██║██╔══██╗██╔══╝      ██║╚██╗██║██║   ██║   ██║       ╚════██║██║   ██║██╔═══╝ ██╔═══╝ ██║   ██║██╔══██╗   ██║   ██╔══╝  ██║  ██║
+                ██║  ██║██║  ██║███████╗    ██║ ╚████║╚██████╔╝   ██║       ███████║╚██████╔╝██║     ██║     ╚██████╔╝██║  ██║   ██║   ███████╗██████╔╝
+                ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝    ╚═╝  ╚═══╝ ╚═════╝    ╚═╝       ╚══════╝ ╚═════╝ ╚═╝     ╚═╝      ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═════╝
+                \s                      
+                """;
         // https://www.tabnine.com/code/query/%22JLINE%22+org.fusesource.jansi@Ansi
         // https://github.com/jline/jline3/wiki/Completion
         // https://github.com/jline/jline3/wiki/Autosuggestions
+        clearTerminal(terminal);
+        if (terminal.getWidth() < 200) {
+            printTerminalCenteredMultilineText(terminal, SMALL_MONITORS + "\n" + ARE_NOT_SUPPORTED +  "Try to reduce the font size of your terminal.\nPress enter to quit the game...");
+            moveCursorToEnd(terminal);
+            waitEnterPressed(terminal);
+            onEnd(false);
+        }
+        else {
+            printTerminalCenteredMultilineText(terminal, WELCOME_TO + "\n" + ERIANTYS + "\nMade by Pietro Mello Rella, Tommaso Montanari and Riccardo Negri\n" + "\nPress enter to continue...");
+            moveCursorToEnd(terminal);
+            waitEnterPressed(terminal);
+            onEnd(true);
+        }
 
-
-        printTerminalCenteredMultilineText(terminal, WELCOME_TO + "\n" + ERIANTYS + "\nMade by Pietro Mello Rella, Tommaso Montanari and Riccardo Negri\n" + "\nPress enter to continue...");
-        moveCursorToEnd(terminal);
-        waitEnterPressed(terminal);
-        onEnd();
     }
 }

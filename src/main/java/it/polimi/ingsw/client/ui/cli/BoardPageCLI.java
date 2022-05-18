@@ -49,7 +49,7 @@ public class BoardPageCLI extends AbstractBoardPage {
                 printConsoleWarning(terminal, lastWarning);
                 lastWarning = null;
             }
-            if(lastHelper != null) {
+            if (lastHelper != null) {
                 printCharacterHelper(terminal, lastHelper);
                 lastHelper = null;
             }
@@ -72,10 +72,13 @@ public class BoardPageCLI extends AbstractBoardPage {
                         else {
                             switch (model.getGameState().getGameStateName()) {
                                 case "PS" -> doCardChoice(Integer.parseInt(moveFromStdin.get(0).split(" ")[1]));
-                                case "MSS" -> doStudentMovement(getStudentColorFromString(moveFromStdin.get(0).split(" ")[1]), moveFromStdin.get(0).split(" ")[3]);
-                                case "MMNS" -> doMotherNatureMovement(Integer.parseInt(moveFromStdin.get(0).split(" ")[2]));
+                                case "MSS" ->
+                                        doStudentMovement(getStudentColorFromString(moveFromStdin.get(0).split(" ")[1]), moveFromStdin.get(0).split(" ")[3]);
+                                case "MMNS" ->
+                                        doMotherNatureMovement(Integer.parseInt(moveFromStdin.get(0).split(" ")[2]));
                                 case "CCS" -> doCloudChoice(Integer.parseInt(moveFromStdin.get(0).split(" ")[1]));
-                                default -> {}
+                                default -> {
+                                }
                             }
                         }
                     } catch (Exception e) {
@@ -140,7 +143,8 @@ public class BoardPageCLI extends AbstractBoardPage {
                 parameters.add(getStudentColorFromString(move.split(" ")[2]));
                 parameters.add(Integer.parseInt(move.split(" ")[4].split("-")[1]));
             }
-            case "use-character-3", "use-character-5" -> parameters.add(Integer.parseInt(move.split(" ")[2].split("-")[1]));
+            case "use-character-3", "use-character-5" ->
+                    parameters.add(Integer.parseInt(move.split(" ")[2].split("-")[1]));
             case "use-character-7" -> {
                 List<StudentColor> temp1 = new ArrayList<>();
                 List<StudentColor> temp2 = new ArrayList<>();
@@ -163,7 +167,8 @@ public class BoardPageCLI extends AbstractBoardPage {
                 }
                 parameters.add(temp2);
             }
-            case "use-character-9", "use-character-11", "use-character-12" -> parameters.add(getStudentColorFromString(move.split(" ")[2]));
+            case "use-character-9", "use-character-11", "use-character-12" ->
+                    parameters.add(getStudentColorFromString(move.split(" ")[2]));
             case "use-character-10" -> {
                 List<StudentColor> temp1 = new ArrayList<>();
                 List<StudentColor> temp2 = new ArrayList<>();
@@ -180,18 +185,24 @@ public class BoardPageCLI extends AbstractBoardPage {
                 }
                 parameters.add(temp2);
             }
-            default -> {}
+            default -> {
+            }
         }
         doCharacterMove(ID, parameters);
     }
 
     private void askForMoveBasedOnState () {
         switch (model.getGameState().getGameStateName()) {
-            case "PS" -> getMovePlayAssistant(terminal, commandsHistory, client.getUsername(), getCharactersID(), moveFromStdin);
-            case "MSS" -> getMoveStudentToIsland(terminal, commandsHistory, client.getUsername(), getCharactersID(), moveFromStdin);
-            case "MMNS" -> getMoveMotherNature(terminal, commandsHistory, client.getUsername(), getCharactersID(), moveFromStdin);
-            case "CCS" -> getMoveSelectCloud(terminal, commandsHistory, client.getUsername(), getCharactersID(), moveFromStdin);
-            default -> {}
+            case "PS" ->
+                    getMovePlayAssistant(terminal, commandsHistory, client.getUsername(), getCharactersID(), moveFromStdin);
+            case "MSS" ->
+                    getMoveStudentToIsland(terminal, commandsHistory, client.getUsername(), getCharactersID(), moveFromStdin);
+            case "MMNS" ->
+                    getMoveMotherNature(terminal, commandsHistory, client.getUsername(), getCharactersID(), moveFromStdin);
+            case "CCS" ->
+                    getMoveSelectCloud(terminal, commandsHistory, client.getUsername(), getCharactersID(), moveFromStdin);
+            default -> {
+            }
         }
     }
 
@@ -360,7 +371,8 @@ public class BoardPageCLI extends AbstractBoardPage {
 
         drawConsoleArea(
                 terminal,
-                48);
+                48
+        );
     }
 
 }

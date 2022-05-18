@@ -10,7 +10,6 @@ import it.polimi.ingsw.model.enums.PlayerNumber;
 import it.polimi.ingsw.utils.*;
 import it.polimi.ingsw.utils.InitialState;
 
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.FileHandler;
@@ -98,13 +97,6 @@ public class Client {
 
         // import initial state
         InitialState initialState = (InitialState) connection.waitMessage(InitialState.class);
-        try {
-            FileWriter myWriter = new FileWriter("test.txt");
-            myWriter.write(initialState.getState());
-            myWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         try {
             model = Game.request(Game.deserializeGameFromString(initialState.getState()));
             LOGGER.log(Level.FINE, "Successfully loaded model sent by the server");

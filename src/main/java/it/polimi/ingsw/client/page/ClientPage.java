@@ -7,4 +7,6 @@ public enum ClientPage {
     GAME_MODE_SELECTION_PAGE,
     MATCHMAKING_PAGE,
     BOARD_PAGE,
+
+    END_PAGE
 }

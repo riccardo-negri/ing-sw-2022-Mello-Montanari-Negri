@@ -66,8 +66,8 @@ public class BoardPageCLI extends AbstractBoardPage {
                         if (moveFromStdin.get(0).contains("use-character")) {
                             parseAndDoCharacterMove(moveFromStdin.get(0));
                         }
-                        else if (moveFromStdin.get(0).contains("help")) {
-                            lastHelper = Integer.parseInt(moveFromStdin.get(0).split("-")[1].strip());
+                        else if (moveFromStdin.get(0).contains("character-info")) {
+                            lastHelper = Integer.parseInt(moveFromStdin.get(0).split("-")[2].strip());
                         }
                         else {
                             switch (model.getGameState().getGameStateName()) {

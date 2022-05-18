@@ -158,8 +158,8 @@ public class BoardUtilsCLI {
         terminal.writer().println(ansi().cursor(baseRow, baseCol).a(R1));
         terminal.writer().println(ansi().cursor(baseRow + 1, baseCol).a(R2));
         terminal.writer().println(ansi().cursor(baseRow + 2, baseCol).a(
-                MessageFormat.format(R3, (hasMotherNature ? ansi().fgRgb(255, 128, 0).a(String.format("%02d", ID)) + "" + ansi().fgDefault().bgDefault().a("") : String.format("%02d", ID)))
-        ));
+                MessageFormat.format(R3, String.format("%02d", ID)))
+        );
         terminal.writer().println(ansi().cursor(baseRow + 3, baseCol).a(R4));
         terminal.writer().println(ansi().cursor(baseRow + 4, baseCol).a(
                 MessageFormat.format(R5,
@@ -181,6 +181,21 @@ public class BoardUtilsCLI {
         ));
         terminal.writer().println(ansi().cursor(baseRow + 8, baseCol).a(R9));
 
+        if(hasMotherNature) {
+            final String R1_M = "_________\n";
+            final String R2_M = "/";
+            final String R3_M = "\\";
+            final String R4_M = "\\_________/\n";
+            terminal.writer().println(ansi().fgRgb(255,128,0).cursor(baseRow, baseCol+4).a(R1_M));
+            terminal.writer().println(ansi().cursor(baseRow+1, baseCol+3).a(R2_M).cursor(baseRow+1, baseCol+13).a(R3_M));
+            terminal.writer().println(ansi().cursor(baseRow+2, baseCol+2).a(R2_M).cursor(baseRow+2, baseCol+14).a(R3_M));
+            terminal.writer().println(ansi().cursor(baseRow+3, baseCol+1).a(R2_M).cursor(baseRow+3, baseCol+15).a(R3_M));
+            terminal.writer().println(ansi().cursor(baseRow+4, baseCol).a(R2_M).cursor(baseRow+4, baseCol+16).a(R3_M));
+            terminal.writer().println(ansi().cursor(baseRow+5, baseCol).a(R3_M).cursor(baseRow+5, baseCol+16).a(R2_M));
+            terminal.writer().println(ansi().cursor(baseRow+6, baseCol+1).a(R3_M).cursor(baseRow+6, baseCol+15).a(R2_M));
+            terminal.writer().println(ansi().cursor(baseRow+7, baseCol+2).a(R3_M).cursor(baseRow+7, baseCol+14).a(R2_M));
+            terminal.writer().println(ansi().cursor(baseRow+8, baseCol+3).a(R4_M).fgDefault());
+        }
         if (hasNoEntryTile) {
             terminal.writer().print(ansi().cursor(baseRow + 1, baseCol + 8).fgRgb(255, 0, 0).a("Ø").fgDefault());
         }

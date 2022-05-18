@@ -190,7 +190,7 @@ public class ReadMoveUtilsCLI {
 
     private static ArgumentCompleter characterHelper (int[] ids) {
         return new ArgumentCompleter(
-                new StringsCompleter("help"),
+                new StringsCompleter("character-info"),
                 new Completers.OptionCompleter(Arrays.asList(
                         new StringsCompleter("character-" + ids[0], "character-" + ids[1], "character-" + ids[2]),
                         NullCompleter.INSTANCE),

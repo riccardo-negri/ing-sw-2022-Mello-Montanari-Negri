@@ -17,6 +17,6 @@ public class Regex {
     public final static String USE_CHARACTER_10 = "^(use-character-10 take-from-entrance )(green|red|yellow|pink|blue)( )(green|red|yellow|pink|blue|nothing)( exchange-with-from-entrance )(green|red|yellow|pink|blue)( )(green|red|yellow|pink|blue|nothing)\s?$";
     public final static String USE_CHARACTER_11 = "^(use-character-11 take )(green|red|yellow|pink|blue)\s?$";
     public final static String USE_CHARACTER_12 = "^(use-character-12 select )(green|red|yellow|pink|blue)\s?$";
-    public final static String HELPER_CHARACTER_START = "^(help character-";
+    public final static String HELPER_CHARACTER_START = "^(character-info character-";
     public final static String HELPER_CHARACTER_END = ")\s?$";
 }

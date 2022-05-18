@@ -2,7 +2,7 @@ package it.polimi.ingsw.client.page;
 
 import it.polimi.ingsw.client.Client;
 
-import static it.polimi.ingsw.client.page.ClientPage.START_PAGE;
+import static it.polimi.ingsw.client.page.ClientPage.MENU_PAGE;
 
 public abstract class AbstractEndPage extends AbstractPage {
 
@@ -11,6 +11,6 @@ public abstract class AbstractEndPage extends AbstractPage {
     }
 
     public void onEnd () {
-        client.setNextState(START_PAGE);
+        client.setNextState(MENU_PAGE);
     }
 }

@@ -17,6 +17,11 @@ public class CoreUtilsCLI {
         terminal.writer().flush();
     }
 
+    public static void moveCursorToTop (Terminal terminal) {
+        terminal.writer().println(ansi().cursor(0, 0));
+        terminal.writer().flush();
+    }
+
     public static void moveCursorToEnd (Terminal terminal) {
         terminal.writer().println(ansi().cursor(terminal.getHeight() - 1, 0));
         terminal.writer().flush();
@@ -213,7 +218,7 @@ public class CoreUtilsCLI {
             terminal.writer().print(ansi().cursorUp(1));
             terminal.writer().print(ansi().eraseLine());
             printTerminalCenteredLine(terminal, requestText, 1);
-            terminal.writer().print(ansi().fgBlue().a(defaultValue).cursorDownLine());
+            terminal.writer().print(ansi().fgBlue().a(defaultValue ? "y" : "n").cursorDownLine());
             terminal.writer().flush();
             return defaultValue;
         }

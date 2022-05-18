@@ -75,6 +75,29 @@ public class BoardUtilsCLI {
         terminal.writer().flush();
     }
 
+    public static void printCharacterHelper(Terminal terminal, int characterID) {
+        String help;
+        help = "Character " + characterID + " description: ";
+        switch (characterID) {
+            case 1 -> help += CharactersDescription.CHARACTER_1;
+            case 2 -> help += CharactersDescription.CHARACTER_2;
+            case 3 -> help += CharactersDescription.CHARACTER_3;
+            case 4 -> help += CharactersDescription.CHARACTER_4;
+            case 5 -> help += CharactersDescription.CHARACTER_5;
+            case 6 -> help += CharactersDescription.CHARACTER_6;
+            case 7 -> help += CharactersDescription.CHARACTER_7;
+            case 8 -> help += CharactersDescription.CHARACTER_8;
+            case 9 -> help += CharactersDescription.CHARACTER_9;
+            case 10 -> help += CharactersDescription.CHARACTER_10;
+            case 11 -> help += CharactersDescription.CHARACTER_11;
+            case 12 -> help += CharactersDescription.CHARACTER_12;
+            default -> help = "";
+        }
+        help += "\n";
+        terminal.writer().print(ansi().fgGreen().a(help).fgDefault());
+        terminal.writer().flush();
+    }
+
     private static int getSchoolBoardWidth () {
         return 19;
     }

@@ -24,6 +24,7 @@ import static org.fusesource.jansi.Ansi.ansi;
 
 public class BoardPageCLI extends AbstractBoardPage {
     private String lastWarning;
+    private Integer lastHelper;
     volatile List<String> moveFromStdin = new ArrayList<>();
 
     public BoardPageCLI (Client client) {
@@ -48,6 +49,10 @@ public class BoardPageCLI extends AbstractBoardPage {
                 printConsoleWarning(terminal, lastWarning);
                 lastWarning = null;
             }
+            if(lastHelper != null) {
+                printCharacterHelper(terminal, lastHelper);
+                lastHelper = null;
+            }
             LOGGER.log(Level.INFO, "Drew game board and console area");
 
             if (model.getGameState().getCurrentPlayer() == client.getUsernames().indexOf(client.getUsername())) { // enter if it's your turn
@@ -58,8 +63,11 @@ public class BoardPageCLI extends AbstractBoardPage {
                 if (moveFromStdin.size() != 0) { // a move has have been read
                     LOGGER.log(Level.INFO, "Processing input move: " + moveFromStdin + " Game state: " + model.getGameState().getGameStateName());
                     try {
-                        if (moveFromStdin.get(0).contains("character")) {
+                        if (moveFromStdin.get(0).contains("use-character")) {
                             parseAndDoCharacterMove(moveFromStdin.get(0));
+                        }
+                        else if (moveFromStdin.get(0).contains("help")) {
+                            lastHelper = Integer.parseInt(moveFromStdin.get(0).split("-")[1].strip());
                         }
                         else {
                             switch (model.getGameState().getGameStateName()) {
@@ -179,7 +187,7 @@ public class BoardPageCLI extends AbstractBoardPage {
 
     private void askForMoveBasedOnState () {
         switch (model.getGameState().getGameStateName()) {
-            case "PS" -> getMovePlayAssistant(terminal, commandsHistory, client.getUsername(), moveFromStdin);
+            case "PS" -> getMovePlayAssistant(terminal, commandsHistory, client.getUsername(), getCharactersID(), moveFromStdin);
             case "MSS" -> getMoveStudentToIsland(terminal, commandsHistory, client.getUsername(), getCharactersID(), moveFromStdin);
             case "MMNS" -> getMoveMotherNature(terminal, commandsHistory, client.getUsername(), getCharactersID(), moveFromStdin);
             case "CCS" -> getMoveSelectCloud(terminal, commandsHistory, client.getUsername(), getCharactersID(), moveFromStdin);

@@ -9,6 +9,7 @@ import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.enums.PlayerNumber;
 import it.polimi.ingsw.networking.*;
 import it.polimi.ingsw.networking.InitialState;
+import it.polimi.ingsw.utils.LogFormatter;
 
 import java.io.IOException;
 import java.util.ArrayList;

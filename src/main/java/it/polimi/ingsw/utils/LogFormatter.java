@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client;
+package it.polimi.ingsw.utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

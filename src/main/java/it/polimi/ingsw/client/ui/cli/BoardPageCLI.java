@@ -12,7 +12,6 @@ import it.polimi.ingsw.networking.moves.Move;
 import org.jline.reader.UserInterruptException;
 
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -25,7 +24,7 @@ import static org.fusesource.jansi.Ansi.ansi;
 public class BoardPageCLI extends AbstractBoardPage {
     private String lastWarning;
     private Integer lastHelper;
-    volatile List<String> moveFromStdin = new ArrayList<>();
+    static final List<String> moveFromStdin = new ArrayList<>();
 
     public BoardPageCLI (Client client) {
         super(client);
@@ -37,56 +36,16 @@ public class BoardPageCLI extends AbstractBoardPage {
     @Override
     public void draw (Client client) {
 
-        while (!client.getModel().isGameEnded() && client.getNextState() == ClientPage.BOARD_PAGE) { //TODO refactor
-            try {
-                drawGameAndConsole();
-            } catch (ConcurrentModificationException e) {
-                LOGGER.log(Level.WARNING, new StringBuilder().append("Got a ConcurrentModificationException while trying to draw the CLI: ").append(e).toString());
-                drawGameAndConsole(); //TODO understand if there's a nicer way to handle this
-            }
-
-            if (lastWarning != null) {
-                printConsoleWarning(terminal, lastWarning);
-                lastWarning = null;
-            }
-            if (lastHelper != null) {
-                printCharacterHelper(terminal, lastHelper);
-                lastHelper = null;
-            }
-            LOGGER.log(Level.INFO, "Drew game board and console area");
+        while (!client.getModel().isGameEnded() && client.getNextState() == ClientPage.BOARD_PAGE) {
+            drawGameAndConsole();
+            printWarningOrHelper();
+            logger.log(Level.INFO, "Drew game board and console area");
 
             if (model.getGameState().getCurrentPlayer() == client.getUsernames().indexOf(client.getUsername())) { // enter if it's your turn
-
-                moveFromStdin = new ArrayList<>();
+                moveFromStdin.clear();
                 waitForMoveOrMessage();
-
-                if (moveFromStdin.size() != 0) { // a move has have been read
-                    LOGGER.log(Level.INFO, "Processing input move: " + moveFromStdin + " Game state: " + model.getGameState().getGameStateName());
-                    try {
-                        if (moveFromStdin.get(0).contains("use-character")) {
-                            parseAndDoCharacterMove(moveFromStdin.get(0));
-                        }
-                        else if (moveFromStdin.get(0).contains("character-info")) {
-                            lastHelper = Integer.parseInt(moveFromStdin.get(0).split("-")[2].strip());
-                        }
-                        else {
-                            switch (model.getGameState().getGameStateName()) {
-                                case "PS" -> doCardChoice(Integer.parseInt(moveFromStdin.get(0).split(" ")[1]));
-                                case "MSS" ->
-                                        doStudentMovement(getStudentColorFromString(moveFromStdin.get(0).split(" ")[1]), moveFromStdin.get(0).split(" ")[3]);
-                                case "MMNS" ->
-                                        doMotherNatureMovement(Integer.parseInt(moveFromStdin.get(0).split(" ")[2]));
-                                case "CCS" -> doCloudChoice(Integer.parseInt(moveFromStdin.get(0).split(" ")[1]));
-                                default -> {
-                                }
-                            }
-                        }
-                    } catch (Exception e) {
-                        LOGGER.log(Level.WARNING, "Got an invalid move (that passed regex check), asking for it again. Exception: " + e);
-                        lastWarning = "Please type a valid command. " + e.getMessage();
-                        e.printStackTrace();
-                        waitEnterPressed(terminal);
-                    }
+                if (!moveFromStdin.isEmpty()) { // a move has have been read
+                    processMoveFromInput();
                 }
                 else { // no move was made, so it's a message about some disconnection events
                     Message message = client.getConnection().waitMessage();
@@ -94,25 +53,70 @@ public class BoardPageCLI extends AbstractBoardPage {
                 }
             }
             else { // enter here if it's not your turn
-                printConsoleInfo(terminal, "Waiting for the other players to do a move...");
-                Message message = client.getConnection().waitMessage();
-                if (message instanceof Move) {
-                    try {
-                        applyOtherPlayersMove((Move) message);
-                    } catch (Exception e) {
-                        LOGGER.log(Level.WARNING, "Got an invalid move from the server. Exception: " + e);
-                        e.printStackTrace();
-                        waitEnterPressed(terminal);
-                    }
-                }
-                else {
-                    handleMessageNotMoveAndPrintStatus(message);
-                }
+                waitAndHandleMessage();
             }
         }
 
-        LOGGER.log(Level.FINE, "Game finished because someone won or surrendered");
+        logger.log(Level.FINE, "Game finished because someone won or surrendered");
         if (client.getNextState() == ClientPage.BOARD_PAGE) onEnd(false);
+    }
+
+    private void processMoveFromInput () {
+        String toLog = "Processing input move: " + moveFromStdin + " Game state: " + model.getGameState().getGameStateName();
+        logger.log(Level.INFO, toLog);
+        try {
+            if (moveFromStdin.get(0).contains("use-character")) {
+                parseAndDoCharacterMove(moveFromStdin.get(0));
+            }
+            else if (moveFromStdin.get(0).contains("character-info")) {
+                lastHelper = Integer.parseInt(moveFromStdin.get(0).split("-")[2].strip());
+            }
+            else {
+                switch (model.getGameState().getGameStateName()) {
+                    case "PS" -> doCardChoice(Integer.parseInt(moveFromStdin.get(0).split(" ")[1]));
+                    case "MSS" ->
+                            doStudentMovement(getStudentColorFromString(moveFromStdin.get(0).split(" ")[1]), moveFromStdin.get(0).split(" ")[3]);
+                    case "MMNS" -> doMotherNatureMovement(Integer.parseInt(moveFromStdin.get(0).split(" ")[2]));
+                    case "CCS" -> doCloudChoice(Integer.parseInt(moveFromStdin.get(0).split(" ")[1]));
+                    default -> logger.log(Level.WARNING, "Current state is not supported");
+                }
+            }
+        } catch (Exception e) {
+            toLog = "Got an invalid move (that passed regex check), asking for it again. Exception: " + e;
+            logger.log(Level.WARNING, toLog);
+            lastWarning = "Please type a valid command. " + e.getMessage();
+            e.printStackTrace();
+            waitEnterPressed(terminal);
+        }
+    }
+
+    private void waitAndHandleMessage () {
+        printConsoleInfo(terminal, "Waiting for the other players to do a move...");
+        Message message = client.getConnection().waitMessage();
+        if (message instanceof Move move) {
+            try {
+                applyOtherPlayersMove(move);
+            } catch (Exception e) {
+                String toLog = "Got an invalid move from the server. Exception: " + e;
+                logger.log(Level.WARNING, toLog);
+                e.printStackTrace();
+                waitEnterPressed(terminal);
+            }
+        }
+        else {
+            handleMessageNotMoveAndPrintStatus(message);
+        }
+    }
+
+    private void printWarningOrHelper () {
+        if (lastWarning != null) {
+            printConsoleWarning(terminal, lastWarning);
+            lastWarning = null;
+        }
+        if (lastHelper != null) {
+            printCharacterHelper(terminal, lastHelper);
+            lastHelper = null;
+        }
     }
 
     private void handleMessageNotMoveAndPrintStatus (Message message) {
@@ -121,12 +125,12 @@ public class BoardPageCLI extends AbstractBoardPage {
             waitEnterPressed(terminal);
             onEnd(true);
         }
-        else if (message instanceof UserDisconnected) {
-            lastWarning = "Player " + ((UserDisconnected) message).getUsername() + " disconnected from the game.";
+        else if (message instanceof UserDisconnected userDisconnected) {
+            lastWarning = "Player " + userDisconnected.getUsername() + " disconnected from the game.";
             client.getUsernamesDisconnected().add(((UserDisconnected) message).getUsername());
         }
-        else if (message instanceof UserReconnected) {
-            lastWarning = "Player " + ((UserReconnected) message).getUsername() + " reconnected to the game.";
+        else if (message instanceof UserReconnected userReconnected) {
+            lastWarning = "Player " + userReconnected.getUsername() + " reconnected to the game.";
             client.getUsernamesDisconnected().remove(((UserReconnected) message).getUsername());
         }
         else {
@@ -136,8 +140,10 @@ public class BoardPageCLI extends AbstractBoardPage {
     }
 
     private void parseAndDoCharacterMove (String move) throws Exception {
-        int ID = Integer.parseInt(move.split(" ")[0].split("-")[2]);
+        int id = Integer.parseInt(move.split(" ")[0].split("-")[2]);
         ArrayList<Object> parameters = new ArrayList<>();
+        final String nothing = "nothing";
+
         switch (move.split(" ")[0]) { // adding parameters only where needed
             case "use-character-1" -> {
                 parameters.add(getStudentColorFromString(move.split(" ")[2]));
@@ -150,19 +156,19 @@ public class BoardPageCLI extends AbstractBoardPage {
                 List<StudentColor> temp2 = new ArrayList<>();
 
                 temp1.add(getStudentColorFromString(move.split(" ")[2]));
-                if (!move.split(" ")[3].contains("nothing")) {
+                if (!move.split(" ")[3].contains(nothing)) {
                     temp1.add(getStudentColorFromString(move.split(" ")[3]));
                 }
-                if (!move.split(" ")[4].contains("nothing")) {
+                if (!move.split(" ")[4].contains(nothing)) {
                     temp1.add(getStudentColorFromString(move.split(" ")[4]));
                 }
                 parameters.add(temp1);
 
                 temp2.add(getStudentColorFromString(move.split(" ")[6]));
-                if (!move.split(" ")[7].contains("nothing")) {
+                if (!move.split(" ")[7].contains(nothing)) {
                     temp2.add(getStudentColorFromString(move.split(" ")[7]));
                 }
-                if (!move.split(" ")[8].contains("nothing")) {
+                if (!move.split(" ")[8].contains(nothing)) {
                     temp2.add(getStudentColorFromString(move.split(" ")[8]));
                 }
                 parameters.add(temp2);
@@ -174,21 +180,20 @@ public class BoardPageCLI extends AbstractBoardPage {
                 List<StudentColor> temp2 = new ArrayList<>();
 
                 temp1.add(getStudentColorFromString(move.split(" ")[2]));
-                if (!move.split(" ")[3].contains("nothing")) {
+                if (!move.split(" ")[3].contains(nothing)) {
                     temp1.add(getStudentColorFromString(move.split(" ")[3]));
                 }
                 parameters.add(temp1);
 
                 temp2.add(getStudentColorFromString(move.split(" ")[5]));
-                if (!move.split(" ")[6].contains("nothing")) {
+                if (!move.split(" ")[6].contains(nothing)) {
                     temp2.add(getStudentColorFromString(move.split(" ")[6]));
                 }
                 parameters.add(temp2);
             }
-            default -> {
-            }
+            default -> logger.log(Level.WARNING, "Received unsupported use-character move command");
         }
-        doCharacterMove(ID, parameters);
+        doCharacterMove(id, parameters);
     }
 
     private void askForMoveBasedOnState () {
@@ -201,8 +206,7 @@ public class BoardPageCLI extends AbstractBoardPage {
                     getMoveMotherNature(terminal, commandsHistory, client.getUsername(), getCharactersID(), moveFromStdin);
             case "CCS" ->
                     getMoveSelectCloud(terminal, commandsHistory, client.getUsername(), getCharactersID(), moveFromStdin);
-            default -> {
-            }
+            default -> logger.log(Level.WARNING, "Current state is not supported");
         }
     }
 
@@ -212,7 +216,7 @@ public class BoardPageCLI extends AbstractBoardPage {
                 askForMoveBasedOnState();
 
             } catch (UserInterruptException e) {
-                LOGGER.log(Level.SEVERE, e.toString());
+                logger.log(Level.SEVERE, e.toString());
             }
         });
 
@@ -228,7 +232,7 @@ public class BoardPageCLI extends AbstractBoardPage {
         try {
             t.join();
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            t.interrupt();
         }
     }
 

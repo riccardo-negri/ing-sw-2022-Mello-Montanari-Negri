@@ -111,8 +111,7 @@ public abstract class AbstractBoardPage extends AbstractPage {
                 moveToSend = new UseCharacter12(author, (StudentColor) parameters.get(0));
                 toLog = "Sending move UseCharacter12. Parameters: " + parameters.get(0).toString();
             }
-            default -> throw new Exception();
-
+            default -> throw new IllegalArgumentException();
         }
         logger.log(Level.INFO, toLog);
         validateAndSendMove(moveToSend);

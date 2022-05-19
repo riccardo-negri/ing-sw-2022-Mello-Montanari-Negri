@@ -113,6 +113,13 @@ public class BoardUtilsCLI {
         return array;
     }
 
+    private static int getPlayedCharacter(Game model, int playerID) {
+        if (model.getGameState().getCurrentPlayer() == playerID && model.getGameState() instanceof ActionState actionState && actionState.getActivatedCharacter() != null) {
+            return actionState.getActivatedCharacter().getId();
+        }
+        return -1;
+    }
+
     private static boolean areIslandsConnected (Game model, int firstIsl, int secondIsl) {
         for (IslandGroup g : model.getIslandGroupList()) {
             if (2 == g.getIslandList().stream().map(Island::getId).filter(integer -> integer == firstIsl || integer == secondIsl).count()) {
@@ -469,7 +476,7 @@ public class BoardUtilsCLI {
         final Wizard wizard = model.getWizard(playerID);
         final String playedCard = wizard.getCardDeck().getCurrentCard() != null ? wizard.getCardDeck().getCurrentCard().toString() : "Not played";
         final int coins = wizard.getMoney();
-        final int playedCharacter = model.getGameState().getCurrentPlayer() == playerID ? (model.getGameState() instanceof ActionState actionState ? (actionState.getActivatedCharacter() != null ? actionState.getActivatedCharacter().getId() : -1) : -1) : -1;
+        final int playedCharacter = getPlayedCharacter(model, playerID);
         final String towerColor = wizard.getTowerColor().toString();
         final int towerNumber = wizard.getTowerNumber();
         boolean[] professors = new boolean[]{

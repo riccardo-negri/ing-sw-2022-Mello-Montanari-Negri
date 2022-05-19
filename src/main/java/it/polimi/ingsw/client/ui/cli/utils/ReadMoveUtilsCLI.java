@@ -25,6 +25,27 @@ import static org.fusesource.jansi.Ansi.ansi;
 
 
 public class ReadMoveUtilsCLI {
+    private static final String GREEN = "green";
+    private static final String RED = "red";
+    private static final String YELLOW = "yellow";
+    private static final String PINK = "pink";
+    private static final String BLUE = "blue";
+
+    private static final String ISLAND_0 = "island-0";
+    private static final String ISLAND_1 = "island-1";
+    private static final String ISLAND_2 = "island-2";
+    private static final String ISLAND_3 = "island-3";
+    private static final String ISLAND_4 = "island-4";
+    private static final String ISLAND_5 = "island-5";
+    private static final String ISLAND_6 = "island-6";
+    private static final String ISLAND_7 = "island-7";
+    private static final String ISLAND_8 = "island-8";
+    private static final String ISLAND_9 = "island-9";
+    private static final String ISLAND_10 = "island-10";
+    private static final String ISLAND_11 = "island-11";
+    private ReadMoveUtilsCLI () {
+        
+    }
 
     public static String askForMove (Terminal terminal, History history, Completer completer, String username) {
         LineReader reader = LineReaderBuilder.builder()
@@ -69,6 +90,7 @@ public class ReadMoveUtilsCLI {
                 characterHelper(characters)
         );
     }
+
     private static AggregateCompleter decorateWithCharacterMoveAndHelper (int[] characters, ArgumentCompleter completer) {
         if (characters.length == 0) {
             return new AggregateCompleter(completer);
@@ -82,15 +104,17 @@ public class ReadMoveUtilsCLI {
         );
     }
 
-    private static ArgumentCompleter characterCompleter (int id) {
+    private static ArgumentCompleter characterCompleter (int id) {        
+        final String SELECT = "select";
+        final String NOTHING = "nothing";
         return switch (id) {
             case 1 -> new ArgumentCompleter(
                     new StringsCompleter("use-character-1"),
                     new Completers.OptionCompleter(Arrays.asList(
                             new StringsCompleter("move"),
-                            new StringsCompleter("green", "red", "yellow", "pink", "blue"),
+                            new StringsCompleter(GREEN, RED, YELLOW, PINK, BLUE),
                             new StringsCompleter("to"),
-                            new StringsCompleter("island-1", "island-2", "island-3", "island-4", "island-5", "island-6", "island-7", "island-8", "island-9", "island-10", "island-11", "island-0"),
+                            new StringsCompleter(ISLAND_1, ISLAND_2, ISLAND_3, ISLAND_4, ISLAND_5, ISLAND_6, ISLAND_7, ISLAND_8, ISLAND_9, ISLAND_10, ISLAND_11, ISLAND_0),
                             NullCompleter.INSTANCE),
                             JlineCommandRegistry.compileCommandOptions(""), 1)
             );
@@ -103,8 +127,8 @@ public class ReadMoveUtilsCLI {
             case 3 -> new ArgumentCompleter(
                     new StringsCompleter("use-character-3"),
                     new Completers.OptionCompleter(Arrays.asList(
-                            new StringsCompleter("select"),
-                            new StringsCompleter("island-1", "island-2", "island-3", "island-4", "island-5", "island-6", "island-7", "island-8", "island-9", "island-10", "island-11", "island-0"),
+                            new StringsCompleter(SELECT),
+                            new StringsCompleter(ISLAND_1, ISLAND_2, ISLAND_3, ISLAND_4, ISLAND_5, ISLAND_6, ISLAND_7, ISLAND_8, ISLAND_9, ISLAND_10, ISLAND_11, ISLAND_0),
                             NullCompleter.INSTANCE),
                             JlineCommandRegistry.compileCommandOptions(""), 1)
             );
@@ -117,8 +141,8 @@ public class ReadMoveUtilsCLI {
             case 5 -> new ArgumentCompleter(
                     new StringsCompleter("use-character-5"),
                     new Completers.OptionCompleter(Arrays.asList(
-                            new StringsCompleter("select"),
-                            new StringsCompleter("island-1", "island-2", "island-3", "island-4", "island-5", "island-6", "island-7", "island-8", "island-9", "island-10", "island-11", "island-0"),
+                            new StringsCompleter(SELECT),
+                            new StringsCompleter(ISLAND_1, ISLAND_2, ISLAND_3, ISLAND_4, ISLAND_5, ISLAND_6, ISLAND_7, ISLAND_8, ISLAND_9, ISLAND_10, ISLAND_11, ISLAND_0),
                             NullCompleter.INSTANCE),
                             JlineCommandRegistry.compileCommandOptions(""), 1)
             );
@@ -132,13 +156,13 @@ public class ReadMoveUtilsCLI {
                     new StringsCompleter("use-character-7"),
                     new Completers.OptionCompleter(Arrays.asList(
                             new StringsCompleter("take"),
-                            new StringsCompleter("green", "red", "yellow", "pink", "blue"),
-                            new StringsCompleter("green", "red", "yellow", "pink", "blue", "nothing"),
-                            new StringsCompleter("green", "red", "yellow", "pink", "blue", "nothing"),
+                            new StringsCompleter(GREEN, RED, YELLOW, PINK, BLUE),
+                            new StringsCompleter(GREEN, RED, YELLOW, PINK, BLUE, NOTHING),
+                            new StringsCompleter(GREEN, RED, YELLOW, PINK, BLUE, NOTHING),
                             new StringsCompleter("remove-from-dining"),
-                            new StringsCompleter("green", "red", "yellow", "pink", "blue"),
-                            new StringsCompleter("green", "red", "yellow", "pink", "blue", "nothing"),
-                            new StringsCompleter("green", "red", "yellow", "pink", "blue", "nothing"),
+                            new StringsCompleter(GREEN, RED, YELLOW, PINK, BLUE),
+                            new StringsCompleter(GREEN, RED, YELLOW, PINK, BLUE, NOTHING),
+                            new StringsCompleter(GREEN, RED, YELLOW, PINK, BLUE, NOTHING),
                             NullCompleter.INSTANCE),
                             JlineCommandRegistry.compileCommandOptions(""), 1)
             );
@@ -151,8 +175,8 @@ public class ReadMoveUtilsCLI {
             case 9 -> new ArgumentCompleter(
                     new StringsCompleter("use-character-9"),
                     new Completers.OptionCompleter(Arrays.asList(
-                            new StringsCompleter("select"),
-                            new StringsCompleter("green", "red", "yellow", "pink", "blue"),
+                            new StringsCompleter(SELECT),
+                            new StringsCompleter(GREEN, RED, YELLOW, PINK, BLUE),
                             NullCompleter.INSTANCE),
                             JlineCommandRegistry.compileCommandOptions(""), 1)
             );
@@ -160,11 +184,11 @@ public class ReadMoveUtilsCLI {
                     new StringsCompleter("use-character-10"),
                     new Completers.OptionCompleter(Arrays.asList(
                             new StringsCompleter("take-from-entrance"),
-                            new StringsCompleter("green", "red", "yellow", "pink", "blue"),
-                            new StringsCompleter("green", "red", "yellow", "pink", "blue", "nothing"),
+                            new StringsCompleter(GREEN, RED, YELLOW, PINK, BLUE),
+                            new StringsCompleter(GREEN, RED, YELLOW, PINK, BLUE, NOTHING),
                             new StringsCompleter("exchange-with-from-dining"),
-                            new StringsCompleter("green", "red", "yellow", "pink", "blue"),
-                            new StringsCompleter("green", "red", "yellow", "pink", "blue", "nothing"),
+                            new StringsCompleter(GREEN, RED, YELLOW, PINK, BLUE),
+                            new StringsCompleter(GREEN, RED, YELLOW, PINK, BLUE, NOTHING),
                             NullCompleter.INSTANCE),
                             JlineCommandRegistry.compileCommandOptions(""), 1)
             );
@@ -172,15 +196,15 @@ public class ReadMoveUtilsCLI {
                     new StringsCompleter("use-character-11"),
                     new Completers.OptionCompleter(Arrays.asList(
                             new StringsCompleter("take"),
-                            new StringsCompleter("green", "red", "yellow", "pink", "blue"),
+                            new StringsCompleter(GREEN, RED, YELLOW, PINK, BLUE),
                             NullCompleter.INSTANCE),
                             JlineCommandRegistry.compileCommandOptions(""), 1)
             );
             case 12 -> new ArgumentCompleter(
                     new StringsCompleter("use-character-12"),
                     new Completers.OptionCompleter(Arrays.asList(
-                            new StringsCompleter("select"),
-                            new StringsCompleter("green", "red", "yellow", "pink", "blue"),
+                            new StringsCompleter(SELECT),
+                            new StringsCompleter(GREEN, RED, YELLOW, PINK, BLUE),
                             NullCompleter.INSTANCE),
                             JlineCommandRegistry.compileCommandOptions(""), 1)
             );
@@ -189,22 +213,26 @@ public class ReadMoveUtilsCLI {
     }
 
     private static ArgumentCompleter characterHelper (int[] ids) {
+        final String CHARACTER_PREFIX = "character-";
         return new ArgumentCompleter(
                 new StringsCompleter("character-info"),
                 new Completers.OptionCompleter(Arrays.asList(
-                        new StringsCompleter("character-" + ids[0], "character-" + ids[1], "character-" + ids[2]),
+                        new StringsCompleter(CHARACTER_PREFIX + ids[0], CHARACTER_PREFIX + ids[1], CHARACTER_PREFIX + ids[2]),
                         NullCompleter.INSTANCE),
                         JlineCommandRegistry.compileCommandOptions(""), 1));
     }
 
-    private static String decorateWithHelperRegex (int[] characters, String regex) {
+    private static String decorateWithHelperRegex (int[] characters) {
         if (characters.length != 0) {
+            StringBuilder regexBuilder = new StringBuilder(Regex.PLAY_ASSISTANT);
             for (int character : characters) {
-                regex += "|" + Regex.HELPER_CHARACTER_START + character + Regex.HELPER_CHARACTER_END;
+                regexBuilder.append("|").append(Regex.HELPER_CHARACTER_START).append(character).append(Regex.HELPER_CHARACTER_END);
             }
+            return regexBuilder.toString();
         }
-        return regex;
+        return "";
     }
+
     private static String decorateWithUseCharacterAndHelperRegex (int[] characters, String regex) {
         if (characters.length == 0) {
             return regex;
@@ -236,9 +264,9 @@ public class ReadMoveUtilsCLI {
         AggregateCompleter completer = decorateWithCharacterMoveAndHelper(characters, new ArgumentCompleter(
                 new StringsCompleter("move-student"),
                 new Completers.OptionCompleter(Arrays.asList(
-                        new StringsCompleter("green", "red", "yellow", "pink", "blue"),
+                        new StringsCompleter(GREEN, RED, YELLOW, PINK, BLUE),
                         new StringsCompleter("to"),
-                        new StringsCompleter("dining-room", "island-1", "island-2", "island-3", "island-4", "island-5", "island-6", "island-7", "island-8", "island-9", "island-10", "island-11", "island-0"), NullCompleter.INSTANCE),
+                        new StringsCompleter("dining-room", ISLAND_1, ISLAND_2, ISLAND_3, ISLAND_4, ISLAND_5, ISLAND_6, ISLAND_7, ISLAND_8, ISLAND_9, ISLAND_10, ISLAND_11, ISLAND_0), NullCompleter.INSTANCE),
                         JlineCommandRegistry.compileCommandOptions(""), 1)
         ));
         Pattern pattern = Pattern.compile(decorateWithUseCharacterAndHelperRegex(characters, Regex.MOVE_STUDENT), Pattern.CASE_INSENSITIVE);
@@ -284,7 +312,7 @@ public class ReadMoveUtilsCLI {
                         new StringsCompleter("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"), NullCompleter.INSTANCE),
                         JlineCommandRegistry.compileCommandOptions(""), 1)
         ));
-        Pattern pattern = Pattern.compile(decorateWithHelperRegex(characters, Regex.PLAY_ASSISTANT), Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile(decorateWithHelperRegex(characters), Pattern.CASE_INSENSITIVE);
 
         String move = askAndCheckMove(terminal, history, completer, username, pattern);
 

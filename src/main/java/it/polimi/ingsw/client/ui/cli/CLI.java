@@ -16,9 +16,6 @@ public class CLI implements UI {
     private History commandsHistory;
 
     public void init () {
-
-        // https://superuser.com/questions/413073/windows-console-with-ansi-colors-handling
-        // https://github.com/jline/jline3/issues/779
         try {
             terminal = TerminalBuilder.terminal();
             commandsHistory = new DefaultHistory();

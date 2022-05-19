@@ -6,7 +6,7 @@ import static it.polimi.ingsw.client.page.ClientPage.MENU_PAGE;
 
 public abstract class AbstractCreditsPage extends AbstractPage {
 
-    public AbstractCreditsPage (Client client) {
+    protected AbstractCreditsPage (Client client) {
         super(client);
     }
 

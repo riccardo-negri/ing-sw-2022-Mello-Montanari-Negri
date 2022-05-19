@@ -5,7 +5,7 @@ import it.polimi.ingsw.client.Client;
 import static it.polimi.ingsw.client.page.ClientPage.MATCHMAKING_PAGE;
 
 public abstract class AbstractGameModeSelectionPage extends AbstractPage {
-    public AbstractGameModeSelectionPage (Client client) {
+    protected AbstractGameModeSelectionPage (Client client) {
         super(client);
     }
 

@@ -13,13 +13,14 @@ public class CreditsPageCLI extends AbstractCreditsPage {
 
     @Override
     public void draw (Client client) {
-        String CREDITS =
-                       " ██████╗██████╗ ███████╗██████╗ ██╗████████╗███████╗\n" +
-                       "██╔════╝██╔══██╗██╔════╝██╔══██╗██║╚══██╔══╝██╔════╝\n" +
-                       "██║     ██████╔╝█████╗  ██║  ██║██║   ██║   ███████╗\n" +
-                       "██║     ██╔══██╗██╔══╝  ██║  ██║██║   ██║   ╚════██║\n" +
-                       "╚██████╗██║  ██║███████╗██████╔╝██║   ██║   ███████║\n" +
-                       " ╚═════╝╚═╝  ╚═╝╚══════╝╚═════╝ ╚═╝   ╚═╝   ╚══════╝\n" ;
+        final String CREDITS = """
+                  ██████╗██████╗ ███████╗██████╗ ██╗████████╗███████╗
+                 ██╔════╝██╔══██╗██╔════╝██╔══██╗██║╚══██╔══╝██╔════╝
+                 ██║     ██████╔╝█████╗  ██║  ██║██║   ██║   ███████╗
+                 ██║     ██╔══██╗██╔══╝  ██║  ██║██║   ██║   ╚════██║
+                 ╚██████╗██║  ██║███████╗██████╔╝██║   ██║   ███████║
+                 ╚═════╝╚═╝  ╚═╝╚══════╝╚═════╝ ╚═╝   ╚═╝   ╚══════╝\040
+                """;
 
         clearTerminal(terminal);
         printTerminalCenteredMultilineText(terminal, CREDITS + "\nGame Design: Leo Colovini\nDevelopment: Simone Luciani \nArt: Alessandro Costa Kapakkione \nGraphics: Elisabetta Micucci \nRules: David Digby \nEdition: Giuliano Acquati and Lorenzo Tucci Sorrentino\n" + "\nPress enter to continue...");

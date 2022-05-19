@@ -7,7 +7,6 @@ import it.polimi.ingsw.networking.moves.*;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -23,7 +22,7 @@ public abstract class AbstractBoardPage extends AbstractPage {
     public void doCardChoice (int card) throws Exception {
         Move moveToSend = new CardChoice(client.getModel().getWizard(client.getUsernames().indexOf(client.getUsername())), card);
         String toLog = new StringBuilder().append("Sending move CardChoice. Usernames: ").append(client.getUsernames()).append(". Your username: ").append(client.getUsername()).append(". Your ID: ").append(client.getUsernames().indexOf(client.getUsername())).toString();
-        LOGGER.log(Level.INFO, toLog);
+        logger.log(Level.INFO, toLog);
         validateAndSendMove(moveToSend);
     }
 
@@ -32,12 +31,12 @@ public abstract class AbstractBoardPage extends AbstractPage {
         if (destination.contains("island")) {
             moveToSend = new IslandMovement(client.getModel().getWizard(client.getUsernames().indexOf(client.getUsername())), color, Integer.parseInt(destination.split("-")[1]));
             String toLog = new StringBuilder().append("Sending move IslandMovement: ").append(color.toString()).append(" ").append(destination).toString();
-            LOGGER.log(Level.INFO, toLog);
+            logger.log(Level.INFO, toLog);
         }
         else {
             moveToSend = new DiningRoomMovement(client.getModel().getWizard(client.getUsernames().indexOf(client.getUsername())), color);
             String toLog = "Sending move DiningRoomMovement: " + color.toString() + " " + destination;
-            LOGGER.log(Level.INFO, toLog);
+            logger.log(Level.INFO, toLog);
         }
 
         validateAndSendMove(moveToSend);
@@ -46,26 +45,26 @@ public abstract class AbstractBoardPage extends AbstractPage {
     public void doMotherNatureMovement (int steps) throws Exception { // destination can either be "dining-room" or "island-ID"
         Move moveToSend = new MotherNatureMovement(client.getModel().getWizard(client.getUsernames().indexOf(client.getUsername())), steps);
         String toLog = "Sending move MotherNatureMovement. Steps: " + steps;
-        LOGGER.log(Level.INFO, toLog);
+        logger.log(Level.INFO, toLog);
         validateAndSendMove(moveToSend);
     }
 
     public void doCloudChoice (int id) throws Exception { // destination can either be "dining-room" or "island-ID"
         Move moveToSend = new CloudChoice(client.getModel().getWizard(client.getUsernames().indexOf(client.getUsername())), id);
         String toLog = "Sending move CloudChoice. Cloud: " + id;
-        LOGGER.log(Level.INFO, toLog);
+        logger.log(Level.INFO, toLog);
         validateAndSendMove(moveToSend);
     }
 
-    public void doCharacterMove (int characterID, ArrayList<Object> parameters) throws Exception {
-        Move moveToSend = null;
+    public void doCharacterMove (int characterID, List<Object> parameters) throws Exception {
+        Move moveToSend;
         Wizard author = client.getModel().getWizard(client.getUsernames().indexOf(client.getUsername()));
-        String toLog = "";
+        String toLog;
 
         switch (characterID) {
             case 1 -> {
                 moveToSend = new UseCharacter1(author, (StudentColor) parameters.get(0), (Integer) parameters.get(1));
-                toLog = "Sending move UseCharacter1. Parameters: " + ((StudentColor) parameters.get(0)).toString() + " " + (Integer) parameters.get(1);
+                toLog = "Sending move UseCharacter1. Parameters: " + parameters.get(0).toString() + " " + parameters.get(1);
 
             }
             case 2 -> {
@@ -82,7 +81,7 @@ public abstract class AbstractBoardPage extends AbstractPage {
             }
             case 5 -> {
                 moveToSend = new UseCharacter5(author, (Integer) parameters.get(0));
-                toLog = "Sending move UseCharacter5. Parameters: " + (Integer) parameters.get(0);
+                toLog = "Sending move UseCharacter5. Parameters: " + parameters.get(0);
             }
             case 6 -> {
                 moveToSend = new UseCharacter6(author);
@@ -90,7 +89,7 @@ public abstract class AbstractBoardPage extends AbstractPage {
             }
             case 7 -> {
                 moveToSend = new UseCharacter7(author, (List<StudentColor>) parameters.get(0), (List<StudentColor>) parameters.get(1));
-                toLog = "Sending move UseCharacter7. Parameters: " + (List<StudentColor>) parameters.get(0) + " " + (List<StudentColor>) parameters.get(1);
+                toLog = "Sending move UseCharacter7. Parameters: " + parameters.get(0) + " " + parameters.get(1);
             }
             case 8 -> {
                 moveToSend = new UseCharacter8(author);
@@ -98,56 +97,60 @@ public abstract class AbstractBoardPage extends AbstractPage {
             }
             case 9 -> {
                 moveToSend = new UseCharacter9(author, (StudentColor) parameters.get(0));
-                toLog = "Sending move UseCharacter9. Parameters: " + ((StudentColor) parameters.get(0)).toString();
+                toLog = "Sending move UseCharacter9. Parameters: " + parameters.get(0).toString();
             }
             case 10 -> {
                 moveToSend = new UseCharacter10(author, (List<StudentColor>) parameters.get(0), (List<StudentColor>) parameters.get(1));
-                toLog = "Sending move UseCharacter10. Parameters: " + (List<StudentColor>) parameters.get(0) + " " + (List<StudentColor>) parameters.get(1);
+                toLog = "Sending move UseCharacter10. Parameters: " + parameters.get(0) + " " + parameters.get(1);
             }
             case 11 -> {
                 moveToSend = new UseCharacter11(author, (StudentColor) parameters.get(0));
-                toLog = "Sending move UseCharacter11. Parameters: " + ((StudentColor) parameters.get(0)).toString();
+                toLog = "Sending move UseCharacter11. Parameters: " + parameters.get(0).toString();
             }
             case 12 -> {
                 moveToSend = new UseCharacter12(author, (StudentColor) parameters.get(0));
-                toLog = "Sending move UseCharacter12. Parameters: " + ((StudentColor) parameters.get(0)).toString();
+                toLog = "Sending move UseCharacter12. Parameters: " + parameters.get(0).toString();
             }
-            default -> {}
+            default -> throw new Exception();
+
         }
-        LOGGER.log(Level.INFO, toLog);
-        if (moveToSend != null) {
-            validateAndSendMove(moveToSend);
-        }
+        logger.log(Level.INFO, toLog);
+        validateAndSendMove(moveToSend);
 
     }
 
     public void applyOtherPlayersMove (Move move) throws Exception {
         savePreviousState();
         String toLog = "Applying effects of the move just received. Move:" + move.toString();
-        LOGGER.log(Level.INFO, toLog);
+        logger.log(Level.INFO, toLog);
         move.applyEffectClient(client.getModel());
     }
 
     private void validateAndSendMove (Move moveToSend) throws Exception {
         savePreviousState();
 
-        LOGGER.log(Level.INFO, "Validating message. Move:" + moveToSend.toString());
+        String toLog = "Validating message. Move:" + moveToSend.toString();
+        logger.log(Level.INFO, toLog);
         moveToSend.validate(client.getModel()); // may throw exception
 
-        LOGGER.log(Level.INFO, "Sending message after validation. Move:" + moveToSend.toString());
+        toLog = "Sending message after validation. Move:" + moveToSend;
+        logger.log(Level.INFO, toLog);
         client.getConnection().send(moveToSend);
 
-        LOGGER.log(Level.INFO, "Waiting for message to come back. Move:" + moveToSend.toString());
+        toLog = "Waiting for message to come back. Move:" + moveToSend;
+        logger.log(Level.INFO, toLog);
         Move moveToApply = (Move) client.getConnection().waitMessage(Move.class);
 
-        LOGGER.log(Level.INFO, "Applying effects of message. Move:" + moveToSend.toString());
+        toLog = "Applying effects of message. Move:" + moveToSend;
+        logger.log(Level.INFO, toLog);
         moveToApply.applyEffectClient(client.getModel());
 
-        LOGGER.log(Level.INFO, "Applied effect of message. Move:" + moveToSend.toString());
+        toLog = "Applied effect of message. Move:" + moveToSend;
+        logger.log(Level.INFO, toLog);
     }
 
     private void savePreviousState () {
-        LOGGER.log(Level.INFO, "Saved state to file state.txt");
+        logger.log(Level.INFO, "Saved state to file state.txt");
         try {
             try (FileWriter myWriter = new FileWriter("state_" + client.getUsername() + ".txt")) {
                 myWriter.write(model.serializeGame());

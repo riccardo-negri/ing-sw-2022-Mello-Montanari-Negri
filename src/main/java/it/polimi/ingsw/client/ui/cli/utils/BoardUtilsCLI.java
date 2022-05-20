@@ -113,7 +113,7 @@ public class BoardUtilsCLI {
         return array;
     }
 
-    private static int getPlayedCharacter(Game model, int playerID) {
+    private static int getPlayedCharacter (Game model, int playerID) {
         if (model.getGameState().getCurrentPlayer() == playerID && model.getGameState() instanceof ActionState actionState && actionState.getActivatedCharacter() != null) {
             return actionState.getActivatedCharacter().getId();
         }
@@ -649,14 +649,13 @@ public class BoardUtilsCLI {
     public static void drawInfoSection (Terminal terminal, List<Integer> base, String serverIP, int serverPort, String username, List<String> usernames, Game model) {
         final int baseRow = base.get(0);
         final int baseCol = base.get(1);
-        final String gameMode = model.getGameState().getGameStateName();
+        final String currPhase = model.getGameState().getGameStateName();
         final int playersNumber = model.getPlayerNumber().getWizardNumber();
         final int round = findRoundNumber(model);
         final String currPlayer = usernames.get(model.getGameState().getCurrentPlayer());
-        final String currPhase = model.getGameMode().toString();
+        final String gameMode = model.getGameMode().toString();
         final int[] characters = model.getGameMode().equals(GameMode.COMPLETE) ? getCharactersID(model) : null;
         final int[] deck = model.getWizard(usernames.indexOf(username)).getCardDeck().getDeckCards();
-
 
         final String INFO = "Game Info";
         final String STATUS = "Game Status";

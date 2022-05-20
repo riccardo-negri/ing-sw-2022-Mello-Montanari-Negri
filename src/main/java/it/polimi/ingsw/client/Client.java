@@ -4,11 +4,8 @@ import it.polimi.ingsw.client.page.AbstractPage;
 import it.polimi.ingsw.client.page.ClientPage;
 import it.polimi.ingsw.client.ui.UI;
 import it.polimi.ingsw.client.ui.cli.CLI;
-import it.polimi.ingsw.model.enums.GameMode;
 import it.polimi.ingsw.model.entity.Game;
-import it.polimi.ingsw.model.enums.PlayerNumber;
 import it.polimi.ingsw.networking.*;
-import it.polimi.ingsw.networking.InitialState;
 import it.polimi.ingsw.utils.LogFormatter;
 
 import java.io.IOException;
@@ -72,27 +69,6 @@ public class Client {
         this.nextState = nextState;
     }
 
-    public void setupConnection () {
-        GameMode gm = isAdvancedGame ? GameMode.COMPLETE : GameMode.EASY;
-        Login login = new Login(username, PlayerNumber.fromNumber(playerNumber), gm);
-        connection = new Connection(ipAddress, port);
-        connection.send(login);
-        Redirect redirect = (Redirect) connection.waitMessage(Redirect.class);
-        port = redirect.getPort();
-        connection = new Connection(ipAddress, port);
-        connection.send(login);
-
-        // import initial state
-        InitialState initialState = (InitialState) connection.waitMessage(InitialState.class);
-        try {
-            model = Game.request(Game.deserializeGameFromString(initialState.getState()));
-            logger.log(Level.FINE, "Successfully loaded model sent by the server");
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, new StringBuilder().append("Couldn't load model sent by the server. Exception: ").append(e).toString());
-        }
-        usernames = initialState.getUsernames();
-    }
-
     public UI getUI () {
         return ui;
     }
@@ -125,6 +101,10 @@ public class Client {
         this.playerNumber = playerNumber;
     }
 
+    public boolean isAdvancedGame () {
+        return isAdvancedGame;
+    }
+
     public void setAdvancedGame (boolean advancedGame) {
         isAdvancedGame = advancedGame;
     }
@@ -145,12 +125,20 @@ public class Client {
         return usernames;
     }
 
+    public void setUsernames (List<String> usernames) {
+        this.usernames = (ArrayList<String>) usernames;
+    }
+
     public Logger getLogger () {
         return logger;
     }
 
     public Game getModel () {
         return model;
+    }
+
+    public void setModel (Game model) {
+        this.model = model;
     }
 
     public List<String> getUsernamesDisconnected () {

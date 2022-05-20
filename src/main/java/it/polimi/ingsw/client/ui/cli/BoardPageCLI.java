@@ -155,8 +155,6 @@ public class BoardPageCLI extends AbstractBoardPage {
             toLog = "Got an invalid move (that passed regex check), asking for it again. Exception: " + e;
             logger.log(Level.WARNING, toLog);
             lastWarning = "Please type a valid command. " + e.getMessage();
-            e.printStackTrace();
-            waitEnterPressed(terminal);
         }
     }
 

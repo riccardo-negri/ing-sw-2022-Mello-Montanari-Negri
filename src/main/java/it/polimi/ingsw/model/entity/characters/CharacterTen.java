@@ -5,6 +5,8 @@ import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.enums.StudentColor;
 import it.polimi.ingsw.model.enums.Tower;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class CharacterTen extends Character {
@@ -22,6 +24,7 @@ public class CharacterTen extends Character {
     public void useEffect(Integer playingWizard, List<StudentColor> take, List<StudentColor> give) throws Exception {
         characterTenValidator(playingWizard, take, give);
         useCard(playingWizard);
+        Wizard wizard = Game.request(gameId).getWizard(playingWizard);
         for (StudentColor color : give) Game.request(gameId).getWizard(playingWizard).takeDiningStudent(color);
         for (StudentColor color : take) Game.request(gameId).getWizard(playingWizard).putDiningStudent(color);
         Game.request(gameId).getWizard(playingWizard).getEntranceStudents().removeAll(take);
@@ -38,7 +41,7 @@ public class CharacterTen extends Character {
      */
     public void characterTenValidator(Integer playingWizard, List<StudentColor> take, List<StudentColor> give) throws Exception {
         characterValidator(playingWizard);
-        if (!Game.request(gameId).getWizard(playingWizard).getEntranceStudents().containsAll(take))
+        if (!new HashSet<>(Game.request(gameId).getWizard(playingWizard).getEntranceStudents()).containsAll(take))
             throw new Exception("Students not present in entrance");
         for (StudentColor color : StudentColor.values())
             if (give.stream().filter(x -> x == color).count() > Game.request(gameId).getWizard(playingWizard).getDiningStudents(color))

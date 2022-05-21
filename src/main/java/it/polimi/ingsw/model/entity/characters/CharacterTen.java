@@ -43,9 +43,14 @@ public class CharacterTen extends Character {
         characterValidator(playingWizard);
         if (!new HashSet<>(Game.request(gameId).getWizard(playingWizard).getEntranceStudents()).containsAll(take))
             throw new Exception("Students not present in entrance");
-        for (StudentColor color : StudentColor.values())
-            if (give.stream().filter(x -> x == color).count() > Game.request(gameId).getWizard(playingWizard).getDiningStudents(color))
+        for (StudentColor color : StudentColor.values()) {
+            if (Game.request(gameId).getWizard(playingWizard).getDiningStudents(color) +
+                    take.stream().filter(x -> x == color).count() - give.stream().filter(x -> x == color).count() > 10)
+                throw new Exception("Not enough free spots in dining room");
+            if (give.stream().filter(x -> x == color).count() - take.stream().filter(x -> x == color).count() >
+                    Game.request(gameId).getWizard(playingWizard).getDiningStudents(color))
                 throw new Exception("Students not present in dining room");
+        }
         if (take.size() > 2 || take.size() != give.size()) throw new Exception("Inexact number of students");
     }
 }

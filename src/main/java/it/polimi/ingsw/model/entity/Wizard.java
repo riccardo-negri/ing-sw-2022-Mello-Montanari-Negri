@@ -43,6 +43,11 @@ public class Wizard {
 
     public void putDiningStudent (StudentColor studentColor) { if(++diningStudents[studentColor.getValue()] % 3 == 0) money++; }
 
+    public void checkDiningStudentNUmber (StudentColor studentColor) throws Exception {
+        if (diningStudents[studentColor.getValue()] >= 10)
+            throw new Exception("The dining room is full");
+    }
+
     public void takeDiningStudent (StudentColor studentColor) { diningStudents[studentColor.getValue()] -= diningStudents[studentColor.getValue()]>0 ? 1 : 0; }
 
     public void changeTowerNumber(Game game, Integer difference) {

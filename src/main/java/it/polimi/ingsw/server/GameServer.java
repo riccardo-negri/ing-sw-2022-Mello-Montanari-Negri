@@ -35,12 +35,15 @@ public class GameServer extends Server{
 
     boolean receiveMessage(Connection source) {
         Message message = source.getLastMessage();
+        GameUser user = userFromConnection(source);
         if (message instanceof Disconnected) {
-            GameUser user = userFromConnection(source);
             user.setDisconnected(true);
             broadcast(new UserDisconnected(user.getName()));
-        } else if (message instanceof Move) {
-            doMove((Move) message, source);
+        } else if (message instanceof UserResigned resign) {
+            resign.setUsername(user.name);
+            broadcast(resign);
+        } else if (message instanceof Move move) {
+            doMove(move, source);
         } else {
             throw new RuntimeException("Unknown message" + message);
         }

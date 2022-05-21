@@ -6,6 +6,7 @@ import it.polimi.ingsw.networking.Connection;
 import it.polimi.ingsw.networking.InitialState;
 import it.polimi.ingsw.networking.Login;
 import it.polimi.ingsw.networking.Redirect;
+import it.polimi.ingsw.utils.LogFormatter;
 import org.junit.jupiter.api.Test;
 
 import java.util.logging.Level;
@@ -13,7 +14,7 @@ import java.util.logging.Logger;
 
 public class ReconnectTest {
 
-    Logger logger = Logger.getLogger("MyLog");
+    Logger logger = LogFormatter.getLogger("Test");
 
     @Test
     void startTest() {

@@ -4,6 +4,7 @@ package it.polimi.ingsw.server;
 import it.polimi.ingsw.networking.Connection;
 import it.polimi.ingsw.networking.Login;
 import it.polimi.ingsw.networking.SafeSocket;
+import it.polimi.ingsw.utils.LogFormatter;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -32,7 +33,7 @@ public abstract class Server {
     public Server() {
         connectedUsers = new UniqueUserVector();
         connecting = new Vector<>();
-        logger = Logger.getLogger("MyLog");
+        logger = LogFormatter.getLogger("Server");
         try {
             socket = new ServerSocket(getPortToBind());
             port = socket.getLocalPort();

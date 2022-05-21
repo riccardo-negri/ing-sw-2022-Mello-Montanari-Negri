@@ -39,19 +39,7 @@ public class Client {
         }
         nextState = ClientPage.WELCOME_PAGE;
 
-        logger = Logger.getLogger("MyLog");
-        FileHandler fh;
-        try {
-            logger.setUseParentHandlers(false);
-            fh = new FileHandler("./log.txt");
-            logger.setLevel(Level.ALL);
-            logger.addHandler(fh);
-            LogFormatter formatter = new LogFormatter();
-            fh.setFormatter(formatter);
-
-        } catch (SecurityException | IOException e) {
-            e.printStackTrace();
-        }
+        logger = LogFormatter.getLogger("Client");
     }
 
     public void start () {

@@ -288,6 +288,8 @@ public class Game {
         return wizardList.stream().filter(w -> Objects.equals(w.getTowerColor(), towerColor)).collect(Collectors.toList());
     }
 
+    public List<Wizard> getAllWizards() { return wizardList; }
+
     public Island getIsland(Integer islandId) {
         for(Island i : islandGroupList.stream().flatMap(x -> x.getIslandList().stream()).toList())
             if (Objects.equals(i.getId(), islandId)) return i;

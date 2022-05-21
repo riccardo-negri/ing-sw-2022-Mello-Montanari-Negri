@@ -30,8 +30,7 @@ public class CharacterEleven extends Character{
         studentColorList.remove(studentColor);
         Game.request(gameId).getWizard(playingWizard).putDiningStudent(studentColor);
         studentColorList.addAll(bag.requestStudents(1));
-        for (StudentColor c : StudentColor.values())
-            Game.request(gameId).getProfessor(c).refreshMaster(playingWizard);
+        Game.request(gameId).getProfessor(studentColor).refreshMaster(playingWizard);
     }
 
     /**

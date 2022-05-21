@@ -11,6 +11,9 @@ import java.util.stream.IntStream;
 import java.util.regex.*;
 
 public class CoreUtilsCLI {
+    private CoreUtilsCLI () {
+
+    }
 
     public static void clearTerminal (Terminal terminal) {
         terminal.writer().println(ansi().reset().eraseScreen());
@@ -27,16 +30,12 @@ public class CoreUtilsCLI {
         terminal.writer().flush();
     }
 
-    public static void resetCursorColors (Terminal terminal) {
-        terminal.writer().print(ansi().fgDefault().bgDefault());
-        terminal.writer().flush();
-    }
-
     public static void waitEnterPressed (Terminal terminal) {
         final LineReader reader = LineReaderBuilder.builder().terminal(terminal).build();
         try {
-            reader.readLine();
+            reader.readLine(" ");
         } catch (Exception ignored) {
+            assert true; // nop
         }
     }
 
@@ -69,7 +68,7 @@ public class CoreUtilsCLI {
     }
 
     public static void printTerminalCenteredLine (Terminal terminal, String s, int expectedInputSize) {
-        terminal.writer().print(ansi().fgDefault().cursorMove(terminal.getWidth() / 2 - (s.length() + expectedInputSize) / 2, 0).a(s + " ").fgBlue());
+        terminal.writer().print(ansi().fgDefault().cursorMove(terminal.getWidth() / 2 - (s.length() + expectedInputSize) / 2, 0).a(s).fgBlue());
         terminal.writer().flush();
     }
 
@@ -101,8 +100,7 @@ public class CoreUtilsCLI {
         final LineReader reader = LineReaderBuilder.builder().terminal(terminal).build();
 
         try {
-
-            num = Integer.parseInt(reader.readLine());
+            num = Integer.parseInt(reader.readLine(" "));
             return num;
         } catch (NumberFormatException e) {
             return -1;
@@ -110,26 +108,27 @@ public class CoreUtilsCLI {
     }
 
     public static String readIPAddress (Terminal terminal) {
-        String IPAddress;
-        String zeroTo255 = "(\\d{1,2}|(0|1)\\" + "d{2}|2[0-4]\\d|25[0-5])";
-        String regex = zeroTo255 + "\\." + zeroTo255 + "\\." + zeroTo255 + "\\." + zeroTo255;
-        String REQUEST = "Please insert the IP address of the server (default is 127.0.0.1):";
-        String DEFAULT = "localhost";
         final LineReader reader = LineReaderBuilder.builder().terminal(terminal).build();
+
+        final String zeroTo255 = "(\\d{1,2}|([01])\\" + "d{2}|2[0-4]\\d|25[0-5])";
+        final String REGEX = zeroTo255 + "\\." + zeroTo255 + "\\." + zeroTo255 + "\\." + zeroTo255;
+        final String REQUEST = "Please insert the IP address of the server (default is 127.0.0.1):";
+        final String DEFAULT = "localhost";
+
 
         printTerminalCenteredLine(terminal, REQUEST, 10);
         terminal.writer().flush();
-        IPAddress = reader.readLine();
-        if (IPAddress.length() == 0) {
+        String ipAddress = reader.readLine(" ");
+        if (ipAddress.length() == 0) {
             terminal.writer().print(ansi().cursorUp(1));
             terminal.writer().print(ansi().eraseLine());
             printTerminalCenteredLine(terminal, REQUEST, 10);
-            terminal.writer().print(ansi().fgBlue().a(DEFAULT).cursorDownLine());
+            terminal.writer().print(ansi().fgBlue().a(" " + DEFAULT).cursorDownLine());
             terminal.writer().flush();
             return DEFAULT;
         }
-        else if (Pattern.compile(regex).matcher(IPAddress).matches()) {
-            return IPAddress;
+        else if (Pattern.compile(REGEX).matcher(ipAddress).matches()) {
+            return ipAddress;
         }
         else {
             printTopErrorBanner(terminal, "Please type a valid IP address");
@@ -150,12 +149,12 @@ public class CoreUtilsCLI {
 
         printTerminalCenteredLine(terminal, requestText, 10);
         terminal.writer().flush();
-        s = reader.readLine();
+        s = reader.readLine(" ");
         if (defaultValue != null && s.length() == 0) {
             terminal.writer().print(ansi().cursorUp(1));
             terminal.writer().print(ansi().eraseLine());
             printTerminalCenteredLine(terminal, requestText, 10);
-            terminal.writer().print(ansi().fgBlue().a(defaultValue).cursorDownLine());
+            terminal.writer().print(ansi().fgBlue().a(" " + defaultValue).cursorDownLine());
             terminal.writer().flush();
             return defaultValue;
         }
@@ -177,12 +176,12 @@ public class CoreUtilsCLI {
         printTerminalCenteredLine(terminal, requestText, 5);
         terminal.writer().flush();
         try {
-            String in = reader.readLine();
+            String in = reader.readLine(" ");
             if (defaultValue != null && in.length() == 0) {
                 terminal.writer().print(ansi().cursorUp(1));
                 terminal.writer().print(ansi().eraseLine());
                 printTerminalCenteredLine(terminal, requestText, 5);
-                terminal.writer().print(ansi().fgBlue().a(defaultValue).cursorDownLine());
+                terminal.writer().print(ansi().fgBlue().a(" " + defaultValue).cursorDownLine());
                 terminal.writer().flush();
                 return defaultValue;
             }
@@ -213,12 +212,12 @@ public class CoreUtilsCLI {
         terminal.writer().flush();
         final LineReader reader = LineReaderBuilder.builder().terminal(terminal).build();
 
-        read = reader.readLine();
+        read = reader.readLine(" ");
         if (defaultValue != null && read.length() == 0) {
             terminal.writer().print(ansi().cursorUp(1));
             terminal.writer().print(ansi().eraseLine());
             printTerminalCenteredLine(terminal, requestText, 1);
-            terminal.writer().print(ansi().fgBlue().a(defaultValue ? "y" : "n").cursorDownLine());
+            terminal.writer().print(ansi().fgBlue().a(defaultValue ? " y" : " n").cursorDownLine());
             terminal.writer().flush();
             return defaultValue;
         }

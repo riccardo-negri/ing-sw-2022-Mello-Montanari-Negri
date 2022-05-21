@@ -13,13 +13,13 @@ public abstract class AbstractPage {
     protected CLI cli;
     protected Terminal terminal;
     protected Game model;
-    protected Logger LOGGER;
+    protected Logger logger;
     protected History commandsHistory;
 
-    public AbstractPage (Client client) {
+    protected AbstractPage (Client client) {
         this.client = client;
         model = client.getModel();
-        LOGGER = client.getLogger();
+        logger = client.getLogger();
 
         if (client.getUI().getClass().equals(CLI.class)) {
             cli = (CLI) client.getUI();
@@ -29,6 +29,6 @@ public abstract class AbstractPage {
 
     }
 
-    public abstract void draw(Client client);
+    public abstract void draw (Client client);
 
 }

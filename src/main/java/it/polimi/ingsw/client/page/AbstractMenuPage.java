@@ -6,7 +6,7 @@ import static it.polimi.ingsw.client.page.ClientPage.*;
 
 public abstract class AbstractMenuPage extends AbstractPage {
 
-    public AbstractMenuPage (Client client) {
+    protected AbstractMenuPage (Client client) {
         super(client);
     }
 
@@ -16,6 +16,7 @@ public abstract class AbstractMenuPage extends AbstractPage {
             case 2 -> client.setNextState(STORYLINE_PAGE);
             case 3 -> client.setNextState(CREDITS_PAGE);
             case 4 -> client.setNextState(null);
+            default -> client.setNextState(MENU_PAGE);
         }
     }
 }

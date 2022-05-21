@@ -3,6 +3,7 @@ package it.polimi.ingsw.networking;
 import it.polimi.ingsw.networking.moves.Move;
 import java.io.EOFException;
 import java.io.IOException;
+import java.io.InvalidClassException;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
@@ -73,19 +74,15 @@ public class Connection extends ConnectionBase {
                 else if(!(msg instanceof Ping)) {
                     processMessage(msg);
                 }
-            } catch (IOException e) {
+            } catch(EOFException | SocketTimeoutException e) {
                 // EOF means that the connection was closed from the other end
                 // SocketTimeout means is not receiving the expected ping, so it means the connection is lost
-                if (e instanceof EOFException || e instanceof SocketTimeoutException) {
-                    stop();
-                    processMessage(new Disconnected());
-                    return;
-                } else if (e instanceof SocketException) {  // SocketException I called close() on this socket
-                    return;
-                } else {
-                    throw new RuntimeException(e);
-                }
-            } catch (ClassCastException | ClassNotFoundException ignored) {}
+                stop();
+                processMessage(new Disconnected());
+                return;
+            } catch(ClassNotFoundException | IOException | ClassCastException ignored) {
+                // IOException contains also SocketException which means I called close() on this socket
+            }
         }
     }
 

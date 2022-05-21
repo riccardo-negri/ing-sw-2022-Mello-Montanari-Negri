@@ -94,6 +94,11 @@ public class MatchmakingServer extends Server {
         moveToGame(user, game);
     }
 
+    @Override
+    boolean isUserAllowed(Login login) {
+        return login.getPlayerNumber() != null && login.getGameMode() != null;
+    }
+
     List<GameServer> getStartedGames() {
         return startedGames;
     }

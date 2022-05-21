@@ -9,12 +9,17 @@ import it.polimi.ingsw.networking.InitialState;
 import it.polimi.ingsw.networking.moves.Move;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 
 public class GameServer extends Server{
     private final CapacityVector<String> assignedUsernames;
 
     private final Game game;
+
+    private Timer afkTimer;
+    private static final int afkPeriod = 300;  // 5 minutes
 
     public GameServer(PlayerNumber playerNumber, GameMode mode) {
         maxUsers = playerNumber.getWizardNumber();
@@ -30,7 +35,7 @@ public class GameServer extends Server{
 
     @Override
     void onQuit() {
-
+        afkTimer.cancel();
     }
 
     boolean receiveMessage(Connection source) {
@@ -40,8 +45,9 @@ public class GameServer extends Server{
             user.setDisconnected(true);
             broadcast(new UserDisconnected(user.getName()));
         } else if (message instanceof UserResigned resign) {
-            resign.setUsername(user.name);
+            resign.setUsername(user.name);  // can't trust client
             broadcast(resign);
+            stop();
         } else if (message instanceof Move move) {
             doMove(move, source);
         } else {
@@ -54,6 +60,8 @@ public class GameServer extends Server{
         Wizard wizard = userFromConnection(source).getWizard();
         try {
             move.applyEffectServer(game, wizard);
+            afkTimer.cancel(); // terminates any previous scheduled task
+            setAfkTimer();
             broadcast(move);
             if (game.isGameEnded()) {
                 stop();
@@ -63,6 +71,19 @@ public class GameServer extends Server{
             logger.log(Level.WARNING, toLog);
         }
     }
+
+
+    void setAfkTimer() {
+        afkTimer = new Timer();
+        TimerTask afkTask = new TimerTask() {
+            public void run() {
+                broadcast(new UserResigned(userCurrentlyPlaying().getName()));
+                stop();
+            }
+        };
+        afkTimer.schedule(afkTask, afkPeriod * 1000);
+    }
+
 
     void broadcast(Message message) {
         for (User user : getConnectedUsers()) {
@@ -90,6 +111,7 @@ public class GameServer extends Server{
             broadcast(new InitialState(game.serializeGame(), usernames()));
             for (User u: connectedUsers)
                 tellWhoIsDisconnected(u);
+            setAfkTimer();
         }
     }
 
@@ -130,4 +152,15 @@ public class GameServer extends Server{
     }
 
     public PlayerNumber getPlayerNumber() {return game.getPlayerNumber();}
+
+    User userCurrentlyPlaying() {
+        int id = game.getGameState().getCurrentPlayer();
+        User result = null;
+        for (User u: connectedUsers) {
+            if (((GameUser) u).getWizard().getId() == id) {
+                result = u;
+            }
+        }
+        return result;
+    }
 }

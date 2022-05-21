@@ -6,6 +6,7 @@ import it.polimi.ingsw.networking.Redirect;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Level;
 
 public class MatchmakingServer extends Server {
     private static final int wellKnownPort = 50000;
@@ -27,9 +28,10 @@ public class MatchmakingServer extends Server {
 
     }
 
-    static void moveToGame(User user, GameServer game) {
+    void moveToGame(User user, GameServer game) {
         user.getConnection().send(new Redirect(game.getPort()));
-        System.out.println("Moving user " + user.getName() + " to game " + game + " with port " + game.getPort());
+        String toLog = "Moving user " + user.getName() + " to game " + game + " with port " + game.getPort();
+        logger.log(Level.INFO, toLog);
     }
 
     // create a thread that waits for the game to finish and disconnects all the related users

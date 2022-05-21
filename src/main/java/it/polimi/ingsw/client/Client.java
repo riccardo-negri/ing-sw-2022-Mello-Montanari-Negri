@@ -73,11 +73,11 @@ public class Client {
     public void setupConnection () {
         GameMode gm = isAdvancedGame ? GameMode.COMPLETE : GameMode.EASY;
         Login login = new Login(username, PlayerNumber.fromNumber(playerNumber), gm);
-        connection = new Connection(IPAddress, port);
+        connection = new Connection(IPAddress, port, LOGGER);
         connection.send(login);
         Redirect redirect = (Redirect) connection.waitMessage(Redirect.class);
         port = redirect.getPort();
-        connection = new Connection(IPAddress, port);
+        connection = new Connection(IPAddress, port, LOGGER);
         connection.send(login);
 
         // import initial state

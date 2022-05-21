@@ -8,7 +8,13 @@ import it.polimi.ingsw.networking.Login;
 import it.polimi.ingsw.networking.Redirect;
 import org.junit.jupiter.api.Test;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class ReconnectTest {
+
+    Logger logger = Logger.getLogger("MyLog");
+
     @Test
     void startTest() {
         Server s = new MatchmakingServer();
@@ -19,18 +25,18 @@ public class ReconnectTest {
         enterGame(l2, true);
         c.close();
         enterGame(l1, true);
-        System.out.println("done");
+        logger.log(Level.INFO, "Done");
         s.stop();
     }
 
     Connection enterGame(Login login, boolean wait) {
-        Connection connection = new Connection("localhost", 50000);
+        Connection connection = new Connection("localhost", 50000, logger);
         connection.send(login);
         Redirect redirect = (Redirect) connection.waitMessage(Redirect.class);
-        System.out.println("port");
-        System.out.println(redirect.getPort());
+        String toLog = "port " + redirect.getPort();
+        logger.log(Level.INFO, toLog);
         connection.close();
-        connection = new Connection("localhost", redirect.getPort());
+        connection = new Connection("localhost", redirect.getPort(), logger);
         connection.send(login);
         if (wait) {
             connection.waitMessage(InitialState.class);

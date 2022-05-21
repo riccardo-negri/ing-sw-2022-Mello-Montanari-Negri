@@ -10,6 +10,8 @@ import java.net.ServerSocket;
 import java.net.SocketException;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public abstract class Server {
@@ -20,6 +22,8 @@ public abstract class Server {
     protected ServerSocket socket;
     protected int port;
 
+    protected final Logger logger;
+
     int getPortToBind() {
         return 0;
     }
@@ -28,12 +32,13 @@ public abstract class Server {
     public Server() {
         connectedUsers = new UniqueUserVector();
         connecting = new Vector<>();
+        logger = Logger.getLogger("MyLog");
         try {
             socket = new ServerSocket(getPortToBind());
             port = socket.getLocalPort();
         } catch (IOException e) {
-            System.out.println("Unable to open server socket:");
-            System.out.println(e.getMessage());
+            String toLog = "Unable to open server socket: " + e.getMessage();
+            logger.log(Level.SEVERE, toLog);
         }
     }
 
@@ -77,13 +82,15 @@ public abstract class Server {
     // listen for new connections until socket.close() is used
     // in that case socket.accept() throws SocketException, and we terminate the thread
     void listenConnection() {
-        System.out.println("Listening for new connections on port: " + getPort());
+        String toLog = "Listening for new connections on port: " + getPort();
+        logger.log(Level.INFO, toLog);
         while (true) {
             try {
                 SafeSocket socket;
                 socket = new SafeSocket(this.socket.accept());
-                System.out.println("Accepted new connection from: " + socket.getInetAddress());
-                connecting.add(new Connection(socket, this::userLogin));
+                toLog = "Accepted new connection from: " + socket.getInetAddress();
+                logger.log(Level.INFO, toLog);
+                connecting.add(new Connection(socket, this::userLogin, logger));
             } catch (IOException e) {
                 if (e instanceof SocketException) {
                     return;
@@ -121,7 +128,8 @@ public abstract class Server {
         User user = createUser(login.getUsername(), connection);
         if(connectedUsers.addWithLimit(user, maxUsers)) {
             connecting.remove(connection);
-            System.out.println("New user logged in: " + user.getName());
+            String toLog = "New user logged in: " + user.getName();
+            logger.log(Level.INFO, toLog);
             onNewUserConnect(user, login);
         }
         else {
@@ -134,7 +142,8 @@ public abstract class Server {
             if (u.getName().equals(login.getUsername())) {
                 u.replaceConnection(connection);
                 connecting.remove(connection);
-                System.out.println("User " + login.getUsername() + " reconnected");
+                String toLog = "User " + login.getUsername() + " reconnected";
+                logger.log(Level.INFO, toLog);
                 onUserReconnected(u);
             }
         }

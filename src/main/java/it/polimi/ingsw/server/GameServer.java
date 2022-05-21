@@ -9,6 +9,7 @@ import it.polimi.ingsw.networking.InitialState;
 import it.polimi.ingsw.networking.moves.Move;
 
 import java.util.List;
+import java.util.logging.Level;
 
 public class GameServer extends Server{
     private final CapacityVector<String> assignedUsernames;
@@ -54,9 +55,9 @@ public class GameServer extends Server{
             if (game.isGameEnded()) {
                 stop();
             }
-        } catch (Exception ignored) { // TODO here
-            System.out.println("INVALID MOVE: " + ignored.toString());
-            ignored.printStackTrace();
+        } catch (Exception e) {
+            String toLog = "Move refused: " + e.getMessage();
+            logger.log(Level.WARNING, toLog);
         }
     }
 

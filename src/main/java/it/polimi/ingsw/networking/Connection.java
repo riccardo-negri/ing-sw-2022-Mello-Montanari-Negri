@@ -9,6 +9,8 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Connection extends ConnectionBase {
     private final Counter movesCount = new Counter();
@@ -16,23 +18,23 @@ public class Connection extends ConnectionBase {
     private final MovesQueue movesQueue = new MovesQueue();
     private final Queue<Message> messagesToProcess = new LinkedList<>();
 
-    public Connection(SafeSocket socket, Predicate<Connection> acceptMessage) {
-        super(socket, acceptMessage);
+    public Connection(SafeSocket socket, Predicate<Connection> acceptMessage, Logger logger) {
+        super(socket, acceptMessage, logger);
 
     }
 
-    public Connection(SafeSocket socket) {
-        super(socket, Connection::doNothing);
+    public Connection(SafeSocket socket, Logger logger) {
+        super(socket, Connection::doNothing, logger);
 
     }
 
-    public Connection(String address, int port, Predicate<Connection> acceptMessage) {
-        super(Connection.createSocket(address, port), acceptMessage);
+    public Connection(String address, int port, Predicate<Connection> acceptMessage, Logger logger) {
+        super(Connection.createSocket(address, port), acceptMessage, logger);
 
     }
 
-    public Connection(String address, int port) {
-        super(Connection.createSocket(address, port), Connection::doNothing);
+    public Connection(String address, int port, Logger logger) {
+        super(Connection.createSocket(address, port), Connection::doNothing, logger);
     }
 
     static private boolean doNothing(Connection source) {return false;}
@@ -64,7 +66,8 @@ public class Connection extends ConnectionBase {
     }
 
     protected void listenMessages() {
-        System.out.println("Listening for new messages from: " + socket.getInetAddress());
+        String toLog = "Listening for new messages from: " + socket.getInetAddress();
+        logger.log(Level.INFO, toLog);
         while (isRunning()) {
             try {
                 Message msg = (Message) reader.readObject();
@@ -100,7 +103,8 @@ public class Connection extends ConnectionBase {
     }
 
     private synchronized void processMessage(Message message) {
-        System.out.println("Received new object from " + socket.getInetAddress() + ": " + message);
+        String toLog = "Received new object from " + socket.getInetAddress() + ": " + message;
+        logger.log(Level.INFO, toLog);
         messagesToProcess.add(message);
         if(acceptMessage.test(this)) {
             messagesToProcess.poll();  // remove the only message accessible by acceptMessage

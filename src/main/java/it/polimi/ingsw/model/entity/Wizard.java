@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.enums.StudentColor;
 import it.polimi.ingsw.model.enums.Tower;
 
 import java.lang.management.PlatformLoggingMXBean;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -18,6 +19,7 @@ public class Wizard {
     private final Integer[] diningStudents;
     private final Tower towerColor;
     private Integer towerNumber;
+    private transient Integer gameId;
 
     /**
      * create the wizard
@@ -41,7 +43,17 @@ public class Wizard {
 
     public void takeEntranceStudent (StudentColor studentColor) { entranceStudents.remove(studentColor); }
 
-    public void putDiningStudent (StudentColor studentColor) { if(++diningStudents[studentColor.getValue()] % 3 == 0) money++; }
+    public void putDiningStudent (StudentColor studentColor) {
+        if(++diningStudents[studentColor.getValue()] % 3 == 0 &&
+                Game.request(gameId).getAllWizards().stream().mapToInt(Wizard::getMoney).sum() < 20)
+            money ++;
+
+    }
+
+    public void checkDiningStudentNUmber (StudentColor studentColor) throws Exception {
+        if (diningStudents[studentColor.getValue()] >= 10)
+            throw new Exception("The dining room is full");
+    }
 
     public void takeDiningStudent (StudentColor studentColor) { diningStudents[studentColor.getValue()] -= diningStudents[studentColor.getValue()]>0 ? 1 : 0; }
 

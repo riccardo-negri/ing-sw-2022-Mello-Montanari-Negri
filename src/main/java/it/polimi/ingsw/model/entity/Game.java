@@ -278,6 +278,11 @@ public class Game {
         if (finalWinners.size() == 1) winner = finalWinners.get(0);
     }
 
+    public void deleteGame() throws Exception {
+        if (!gameEntities.contains(this)) throw new Exception("Error deleting the game");
+        gameEntities.remove(this);
+    }
+
     public Wizard getWizard(Integer wizardId) {
         for (Wizard w : wizardList)
             if (Objects.equals(w.getId(), wizardId)) return w;
@@ -287,6 +292,8 @@ public class Game {
     public List<Wizard> getWizardsFromTower(Tower towerColor) {
         return wizardList.stream().filter(w -> Objects.equals(w.getTowerColor(), towerColor)).collect(Collectors.toList());
     }
+
+    public List<Wizard> getAllWizards() { return wizardList; }
 
     public Island getIsland(Integer islandId) {
         for(Island i : islandGroupList.stream().flatMap(x -> x.getIslandList().stream()).toList())

@@ -38,6 +38,7 @@ public class MoveStudentActionState extends ActionState {
      */
     public void moveStudentToDiningRoomValidator(Integer playingWizard, StudentColor studentColor) throws Exception {
         moveStudentValidator(playingWizard, studentColor);
+        Game.request(gameId).getWizard(playingWizard).checkDiningStudentNUmber(studentColor);
     }
 
 

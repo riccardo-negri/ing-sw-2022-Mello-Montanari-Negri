@@ -18,7 +18,6 @@ public class CharacterEight extends Character {
     public void useEffect(Integer playingWizard) throws Exception {
         characterEightValidator(playingWizard);
         useCard(playingWizard);
-        ((ActionState) Game.request(gameId).getGameState()).activateEffect(this);
     }
 
     /**

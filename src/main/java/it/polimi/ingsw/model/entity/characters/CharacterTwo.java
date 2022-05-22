@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.entity.characters;
 import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.entity.gameState.ActionState;
+import it.polimi.ingsw.model.enums.StudentColor;
 import it.polimi.ingsw.model.enums.Tower;
 
 public class CharacterTwo extends Character{
@@ -12,13 +13,14 @@ public class CharacterTwo extends Character{
     }
 
     /**
-     * for the turn take control of professors even if the number of student is the same as the one controlling them
+     * take control of professors even if the number of student is the same as the one controlling them
      * @param playingWizard the player playing the card
      */
     public void useEffect(Integer playingWizard) throws Exception {
         characterTwoValidator(playingWizard);
         useCard(playingWizard);
-        ((ActionState) Game.request(gameId).getGameState()).activateEffect(this);
+        for (StudentColor student : StudentColor.values())
+            Game.request(gameId).getProfessor(student).refreshMaster(playingWizard);
     }
 
     /**

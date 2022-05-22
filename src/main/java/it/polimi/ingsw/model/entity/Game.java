@@ -278,6 +278,11 @@ public class Game {
         if (finalWinners.size() == 1) winner = finalWinners.get(0);
     }
 
+    public void deleteGame() throws Exception {
+        if (!gameEntities.contains(this)) throw new Exception("Error deleting the game");
+        gameEntities.remove(this);
+    }
+
     public Wizard getWizard(Integer wizardId) {
         for (Wizard w : wizardList)
             if (Objects.equals(w.getId(), wizardId)) return w;

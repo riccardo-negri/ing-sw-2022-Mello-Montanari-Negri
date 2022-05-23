@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.entity.characters;
 import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.entity.Bag;
+import it.polimi.ingsw.model.entity.gameState.ActionState;
 
 import java.util.Objects;
 
@@ -44,6 +45,7 @@ public abstract class Character {
 
     protected void useCard(Integer playingWizard) throws Exception{
         Game.request(gameId).getWizard(playingWizard).payEffect(price + (used ? 1 : 0));
+        ((ActionState) Game.request(gameId).getGameState()).activateEffect(this);
         activator = playingWizard;
         used = true;
     }
@@ -56,6 +58,10 @@ public abstract class Character {
     protected void characterValidator (Integer playingWizard) throws Exception {
         if (!Objects.equals(Game.request(gameId).getGameState().getCurrentPlayer(), playingWizard))
             throw new Exception("Wrong player");
+        if(Objects.equals(Game.request(gameId).getGameState().getGameStateName(), "PS"))
+            throw new Exception("Wrong game phase");
+        if(((ActionState) Game.request(gameId).getGameState()).getActivatedCharacter() != null)
+            throw new Exception("A character is already active");
         if (price + (used ? 1 : 0) > Game.request(gameId).getWizard(playingWizard).getMoney())
             throw new Exception("Not enough money to activate the effect");
     }

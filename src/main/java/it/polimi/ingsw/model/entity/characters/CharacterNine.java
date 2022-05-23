@@ -23,7 +23,6 @@ public class CharacterNine extends Character{
         characterNineValidator(playingWizard);
         useCard(playingWizard);
         this.studentColor = studentColor;
-        ((ActionState) Game.request(gameId).getGameState()).activateEffect(this);
     }
 
     /**

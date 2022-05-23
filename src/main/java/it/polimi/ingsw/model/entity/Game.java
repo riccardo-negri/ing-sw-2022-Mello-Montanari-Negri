@@ -98,9 +98,12 @@ public class Game {
             cloudList.add(new Cloud(i, bag, this.playerNumber));
 
         wizardList = new ArrayList<>();
-        for (int i=0; i<playerNumber.getWizardNumber(); i++)
-            wizardList.add(new Wizard(i, bag.requestStudents(playerNumber.getEntranceNumber()),
-                    playerNumber == PlayerNumber.FOUR ? Tower.fromNumber(i%2) : Tower.fromNumber(i), playerNumber.getTowerNumber()));
+        for (int i=0; i<playerNumber.getWizardNumber(); i++) {
+            Wizard w = new Wizard(i, bag.requestStudents(playerNumber.getEntranceNumber()),
+                    playerNumber == PlayerNumber.FOUR ? Tower.fromNumber(i % 2) : Tower.fromNumber(i), playerNumber.getTowerNumber());
+            w.refreshGameId(this);
+            wizardList.add(w);
+        }
 
         this.gameState = new PlanningState(id, wizardList.stream().map(Wizard::getId).collect(Collectors.toList()), randomGenerator);
 
@@ -179,6 +182,8 @@ public class Game {
                 else if (c.getId() == 11) ((CharacterEleven) c).refreshBag(newGame.bag);
             }
         }
+
+        newGame.wizardList.forEach(w -> w.refreshGameId(newGame));
 
         newGame.gameState.refreshGameId(newGame);
 
@@ -278,6 +283,11 @@ public class Game {
         if (finalWinners.size() == 1) winner = finalWinners.get(0);
     }
 
+    public void deleteGame() throws Exception {
+        if (!gameEntities.contains(this)) throw new Exception("Error deleting the game");
+        gameEntities.remove(this);
+    }
+
     public Wizard getWizard(Integer wizardId) {
         for (Wizard w : wizardList)
             if (Objects.equals(w.getId(), wizardId)) return w;
@@ -287,6 +297,8 @@ public class Game {
     public List<Wizard> getWizardsFromTower(Tower towerColor) {
         return wizardList.stream().filter(w -> Objects.equals(w.getTowerColor(), towerColor)).collect(Collectors.toList());
     }
+
+    public List<Wizard> getAllWizards() { return wizardList; }
 
     public Island getIsland(Integer islandId) {
         for(Island i : islandGroupList.stream().flatMap(x -> x.getIslandList().stream()).toList())

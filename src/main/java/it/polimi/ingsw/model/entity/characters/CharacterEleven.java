@@ -30,8 +30,7 @@ public class CharacterEleven extends Character{
         studentColorList.remove(studentColor);
         Game.request(gameId).getWizard(playingWizard).putDiningStudent(studentColor);
         studentColorList.addAll(bag.requestStudents(1));
-        for (StudentColor c : StudentColor.values())
-            Game.request(gameId).getProfessor(c).refreshMaster(playingWizard);
+        Game.request(gameId).getProfessor(studentColor).refreshMaster(playingWizard);
     }
 
     /**
@@ -44,6 +43,7 @@ public class CharacterEleven extends Character{
     public void characterElevenValidator(Integer playingWizard, StudentColor studentColor) throws Exception{
         characterValidator(playingWizard);
         if (!studentColorList.contains(studentColor)) throw new Exception("Student color not present on the card");
+        Game.request(gameId).getWizard(playingWizard).checkDiningStudentNUmber(studentColor);
     }
 
     public void refreshBag (Bag bag) { this.bag = bag; }

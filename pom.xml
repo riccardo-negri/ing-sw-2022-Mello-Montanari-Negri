@@ -16,6 +16,12 @@
     </properties>
 
     <dependencies>
+        <!-- Provide utility function to delete directories recursively -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.6</version>
+        </dependency>
         <!-- JUnit provides unit testing for Java applications -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>

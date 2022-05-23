@@ -25,7 +25,9 @@ public class MatchmakingServer extends Server {
 
     @Override
     void onStart() {
-
+        if(!SavesManager.createSavesFolder(logger)) {
+            stop();
+        }
     }
 
     void moveToGame(User user, GameServer game) {

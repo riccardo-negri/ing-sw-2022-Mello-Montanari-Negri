@@ -36,6 +36,7 @@ public class GameServer extends Server{
     @Override
     void onQuit() {
         afkTimer.cancel();
+        SavesManager.deleteGameFolder(logger, game);
         try {
             game.delete();
         } catch (Exception e) {
@@ -68,6 +69,7 @@ public class GameServer extends Server{
             afkTimer.cancel(); // terminates any previous scheduled task
             setAfkTimer();
             broadcast(move);
+            SavesManager.createSnapshot(logger, game);
             if (game.isGameEnded()) {
                 stop();
             }
@@ -117,6 +119,9 @@ public class GameServer extends Server{
             for (User u: connectedUsers)
                 tellWhoIsDisconnected(u);
             setAfkTimer();
+            if(!SavesManager.createGameFolder(logger, game, assignedUsernames)) {
+                stop();
+            }
         }
     }
 

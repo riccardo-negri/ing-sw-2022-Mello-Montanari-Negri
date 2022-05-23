@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.page;
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.ui.cli.CLI;
 import it.polimi.ingsw.model.entity.Game;
+import javafx.application.Application;
 import org.jline.reader.History;
 import org.jline.terminal.Terminal;
 

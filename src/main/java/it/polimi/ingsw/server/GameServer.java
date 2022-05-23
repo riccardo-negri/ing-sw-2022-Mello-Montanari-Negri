@@ -36,6 +36,11 @@ public class GameServer extends Server{
     @Override
     void onQuit() {
         afkTimer.cancel();
+        try {
+            game.delete();
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+        }
     }
 
     boolean receiveMessage(Connection source) {

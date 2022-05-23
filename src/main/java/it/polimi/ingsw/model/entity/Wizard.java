@@ -81,6 +81,8 @@ public class Wizard {
     public Integer getId() { return wizardId; }
 
     public Integer getTowerNumber() { return towerNumber; }
+
+    public void refreshGameId(Game game) { this.gameId = game.getId(); }
 }
 
 

@@ -98,9 +98,12 @@ public class Game {
             cloudList.add(new Cloud(i, bag, this.playerNumber));
 
         wizardList = new ArrayList<>();
-        for (int i=0; i<playerNumber.getWizardNumber(); i++)
-            wizardList.add(new Wizard(i, bag.requestStudents(playerNumber.getEntranceNumber()),
-                    playerNumber == PlayerNumber.FOUR ? Tower.fromNumber(i%2) : Tower.fromNumber(i), playerNumber.getTowerNumber()));
+        for (int i=0; i<playerNumber.getWizardNumber(); i++) {
+            Wizard w = new Wizard(i, bag.requestStudents(playerNumber.getEntranceNumber()),
+                    playerNumber == PlayerNumber.FOUR ? Tower.fromNumber(i % 2) : Tower.fromNumber(i), playerNumber.getTowerNumber());
+            w.refreshGameId(this);
+            wizardList.add(w);
+        }
 
         this.gameState = new PlanningState(id, wizardList.stream().map(Wizard::getId).collect(Collectors.toList()), randomGenerator);
 
@@ -179,6 +182,8 @@ public class Game {
                 else if (c.getId() == 11) ((CharacterEleven) c).refreshBag(newGame.bag);
             }
         }
+
+        newGame.wizardList.forEach(w -> w.refreshGameId(newGame));
 
         newGame.gameState.refreshGameId(newGame);
 

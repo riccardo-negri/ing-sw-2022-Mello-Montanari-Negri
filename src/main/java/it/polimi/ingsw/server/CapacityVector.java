@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server;
 
+import java.util.Collection;
 import java.util.Vector;
 
 /*
@@ -20,5 +21,14 @@ public class CapacityVector<E> extends Vector<E> {
             return super.add(e);
         }
         return false;
+    }
+
+    @Override
+    public synchronized boolean addAll(Collection<? extends E> c) {
+        for (E e : c) {
+            if(!add(e))
+                return false;
+        }
+        return true;
     }
 }

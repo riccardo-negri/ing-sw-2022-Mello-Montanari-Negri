@@ -21,6 +21,13 @@ public class GameServer extends Server{
     private Timer afkTimer;
     private static final int afkPeriod = 300;  // 5 minutes
 
+    public GameServer(Game game, List<String> usernames) {
+        maxUsers = game.getPlayerNumber().getWizardNumber();
+        this.assignedUsernames = new CapacityVector<>(maxUsers);
+        assignedUsernames.addAll(usernames);
+        this.game = game;
+    }
+
     public GameServer(PlayerNumber playerNumber, GameMode mode) {
         maxUsers = playerNumber.getWizardNumber();
         this.assignedUsernames = new CapacityVector<>(maxUsers);
@@ -35,8 +42,9 @@ public class GameServer extends Server{
 
     @Override
     void onQuit() {
-        afkTimer.cancel();
-        SavesManager.deleteGameFolder(logger, game);
+        if (afkTimer != null)
+            afkTimer.cancel();
+        SavesManager.deleteGameFolder(logger, game.getId());
         try {
             game.delete();
         } catch (Exception e) {

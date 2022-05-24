@@ -28,6 +28,11 @@ public class MatchmakingServer extends Server {
         if(!SavesManager.createSavesFolder(logger)) {
             stop();
         }
+        List<SavedGameRecord> records = SavesManager.restoreAll(logger);
+        for (SavedGameRecord r : records) {
+            GameServer server = new GameServer(r.getGame(), r.getUsernames());
+            runGameServer(server);
+        }
     }
 
     void moveToGame(User user, GameServer game) {

@@ -1,11 +1,11 @@
 package it.polimi.ingsw.networking;
 
 import it.polimi.ingsw.networking.moves.Move;
+import it.polimi.ingsw.utils.Counter;
+
 import java.io.EOFException;
 import java.io.IOException;
-import java.io.InvalidClassException;
 import java.net.Socket;
-import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.*;
 import java.util.function.Predicate;

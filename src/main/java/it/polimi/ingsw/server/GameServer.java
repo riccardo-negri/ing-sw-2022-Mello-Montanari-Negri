@@ -21,18 +21,22 @@ public class GameServer extends Server{
     private Timer afkTimer;
     private static final int afkPeriod = 300;  // 5 minutes
 
-    public GameServer(Game game, List<String> usernames) {
+    private final GameSavesManager savesManager;
+
+    public GameServer(Game game, List<String> usernames, GameSavesManager savesManager) {
         maxUsers = game.getPlayerNumber().getWizardNumber();
         this.assignedUsernames = new CapacityVector<>(maxUsers);
         assignedUsernames.addAll(usernames);
         this.game = game;
+        this.savesManager = savesManager;
     }
 
-    public GameServer(PlayerNumber playerNumber, GameMode mode) {
+    public GameServer(PlayerNumber playerNumber, GameMode mode, GameSavesManager savesManager) {
         maxUsers = playerNumber.getWizardNumber();
         this.assignedUsernames = new CapacityVector<>(maxUsers);
         int id = Game.gameEntityFactory(mode, playerNumber);
         game = Game.request(id);
+        this.savesManager = savesManager;
     }
 
     @Override
@@ -44,7 +48,7 @@ public class GameServer extends Server{
     void onQuit() {
         if (afkTimer != null)
             afkTimer.cancel();
-        SavesManager.deleteGameFolder(logger, game.getId());
+        savesManager.deleteGameFolder();
         try {
             game.delete();
         } catch (Exception e) {
@@ -77,7 +81,7 @@ public class GameServer extends Server{
             afkTimer.cancel(); // terminates any previous scheduled task
             setAfkTimer();
             broadcast(move);
-            SavesManager.createSnapshot(logger, game);
+            savesManager.createSnapshot(game);
             if (game.isGameEnded()) {
                 stop();
             }
@@ -127,7 +131,7 @@ public class GameServer extends Server{
             for (User u: connectedUsers)
                 tellWhoIsDisconnected(u);
             setAfkTimer();
-            if(!SavesManager.createGameFolder(logger, game, assignedUsernames)) {
+            if(!savesManager.createGameFolder(game, assignedUsernames)) {
                 stop();
             }
         }

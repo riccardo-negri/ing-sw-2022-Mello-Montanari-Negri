@@ -10,14 +10,11 @@ import java.util.logging.Level;
 
 public class MatchmakingServer extends Server {
     private static final int wellKnownPort = 50000;
-    private final Vector<GameServer> startedGames;
+    private final Vector<GameServer> startedGames = new Vector<>();
 
-    private final List<Thread> gameThreads;
+    private final List<Thread> gameThreads = new Vector<>();
 
-    public MatchmakingServer() {
-        startedGames = new Vector<>();
-        gameThreads = new Vector<>();
-    }
+    private final MainSavesManager savesManager = new MainSavesManager(logger);
 
     int getPortToBind() {
         return wellKnownPort;
@@ -25,12 +22,12 @@ public class MatchmakingServer extends Server {
 
     @Override
     void onStart() {
-        if(!SavesManager.createSavesFolder(logger)) {
+        if(!savesManager.createSavesFolder()) {
             stop();
         }
-        List<SavedGameRecord> records = SavesManager.restoreAll(logger);
+        List<SavedGameRecord> records = savesManager.restoreAll();
         for (SavedGameRecord r : records) {
-            GameServer server = new GameServer(r.getGame(), r.getUsernames());
+            GameServer server = new GameServer(r.getGame(), r.getUsernames(), r.getSavesManager());
             runGameServer(server);
         }
     }
@@ -97,7 +94,8 @@ public class MatchmakingServer extends Server {
             }
         }
         // reach this point only if no compatible game exists
-        GameServer game = new GameServer(info.getPlayerNumber(), info.getGameMode());
+        GameSavesManager sm = savesManager.createGameSavesManager();
+        GameServer game = new GameServer(info.getPlayerNumber(), info.getGameMode(), sm);
         runGameServer(game);
         game.assignUser(user.name);
         moveToGame(user, game);

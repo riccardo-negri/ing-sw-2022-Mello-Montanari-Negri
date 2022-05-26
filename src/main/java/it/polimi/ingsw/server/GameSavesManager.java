@@ -30,9 +30,14 @@ public class GameSavesManager extends SavesManager {
     }
 
     public boolean createSnapshot(Game game) {
-        int next = counter.increment();
-        Path snapshotPath = gameFilePath(code, Long.toString(next-1));
-        return writeFile(snapshotPath, game.serializeGame());
+        int current = counter.increment() - 1;
+        Path snapshotPath = gameFilePath(code, Long.toString(current));
+        boolean success = writeFile(snapshotPath, game.serializeGame());
+        if (success) {
+            Path oldSnapshot = gameFilePath(code, Long.toString(current-2));
+            deleteFile(oldSnapshot);
+        }
+        return success;
     }
 
     public boolean createGameFolder(Game game, Vector<String> usernames) {

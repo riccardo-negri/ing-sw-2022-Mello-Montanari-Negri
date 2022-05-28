@@ -1,7 +1,8 @@
 package it.polimi.ingsw.server;
 
-import it.polimi.ingsw.networking.Login;
-import it.polimi.ingsw.networking.Redirect;
+import it.polimi.ingsw.model.entity.Game;
+import it.polimi.ingsw.networking.*;
+import it.polimi.ingsw.networking.ErrorMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,28 +83,40 @@ public class MatchmakingServer extends Server {
         }
     }
 
-    // if game with desired parameters doesn't exist create it and redirect the user to that game server
     @Override
     void onNewUserConnect(User user, Login info) {
-        for (GameServer g : getStartedGames()) {
-            if (g.getPlayerNumber() == info.getPlayerNumber() && g.getGameMode() == info.getGameMode()) {
-                if (g.assignUser(user.getName())) {
-                    moveToGame(user, g);
-                    return;
-                }
-            }
+        user.getConnection().bindFunction(this::onLobbyAction);
+        List<LobbyDescriptor> lobbies = new ArrayList<>();
+        for (GameServer g: getStartedGames()) {
+            List<String> connected = g.getAssignedUsernames();
+            LobbyDescriptor ld = new LobbyDescriptor(g.getCode(), g.getPlayerNumber(), g.getGameMode(), connected);
         }
-        // reach this point only if no compatible game exists
-        GameSavesManager sm = savesManager.createGameSavesManager();
-        GameServer game = new GameServer(info.getPlayerNumber(), info.getGameMode(), sm);
-        runGameServer(game);
-        game.assignUser(user.name);
-        moveToGame(user, game);
+        user.getConnection().send(new LobbiesList(lobbies));
     }
 
-    @Override
-    boolean isUserAllowed(Login login) {
-        return login.getPlayerNumber() != null && login.getGameMode() != null;
+    boolean onLobbyAction(Connection connection) {
+        Message message = connection.getLastMessage();
+        User user = userFromConnection(connection);
+        if (message instanceof LobbyChoice lobbyChoice) {
+            for (GameServer g : getStartedGames()) {
+                if (g.getCode().equals(lobbyChoice.getCode())) {
+                    if (g.assignUser(user.getName()))
+                        moveToGame(user, g);
+                    else
+                        connection.send(new ErrorMessage());
+                    return true;
+                }
+            }
+        } else if (message instanceof CreateLobby createLobby) {
+            if (createLobby.getGameMode() == null || createLobby.getPlayerNumber() == null)
+                return true;  // skip this message and do nothing because mal formatted
+            GameSavesManager sm = savesManager.createGameSavesManager();
+            GameServer game = new GameServer(createLobby.getPlayerNumber(), createLobby.getGameMode(), sm);
+            runGameServer(game);
+            game.assignUser(user.name);
+            moveToGame(user, game);
+        }
+        return false;
     }
 
     List<GameServer> getStartedGames() {

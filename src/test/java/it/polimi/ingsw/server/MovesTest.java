@@ -22,8 +22,8 @@ public class MovesTest {
     void startTest() throws Exception {
         Server s = new MatchmakingServer();
         new Thread(s::run).start();
-        Login l1 = new Login("tommaso", PlayerNumber.TWO, GameMode.COMPLETE);
-        Login l2 = new Login("riccardo", PlayerNumber.TWO, GameMode.COMPLETE);
+        Login l1 = new Login("tommaso");
+        Login l2 = new Login("riccardo");
         Connection c1 = enterGame(l1);
         Connection c2 = enterGame(l2);
         InitialState state1 = (InitialState) c1.waitMessage(InitialState.class);

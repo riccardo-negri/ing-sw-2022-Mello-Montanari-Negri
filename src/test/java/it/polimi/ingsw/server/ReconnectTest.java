@@ -20,8 +20,8 @@ public class ReconnectTest {
     void startTest() {
         Server s = new MatchmakingServer();
         new Thread(s::run).start();
-        Login l1 = new Login("tommaso", PlayerNumber.TWO, GameMode.COMPLETE);
-        Login l2 = new Login("riccardo", PlayerNumber.TWO, GameMode.COMPLETE);
+        Login l1 = new Login("tommaso");
+        Login l2 = new Login("riccardo");
         Connection c = enterGame(l1, false);
         enterGame(l2, true);
         c.close();

@@ -185,4 +185,8 @@ public class GameServer extends Server{
         }
         return result;
     }
+
+    public String getCode() {
+        return savesManager.getCode();
+    }
 }

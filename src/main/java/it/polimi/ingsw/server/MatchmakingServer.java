@@ -89,7 +89,8 @@ public class MatchmakingServer extends Server {
         List<LobbyDescriptor> lobbies = new ArrayList<>();
         for (GameServer g: getStartedGames()) {
             List<String> connected = g.getAssignedUsernames();
-            LobbyDescriptor ld = new LobbyDescriptor(g.getCode(), g.getPlayerNumber(), g.getGameMode(), connected);
+            if (connected.size() < g.maxUsers)
+                lobbies.add(new LobbyDescriptor(g.getCode(), g.getPlayerNumber(), g.getGameMode(), connected));
         }
         user.getConnection().send(new LobbiesList(lobbies));
     }

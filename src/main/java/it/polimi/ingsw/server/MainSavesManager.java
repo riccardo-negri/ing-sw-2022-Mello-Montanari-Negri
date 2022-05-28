@@ -48,7 +48,8 @@ public class MainSavesManager extends SavesManager{
         Path folder = gameFolderPath(folderCode);
         File[] files = folder.toFile().listFiles();
         String usernames = null;
-        int maxCount = -1;
+        // if there are two saves files something happened during the last save and the older is considered more safe
+        int minCount = Integer.MAX_VALUE;
         if (files == null || gameCodes.contains(folderCode)) {
             deleteGameFolder(folderCode);
             throw new Exception("Bad record format");
@@ -59,16 +60,16 @@ public class MainSavesManager extends SavesManager{
             }
             else {
                 int count = Integer.parseInt(f.getName());
-                if (count > maxCount)
-                    maxCount = count;
+                if (count < minCount)
+                    minCount = count;
             }
         }
-        if (maxCount == -1 || usernames == null) {
+        if (minCount == Integer.MAX_VALUE || usernames == null) {
             deleteGameFolder(folderCode);
             throw new Exception("Bad record format");
         }
-        String game = readFile(gameFilePath(folderCode, Long.toString(maxCount)));
-        GameSavesManager sm = new GameSavesManager(logger, folderCode, maxCount);
+        String game = readFile(gameFilePath(folderCode, Long.toString(minCount)));
+        GameSavesManager sm = new GameSavesManager(logger, folderCode, minCount);
         gameCodes.add(folderCode);
         return new SavedGameRecord(game, usernames, sm);
     }

@@ -34,7 +34,7 @@ public class GameSavesManager extends SavesManager {
         Path snapshotPath = gameFilePath(code, Long.toString(current));
         boolean success = writeFile(snapshotPath, game.serializeGame());
         if (success) {
-            Path oldSnapshot = gameFilePath(code, Long.toString(current-2));
+            Path oldSnapshot = gameFilePath(code, Long.toString(current-1));
             deleteFile(oldSnapshot);
         }
         return success;

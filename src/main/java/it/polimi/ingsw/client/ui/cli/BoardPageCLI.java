@@ -77,9 +77,9 @@ public class BoardPageCLI extends AbstractBoardPage {
             lastWarning = "Player " + userDisconnected.getUsername() + " disconnected from the game.";
             client.getUsernamesDisconnected().add(((UserDisconnected) message).getUsername());
         }
-        else if (message instanceof UserReconnected userReconnected) {
-            lastWarning = "Player " + userReconnected.getUsername() + " reconnected to the game.";
-            client.getUsernamesDisconnected().remove(((UserReconnected) message).getUsername());
+        else if (message instanceof UserConnected userConnected) {
+            lastWarning = "Player " + userConnected.getUsername() + " reconnected to the game.";
+            client.getUsernamesDisconnected().remove(((UserConnected) message).getUsername());
         }
         else {
             lastWarning = "Received an unsupported message...";

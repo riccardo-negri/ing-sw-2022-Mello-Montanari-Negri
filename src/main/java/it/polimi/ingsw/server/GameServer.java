@@ -118,13 +118,14 @@ public class GameServer extends Server{
             // In the game server means that everyone joined once, but we don't know if the connection was lost
             user.getConnection().send(new InitialState(game.serializeGame(), usernames()));
             tellWhoIsDisconnected(user);
-            broadcast(new UserReconnected(user.name));
+            broadcast(new UserConnected(user.name));
         }
     }
 
     @Override
     void onNewUserConnect(User user, Login info) {
         user.getConnection().bindFunction(this::receiveMessage);
+        broadcast(new UserConnected(user.name));
         if (isEveryoneConnected()) {
             // Game is starting
             broadcast(new InitialState(game.serializeGame(), usernames()));

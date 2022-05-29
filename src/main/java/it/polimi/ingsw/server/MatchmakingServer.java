@@ -111,13 +111,16 @@ public class MatchmakingServer extends Server {
         if (message instanceof LobbyChoice lobbyChoice) {
             for (GameServer g : getStartedGames()) {
                 if (g.getCode().equals(lobbyChoice.getCode())) {
-                    if (g.assignUser(user.getName()))
+                    if (g.assignUser(user.getName()))  // if lobby is full returns false and sends ErrorMessage
                         moveToGame(user, g);
                     else
                         connection.send(new ErrorMessage());
                     return true;
                 }
             }
+            // no matching lobby found for this code
+            connection.send(new ErrorMessage());
+            return true;
         } else if (message instanceof CreateLobby createLobby) {
             if (createLobby.getGameMode() == null || createLobby.getPlayerNumber() == null)
                 return true;  // skip this message and do nothing because mal formatted
@@ -126,6 +129,7 @@ public class MatchmakingServer extends Server {
             runGameServer(game);
             game.assignUser(user.name);
             moveToGame(user, game);
+            return true;
         }
         return false;
     }

@@ -125,7 +125,10 @@ public class GameServer extends Server{
     @Override
     void onNewUserConnect(User user, Login info) {
         user.getConnection().bindFunction(this::receiveMessage);
-        broadcast(new UserConnected(user.name));
+        for (User u: connectedUsers)  // tell to the new user all the other connected in the lobby
+            if (!u.getName().equals(user.getName()))
+                user.getConnection().send(new UserConnected(u.name));
+        broadcast(new UserConnected(user.name));  // tell to the other in the lobby that the new user is joining
         if (isEveryoneConnected()) {
             // Game is starting
             broadcast(new InitialState(game.serializeGame(), usernames()));

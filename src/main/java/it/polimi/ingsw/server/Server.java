@@ -18,6 +18,9 @@ import java.util.stream.Collectors;
 public abstract class Server {
     // using Vector instead of ArrayList because Vector class is thread-safe
     protected final Vector<Connection> connecting;
+
+    // users in this vector stay there also if the socket stops working for network issues
+    // when they reconnect the new connection is used for the same user
     protected final UniqueUserVector connectedUsers;
     protected int maxUsers = Integer.MAX_VALUE;
     protected ServerSocket socket;
@@ -181,6 +184,7 @@ public abstract class Server {
         return connecting;
     }
 
+    // everyone joined at least once, we don't know if they disconnected later
     public boolean isEveryoneConnected() {
         return connectedUsers.size() >= maxUsers;
     }

@@ -78,7 +78,17 @@ public class MatchmakingServer extends Server {
     void onUserReconnected(User user) {
         for (GameServer g : getStartedGames()) {
             if (g.getAssignedUsernames().contains(user.getName())) {
+                // if user is already connected directly refuse new connection
+                for (User u: g.connectedUsers) {
+                    GameUser gu = (GameUser) u;
+                    if (gu.getName().equals(user.getName()) && !gu.isDisconnected()) {
+                        user.getConnection().send(new ErrorMessage());
+                        break;
+                    }
+                }
+                // this part runs if user is disconnected or if is assigned but never joined
                 user.getConnection().send(new Redirect(g.getPort()));
+                break;
             }
         }
     }

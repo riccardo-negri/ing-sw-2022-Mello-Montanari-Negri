@@ -25,10 +25,12 @@ public class LobbyPageCLI extends AbstractLobbyPage {
         clearTerminal(terminal);
         printTerminalCenteredMultilineText(terminal, LOBBY, 1);
         printEmptyLine(terminal);
-        printTerminalCenteredLine(terminal, "Players number: " + client.getPlayerNumber());
-        printEmptyLine(terminal);
-        printTerminalCenteredLine(terminal, "Game mode: " + (client.isAdvancedGame() ? GameMode.COMPLETE : GameMode.EASY));
-        printEmptyLine(terminal);
+        if(client.getPlayerNumber() != 0) {
+            printTerminalCenteredLine(terminal, "Players number: " + client.getPlayerNumber());
+            printEmptyLine(terminal);
+            printTerminalCenteredLine(terminal, "Game mode: " + (client.isAdvancedGame() ? GameMode.COMPLETE : GameMode.EASY));
+            printEmptyLine(terminal);
+        }
         printEmptyLine(terminal);
         String justConnected = waitForConnectedOrStart();
         while (justConnected != null) {

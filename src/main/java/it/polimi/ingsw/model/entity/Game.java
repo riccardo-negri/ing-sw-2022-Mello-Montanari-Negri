@@ -98,9 +98,12 @@ public class Game {
             cloudList.add(new Cloud(i, bag, this.playerNumber));
 
         wizardList = new ArrayList<>();
-        for (int i=0; i<playerNumber.getWizardNumber(); i++)
-            wizardList.add(new Wizard(i, bag.requestStudents(playerNumber.getEntranceNumber()),
-                    playerNumber == PlayerNumber.FOUR ? Tower.fromNumber(i%2) : Tower.fromNumber(i), playerNumber.getTowerNumber()));
+        for (int i=0; i<playerNumber.getWizardNumber(); i++) {
+            Wizard w = new Wizard(i, bag.requestStudents(playerNumber.getEntranceNumber()),
+                    playerNumber == PlayerNumber.FOUR ? Tower.fromNumber(i % 2) : Tower.fromNumber(i), playerNumber.getTowerNumber());
+            w.refreshGameId(this);
+            wizardList.add(w);
+        }
 
         this.gameState = new PlanningState(id, wizardList.stream().map(Wizard::getId).collect(Collectors.toList()), randomGenerator);
 
@@ -116,7 +119,7 @@ public class Game {
      * @param playerNumber two, three or four players
      * @return Returns the id of the created match
      */
-    public static Integer gameEntityFactory(GameMode gameMode, PlayerNumber playerNumber) {
+    public static synchronized Integer gameEntityFactory(GameMode gameMode, PlayerNumber playerNumber) {
         if (gameEntities == null) gameEntities = new ArrayList<>();
         Game generatedGame = new Game(idCount, gameMode, playerNumber);
         gameEntities.add(generatedGame);
@@ -161,7 +164,7 @@ public class Game {
         return deserializeGameFromString(in);
     }
 
-    public static Integer deserializeGameFromString(String string) {
+    public static synchronized Integer deserializeGameFromString(String string) {
         if (deserializationGson == null) initializeDeserializationGson();
 
         if (gameEntities == null) gameEntities = new ArrayList<>();
@@ -179,6 +182,8 @@ public class Game {
                 else if (c.getId() == 11) ((CharacterEleven) c).refreshBag(newGame.bag);
             }
         }
+
+        newGame.wizardList.forEach(w -> w.refreshGameId(newGame));
 
         newGame.gameState.refreshGameId(newGame);
 
@@ -206,7 +211,7 @@ public class Game {
      * @return game object with id
      * @throws MissingResourceException if id missing
      */
-    public static Game request (Integer gameId) throws MissingResourceException, IllegalStateException {
+    public static synchronized Game request (Integer gameId) throws MissingResourceException, IllegalStateException {
         List <Game> result = gameEntities.stream().filter(x -> x.isGameId(gameId)).toList();
         if (result.isEmpty()) throw new MissingResourceException("Game not found", "GameStateEentity", gameId.toString());
         return result.get(0);
@@ -278,9 +283,13 @@ public class Game {
         if (finalWinners.size() == 1) winner = finalWinners.get(0);
     }
 
-    public void deleteGame() throws Exception {
-        if (!gameEntities.contains(this)) throw new Exception("Error deleting the game");
-        gameEntities.remove(this);
+    public static synchronized void deleteGame(Game toDelete) throws Exception {
+        if (!gameEntities.contains(toDelete)) throw new Exception("Error deleting the game");
+        gameEntities.remove(toDelete);
+    }
+
+    public void delete() throws Exception {
+        Game.deleteGame(this);
     }
 
     public Wizard getWizard(Integer wizardId) {

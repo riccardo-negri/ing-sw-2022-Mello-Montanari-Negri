@@ -22,14 +22,14 @@ public abstract class AbstractMatchmakingPage extends AbstractPage {
     public void connectToMatchmakingServer () throws java.lang.RuntimeException {
         GameMode gm = client.isAdvancedGame() ? GameMode.COMPLETE : GameMode.EASY;
         Login login = new Login(client.getUsername(), PlayerNumber.fromNumber(client.getPlayerNumber()), gm);
-        client.setConnection(new Connection(client.getIpAddress(), client.getPort()));
+        client.setConnection(new Connection(client.getIpAddress(), client.getPort(), logger));
         client.getConnection().send(login);
     }
 
     public void connectToGameServer () throws java.lang.RuntimeException {
         Redirect redirect = (Redirect) client.getConnection().waitMessage(Redirect.class);
         client.setPort(redirect.getPort());
-        client.setConnection(new Connection(client.getIpAddress(), client.getPort()));
+        client.setConnection(new Connection(client.getIpAddress(), client.getPort(), logger));
         GameMode gm = client.isAdvancedGame() ? GameMode.COMPLETE : GameMode.EASY;
         Login login = new Login(client.getUsername(), PlayerNumber.fromNumber(client.getPlayerNumber()), gm);
         client.getConnection().send(login);

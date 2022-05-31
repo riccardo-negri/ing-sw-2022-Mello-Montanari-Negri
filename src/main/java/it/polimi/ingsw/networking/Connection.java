@@ -1,13 +1,16 @@
 package it.polimi.ingsw.networking;
 
 import it.polimi.ingsw.networking.moves.Move;
+import it.polimi.ingsw.utils.Counter;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
-import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Connection extends ConnectionBase {
     private final Counter movesCount = new Counter();
@@ -15,23 +18,23 @@ public class Connection extends ConnectionBase {
     private final MovesQueue movesQueue = new MovesQueue();
     private final Queue<Message> messagesToProcess = new LinkedList<>();
 
-    public Connection(SafeSocket socket, Predicate<Connection> acceptMessage) {
-        super(socket, acceptMessage);
+    public Connection(SafeSocket socket, Predicate<Connection> acceptMessage, Logger logger) {
+        super(socket, acceptMessage, logger);
 
     }
 
-    public Connection(SafeSocket socket) {
-        super(socket, Connection::doNothing);
+    public Connection(SafeSocket socket, Logger logger) {
+        super(socket, Connection::doNothing, logger);
 
     }
 
-    public Connection(String address, int port, Predicate<Connection> acceptMessage) {
-        super(Connection.createSocket(address, port), acceptMessage);
+    public Connection(String address, int port, Predicate<Connection> acceptMessage, Logger logger) {
+        super(Connection.createSocket(address, port), acceptMessage, logger);
 
     }
 
-    public Connection(String address, int port) {
-        super(Connection.createSocket(address, port), Connection::doNothing);
+    public Connection(String address, int port, Logger logger) {
+        super(Connection.createSocket(address, port), Connection::doNothing, logger);
     }
 
     static private boolean doNothing(Connection source) {return false;}
@@ -48,8 +51,23 @@ public class Connection extends ConnectionBase {
         this.acceptMessage.set(acceptMessage);
     }
 
+    public synchronized void bindFunctionAndTestPrevious(Predicate<Connection> acceptMessage) {
+        bindFunction(acceptMessage);
+
+        // process the messages received before the call of bindFunction
+        int steps = messagesToProcess.size();
+        for (int i = 0; i < steps; i++) {  // roll the queue on itself until is back to start
+            if(acceptMessage.test(this)) {  // test last element
+                messagesToProcess.poll();
+            } else {
+                messagesToProcess.add(messagesToProcess.poll());
+            }
+        }
+    }
+
     protected void listenMessages() {
-        System.out.println("Listening for new messages from: " + socket.getInetAddress());
+        String toLog = "Listening for new messages from: " + socket.getInetAddress();
+        logger.log(Level.INFO, toLog);
         while (isRunning()) {
             try {
                 Message msg = (Message) reader.readObject();
@@ -59,19 +77,15 @@ public class Connection extends ConnectionBase {
                 else if(!(msg instanceof Ping)) {
                     processMessage(msg);
                 }
-            } catch (IOException e) {
+            } catch(EOFException | SocketTimeoutException e) {
                 // EOF means that the connection was closed from the other end
                 // SocketTimeout means is not receiving the expected ping, so it means the connection is lost
-                if (e instanceof EOFException || e instanceof SocketTimeoutException) {
-                    stop();
-                    processMessage(new Disconnected());
-                    return;
-                } else if (e instanceof SocketException) {  // SocketException I called close() on this socket
-                    return;
-                } else {
-                    throw new RuntimeException(e);
-                }
-            } catch (ClassCastException | ClassNotFoundException ignored) {}
+                stop();
+                processMessage(new Disconnected());
+                return;
+            } catch(ClassNotFoundException | IOException | ClassCastException ignored) {
+                // IOException contains also SocketException which means I called close() on this socket
+            }
         }
     }
 
@@ -89,7 +103,8 @@ public class Connection extends ConnectionBase {
     }
 
     private synchronized void processMessage(Message message) {
-        System.out.println("Received new object from " + socket.getInetAddress() + ": " + message);
+        String toLog = "Received new object from " + socket.getInetAddress() + ": " + message;
+        logger.log(Level.INFO, toLog);
         messagesToProcess.add(message);
         if(acceptMessage.test(this)) {
             messagesToProcess.poll();  // remove the only message accessible by acceptMessage

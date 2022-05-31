@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.function.Predicate;
+import java.util.logging.Logger;
 
 public abstract class ConnectionBase {
 
@@ -22,11 +23,14 @@ public abstract class ConnectionBase {
     protected final ObjectInputStream reader;
     protected final ObjectOutputStream writer;
 
-    public ConnectionBase(SafeSocket socket, Predicate<Connection> acceptMessage) {
+    protected final Logger logger;
+
+    public ConnectionBase(SafeSocket socket, Predicate<Connection> acceptMessage, Logger logger) {
         try {
             socket.setSoTimeout(disconnectPeriod*1000);
             this.socket = socket;
             this.acceptMessage = new ConnectionPredicate(acceptMessage);
+            this.logger = logger;
             writer = new ObjectOutputStream(socket.getOutputStream());
             reader = new ObjectInputStream(socket.getInputStream());
             thread = new Thread(this::listenMessages);

@@ -96,15 +96,14 @@ public class BoardPageCLI extends AbstractBoardPage {
                 logger.log(Level.SEVERE, e.toString());
             }
         });
+        t.start();
 
-        client.getConnection().bindFunction(
+        client.getConnection().bindFunctionAndTestPrevious(
                 (Connection c) -> {
                     t.interrupt();
                     return false;
                 }
         );
-
-        t.start();
 
         try {
             t.join();

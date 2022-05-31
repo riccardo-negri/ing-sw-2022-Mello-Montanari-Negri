@@ -6,17 +6,15 @@ import it.polimi.ingsw.networking.Redirect;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Level;
 
 public class MatchmakingServer extends Server {
     private static final int wellKnownPort = 50000;
-    private final Vector<GameServer> startedGames;
+    private final Vector<GameServer> startedGames = new Vector<>();
 
-    private final List<Thread> gameThreads;
+    private final List<Thread> gameThreads = new Vector<>();
 
-    public MatchmakingServer() {
-        startedGames = new Vector<>();
-        gameThreads = new Vector<>();
-    }
+    private final MainSavesManager savesManager = new MainSavesManager(logger);
 
     int getPortToBind() {
         return wellKnownPort;
@@ -24,12 +22,20 @@ public class MatchmakingServer extends Server {
 
     @Override
     void onStart() {
-
+        if(!savesManager.createSavesFolder()) {
+            stop();
+        }
+        List<SavedGameRecord> records = savesManager.restoreAll();
+        for (SavedGameRecord r : records) {
+            GameServer server = new GameServer(r.getGame(), r.getUsernames(), r.getSavesManager());
+            runGameServer(server);
+        }
     }
 
-    static void moveToGame(User user, GameServer game) {
+    void moveToGame(User user, GameServer game) {
         user.getConnection().send(new Redirect(game.getPort()));
-        System.out.println("Moving user " + user.getName() + " to game " + game + " with port " + game.getPort());
+        String toLog = "Moving user " + user.getName() + " to game " + game + " with port " + game.getPort();
+        logger.log(Level.INFO, toLog);
     }
 
     // create a thread that waits for the game to finish and disconnects all the related users
@@ -37,7 +43,7 @@ public class MatchmakingServer extends Server {
         Thread t = new Thread(() -> {
             server.run();
             List<String> usernames = server.usernames();
-            List<User> connectedCopy = new ArrayList<>(getConnectedUser());
+            List<User> connectedCopy = new ArrayList<>(getConnectedUsers());
             for (User u : connectedCopy) {
                 if (usernames.contains(u.getName())) {
                     disconnectUser(u);
@@ -88,10 +94,16 @@ public class MatchmakingServer extends Server {
             }
         }
         // reach this point only if no compatible game exists
-        GameServer game = new GameServer(info.getPlayerNumber(), info.getGameMode());
+        GameSavesManager sm = savesManager.createGameSavesManager();
+        GameServer game = new GameServer(info.getPlayerNumber(), info.getGameMode(), sm);
         runGameServer(game);
         game.assignUser(user.name);
         moveToGame(user, game);
+    }
+
+    @Override
+    boolean isUserAllowed(Login login) {
+        return login.getPlayerNumber() != null && login.getGameMode() != null;
     }
 
     List<GameServer> getStartedGames() {

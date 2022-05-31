@@ -1,13 +1,31 @@
 package it.polimi.ingsw.utils;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Formatter;
-import java.util.logging.LogRecord;
+import java.util.logging.*;
 
 import static org.fusesource.jansi.Ansi.ansi;
 
 public class LogFormatter extends Formatter {
+
+    public static Logger getLogger(String name) {
+        Logger logger = Logger.getLogger(name);
+        FileHandler fh;
+        try {
+            logger.setUseParentHandlers(false);
+            fh = new FileHandler("./log.txt");
+            logger.setLevel(Level.ALL);
+            logger.addHandler(fh);
+            LogFormatter formatter = new LogFormatter();
+            fh.setFormatter(formatter);
+
+        } catch (SecurityException | IOException e) {
+            e.printStackTrace();
+        }
+        return logger;
+    }
+
     @Override
     public String format (LogRecord r) {
         StringBuilder log = new StringBuilder();

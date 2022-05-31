@@ -8,9 +8,16 @@ import it.polimi.ingsw.networking.InitialState;
 import it.polimi.ingsw.networking.Login;
 import it.polimi.ingsw.networking.Redirect;
 import it.polimi.ingsw.networking.moves.CardChoice;
+import it.polimi.ingsw.utils.LogFormatter;
 import org.junit.jupiter.api.Test;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class MovesTest {
+
+    Logger logger = LogFormatter.getLogger("Test");
+
     @Test
     void startTest() throws Exception {
         Server s = new MatchmakingServer();
@@ -22,9 +29,9 @@ public class MovesTest {
         InitialState state1 = (InitialState) c1.waitMessage(InitialState.class);
         InitialState state2 = (InitialState) c2.waitMessage(InitialState.class);
         assert (state1.getState().equals(state2.getState()));
-        System.out.println("Initial state received correctly");
+        logger.log(Level.INFO, "Initial state received correctly");
         /*int id = Game.deserializeGame(state1.getState());
-        System.out.println("Game loaded correctly");
+        logger.log(Level.INFO, "Game loaded correctly");
         Game g = Game.request(id);*/
         //TODO: use deserialized game
         int id = Game.gameEntityFactory(GameMode.COMPLETE, PlayerNumber.TWO);
@@ -36,18 +43,19 @@ public class MovesTest {
         CardChoice received1 = (CardChoice) c1.waitMessage(CardChoice.class);
         CardChoice received2 = (CardChoice) c2.waitMessage(CardChoice.class);
         assert (received1.getCard() == received2.getCard());
-        System.out.println("The chosen card is " + received1.getCard());
+        String toLog = "The chosen card is " + received1.getCard();
+        logger.log(Level.INFO, toLog);
         s.stop();
     }
 
     Connection enterGame(Login login) {
-        Connection connection = new Connection("localhost", 50000);
+        Connection connection = new Connection("localhost", 50000, logger);
         connection.send(login);
         Redirect redirect = (Redirect) connection.waitMessage(Redirect.class);
-        System.out.println("port");
-        System.out.println(redirect.getPort());
+        String toLog = "port " + redirect.getPort();
+        logger.log(Level.INFO, toLog);
         connection.close();
-        connection = new Connection("localhost", redirect.getPort());
+        connection = new Connection("localhost", redirect.getPort(), logger);
         connection.send(login);
         return connection;
     }

@@ -4,21 +4,26 @@ package it.polimi.ingsw.server;
 import it.polimi.ingsw.networking.Connection;
 import it.polimi.ingsw.networking.Login;
 import it.polimi.ingsw.networking.SafeSocket;
+import it.polimi.ingsw.utils.LogFormatter;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.SocketException;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public abstract class Server {
     // using Vector instead of ArrayList because Vector class is thread-safe
     protected final Vector<Connection> connecting;
-    protected final UniqueUserVector connectedUser;
+    protected final UniqueUserVector connectedUsers;
     protected int maxUsers = Integer.MAX_VALUE;
     protected ServerSocket socket;
     protected int port;
+
+    protected final Logger logger;
 
     int getPortToBind() {
         return 0;
@@ -26,19 +31,20 @@ public abstract class Server {
 
     // initialize variables but don't run server code yet
     public Server() {
-        connectedUser = new UniqueUserVector();
+        connectedUsers = new UniqueUserVector();
         connecting = new Vector<>();
+        logger = LogFormatter.getLogger("Server");
         try {
             socket = new ServerSocket(getPortToBind());
             port = socket.getLocalPort();
         } catch (IOException e) {
-            System.out.println("Unable to open server socket:");
-            System.out.println(e.getMessage());
+            String toLog = "Unable to open server socket: " + e.getMessage();
+            logger.log(Level.SEVERE, toLog);
         }
     }
 
     List<String> usernames() {
-        return getConnectedUser().stream().map(User::getName).collect(Collectors.toList());
+        return getConnectedUsers().stream().map(User::getName).collect(Collectors.toList());
     }
 
     abstract void onStart();
@@ -68,7 +74,7 @@ public abstract class Server {
         for (Connection c : getConnecting()) {
             c.close();
         }
-        for (User u : getConnectedUser()) {
+        for (User u : getConnectedUsers()) {
             u.getConnection().close();
         }
         onQuit();
@@ -77,13 +83,15 @@ public abstract class Server {
     // listen for new connections until socket.close() is used
     // in that case socket.accept() throws SocketException, and we terminate the thread
     void listenConnection() {
-        System.out.println("Listening for new connections on port: " + getPort());
+        String toLog = "Listening for new connections on port: " + getPort();
+        logger.log(Level.INFO, toLog);
         while (true) {
             try {
                 SafeSocket socket;
                 socket = new SafeSocket(this.socket.accept());
-                System.out.println("Accepted new connection from: " + socket.getInetAddress());
-                connecting.add(new Connection(socket, this::userLogin));
+                toLog = "Accepted new connection from: " + socket.getInetAddress();
+                logger.log(Level.INFO, toLog);
+                connecting.add(new Connection(socket, this::userLogin, logger));
             } catch (IOException e) {
                 if (e instanceof SocketException) {
                     return;
@@ -119,9 +127,10 @@ public abstract class Server {
 
     void connectNewUser(Connection connection, Login login) {
         User user = createUser(login.getUsername(), connection);
-        if(connectedUser.addWithLimit(user, maxUsers)) {
+        if(connectedUsers.addWithLimit(user, maxUsers)) {
             connecting.remove(connection);
-            System.out.println("New user logged in: " + user.getName());
+            String toLog = "New user logged in: " + user.getName();
+            logger.log(Level.INFO, toLog);
             onNewUserConnect(user, login);
         }
         else {
@@ -130,11 +139,12 @@ public abstract class Server {
     }
 
     void reconnectUser(Connection connection, Login login) {
-        for (User u : getConnectedUser()) {
+        for (User u : getConnectedUsers()) {
             if (u.getName().equals(login.getUsername())) {
                 u.replaceConnection(connection);
                 connecting.remove(connection);
-                System.out.println("User " + login.getUsername() + " reconnected");
+                String toLog = "User " + login.getUsername() + " reconnected";
+                logger.log(Level.INFO, toLog);
                 onUserReconnected(u);
             }
         }
@@ -145,7 +155,7 @@ public abstract class Server {
     }
 
     public User userFromConnection(Connection connection) {
-        for (User u: connectedUser) {
+        for (User u: connectedUsers) {
             if (u.getConnection().equals(connection)) {
                 return u;
             }
@@ -160,11 +170,11 @@ public abstract class Server {
 
     public void disconnectUser(User user) {
         user.getConnection().close();
-        connectedUser.remove(user);
+        connectedUsers.remove(user);
     }
 
-    public List<User> getConnectedUser() {
-        return connectedUser;
+    public List<User> getConnectedUsers() {
+        return connectedUsers;
     }
 
     public List<Connection> getConnecting() {
@@ -172,7 +182,7 @@ public abstract class Server {
     }
 
     public boolean isEveryoneConnected() {
-        return connectedUser.size() >= maxUsers;
+        return connectedUsers.size() >= maxUsers;
     }
 
     public int getMaxUsers() {

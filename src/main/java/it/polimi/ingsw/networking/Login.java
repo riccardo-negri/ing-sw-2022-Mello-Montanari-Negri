@@ -15,7 +15,8 @@ public class Login extends Message {
     }
 
     public String getUsername() {
-        return username;
+        // newline characters mess up when saving in file, removing them before using the username
+        return username.replace("\n", "");
     }
 
     public PlayerNumber getPlayerNumber() {

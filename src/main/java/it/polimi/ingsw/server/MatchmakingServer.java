@@ -132,6 +132,7 @@ public class MatchmakingServer extends Server {
             return true;
         } else if (message instanceof Disconnected disconnected) {
             disconnectUser(user);
+            return true;
         }
         return false;
     }

@@ -20,7 +20,6 @@ import static org.fusesource.jansi.Ansi.ansi;
 public class BoardPageCLI extends AbstractBoardPage {
     private String lastWarning;
     private Integer lastHelper;
-    private boolean isOriginatedByMessage;
     static final List<String> moveFromStdin = new ArrayList<>();
 
     public BoardPageCLI (Client client) {
@@ -72,17 +71,18 @@ public class BoardPageCLI extends AbstractBoardPage {
     }
 
     private void handleMessageNotMoveAndPrintStatus (Message message) {
+        final String PLAYER = "Player ";
         if (message instanceof Disconnected) {
             printConsoleWarning(terminal, "You got disconnected from the game, rejoin the game with the same username. Press enter to go back to the connection page...");
             waitEnterPressed(terminal);
             onEnd(true);
         }
         else if (message instanceof UserDisconnected userDisconnected) {
-            lastWarning = "Player " + userDisconnected.getUsername() + " disconnected from the game.";
+            lastWarning = PLAYER + userDisconnected.getUsername() + " disconnected from the game.";
             client.getUsernamesDisconnected().add(((UserDisconnected) message).getUsername());
         }
         else if (message instanceof UserConnected userConnected) {
-            lastWarning = "Player " + userConnected.getUsername() + " reconnected to the game.";
+            lastWarning = PLAYER + userConnected.getUsername() + " reconnected to the game.";
             client.getUsernamesDisconnected().remove(((UserConnected) message).getUsername());
         }
         else if (message instanceof UserResigned userResigned) {
@@ -90,7 +90,7 @@ public class BoardPageCLI extends AbstractBoardPage {
                 printConsoleWarning(terminal, "You resigned from the game. Press enter to go back to the menu...");
             }
             else {
-                printConsoleWarning(terminal, "Player " + userResigned.getUsername() + " resigned from the game. Press enter to go back to the menu...");
+                printConsoleWarning(terminal, PLAYER + userResigned.getUsername() + " resigned from the game. Press enter to go back to the menu...");
             }
             waitEnterPressed(terminal);
             onQuit(false);
@@ -102,13 +102,13 @@ public class BoardPageCLI extends AbstractBoardPage {
     }
 
     private void waitForMoveOrMessage () {
-        isOriginatedByMessage = false;
+        final boolean[] isOriginatedByMessage = {false};
         Thread t = new Thread(() -> {
             try {
                 askForMoveBasedOnState();
             } catch (UserInterruptException e) {
                 logger.log(Level.SEVERE, e.toString());
-                if (!isOriginatedByMessage) {
+                if (!isOriginatedByMessage[0]) {
                     onQuit(true);
                 }
             }
@@ -117,7 +117,7 @@ public class BoardPageCLI extends AbstractBoardPage {
 
         client.getConnection().bindFunctionAndTestPrevious(
                 (Connection c) -> {
-                    isOriginatedByMessage = true;
+                    isOriginatedByMessage[0] = true;
                     t.interrupt();
                     return false;
                 }

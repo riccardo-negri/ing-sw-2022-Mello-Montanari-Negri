@@ -131,20 +131,26 @@ public class Connection extends ConnectionBase {
     }
 
     public synchronized Message waitMessage(List<Class> filter) {
-        for (Message m: messagesToProcess) {  // if message was received before the call of waitMessage
+        Message m = pollFirstMatch(filter); // eventual message that was received before the call of waitMessage
+        while (m == null) {  // if no compatible found wait for one
+            try {
+                wait();
+                m = pollFirstMatch(filter);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return m;
+    }
+
+    synchronized Message pollFirstMatch(List<Class> filter) {
+        for (Message m: messagesToProcess) {
             if(matchFileter(m, filter)) {
                 messagesToProcess.remove(m);
                 return m;
             }
         }
-        while (!matchFileter(getLastMessage(), filter)) {  // if no compatible found wait for one
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return messagesToProcess.poll();
+        return null;
     }
 
     public synchronized Message getLastMessage () {

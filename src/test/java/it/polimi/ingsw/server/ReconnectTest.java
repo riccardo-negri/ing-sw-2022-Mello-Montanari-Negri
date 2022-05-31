@@ -53,10 +53,7 @@ public class ReconnectTest {
         connection = new Connection("localhost", redirect.getPort(), logger);
         connection.send(login);
         if (wait) {
-            Message m;
-            do {
-                m = connection.waitMessage(Arrays.asList(InitialState.class, UserConnected.class));
-            } while (m instanceof  UserConnected);
+            Message m = connection.waitMessage(InitialState.class);
             connection.close();
         }
         return connection;

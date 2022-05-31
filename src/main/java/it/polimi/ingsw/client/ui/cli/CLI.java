@@ -32,8 +32,9 @@ public class CLI implements UI {
             case STORYLINE_PAGE -> new StorylinePageCLI(client);
             case CREDITS_PAGE -> new CreditsPageCLI(client);
             case CONNECTION_PAGE -> new ConnectionPageCLI(client);
-            case GAME_MODE_SELECTION_PAGE -> new GameModeSelectionPageCLI(client);
-            case MATCHMAKING_PAGE -> new MatchmakingPageCLI(client);
+            case CREATE_GAME_PAGE -> new CreateGamePageCLI(client);
+            case LOBBY_SELECTION_PAGE -> new LobbySelectionPageCLI(client);
+            case LOBBY_PAGE -> new LobbyPageCLI(client);
             case BOARD_PAGE -> new BoardPageCLI(client);
             case END_PAGE -> new EndPageCLI(client);
         };

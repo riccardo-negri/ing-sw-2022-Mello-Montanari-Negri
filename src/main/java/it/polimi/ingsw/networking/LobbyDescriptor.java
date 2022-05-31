@@ -1,6 +1,5 @@
 package it.polimi.ingsw.networking;
 
-import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.enums.GameMode;
 import it.polimi.ingsw.model.enums.PlayerNumber;
 
@@ -24,5 +23,17 @@ public class LobbyDescriptor implements Serializable {
 
     public String getCode() {
         return code;
+    }
+
+    public PlayerNumber getPlayerNumber () {
+        return playerNumber;
+    }
+
+    public GameMode getGameMode () {
+        return gameMode;
+    }
+
+    public List<String> getConnected () {
+        return connected;
     }
 }

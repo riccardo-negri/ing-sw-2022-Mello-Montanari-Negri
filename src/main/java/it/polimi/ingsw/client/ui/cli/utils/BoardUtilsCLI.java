@@ -232,7 +232,7 @@ public class BoardUtilsCLI {
 
         final String R1 = "    _________\n";
         final String R2 = "   /         \\\n";
-        final String R3 = "  /   id-{0}   \\\n";
+        final String R3 = "  /   ID-{0}   \\\n";
         final String R4 = " /             \\\n";
         final String R5 = "/   {0}   {1}   {2}   \\\n";
         final String R6 = "\\     {0}   {1}     /\n";

@@ -104,13 +104,17 @@ public class MatchmakingServer extends Server {
 
     void sendLobbieList(User user) {
         user.getConnection().bindFunction(this::onLobbyAction);
+        user.getConnection().send(getLobbiesList());
+    }
+
+    LobbiesList getLobbiesList() {
         List<LobbyDescriptor> lobbies = new ArrayList<>();
         for (GameServer g: getStartedGames()) {
             List<String> connected = g.getAssignedUsernames();
             if (connected.size() < g.maxUsers)
                 lobbies.add(new LobbyDescriptor(g.getCode(), g.getPlayerNumber(), g.getGameMode(), connected));
         }
-        user.getConnection().send(new LobbiesList(lobbies));
+        return new LobbiesList(lobbies);
     }
 
     boolean onLobbyAction(Connection connection) {
@@ -122,12 +126,12 @@ public class MatchmakingServer extends Server {
                     if (g.assignUser(user.getName()))  // if lobby is full returns false and sends ErrorMessage
                         moveToGame(user, g);
                     else
-                        connection.send(new ErrorMessage());
+                        connection.send(getLobbiesList());
                     return true;
                 }
             }
             // no matching lobby found for this code
-            connection.send(new ErrorMessage());
+            connection.send(getLobbiesList());
             return true;
         } else if (message instanceof CreateLobby createLobby) {
             if (createLobby.getGameMode() == null || createLobby.getPlayerNumber() == null)

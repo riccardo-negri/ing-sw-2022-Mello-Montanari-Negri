@@ -14,7 +14,7 @@ public class LogFormatter extends Formatter {
         FileHandler fh;
         try {
             logger.setUseParentHandlers(false);
-            fh = new FileHandler("./log.txt");
+            fh = new FileHandler("./" + name + ".log");
             logger.setLevel(Level.ALL);
             logger.addHandler(fh);
             LogFormatter formatter = new LogFormatter();

@@ -78,23 +78,31 @@ public class MatchmakingServer extends Server {
     void onUserReconnected(User user) {
         for (GameServer g : getStartedGames()) {
             if (g.getAssignedUsernames().contains(user.getName())) {
-                // if user is already connected directly refuse new connection
+                // if user is already connected refuse new connection
                 for (User u: g.connectedUsers) {
                     GameUser gu = (GameUser) u;
                     if (gu.getName().equals(user.getName()) && !gu.isDisconnected()) {
                         user.getConnection().send(new ErrorMessage());
-                        break;
+                        user.getConnection().close(); // don't remove the user, just close the connection
+                        return;
                     }
                 }
                 // this part runs if user is disconnected or if is assigned but never joined
                 user.getConnection().send(new Redirect(g.getPort()));
-                break;
+                return;
             }
         }
+        // this part runs if the user is assigned to no game (means he quit while in lobby selection)
+        // he should be treated as a new user
+        sendLobbieList(user);
     }
 
     @Override
     void onNewUserConnect(User user, Login info) {
+        sendLobbieList(user);
+    }
+
+    void sendLobbieList(User user) {
         user.getConnection().bindFunction(this::onLobbyAction);
         List<LobbyDescriptor> lobbies = new ArrayList<>();
         for (GameServer g: getStartedGames()) {
@@ -129,9 +137,6 @@ public class MatchmakingServer extends Server {
             runGameServer(game);
             game.assignUser(user.name);
             moveToGame(user, game);
-            return true;
-        } else if (message instanceof Disconnected disconnected) {
-            disconnectUser(user);
             return true;
         }
         return false;

@@ -51,7 +51,7 @@ public class ConnectionPageCLI extends AbstractConnectionPage {
         } while (!waitForLobbiesListOrRedirect());
 
         if (client.getNextState() == LOBBY_PAGE) {
-            printTerminalCenteredLine(terminal, "You are already registered on the server! Welcome back");
+            printTerminalCenteredLine(terminal, "You are already registered on the server! Welcome back\n");
             printTerminalCenteredLine(terminal, "Press enter to continue...");
             waitEnterPressed(terminal);
         }

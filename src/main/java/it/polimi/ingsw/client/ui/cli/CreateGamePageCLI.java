@@ -26,7 +26,7 @@ public class CreateGamePageCLI extends AbstractCreateGamePage {
         printTerminalCenteredMultilineText(terminal, CREATE_GAME, 5);
         printEmptyLine(terminal);
         int playersNumber = readNumber(terminal, "Please select the number of players (min 2 players, max 4 players) (default is 2):", 2, 4, 2);
-        boolean isAdvancedGame = readBoolean(terminal, "Do you want to play the advanced game rules (y or n)? (default is y):", true);
+        boolean isAdvancedGame = readBoolean(terminal, "Do you want to play the advanced game rules (y or n)? (default is y)", true);
         createGameAndGoToLobby(playersNumber, isAdvancedGame);
         printEmptyLine(terminal);
         printTerminalCenteredLine(terminal, "Successfully created the game\n");

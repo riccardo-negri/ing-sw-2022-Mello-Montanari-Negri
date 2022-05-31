@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.page;
 
 import it.polimi.ingsw.client.Client;
+import it.polimi.ingsw.model.enums.GameMode;
 import it.polimi.ingsw.networking.*;
 
 import java.util.Arrays;
@@ -13,6 +14,12 @@ public abstract class AbstractLobbySelectionPages extends AbstractPage {
         super(client);
     }
 
+    private LobbyDescriptor getLobbyFromCode (String code) {
+        for (LobbyDescriptor l : client.getLobbies()) {
+            if (l.getCode().equals(code)) return l;
+        }
+        return null;
+    }
     /**
      *
      * @param lobbyCode code of the lobby
@@ -29,6 +36,12 @@ public abstract class AbstractLobbySelectionPages extends AbstractPage {
 
             Login login = new Login(client.getUsername());
             client.getConnection().send(login);
+
+            LobbyDescriptor currLobby = getLobbyFromCode(lobbyCode);
+            if(currLobby != null) {
+                client.setAdvancedGame(currLobby.getGameMode() == GameMode.COMPLETE);
+                client.setPlayerNumber(currLobby.getPlayerNumber().getWizardNumber());
+            }
             return true;
         }
         else if (lastMessage instanceof  ErrorMessage) {

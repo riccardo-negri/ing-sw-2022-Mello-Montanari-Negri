@@ -32,7 +32,7 @@ public class LobbyPageCLI extends AbstractLobbyPage {
         printEmptyLine(terminal);
         String justConnected = waitForConnectedOrStart();
         while (justConnected != null) {
-            printTerminalCenteredLine(terminal, "New user connected: " + justConnected);
+            printTerminalCenteredLine(terminal, "New user connected: " + justConnected + "\n");
             justConnected = waitForConnectedOrStart();
         }
         onEnd();

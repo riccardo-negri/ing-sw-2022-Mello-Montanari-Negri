@@ -56,7 +56,7 @@ public class ConnectionPageCLI extends AbstractConnectionPage {
             waitEnterPressed(terminal);
         }
         else {
-            boolean createGame = readBoolean(terminal, "Do you want to create a new game? (default is y):", true);
+            boolean createGame = readBoolean(terminal, "Do you want to create a new game? (default is y)", true);
             onEnd(createGame);
         }
 

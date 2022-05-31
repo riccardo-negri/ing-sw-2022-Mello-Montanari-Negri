@@ -130,6 +130,8 @@ public class MatchmakingServer extends Server {
             game.assignUser(user.name);
             moveToGame(user, game);
             return true;
+        } else if (message instanceof Disconnected disconnected) {
+            disconnectUser(user);
         }
         return false;
     }

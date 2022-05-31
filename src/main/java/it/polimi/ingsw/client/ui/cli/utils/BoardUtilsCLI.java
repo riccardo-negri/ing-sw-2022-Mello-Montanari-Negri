@@ -685,7 +685,7 @@ public class BoardUtilsCLI {
 
     public static void drawConsoleArea (Terminal terminal, int baseRow) {
         final String CONSOLE = "Your Console";
-        final String INSTRUCTIONS = "Write here your commands to interact with the game... (press TAB to get suggestions and autocompletion)";
+        final String INSTRUCTIONS = "Write here your commands to interact with the game... (press TAB to get suggestions and autocompletion, to resign press CTRL+C)";
         final String minus = "-";
 
         terminal.writer().println(ansi().cursor(baseRow, 0).a(minus.repeat(terminal.getWidth())));

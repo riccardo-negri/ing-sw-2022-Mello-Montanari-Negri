@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.enums.StudentColor;
 import it.polimi.ingsw.networking.*;
 import it.polimi.ingsw.networking.moves.Move;
 import org.jline.reader.UserInterruptException;
+import sun.misc.Signal;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -19,6 +20,7 @@ import static org.fusesource.jansi.Ansi.ansi;
 public class BoardPageCLI extends AbstractBoardPage {
     private String lastWarning;
     private Integer lastHelper;
+    private boolean isOriginatedByMessage;
     static final List<String> moveFromStdin = new ArrayList<>();
 
     public BoardPageCLI (Client client) {
@@ -27,6 +29,8 @@ public class BoardPageCLI extends AbstractBoardPage {
 
     @Override
     public void draw (Client client) {
+        Signal.handle(new Signal("INT"),  // SIGINT if the player wants to quit the game
+                signal -> onQuit(true));
 
         while (!client.getModel().isGameEnded() && client.getNextState() == ClientPage.BOARD_PAGE) {
             drawGameAndConsole();
@@ -69,7 +73,7 @@ public class BoardPageCLI extends AbstractBoardPage {
 
     private void handleMessageNotMoveAndPrintStatus (Message message) {
         if (message instanceof Disconnected) {
-            printConsoleWarning(terminal, "You got disconnected from the game, rejoin the game with the same username. Press enter to continue...");
+            printConsoleWarning(terminal, "You got disconnected from the game, rejoin the game with the same username. Press enter to go back to the connection page...");
             waitEnterPressed(terminal);
             onEnd(true);
         }
@@ -81,6 +85,16 @@ public class BoardPageCLI extends AbstractBoardPage {
             lastWarning = "Player " + userConnected.getUsername() + " reconnected to the game.";
             client.getUsernamesDisconnected().remove(((UserConnected) message).getUsername());
         }
+        else if (message instanceof UserResigned userResigned) {
+            if (userResigned.getUsername().equals(client.getUsername())) {
+                printConsoleWarning(terminal, "You resigned from the game. Press enter to go back to the menu...");
+            }
+            else {
+                printConsoleWarning(terminal, "Player " + userResigned.getUsername() + " resigned from the game. Press enter to go back to the menu...");
+            }
+            waitEnterPressed(terminal);
+            onQuit(false);
+        }
         else {
             lastWarning = "Received an unsupported message...";
         }
@@ -88,18 +102,22 @@ public class BoardPageCLI extends AbstractBoardPage {
     }
 
     private void waitForMoveOrMessage () {
+        isOriginatedByMessage = false;
         Thread t = new Thread(() -> {
             try {
                 askForMoveBasedOnState();
-
             } catch (UserInterruptException e) {
                 logger.log(Level.SEVERE, e.toString());
+                if (!isOriginatedByMessage) {
+                    onQuit(true);
+                }
             }
         });
         t.start();
 
         client.getConnection().bindFunctionAndTestPrevious(
                 (Connection c) -> {
+                    isOriginatedByMessage = true;
                     t.interrupt();
                     return false;
                 }
@@ -113,7 +131,7 @@ public class BoardPageCLI extends AbstractBoardPage {
     }
 
     private void waitAndHandleMessage () {
-        printConsoleInfo(terminal, "Waiting for the other players to do a move...");
+        printConsoleInfo(terminal, "Waiting for the other players to do a move...\n");
         Message message = client.getConnection().waitMessage();
         if (message instanceof Move move) {
             try {

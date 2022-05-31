@@ -29,7 +29,8 @@ public abstract class AbstractLobbySelectionPages extends AbstractPage {
         LobbyChoice choiceMessage = new LobbyChoice(lobbyCode);
         client.getConnection().send(choiceMessage);
 
-        Message lastMessage = client.getConnection().waitMessage(Arrays.asList(Redirect.class, ErrorMessage.class));
+        // if I receive LobbiesList it means that there was an error joining the selected lobby
+        Message lastMessage = client.getConnection().waitMessage(Arrays.asList(Redirect.class, LobbiesList.class));
         if (lastMessage instanceof Redirect redirect) {
             client.setPort(redirect.getPort());
             client.setConnection(new Connection(client.getIpAddress(), client.getPort(), logger));
@@ -44,7 +45,8 @@ public abstract class AbstractLobbySelectionPages extends AbstractPage {
             }
             return true;
         }
-        else if (lastMessage instanceof  ErrorMessage) {
+        else if (lastMessage instanceof  LobbiesList lobbiesList) {
+            client.setLobbies(lobbiesList.getLobbies());
             return false; // redundant
         }
         return  false;

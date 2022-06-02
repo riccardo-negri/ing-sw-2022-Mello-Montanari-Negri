@@ -1,6 +1,6 @@
 package it.polimi.ingsw.networking.moves;
 
-import it.polimi.ingsw.model.GameRuleException;
+import it.polimi.ingsw.model.entity.GameRuleException;
 import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.enums.StudentColor;

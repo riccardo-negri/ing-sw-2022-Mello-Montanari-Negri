@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model.entity;
 
-import it.polimi.ingsw.model.GameRuleException;
 import it.polimi.ingsw.model.enums.PlayerNumber;
 import it.polimi.ingsw.model.enums.StudentColor;
 

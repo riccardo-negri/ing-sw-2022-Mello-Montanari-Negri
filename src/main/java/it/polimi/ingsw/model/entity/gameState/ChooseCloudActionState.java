@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.entity.gameState;
 
-import it.polimi.ingsw.model.GameRuleException;
+import it.polimi.ingsw.model.entity.GameRuleException;
 import it.polimi.ingsw.model.entity.Game;
 
 import java.util.Objects;

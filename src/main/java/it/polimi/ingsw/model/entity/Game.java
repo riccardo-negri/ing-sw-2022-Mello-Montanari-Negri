@@ -2,7 +2,6 @@ package it.polimi.ingsw.model.entity;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import it.polimi.ingsw.model.GameRuleException;
 import it.polimi.ingsw.model.entity.characters.CharacterEleven;
 import it.polimi.ingsw.model.entity.characters.CharacterOne;
 import it.polimi.ingsw.model.enums.*;

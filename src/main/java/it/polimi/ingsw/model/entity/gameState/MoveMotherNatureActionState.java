@@ -1,9 +1,7 @@
 package it.polimi.ingsw.model.entity.gameState;
 
-import it.polimi.ingsw.model.GameRuleException;
+import it.polimi.ingsw.model.entity.GameRuleException;
 import it.polimi.ingsw.model.entity.Game;
-import it.polimi.ingsw.model.entity.characters.CharacterFour;
-import it.polimi.ingsw.model.enums.Tower;
 
 import java.util.Objects;
 

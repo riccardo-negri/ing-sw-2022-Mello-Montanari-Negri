@@ -1,10 +1,7 @@
 package it.polimi.ingsw.model.entity.characters;
 
-import it.polimi.ingsw.model.GameRuleException;
+import it.polimi.ingsw.model.entity.GameRuleException;
 import it.polimi.ingsw.model.entity.Game;
-import it.polimi.ingsw.model.entity.IslandGroup;
-import it.polimi.ingsw.model.entity.Wizard;
-import it.polimi.ingsw.model.enums.Tower;
 
 public class CharacterThree extends Character {
 

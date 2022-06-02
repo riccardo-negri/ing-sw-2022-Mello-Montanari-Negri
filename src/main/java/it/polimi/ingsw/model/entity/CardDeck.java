@@ -1,11 +1,9 @@
 package it.polimi.ingsw.model.entity;
 
-import it.polimi.ingsw.model.GameRuleException;
 import it.polimi.ingsw.model.enums.AssistantCard;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * list of the available assistant cards

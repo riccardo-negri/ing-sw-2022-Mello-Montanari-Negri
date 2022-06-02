@@ -1,10 +1,9 @@
 package it.polimi.ingsw.model.entity.characters;
 
-import it.polimi.ingsw.model.GameRuleException;
+import it.polimi.ingsw.model.entity.GameRuleException;
 import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Bag;
 import it.polimi.ingsw.model.enums.StudentColor;
-import it.polimi.ingsw.model.enums.Tower;
 
 import java.util.List;
 

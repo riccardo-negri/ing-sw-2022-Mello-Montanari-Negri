@@ -4,15 +4,13 @@ import it.polimi.ingsw.client.page.AbstractPage;
 import it.polimi.ingsw.client.page.ClientPage;
 import it.polimi.ingsw.client.ui.UI;
 import it.polimi.ingsw.client.ui.cli.CLI;
+import it.polimi.ingsw.client.ui.gui.GUI;
 import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.networking.*;
 import it.polimi.ingsw.utils.LogFormatter;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.FileHandler;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Client {
@@ -31,7 +29,7 @@ public class Client {
 
     public Client (boolean hasGUI) {
         if (hasGUI) {
-            ui = null;
+            ui = new GUI();
         }
         else {
             ui = new CLI();

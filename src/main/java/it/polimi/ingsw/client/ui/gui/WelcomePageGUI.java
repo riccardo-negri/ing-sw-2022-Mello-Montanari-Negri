@@ -2,17 +2,19 @@ package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.page.AbstractWelcomePage;
-import javafx.application.Application;
-import javafx.scene.Parent;
+import it.polimi.ingsw.client.ui.gui.javaFX.JavaFXWelcomePage;
 import javafx.stage.Stage;
 
-public class WelcomePageGUI extends Application {
+import java.util.logging.Level;
 
-    public WelcomePageGUI(Client client) {
-        launch();
+public class WelcomePageGUI extends AbstractWelcomePage{
+
+    protected WelcomePageGUI(Client client) {
+        super(client);
     }
 
-
     @Override
-    public void start(Stage stage) throws Exception {}
+    public void draw(Client client) {
+
+    }
 }

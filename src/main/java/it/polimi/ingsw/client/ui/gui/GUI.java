@@ -10,7 +10,7 @@ public class GUI implements UI {
     @Override
     public AbstractPage getState (Client client, ClientPage nextState) {
         return switch (nextState) {
-            case WELCOME_PAGE -> null;
+            case WELCOME_PAGE -> new WelcomePageGUI(client);
             case MENU_PAGE -> null;
             case STORYLINE_PAGE -> null;
             case CREDITS_PAGE -> null;

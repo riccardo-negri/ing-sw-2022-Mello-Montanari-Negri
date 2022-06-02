@@ -37,13 +37,17 @@ public abstract class Server {
         connectedUsers = new UniqueUserVector();
         connecting = new Vector<>();
         logger = LogFormatter.getLogger("Server");
-        try {
-            socket = new ServerSocket(getPortToBind());
-            port = socket.getLocalPort();
-        } catch (IOException e) {
-            String toLog = "Unable to open server socket: " + e.getMessage();
-            logger.log(Level.SEVERE, toLog);
-        }
+        int attempts = 0;
+        do {
+            try {
+                attempts++;
+                socket = new ServerSocket(getPortToBind());
+                port = socket.getLocalPort();
+            } catch (IOException e) {
+                String toLog = "Unable to open server socket: " + e.getMessage();
+                logger.log(Level.SEVERE, toLog);
+            }
+        } while (socket == null && attempts <= 3);
     }
 
     List<String> usernames() {
@@ -72,7 +76,9 @@ public abstract class Server {
         try {
             connectionThread.join(); // waits here until this.stop() is called
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            String toLog = "Interrupted: " + e.getMessage();
+            logger.log(Level.WARNING, toLog);
+            connectionThread.interrupt();
         }
         for (Connection c : getConnecting()) {
             c.close();
@@ -88,7 +94,8 @@ public abstract class Server {
     void listenConnection() {
         String toLog = "Listening for new connections on port: " + getPort();
         logger.log(Level.INFO, toLog);
-        while (true) {
+        boolean running = true;
+        while (running) {
             try {
                 SafeSocket socket;
                 socket = new SafeSocket(this.socket.accept());
@@ -97,7 +104,7 @@ public abstract class Server {
                 connecting.add(new Connection(socket, this::userLogin, logger));
             } catch (IOException e) {
                 if (e instanceof SocketException) {
-                    return;
+                    running = false;
                 }
             }
         }

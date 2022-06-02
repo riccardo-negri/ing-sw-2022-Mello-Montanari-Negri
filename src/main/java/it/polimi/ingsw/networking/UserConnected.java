@@ -1,9 +1,9 @@
 package it.polimi.ingsw.networking;
 
-public class UserReconnected extends Message {
+public class UserConnected extends Message {
     private final String username;
 
-    public UserReconnected(String username) {
+    public UserConnected(String username) {
         this.username = username;
     }
 

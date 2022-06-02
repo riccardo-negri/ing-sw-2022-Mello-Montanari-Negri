@@ -118,13 +118,17 @@ public class GameServer extends Server{
             // In the game server means that everyone joined once, but we don't know if the connection was lost
             user.getConnection().send(new InitialState(game.serializeGame(), usernames()));
             tellWhoIsDisconnected(user);
-            broadcast(new UserReconnected(user.name));
+            broadcast(new UserConnected(user.name));
         }
     }
 
     @Override
     void onNewUserConnect(User user, Login info) {
         user.getConnection().bindFunction(this::receiveMessage);
+        for (User u: connectedUsers)  // tell to the new user all the other connected in the lobby
+            if (!u.getName().equals(user.getName()))
+                user.getConnection().send(new UserConnected(u.name));
+        broadcast(new UserConnected(user.name));  // tell to the other in the lobby that the new user is joining
         if (isEveryoneConnected()) {
             // Game is starting
             broadcast(new InitialState(game.serializeGame(), usernames()));
@@ -184,5 +188,9 @@ public class GameServer extends Server{
             }
         }
         return result;
+    }
+
+    public String getCode() {
+        return savesManager.getCode();
     }
 }

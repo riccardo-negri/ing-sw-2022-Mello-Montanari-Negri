@@ -8,11 +8,8 @@ import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.networking.*;
 import it.polimi.ingsw.utils.LogFormatter;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.FileHandler;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Client {
@@ -24,6 +21,7 @@ public class Client {
     private int playerNumber;
     private boolean isAdvancedGame;
     private Connection connection;
+    private ArrayList<LobbyDescriptor> lobbies;
     private final Logger logger;
     private ArrayList<String> usernames;
     private final ArrayList<String> usernamesDisconnected = new ArrayList<>();
@@ -103,6 +101,14 @@ public class Client {
 
     public void setConnection (Connection connection) {
         this.connection = connection;
+    }
+
+    public List<LobbyDescriptor> getLobbies () {
+        return lobbies;
+    }
+
+    public void setLobbies (List<LobbyDescriptor> lobbies) {
+        this.lobbies = (ArrayList<LobbyDescriptor>) lobbies;
     }
 
     public void setPort (int port) {

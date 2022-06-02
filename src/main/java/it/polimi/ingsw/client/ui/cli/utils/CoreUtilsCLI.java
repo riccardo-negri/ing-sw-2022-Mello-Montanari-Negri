@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.ui.cli.utils;
 
+import it.polimi.ingsw.networking.LobbyDescriptor;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
 import org.jline.terminal.Terminal;
@@ -95,6 +96,44 @@ public class CoreUtilsCLI {
         terminal.writer().flush();
     }
 
+    public static void printLobby (Terminal terminal, List<Integer> base, LobbyDescriptor lobby) {
+        final int baseRow = base.get(0);
+        final int baseCol = base.get(1);
+        final String code = lobby.getCode();
+        final int playersNumber = lobby.getPlayerNumber().getWizardNumber();
+        final String mode = lobby.getGameMode().toString();
+        final List<String> players = lobby.getConnected();
+
+        final String R1 = "+----------------+";
+        final String R2 = "|                |";
+
+        terminal.writer().print(ansi().cursor(baseRow, baseCol).a(R1));
+        terminal.writer().print(ansi().cursor(baseRow, baseCol + 7).fgRgb(255, 165, 0).a(code).fgDefault());
+
+        terminal.writer().print(ansi().cursor(baseRow + 1, baseCol).a(R2));
+        terminal.writer().print(ansi().cursor(baseRow + 1, baseCol + 2).a("Players: " + playersNumber));
+
+        terminal.writer().print(ansi().cursor(baseRow + 2, baseCol).a(R2));
+        terminal.writer().print(ansi().cursor(baseRow + 2, baseCol + 2).a("Mode: " + mode));
+
+        terminal.writer().print(ansi().cursor(baseRow + 3, baseCol).a(R2));
+
+        terminal.writer().print(ansi().cursor(baseRow + 4, baseCol).a(R1));
+        terminal.writer().print(ansi().cursor(baseRow + 4, baseCol + 6).a("Lobby"));
+
+        int n = 5;
+        for (String p : players) {
+            if (p.length() > 14) {
+                p = p.substring(0, 14);
+            }
+            terminal.writer().println(ansi().cursor(baseRow + n, baseCol).a(R2));
+            terminal.writer().println(ansi().cursor(baseRow + n, baseCol + 2).a(p));
+            n++;
+        }
+
+        terminal.writer().println(ansi().cursor(baseRow + n, baseCol).a(R1));
+    }
+
     public static Integer readNumber (Terminal terminal) {
         int num;
         final LineReader reader = LineReaderBuilder.builder().terminal(terminal).build();
@@ -168,6 +207,25 @@ public class CoreUtilsCLI {
             terminal.writer().flush();
             return readGenericString(terminal, requestText, null);
         }
+    }
+
+    public static String readLobbyCode (Terminal terminal, String requestText, List<LobbyDescriptor> lobbies) {
+        String lobbyCode;
+        while (true) {
+            lobbyCode = readGenericString(terminal, requestText);
+            boolean correct = false;
+            for (LobbyDescriptor lobby : lobbies) {
+                if (lobbyCode.equals(lobby.getCode())) {
+                    correct = true;
+                    break;
+                }
+            }
+            if (correct) break;
+            printTopErrorBanner(terminal, "Insert a correct code!");
+            terminal.writer().print(ansi().cursorUpLine(2));
+            terminal.writer().print(ansi().eraseLine());
+        }
+        return lobbyCode;
     }
 
     public static int readNumber (Terminal terminal, String requestText, int minValue, int maxValue, Integer defaultValue) {

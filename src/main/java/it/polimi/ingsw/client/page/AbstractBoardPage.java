@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.page;
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.enums.StudentColor;
+import it.polimi.ingsw.networking.UserResigned;
 import it.polimi.ingsw.networking.moves.*;
 
 import java.io.FileWriter;
@@ -10,8 +11,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 
-import static it.polimi.ingsw.client.page.ClientPage.CONNECTION_PAGE;
-import static it.polimi.ingsw.client.page.ClientPage.END_PAGE;
+import static it.polimi.ingsw.client.page.ClientPage.*;
 
 public abstract class AbstractBoardPage extends AbstractPage {
 
@@ -166,5 +166,17 @@ public abstract class AbstractBoardPage extends AbstractPage {
         else {
             client.setNextState(END_PAGE);
         }
+    }
+
+    /**
+     * @param active true if the client decided to quit, false if someone else quit
+     */
+    public void onQuit(boolean active) {
+        if (active) {
+            UserResigned userResigned = new UserResigned(client.getUsername());
+            client.getConnection().send(userResigned);
+            logger.log(Level.INFO, "User Decided to resign from the game");
+        }
+        client.setNextState(MENU_PAGE);
     }
 }

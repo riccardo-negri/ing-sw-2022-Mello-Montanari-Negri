@@ -60,4 +60,8 @@ public class GameSavesManager extends SavesManager {
     public void deleteGameFolder() {
         super.deleteGameFolder(code);
     }
+
+    public String getCode() {
+        return code;
+    }
 }

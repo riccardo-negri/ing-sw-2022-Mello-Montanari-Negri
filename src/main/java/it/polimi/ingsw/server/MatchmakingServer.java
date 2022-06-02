@@ -3,14 +3,13 @@ package it.polimi.ingsw.server;
 import it.polimi.ingsw.networking.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 import java.util.logging.Level;
 
 public class MatchmakingServer extends Server {
     private static final int WELL_KNOWN_PORT = 50000;
-    private final Vector<GameServer> startedGames = new Vector<>();
+    private final List<GameServer> startedGames = new SafeList<>();
 
-    private final List<Thread> gameThreads = new Vector<>();
+    private final List<Thread> gameThreads = new SafeList<>();
 
     private final MainSavesManager savesManager = new MainSavesManager(logger);
 

@@ -18,13 +18,15 @@ public class Connection extends ConnectionBase {
     private final MovesQueue movesQueue = new MovesQueue();
     private final Queue<Message> messagesToProcess = new LinkedList<>();
 
+    private static final Predicate<Connection> DO_NOTHING = c -> false;
+
     public Connection(SafeSocket socket, Predicate<Connection> acceptMessage, Logger logger) {
         super(socket, acceptMessage, logger);
 
     }
 
     public Connection(SafeSocket socket, Logger logger) {
-        super(socket, Connection::doNothing, logger);
+        super(socket, DO_NOTHING, logger);
 
     }
 
@@ -34,10 +36,8 @@ public class Connection extends ConnectionBase {
     }
 
     public Connection(String address, int port, Logger logger) {
-        super(Connection.createSocket(address, port, logger), Connection::doNothing, logger);
+        super(Connection.createSocket(address, port, logger), DO_NOTHING, logger);
     }
-
-    private static boolean doNothing(Connection source) {return false;}
 
     private static SafeSocket createSocket(String address, int port, Logger logger) {
         SafeSocket result = null;
@@ -115,8 +115,8 @@ public class Connection extends ConnectionBase {
         notifyAll();
     }
 
-    static boolean matchFileter(Message message, List<Class> filter) {
-        for (Class c: filter) {
+    static boolean matchFileter(Message message, List<Class<?>> filter) {
+        for (Class<?> c: filter) {
             if(c.isInstance(message))
                 return true;
         }
@@ -127,13 +127,13 @@ public class Connection extends ConnectionBase {
         return waitMessage(Message.class);
     }
 
-    public Message waitMessage(Class filter) {
-        List<Class> filterList = new ArrayList<>();
+    public Message waitMessage(Class<?> filter) {
+        List<Class<?>> filterList = new ArrayList<>();
         filterList.add(filter);
         return waitMessage(filterList);
     }
 
-    public synchronized Message waitMessage(List<Class> filter) {
+    public synchronized Message waitMessage(List<Class<?>> filter) {
         Message m = pollFirstMatch(filter); // eventual message that was received before the call of waitMessage
         while (m == null) {  // if no compatible found wait for one
             try {
@@ -147,7 +147,7 @@ public class Connection extends ConnectionBase {
         return m;
     }
 
-    synchronized Message pollFirstMatch(List<Class> filter) {
+    synchronized Message pollFirstMatch(List<Class<?>> filter) {
         for (Message m: messagesToProcess) {
             if(matchFileter(m, filter)) {
                 messagesToProcess.remove(m);

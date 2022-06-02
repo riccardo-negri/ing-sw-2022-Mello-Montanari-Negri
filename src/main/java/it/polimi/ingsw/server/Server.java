@@ -10,17 +10,15 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.SocketException;
 import java.util.List;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public abstract class Server {
-    // using Vector instead of ArrayList because Vector class is thread-safe
-    protected final Vector<Connection> connecting;
+    protected final List<Connection> connecting;
 
     // users in this vector stay there also if the socket stops working for network issues
     // when they reconnect the new connection is used for the same user
-    protected final UniqueUserVector connectedUsers;
+    protected final UniqueUserList connectedUsers;
     protected int maxUsers = Integer.MAX_VALUE;
     protected ServerSocket socket;
     protected int port;
@@ -33,8 +31,8 @@ public abstract class Server {
 
     // initialize variables but don't run server code yet
     protected Server() {
-        connectedUsers = new UniqueUserVector();
-        connecting = new Vector<>();
+        connectedUsers = new UniqueUserList();
+        connecting = new SafeList<>();  // using SafeList instead of ArrayList because SafeList class is thread-safe
         logger = LogFormatter.getLogger("Server");
         int attempts = 0;
         do {

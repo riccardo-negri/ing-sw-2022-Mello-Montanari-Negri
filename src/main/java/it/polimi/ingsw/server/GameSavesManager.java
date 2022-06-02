@@ -4,7 +4,7 @@ import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.utils.Counter;
 
 import java.nio.file.Path;
-import java.util.Vector;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class GameSavesManager extends SavesManager {
@@ -40,7 +40,7 @@ public class GameSavesManager extends SavesManager {
         return success;
     }
 
-    public boolean createGameFolder(Game game, Vector<String> usernames) {
+    public boolean createGameFolder(Game game, List<String> usernames) {
         if (restored)
             return true;
         // delete any previous folder for this same id

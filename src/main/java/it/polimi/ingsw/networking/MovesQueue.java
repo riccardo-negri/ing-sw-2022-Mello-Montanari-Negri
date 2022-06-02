@@ -19,8 +19,10 @@ public class MovesQueue extends PriorityQueue<Move> {
     }
 
     @Override
-    public synchronized boolean add(Move move) {
-        return super.add(move);
+    public boolean add(Move move) {
+        synchronized (this) {
+            return super.add(move);
+        }
     }
 
     public synchronized List<Move> pollAvailable() {

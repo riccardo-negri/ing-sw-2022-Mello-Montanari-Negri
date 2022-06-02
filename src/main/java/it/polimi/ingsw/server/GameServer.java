@@ -13,7 +13,7 @@ import java.util.TimerTask;
 import java.util.logging.Level;
 
 public class GameServer extends Server{
-    private final CapacityVector<String> assignedUsernames;
+    private final CapacityList<String> assignedUsernames;
 
     private final Game game;
 
@@ -24,7 +24,7 @@ public class GameServer extends Server{
 
     public GameServer(Game game, List<String> usernames, GameSavesManager savesManager) {
         maxUsers = game.getPlayerNumber().getWizardNumber();
-        this.assignedUsernames = new CapacityVector<>(maxUsers);
+        this.assignedUsernames = new CapacityList<>(maxUsers);
         assignedUsernames.addAll(usernames);
         this.game = game;
         this.savesManager = savesManager;
@@ -32,7 +32,7 @@ public class GameServer extends Server{
 
     public GameServer(PlayerNumber playerNumber, GameMode mode, GameSavesManager savesManager) {
         maxUsers = playerNumber.getWizardNumber();
-        this.assignedUsernames = new CapacityVector<>(maxUsers);
+        this.assignedUsernames = new CapacityList<>(maxUsers);
         int id = Game.gameEntityFactory(mode, playerNumber);
         game = Game.request(id);
         this.savesManager = savesManager;

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.networking;
 
-public class LobbyChoice extends Message {
+public class LobbyChoice implements Message {
     final String code;
 
     public LobbyChoice(String code) {

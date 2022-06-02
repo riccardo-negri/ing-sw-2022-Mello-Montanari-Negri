@@ -1,4 +1,4 @@
 package it.polimi.ingsw.networking;
 
-public class ErrorMessage extends Message{
+public class ErrorMessage implements Message{
 }

@@ -15,8 +15,9 @@ public class GUI implements UI {
             case STORYLINE_PAGE -> null;
             case CREDITS_PAGE -> null;
             case CONNECTION_PAGE -> null;
-            case GAME_MODE_SELECTION_PAGE -> null;
-            case MATCHMAKING_PAGE -> null;
+            case CREATE_GAME_PAGE -> null;
+            case LOBBY_SELECTION_PAGE -> null;
+            case LOBBY_PAGE -> null;
             case BOARD_PAGE -> null;
             case END_PAGE -> null;
         };

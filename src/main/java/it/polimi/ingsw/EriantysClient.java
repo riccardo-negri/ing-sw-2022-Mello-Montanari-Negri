@@ -4,7 +4,7 @@ import it.polimi.ingsw.client.Client;
 
 public class EriantysClient {
     public static void main(String[] args) {
-        Client client = new Client(true);
+        Client client = new Client(false);
         client.start();
     }
 

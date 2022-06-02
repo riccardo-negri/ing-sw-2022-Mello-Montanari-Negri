@@ -1,5 +1,6 @@
 package it.polimi.ingsw.networking.moves;
 
+import it.polimi.ingsw.model.GameRuleException;
 import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.entity.gameState.MoveStudentActionState;
@@ -18,7 +19,7 @@ public class DiningRoomMovement extends Move{
         try {
             ((MoveStudentActionState) game.getGameState()).moveStudentToDiningRoom(authorId, student);
         } catch (ClassCastException e) {
-            throw new Exception("This phase doesn't allow this move");
+            throw new GameRuleException("This phase doesn't allow this move");
         }
     }
 
@@ -27,7 +28,7 @@ public class DiningRoomMovement extends Move{
         try {
             ((MoveStudentActionState) game.getGameState()).moveStudentToDiningRoomValidator(authorId, student);
         } catch (ClassCastException e) {
-            throw new Exception("This phase doesn't allow this move");
+            throw new GameRuleException("This phase doesn't allow this move");
         }
     }
 

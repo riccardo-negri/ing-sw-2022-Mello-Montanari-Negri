@@ -1,6 +1,6 @@
 package it.polimi.ingsw.networking;
 
-public class Redirect extends Message {
+public class Redirect implements Message {
     private final int port;
 
     public  Redirect(int port) {

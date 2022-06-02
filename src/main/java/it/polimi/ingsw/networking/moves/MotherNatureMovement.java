@@ -1,5 +1,6 @@
 package it.polimi.ingsw.networking.moves;
 
+import it.polimi.ingsw.model.GameRuleException;
 import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.entity.gameState.MoveMotherNatureActionState;
@@ -17,7 +18,7 @@ public class MotherNatureMovement extends Move{
         try {
             ((MoveMotherNatureActionState) game.getGameState()).moveMotherNature(authorId, steps);
         } catch (ClassCastException e) {
-            throw new Exception("This phase doesn't allow this move");
+            throw new GameRuleException("This phase doesn't allow this move");
         }
     }
 
@@ -26,7 +27,7 @@ public class MotherNatureMovement extends Move{
         try {
             ((MoveMotherNatureActionState) game.getGameState()).moveMotherNatureValidator(authorId, steps);
         } catch (ClassCastException e) {
-            throw new Exception("This phase doesn't allow this move");
+            throw new GameRuleException("This phase doesn't allow this move");
         }
     }
 

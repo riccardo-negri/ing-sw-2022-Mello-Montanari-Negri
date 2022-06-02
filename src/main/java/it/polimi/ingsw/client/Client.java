@@ -23,7 +23,7 @@ public class Client {
     private Connection connection;
     private ArrayList<LobbyDescriptor> lobbies;
     private final Logger logger;
-    private ArrayList<String> usernames;
+    private List<String> usernames;
     private final ArrayList<String> usernamesDisconnected = new ArrayList<>();
     private Game model;
 

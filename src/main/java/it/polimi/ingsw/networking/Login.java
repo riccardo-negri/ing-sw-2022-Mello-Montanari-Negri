@@ -1,6 +1,6 @@
 package it.polimi.ingsw.networking;
 
-public class Login extends Message {
+public class Login implements Message {
     final String username;
 
     public Login(String username) {

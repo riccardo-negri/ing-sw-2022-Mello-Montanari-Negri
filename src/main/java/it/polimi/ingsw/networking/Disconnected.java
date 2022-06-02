@@ -1,4 +1,4 @@
 package it.polimi.ingsw.networking;
 
-public class Disconnected extends Message {
+public class Disconnected implements Message {
 }

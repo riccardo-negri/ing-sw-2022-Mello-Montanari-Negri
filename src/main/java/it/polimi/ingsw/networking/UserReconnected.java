@@ -1,6 +1,6 @@
 package it.polimi.ingsw.networking;
 
-public class UserReconnected extends Message {
+public class UserReconnected implements Message {
     private final String username;
 
     public UserReconnected(String username) {

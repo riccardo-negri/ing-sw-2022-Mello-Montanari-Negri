@@ -28,7 +28,7 @@ public class Client {
     private boolean isAdvancedGame;
     private Connection connection;
     private final Logger logger;
-    private ArrayList<String> usernames;
+    private List<String> usernames;
     private final ArrayList<String> usernamesDisconnected = new ArrayList<>();
     private Game model;
 

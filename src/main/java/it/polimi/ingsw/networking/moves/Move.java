@@ -7,7 +7,7 @@ import it.polimi.ingsw.networking.Message;
 
 import java.util.ArrayList;
 
-public abstract class Move extends Message {
+public abstract class Move implements Message {
     // can be empty if no student is extracted for this move
     // must be ArrayList because it is serializable
     private final ArrayList<StudentColor> extracted = new ArrayList<>();

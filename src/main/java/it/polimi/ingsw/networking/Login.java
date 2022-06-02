@@ -3,7 +3,7 @@ package it.polimi.ingsw.networking;
 import it.polimi.ingsw.model.enums.GameMode;
 import it.polimi.ingsw.model.enums.PlayerNumber;
 
-public class Login extends Message {
+public class Login implements Message {
     final String username;
     final PlayerNumber playerNumber;
     final GameMode mode;

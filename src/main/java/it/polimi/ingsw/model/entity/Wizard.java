@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.entity;
 
+import it.polimi.ingsw.model.GameRuleException;
 import it.polimi.ingsw.model.enums.PlayerNumber;
 import it.polimi.ingsw.model.enums.StudentColor;
 import it.polimi.ingsw.model.enums.Tower;
@@ -50,9 +51,9 @@ public class Wizard {
 
     }
 
-    public void checkDiningStudentNUmber (StudentColor studentColor) throws Exception {
+    public void checkDiningStudentNUmber (StudentColor studentColor) throws GameRuleException {
         if (diningStudents[studentColor.getValue()] >= 10)
-            throw new Exception("The dining room is full");
+            throw new GameRuleException("The dining room is full");
     }
 
     public void takeDiningStudent (StudentColor studentColor) { diningStudents[studentColor.getValue()] -= diningStudents[studentColor.getValue()]>0 ? 1 : 0; }
@@ -63,8 +64,8 @@ public class Wizard {
             game.endGame();
     }
 
-    public void payEffect(Integer price) throws Exception{
-        if (price > money) throw new Exception("Not enough money to activate the effect");
+    public void payEffect(Integer price) throws GameRuleException {
+        if (price > money) throw new GameRuleException("Not enough money to activate the effect");
         money -= price;
     }
 

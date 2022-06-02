@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.entity.gameState;
 
+import it.polimi.ingsw.model.GameRuleException;
 import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.characters.CharacterFour;
 import it.polimi.ingsw.model.enums.Tower;
@@ -18,7 +19,7 @@ public class MoveMotherNatureActionState extends ActionState {
      * @param playingWizard the player doing the move
      * @param steps the number of steps to move
      */
-    public void moveMotherNature(Integer playingWizard, Integer steps) throws Exception {
+    public void moveMotherNature(Integer playingWizard, Integer steps) throws GameRuleException {
         moveMotherNatureValidator(playingWizard, steps);
         Game.request(gameId).doMotherNatureSteps(steps);
         Game.request(gameId).getFistIslandGroup().updateTower(Game.request(gameId), activatedCharacter);
@@ -30,12 +31,12 @@ public class MoveMotherNatureActionState extends ActionState {
      * Validator for moveMotherNature method
      * @param playingWizard the player doing the move
      * @param steps the number of steps to move
-     * @throws Exception wrong player, phase or too many steps asked
+     * @throws GameRuleException wrong player, phase or too many steps asked
      */
-    public void moveMotherNatureValidator(Integer playingWizard, Integer steps) throws Exception {
-        if (!Objects.equals(playingWizard, playerOrder.get(currentlyPlaying))) throw new Exception("Wrong player");
-        if (!Objects.equals(gameState, "MMNS")) throw new Exception("Wrong game phase");
-        if (steps > getMaximumSteps(playingWizard)) throw new Exception("Too many steps");
+    public void moveMotherNatureValidator(Integer playingWizard, Integer steps) throws GameRuleException {
+        if (!Objects.equals(playingWizard, playerOrder.get(currentlyPlaying))) throw new GameRuleException("Wrong player");
+        if (!Objects.equals(gameState, "MMNS")) throw new GameRuleException("Wrong game phase");
+        if (steps > getMaximumSteps(playingWizard)) throw new GameRuleException("Too many steps");
     }
 
     /**

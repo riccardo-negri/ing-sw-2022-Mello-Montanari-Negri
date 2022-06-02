@@ -15,7 +15,7 @@ public class DiningRoomMovement extends Move{
     }
 
     @Override
-    protected void applyEffect(Game game) throws Exception {
+    protected void applyEffect(Game game) throws GameRuleException {
         try {
             ((MoveStudentActionState) game.getGameState()).moveStudentToDiningRoom(authorId, student);
         } catch (ClassCastException e) {
@@ -24,7 +24,7 @@ public class DiningRoomMovement extends Move{
     }
 
     @Override
-    public void validate(Game game) throws Exception {
+    public void validate(Game game) throws GameRuleException {
         try {
             ((MoveStudentActionState) game.getGameState()).moveStudentToDiningRoomValidator(authorId, student);
         } catch (ClassCastException e) {

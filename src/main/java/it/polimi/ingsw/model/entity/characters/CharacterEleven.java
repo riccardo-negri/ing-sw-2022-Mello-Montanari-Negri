@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.entity.characters;
 
+import it.polimi.ingsw.model.GameRuleException;
 import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Bag;
 import it.polimi.ingsw.model.entity.Professor;
@@ -24,7 +25,7 @@ public class CharacterEleven extends Character{
      * @param playingWizard the player playing the card
      * @param studentColor the color of the student to take
      */
-    public void useEffect(Integer playingWizard, StudentColor studentColor) throws Exception{
+    public void useEffect(Integer playingWizard, StudentColor studentColor) throws GameRuleException{
         characterElevenValidator(playingWizard, studentColor);
         useCard(playingWizard);
         studentColorList.remove(studentColor);
@@ -37,12 +38,12 @@ public class CharacterEleven extends Character{
      * one student from the card can be taken and put in the dining room
      * @param playingWizard the player playing the card
      * @param studentColor the color of the student to take
-     * @throws Exception if it is not the player turn, he does not have enough money to activate the card,
+     * @throws GameRuleException if it is not the player turn, he does not have enough money to activate the card,
      * or if the student is not present on the card
      */
-    public void characterElevenValidator(Integer playingWizard, StudentColor studentColor) throws Exception{
+    public void characterElevenValidator(Integer playingWizard, StudentColor studentColor) throws GameRuleException {
         characterValidator(playingWizard);
-        if (!studentColorList.contains(studentColor)) throw new Exception("Student color not present on the card");
+        if (!studentColorList.contains(studentColor)) throw new GameRuleException("Student color not present on the card");
         Game.request(gameId).getWizard(playingWizard).checkDiningStudentNUmber(studentColor);
     }
 

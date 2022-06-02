@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.entity.characters;
 
+import it.polimi.ingsw.model.GameRuleException;
 import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Island;
 import it.polimi.ingsw.model.entity.Wizard;
@@ -19,7 +20,7 @@ public class CharacterFive extends Character{
      * @param playingWizard the player playing the card
      * @param islandId the island to put the student on
      */
-    public void useEffect(Integer playingWizard, Integer islandId) throws Exception{
+    public void useEffect(Integer playingWizard, Integer islandId) throws GameRuleException{
         characterFiveValidator(playingWizard, islandId);
         useCard(playingWizard);
         Game.request(gameId).getIsland(islandId).addStopCard(this);
@@ -29,13 +30,13 @@ public class CharacterFive extends Character{
      * Validator for character five useEffect method
      * @param playingWizard the player playing the card
      * @param islandId the island to put the student on
-     * @throws Exception if it is not the player turn, he does not have enough money to activate the card,
+     * @throws GameRuleException if it is not the player turn, he does not have enough money to activate the card,
      * there are no more stop card available, or the island does not exist
      */
-    public void characterFiveValidator(Integer playingWizard, Integer islandId) throws Exception {
+    public void characterFiveValidator(Integer playingWizard, Integer islandId) throws GameRuleException {
         characterValidator(playingWizard);
-        if(stopNumber <= 0) throw new Exception("No more stop cards available");
-        if (islandId<0 || islandId>=12) throw new Exception("Island does not exist");
+        if(stopNumber <= 0) throw new GameRuleException("No more stop cards available");
+        if (islandId<0 || islandId>=12) throw new GameRuleException("Island does not exist");
     }
 
     public void removeOneCard() { stopNumber -= 1; }

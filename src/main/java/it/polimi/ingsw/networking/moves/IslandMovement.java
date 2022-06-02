@@ -17,7 +17,7 @@ public class IslandMovement extends Move{
     }
 
     @Override
-    protected void applyEffect(Game game) throws Exception {
+    protected void applyEffect(Game game) throws GameRuleException {
         try {
             ((MoveStudentActionState) game.getGameState()).moveStudentToIsland(authorId, student, islandId);
         } catch (ClassCastException e) {
@@ -26,7 +26,7 @@ public class IslandMovement extends Move{
     }
 
     @Override
-    public void validate(Game game) throws Exception {
+    public void validate(Game game) throws GameRuleException {
         try {
             ((MoveStudentActionState) game.getGameState()).moveStudentToIslandValidator(authorId, student, islandId);
         } catch (ClassCastException e) {

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.networking.moves;
 
+import it.polimi.ingsw.model.GameRuleException;
 import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.enums.StudentColor;
@@ -14,26 +15,26 @@ public abstract class Move implements Message {
     protected int authorId;  // the wizard that required this move
     private int number = 0;
 
-    public Move(Wizard author) {
+    protected Move(Wizard author) {
         this.authorId = author.getId();
     }
 
-    protected abstract void applyEffect(Game game) throws Exception;
+    protected abstract void applyEffect(Game game) throws GameRuleException;
 
-    public void applyEffectServer(Game game, Wizard wizard) throws Exception {
+    public void applyEffectServer(Game game, Wizard wizard) throws GameRuleException {
         this.authorId = wizard.getId();
         applyEffect(game);
         extracted.clear();
         extracted.addAll(game.getBag().takeRecentlySelected());
     }
 
-    public void applyEffectClient(Game game) throws Exception {
+    public void applyEffectClient(Game game) throws GameRuleException {
         game.getBag().putRecentlySelected(extracted);
         applyEffect(game);
         //TODO: flush out queue
     }
 
-    public abstract void validate(Game game) throws Exception;
+    public abstract void validate(Game game) throws GameRuleException;
 
     public int getNumber() {
         return number;

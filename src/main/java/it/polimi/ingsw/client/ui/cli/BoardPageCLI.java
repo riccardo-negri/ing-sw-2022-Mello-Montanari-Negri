@@ -78,12 +78,12 @@ public class BoardPageCLI extends AbstractBoardPage {
             onEnd(true);
         }
         else if (message instanceof UserDisconnected userDisconnected) {
-            lastWarning = PLAYER + userDisconnected.getUsername() + " disconnected from the game.";
-            client.getUsernamesDisconnected().add(((UserDisconnected) message).getUsername());
+            lastWarning = PLAYER + userDisconnected.username() + " disconnected from the game.";
+            client.getUsernamesDisconnected().add(((UserDisconnected) message).username());
         }
         else if (message instanceof UserConnected userConnected) {
-            lastWarning = PLAYER + userConnected.getUsername() + " reconnected to the game.";
-            client.getUsernamesDisconnected().remove(((UserConnected) message).getUsername());
+            lastWarning = PLAYER + userConnected.username() + " reconnected to the game.";
+            client.getUsernamesDisconnected().remove(((UserConnected) message).username());
         }
         else if (message instanceof UserResigned userResigned) {
             if (userResigned.getUsername().equals(client.getUsername())) {

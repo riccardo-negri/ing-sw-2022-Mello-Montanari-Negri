@@ -17,7 +17,7 @@ public abstract class AbstractLobbyPage extends AbstractPage {
     public String waitForConnectedOrStart () {
         Message lastMessage = client.getConnection().waitMessage(Arrays.asList(InitialState.class, UserConnected.class));
         if (lastMessage instanceof UserConnected userConnected) {
-            return userConnected.getUsername();
+            return userConnected.username();
         }
         else if (lastMessage instanceof InitialState initialState) {
             client.setModel(Game.request(Game.deserializeGameFromString(initialState.getState())));

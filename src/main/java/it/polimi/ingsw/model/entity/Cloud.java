@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.entity;
 
+import it.polimi.ingsw.model.GameRuleException;
 import it.polimi.ingsw.model.enums.PlayerNumber;
 import it.polimi.ingsw.model.enums.StudentColor;
 
@@ -34,10 +35,10 @@ public class Cloud {
     /**
      * to take the student from the cloud at the end of the Action State
      * @return the list of taken students present on the island
-     * @throws Exception if the cloud is already taken
+     * @throws GameRuleException if the cloud is already taken
      */
-    public List<StudentColor> takeStudents() throws Exception {
-        if (taken) throw new Exception("Cloud already taken");
+    public List<StudentColor> takeStudents() throws GameRuleException {
+        if (taken) throw new GameRuleException("Cloud already taken");
         taken = true;
         List<StudentColor> out = studentColorList;
         studentColorList = new ArrayList<>();

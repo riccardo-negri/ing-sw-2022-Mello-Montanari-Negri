@@ -1,6 +1,8 @@
 package it.polimi.ingsw.utils;
 
-public class Counter {
+import java.io.Serializable;
+
+public class Counter implements Serializable {
     private int number = 0;
 
     public Counter() {}

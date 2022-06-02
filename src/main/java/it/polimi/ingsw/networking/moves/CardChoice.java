@@ -14,7 +14,7 @@ public class CardChoice extends Move{
     }
 
     @Override
-    protected void applyEffect(Game game) throws Exception {
+    protected void applyEffect(Game game) throws GameRuleException {
         try {
             ((PlanningState) game.getGameState()).selectCard(authorId, card);
         } catch (ClassCastException e) {
@@ -23,7 +23,7 @@ public class CardChoice extends Move{
     }
 
     @Override
-    public void validate(Game game) throws Exception {
+    public void validate(Game game) throws GameRuleException {
         try {
             ((PlanningState) game.getGameState()).cardSelectionValidator(authorId, card);
         } catch (ClassCastException e) {

@@ -14,7 +14,7 @@ public class MotherNatureMovement extends Move{
     }
 
     @Override
-    protected void applyEffect(Game game) throws Exception {
+    protected void applyEffect(Game game) throws GameRuleException {
         try {
             ((MoveMotherNatureActionState) game.getGameState()).moveMotherNature(authorId, steps);
         } catch (ClassCastException e) {
@@ -23,7 +23,7 @@ public class MotherNatureMovement extends Move{
     }
 
     @Override
-    public void validate(Game game) throws Exception {
+    public void validate(Game game) throws GameRuleException {
         try {
             ((MoveMotherNatureActionState) game.getGameState()).moveMotherNatureValidator(authorId, steps);
         } catch (ClassCastException e) {

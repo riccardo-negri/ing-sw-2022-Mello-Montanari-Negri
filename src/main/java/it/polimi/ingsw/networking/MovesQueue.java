@@ -18,6 +18,7 @@ public class MovesQueue extends PriorityQueue<Move> {
         super(Comparator.comparingInt(Move::getNumber));
     }
 
+    @Override
     public synchronized boolean add(Move move) {
         return super.add(move);
     }

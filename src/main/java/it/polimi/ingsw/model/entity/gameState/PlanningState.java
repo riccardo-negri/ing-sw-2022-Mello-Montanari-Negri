@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.entity.gameState;
 
+import it.polimi.ingsw.model.GameRuleException;
 import it.polimi.ingsw.model.entity.Cloud;
 import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Wizard;
@@ -66,9 +67,9 @@ public class PlanningState extends GameState {
      * Selection of the assistant card to be played
      * @param playingWizard the player who is selecting the card
      * @param selected the number of the card to select (1 to 10)
-     * @throws Exception wrong player according to the turns, or the card already played
+     * @throws GameRuleException wrong player according to the turns, or the card already played
      */
-    public void selectCard (Integer playingWizard, Integer selected) throws Exception {
+    public void selectCard (Integer playingWizard, Integer selected) throws GameRuleException {
         cardSelectionValidator(playingWizard, selected);
         Game.request(gameId).getWizard(playingWizard).getCardDeck().playCard(selected);
         currentlyPlaying++;
@@ -79,22 +80,22 @@ public class PlanningState extends GameState {
      * Validation of card selection by player
      * @param playingWizard the player who is selecting the card
      * @param selected the number of the card to select (1 to 10)
-     * @throws Exception wrong player according to the turns, or the card already played
+     * @throws GameRuleException wrong player according to the turns, or the card already played
      */
-    public void cardSelectionValidator(Integer playingWizard, Integer selected) throws Exception {
+    public void cardSelectionValidator(Integer playingWizard, Integer selected) throws GameRuleException {
 
-        if (!Objects.equals(playingWizard, playerOrder.get(currentlyPlaying))) throw new Exception("Wrong player");
-        if (!Objects.equals(gameState, "PS")) throw new Exception("Wrong game phase");
+        if (!Objects.equals(playingWizard, playerOrder.get(currentlyPlaying))) throw new GameRuleException("Wrong player");
+        if (!Objects.equals(gameState, "PS")) throw new GameRuleException("Wrong game phase");
 
         Wizard player = Game.request(gameId).getWizard(playingWizard);
 
-        if (Arrays.stream(player.getCardDeck().getDeckCards()).noneMatch(x -> x==selected)) throw new Exception("Card not available");
+        if (Arrays.stream(player.getCardDeck().getDeckCards()).noneMatch(x -> x==selected)) throw new GameRuleException("Card not available");
 
         List<Integer> cardNumbers = new ArrayList<>();
         for (int i=0; i<currentlyPlaying; i++)
             cardNumbers.add(Game.request(gameId).getWizard(playerOrder.get(i)).getCardDeck().getCurrentCard().getNumber());
         if (cardNumbers.contains(selected) && player.getCardDeck().checkAvailableCards(cardNumbers))
-            throw new Exception("Card already played with valid alternatives");
+            throw new GameRuleException("Card already played with valid alternatives");
     }
 
     /**

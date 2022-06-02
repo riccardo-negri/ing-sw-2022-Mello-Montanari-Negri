@@ -29,22 +29,25 @@ public class Connection extends ConnectionBase {
     }
 
     public Connection(String address, int port, Predicate<Connection> acceptMessage, Logger logger) {
-        super(Connection.createSocket(address, port), acceptMessage, logger);
+        super(Connection.createSocket(address, port, logger), acceptMessage, logger);
 
     }
 
     public Connection(String address, int port, Logger logger) {
-        super(Connection.createSocket(address, port), Connection::doNothing, logger);
+        super(Connection.createSocket(address, port, logger), Connection::doNothing, logger);
     }
 
-    static private boolean doNothing(Connection source) {return false;}
+    private static boolean doNothing(Connection source) {return false;}
 
-    static private SafeSocket createSocket(String address, int port) {
+    private static SafeSocket createSocket(String address, int port, Logger logger) {
+        SafeSocket result = null;
         try {
-            return new SafeSocket(new Socket(address, port));
+            result = new SafeSocket(new Socket(address, port));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            String toLog = "Failed to create connection socket: " + e.getMessage();
+            logger.log(Level.SEVERE, toLog);
         }
+        return result;
     }
 
     public void bindFunction(Predicate<Connection> acceptMessage) {
@@ -71,8 +74,8 @@ public class Connection extends ConnectionBase {
         while (isRunning()) {
             try {
                 Message msg = (Message) reader.readObject();
-                if (msg instanceof Move) {
-                    updateQueue((Move) msg);
+                if (msg instanceof Move move) {
+                    updateQueue(move);
                 }
                 else if(!(msg instanceof Ping)) {
                     processMessage(msg);
@@ -137,7 +140,8 @@ public class Connection extends ConnectionBase {
                 wait();
                 m = pollFirstMatch(filter);
             } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                logger.log(Level.WARNING, "Interrupted", e);
+                Thread.currentThread().interrupt();
             }
         }
         return m;
@@ -162,12 +166,12 @@ public class Connection extends ConnectionBase {
             Move move = (Move) message;
             int next = movesCount.increment();
             move.setNumber(next-1);
-        } catch (ClassCastException ignored) {}
+        } catch (ClassCastException ignored) { /*ignored*/ }
         try {
             synchronized (writer) {
                 writer.writeObject(message);
             }
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) { /*ignored*/ }
     }
 
     boolean isRunning() {
@@ -177,7 +181,7 @@ public class Connection extends ConnectionBase {
     void stop() {
         try {
             socket.close();
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) { /*ignored*/ }
         pingTimer.cancel();
     }
 
@@ -186,6 +190,9 @@ public class Connection extends ConnectionBase {
             stop();
             if (!Thread.currentThread().equals(thread))
                 thread.join();
-        } catch (InterruptedException ignored) {}
+        } catch (InterruptedException e) {
+            logger.log(Level.WARNING, "Interrupted", e);
+            Thread.currentThread().interrupt();
+        }
     }
 }

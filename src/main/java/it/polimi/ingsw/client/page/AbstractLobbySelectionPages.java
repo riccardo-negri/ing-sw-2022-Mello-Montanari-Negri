@@ -32,7 +32,7 @@ public abstract class AbstractLobbySelectionPages extends AbstractPage {
         // if I receive LobbiesList it means that there was an error joining the selected lobby
         Message lastMessage = client.getConnection().waitMessage(Arrays.asList(Redirect.class, LobbiesList.class));
         if (lastMessage instanceof Redirect redirect) {
-            client.setPort(redirect.getPort());
+            client.setPort(redirect.port());
             client.setConnection(new Connection(client.getIpAddress(), client.getPort(), logger));
 
             Login login = new Login(client.getUsername());

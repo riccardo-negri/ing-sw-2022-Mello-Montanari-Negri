@@ -1,6 +1,5 @@
 package it.polimi.ingsw.server;
 
-import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.networking.*;
 import it.polimi.ingsw.networking.ErrorMessage;
 
@@ -122,7 +121,7 @@ public class MatchmakingServer extends Server {
         User user = userFromConnection(connection);
         if (message instanceof LobbyChoice lobbyChoice) {
             for (GameServer g : getStartedGames()) {
-                if (g.getCode().equals(lobbyChoice.getCode())) {
+                if (g.getCode().equals(lobbyChoice.code())) {
                     if (g.assignUser(user.getName()))  // if lobby is full returns false and sends ErrorMessage
                         moveToGame(user, g);
                     else

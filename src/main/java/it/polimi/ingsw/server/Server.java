@@ -76,8 +76,7 @@ public abstract class Server {
         try {
             connectionThread.join(); // waits here until this.stop() is called
         } catch (InterruptedException e) {
-            String toLog = "Interrupted: " + e.getMessage();
-            logger.log(Level.WARNING, toLog);
+            logger.log(Level.WARNING, "Interrupted", e);
             connectionThread.interrupt();
         }
         for (Connection c : getConnecting()) {

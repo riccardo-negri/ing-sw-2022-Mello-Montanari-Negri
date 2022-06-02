@@ -14,7 +14,7 @@ public class Procedures {
         connection.send(new CreateLobby(number, mode));
         Redirect redirect = (Redirect) connection.waitMessage(Redirect.class);
         connection.close();
-        connection = new Connection("localhost", redirect.getPort(), logger);
+        connection = new Connection("localhost", redirect.port(), logger);
         connection.send(login);
         if (wait) {
             Message m = connection.waitMessage(InitialState.class);
@@ -31,7 +31,7 @@ public class Procedures {
         connection.send(new LobbyChoice(list.getLobbies().get(0).getCode()));
         Redirect redirect = (Redirect) connection.waitMessage(Redirect.class);
         connection.close();
-        connection = new Connection("localhost", redirect.getPort(), logger);
+        connection = new Connection("localhost", redirect.port(), logger);
         connection.send(login);
         if (wait) {
             Message m = connection.waitMessage(InitialState.class);
@@ -46,7 +46,7 @@ public class Procedures {
         connection.send(login);
         Redirect redirect = (Redirect) connection.waitMessage(Redirect.class);
         connection.close();
-        connection = new Connection("localhost", redirect.getPort(), logger);
+        connection = new Connection("localhost", redirect.port(), logger);
         connection.send(login);
         if (wait) {
             Message m = connection.waitMessage(InitialState.class);

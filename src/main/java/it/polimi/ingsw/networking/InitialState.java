@@ -22,8 +22,4 @@ public class InitialState implements Message {
     public List<String> getUsernames() {
         return usernames;
     }
-
-    public int idFromUsername(String name) {
-        return usernames.indexOf(name);
-    }
 }

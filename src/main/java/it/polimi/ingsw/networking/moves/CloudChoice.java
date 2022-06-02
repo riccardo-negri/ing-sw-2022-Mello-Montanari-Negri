@@ -14,7 +14,7 @@ public class CloudChoice extends Move{
     }
 
     @Override
-    protected void applyEffect(Game game) throws Exception {
+    protected void applyEffect(Game game) throws GameRuleException {
         try {
             ((ChooseCloudActionState) game.getGameState()).chooseCloud(authorId, cloudId);
         } catch (ClassCastException e) {
@@ -23,7 +23,7 @@ public class CloudChoice extends Move{
     }
 
     @Override
-    public void validate(Game game) throws Exception {
+    public void validate(Game game) throws GameRuleException {
         try {
             ((ChooseCloudActionState) game.getGameState()).chooseCloudValidator(authorId, cloudId);
         } catch (ClassCastException e) {

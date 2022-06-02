@@ -35,7 +35,7 @@ public abstract class AbstractConnectionPage extends AbstractPage {
             client.setLobbies(lobbiesList.getLobbies());
         }
         else if (lastMessage instanceof Redirect redirect) { // the user was already registered in the server, so he must be in a game
-            client.setPort(redirect.getPort());
+            client.setPort(redirect.port());
             client.setConnection(new Connection(client.getIpAddress(), client.getPort(), logger));
             Login login = new Login(client.getUsername());
             client.getConnection().send(login);

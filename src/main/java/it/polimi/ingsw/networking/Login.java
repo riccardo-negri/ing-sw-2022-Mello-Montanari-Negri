@@ -1,13 +1,9 @@
 package it.polimi.ingsw.networking;
 
-public class Login implements Message {
-    final String username;
+public record Login(String username) implements Message {
 
-    public Login(String username) {
-        this.username = username;
-    }
-
-    public String getUsername() {
+    @Override
+    public String username() {
         // newline characters mess up when saving in file, removing them before using the username
         return username.replace("\n", "");
     }

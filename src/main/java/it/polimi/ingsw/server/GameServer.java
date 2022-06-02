@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.enums.GameMode;
 import it.polimi.ingsw.model.enums.PlayerNumber;
 import it.polimi.ingsw.networking.*;
-import it.polimi.ingsw.networking.InitialState;
 import it.polimi.ingsw.networking.moves.Move;
 
 import java.util.List;
@@ -121,7 +120,7 @@ public class GameServer extends Server{
     }
 
     @Override
-    void onNewUserConnect(User user, Login info) {
+    void onNewUserConnect(User user) {
         user.getConnection().bindFunction(this::receiveMessage);
         for (User u: connectedUsers)  // tell to the new user all the other connected in the lobby
             if (!u.getName().equals(user.getName()))
@@ -148,7 +147,7 @@ public class GameServer extends Server{
 
     @Override
     boolean isUserAllowed(Login info) {
-        return assignedUsernames.contains(info.getUsername());
+        return assignedUsernames.contains(info.username());
     }
 
     @Override

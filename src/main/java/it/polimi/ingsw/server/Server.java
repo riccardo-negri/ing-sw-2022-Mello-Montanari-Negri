@@ -105,7 +105,7 @@ public abstract class Server {
 
     abstract void onUserReconnected(User user);
 
-    abstract void onNewUserConnect(User user, Login info);
+    abstract void onNewUserConnect(User user);
 
     boolean isUserAllowed(Login info) {
         return true;
@@ -129,12 +129,12 @@ public abstract class Server {
     }
 
     void connectNewUser(Connection connection, Login login) {
-        User user = createUser(login.getUsername(), connection);
+        User user = createUser(login.username(), connection);
         if(connectedUsers.addWithLimit(user, maxUsers)) {
             connecting.remove(connection);
             String toLog = "New user logged in: " + user.getName();
             logger.log(Level.INFO, toLog);
-            onNewUserConnect(user, login);
+            onNewUserConnect(user);
         }
         else {
             reconnectUser(connection, login);
@@ -143,10 +143,10 @@ public abstract class Server {
 
     void reconnectUser(Connection connection, Login login) {
         for (User u : getConnectedUsers()) {
-            if (u.getName().equals(login.getUsername())) {
+            if (u.getName().equals(login.username())) {
                 u.replaceConnection(connection);
                 connecting.remove(connection);
-                String toLog = "User " + login.getUsername() + " reconnected";
+                String toLog = "User " + login.username() + " reconnected";
                 logger.log(Level.INFO, toLog);
                 onUserReconnected(u);
             }
@@ -187,10 +187,6 @@ public abstract class Server {
     // everyone joined at least once, we don't know if they disconnected later
     public boolean isEveryoneConnected() {
         return connectedUsers.size() >= maxUsers;
-    }
-
-    public int getMaxUsers() {
-        return maxUsers;
     }
 
     public int getPort() {

@@ -41,10 +41,6 @@ public class SavesManager {
         return true;
     }
 
-    boolean touchFile(Path path) {
-        return writeFile(path, "");
-    }
-
     // replaces the file if already exists or creates it otherwise
     boolean writeFile(Path path, String text) {
         byte[] bytes = text.getBytes();
@@ -58,15 +54,13 @@ public class SavesManager {
         return true;
     }
 
-    boolean deleteFile(Path path) {
+    void deleteFile(Path path) {
         try {
             Files.deleteIfExists(path);
         } catch (IOException e) {
             String toLog = "Unable to delete file: " + e.getMessage();
             logger.log(Level.SEVERE, toLog);
-            return false;
         }
-        return true;
     }
 
     String readFile(Path path) {

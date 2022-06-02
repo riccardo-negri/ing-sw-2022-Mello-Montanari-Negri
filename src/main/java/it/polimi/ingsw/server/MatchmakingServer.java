@@ -1,8 +1,6 @@
 package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.networking.*;
-import it.polimi.ingsw.networking.ErrorMessage;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -87,15 +85,12 @@ public class MatchmakingServer extends Server {
                 }
             }
         }
-        handleNewConnection(user);
+        // after handling the refuse treat exactly as a new user
+        onNewUserConnect(user);
     }
 
     @Override
-    void onNewUserConnect(User user, Login info) {
-        handleNewConnection(user);
-    }
-
-    void handleNewConnection(User user) {
+    void onNewUserConnect(User user) {
         for (GameServer g : getStartedGames()) {
             if (g.getAssignedUsernames().contains(user.getName())) {
                 user.getConnection().send(new Redirect(g.getPort()));

@@ -19,10 +19,10 @@ public abstract class ConnectionBase {
     protected final ConnectionPredicate acceptMessage;
 
     protected final Thread thread;
-    Timer pingTimer = new Timer();
+    final Timer pingTimer = new Timer();
 
-    protected ObjectInputStream reader;
-    protected ObjectOutputStream writer;
+    protected final ObjectInputStream reader;
+    protected final ObjectOutputStream writer;
 
     protected final Logger logger;
 
@@ -30,14 +30,18 @@ public abstract class ConnectionBase {
         this.socket = socket;
         this.acceptMessage = new ConnectionPredicate(acceptMessage);
         this.logger = logger;
+        ObjectOutputStream w = null;
+        ObjectInputStream r = null;
         try {
             this.socket.setSoTimeout(DISCONNECT_PERIOD *1000);
-            writer = new ObjectOutputStream(socket.getOutputStream());
-            reader = new ObjectInputStream(socket.getInputStream());
+            w = new ObjectOutputStream(socket.getOutputStream());
+            r = new ObjectInputStream(socket.getInputStream());
         } catch (IOException e) {
             String toLog = "IOException when  starting connection: " + e.getMessage();
             logger.log(Level.SEVERE, toLog);
         }
+        writer = w;
+        reader = r;
         thread = new Thread(this::listenMessages);
         TimerTask pingTask = new TimerTask() {
             public void run() {send(new Ping());}

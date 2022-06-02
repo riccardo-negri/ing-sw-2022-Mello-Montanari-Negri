@@ -4,7 +4,6 @@ import it.polimi.ingsw.model.enums.AssistantCard;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * list of the available assistant cards
@@ -27,11 +26,11 @@ public class CardDeck {
     /**
      * to play card during the planning phase, it automatically remove the card from the deck
      * @param cardNumber the number of the card to be played
-     * @throws Exception if the card does not have an accepted number or is already played
+     * @throws GameRuleException if the card does not have an accepted number or is already played
      */
-    public void playCard (Integer cardNumber) throws Exception {
+    public void playCard (Integer cardNumber) throws GameRuleException {
         List<AssistantCard> card = assistantCards.stream().filter(x -> x.getNumber().equals(cardNumber)).toList();
-        if (card.isEmpty()) throw new Exception("Card not available");
+        if (card.isEmpty()) throw new GameRuleException("Card not available");
         currentCard = card.get(0);
         assistantCards.remove(currentCard);
     }

@@ -10,15 +10,15 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.SocketException;
 import java.util.List;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 public abstract class Server {
-    // using Vector instead of ArrayList because Vector class is thread-safe
-    protected final Vector<Connection> connecting;
-    protected final UniqueUserVector connectedUsers;
+    protected final List<Connection> connecting;
+
+    // users in this vector stay there also if the socket stops working for network issues
+    // when they reconnect the new connection is used for the same user
+    protected final UniqueUserList connectedUsers;
     protected int maxUsers = Integer.MAX_VALUE;
     protected ServerSocket socket;
     protected int port;
@@ -30,21 +30,25 @@ public abstract class Server {
     }
 
     // initialize variables but don't run server code yet
-    public Server() {
-        connectedUsers = new UniqueUserVector();
-        connecting = new Vector<>();
+    protected Server() {
+        connectedUsers = new UniqueUserList();
+        connecting = new SafeList<>();  // using SafeList instead of ArrayList because SafeList class is thread-safe
         logger = LogFormatter.getLogger("Server");
-        try {
-            socket = new ServerSocket(getPortToBind());
-            port = socket.getLocalPort();
-        } catch (IOException e) {
-            String toLog = "Unable to open server socket: " + e.getMessage();
-            logger.log(Level.SEVERE, toLog);
-        }
+        int attempts = 0;
+        do {
+            try {
+                attempts++;
+                socket = new ServerSocket(getPortToBind());
+                port = socket.getLocalPort();
+            } catch (IOException e) {
+                String toLog = "Unable to open server socket: " + e.getMessage();
+                logger.log(Level.SEVERE, toLog);
+            }
+        } while (socket == null && attempts <= 3);
     }
 
     List<String> usernames() {
-        return getConnectedUsers().stream().map(User::getName).collect(Collectors.toList());
+        return getConnectedUsers().stream().map(User::getName).toList();
     }
 
     abstract void onStart();
@@ -54,9 +58,7 @@ public abstract class Server {
     public void stop() {
         try {
             socket.close(); // this should stop the connectionThread and cause the termination of the server
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        } catch (IOException ignored) { /*ignored*/ }
     }
 
     // open the socket and run server code
@@ -69,7 +71,8 @@ public abstract class Server {
         try {
             connectionThread.join(); // waits here until this.stop() is called
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            logger.log(Level.WARNING, "Interrupted", e);
+            connectionThread.interrupt();
         }
         for (Connection c : getConnecting()) {
             c.close();
@@ -85,24 +88,22 @@ public abstract class Server {
     void listenConnection() {
         String toLog = "Listening for new connections on port: " + getPort();
         logger.log(Level.INFO, toLog);
-        while (true) {
+        boolean running = true;
+        while (running) {
             try {
-                SafeSocket socket;
-                socket = new SafeSocket(this.socket.accept());
-                toLog = "Accepted new connection from: " + socket.getInetAddress();
+                SafeSocket acceptedSocket = new SafeSocket(this.socket.accept());
+                toLog = "Accepted new connection from: " + acceptedSocket.getInetAddress();
                 logger.log(Level.INFO, toLog);
-                connecting.add(new Connection(socket, this::userLogin, logger));
-            } catch (IOException e) {
-                if (e instanceof SocketException) {
-                    return;
-                }
-            }
+                connecting.add(new Connection(acceptedSocket, this::userLogin, logger));
+            } catch (SocketException e) {
+                running = false;
+            } catch (IOException ignored) { /*ignored*/ }
         }
     }
 
     abstract void onUserReconnected(User user);
 
-    abstract void onNewUserConnect(User user, Login info);
+    abstract void onNewUserConnect(User user);
 
     boolean isUserAllowed(Login info) {
         return true;
@@ -126,12 +127,12 @@ public abstract class Server {
     }
 
     void connectNewUser(Connection connection, Login login) {
-        User user = createUser(login.getUsername(), connection);
+        User user = createUser(login.username(), connection);
         if(connectedUsers.addWithLimit(user, maxUsers)) {
             connecting.remove(connection);
             String toLog = "New user logged in: " + user.getName();
             logger.log(Level.INFO, toLog);
-            onNewUserConnect(user, login);
+            onNewUserConnect(user);
         }
         else {
             reconnectUser(connection, login);
@@ -140,10 +141,10 @@ public abstract class Server {
 
     void reconnectUser(Connection connection, Login login) {
         for (User u : getConnectedUsers()) {
-            if (u.getName().equals(login.getUsername())) {
+            if (u.getName().equals(login.username())) {
                 u.replaceConnection(connection);
                 connecting.remove(connection);
-                String toLog = "User " + login.getUsername() + " reconnected";
+                String toLog = "User " + login.username() + " reconnected";
                 logger.log(Level.INFO, toLog);
                 onUserReconnected(u);
             }
@@ -181,12 +182,9 @@ public abstract class Server {
         return connecting;
     }
 
+    // everyone joined at least once, we don't know if they disconnected later
     public boolean isEveryoneConnected() {
         return connectedUsers.size() >= maxUsers;
-    }
-
-    public int getMaxUsers() {
-        return maxUsers;
     }
 
     public int getPort() {

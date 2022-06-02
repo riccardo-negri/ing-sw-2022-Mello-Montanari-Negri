@@ -1,13 +1,11 @@
 package it.polimi.ingsw.server;
 
-import java.util.Vector;
-
 /*
-    A User Vector class that forbids multiple users with same username
+    A thread-safe User List class that forbids multiple users with same username
     Can call addWithLimit to pass a capacity limit to respect during the add operation, if not respected return false
  */
 
-public class UniqueUserVector extends Vector<User> {
+public class UniqueUserList extends SafeList<User> {
     @Override
     public synchronized boolean add(User user) {
         for (User u: this) {

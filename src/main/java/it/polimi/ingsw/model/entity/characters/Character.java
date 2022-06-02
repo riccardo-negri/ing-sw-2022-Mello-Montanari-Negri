@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.entity.characters;
 
+import it.polimi.ingsw.model.entity.GameRuleException;
 import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.entity.Bag;
@@ -43,7 +44,7 @@ public abstract class Character {
 
     public void refreshGameId(Game game) { this.gameId = game.getId(); }
 
-    protected void useCard(Integer playingWizard) throws Exception{
+    protected void useCard(Integer playingWizard) throws GameRuleException{
         Game.request(gameId).getWizard(playingWizard).payEffect(price + (used ? 1 : 0));
         ((ActionState) Game.request(gameId).getGameState()).activateEffect(this);
         activator = playingWizard;
@@ -53,17 +54,17 @@ public abstract class Character {
     /**
      * Validator for all the character useEffect
      * @param playingWizard the player using the effect
-     * @throws Exception if it is not the player turn, or he does not have enough money to activate the card
+     * @throws GameRuleException if it is not the player turn, or he does not have enough money to activate the card
      */
-    protected void characterValidator (Integer playingWizard) throws Exception {
+    protected void characterValidator (Integer playingWizard) throws GameRuleException {
         if (!Objects.equals(Game.request(gameId).getGameState().getCurrentPlayer(), playingWizard))
-            throw new Exception("Wrong player");
+            throw new GameRuleException("Wrong player");
         if(Objects.equals(Game.request(gameId).getGameState().getGameStateName(), "PS"))
-            throw new Exception("Wrong game phase");
+            throw new GameRuleException("Wrong game phase");
         if(((ActionState) Game.request(gameId).getGameState()).getActivatedCharacter() != null)
-            throw new Exception("A character is already active");
+            throw new GameRuleException("A character is already active");
         if (price + (used ? 1 : 0) > Game.request(gameId).getWizard(playingWizard).getMoney())
-            throw new Exception("Not enough money to activate the effect");
+            throw new GameRuleException("Not enough money to activate the effect");
     }
 
     public Wizard getActivator() { return Game.request(gameId).getWizard(activator); }

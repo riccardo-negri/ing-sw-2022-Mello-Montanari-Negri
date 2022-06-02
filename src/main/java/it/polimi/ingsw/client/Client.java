@@ -22,8 +22,9 @@ public class Client {
     private int playerNumber;
     private boolean isAdvancedGame;
     private Connection connection;
+    private ArrayList<LobbyDescriptor> lobbies;
     private final Logger logger;
-    private ArrayList<String> usernames;
+    private List<String> usernames;
     private final ArrayList<String> usernamesDisconnected = new ArrayList<>();
     private Game model;
 
@@ -101,6 +102,14 @@ public class Client {
 
     public void setConnection (Connection connection) {
         this.connection = connection;
+    }
+
+    public List<LobbyDescriptor> getLobbies () {
+        return lobbies;
+    }
+
+    public void setLobbies (List<LobbyDescriptor> lobbies) {
+        this.lobbies = (ArrayList<LobbyDescriptor>) lobbies;
     }
 
     public void setPort (int port) {

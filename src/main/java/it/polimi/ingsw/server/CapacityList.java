@@ -1,16 +1,15 @@
 package it.polimi.ingsw.server;
 
 import java.util.Collection;
-import java.util.Vector;
 
 /*
     A thread-safe list that also has a limitate capacity and refuses duplicates
  */
 
-public class CapacityVector<E> extends Vector<E> {
+public class CapacityList<E> extends SafeList<E> {
     private final int capacity;
 
-    public CapacityVector(int capacity) {
+    public CapacityList(int capacity) {
         super();
         this.capacity = capacity;
     }

@@ -1,9 +1,6 @@
 package it.polimi.ingsw.model.entity.characters;
 
-import it.polimi.ingsw.model.entity.Game;
-import it.polimi.ingsw.model.entity.Wizard;
-import it.polimi.ingsw.model.entity.gameState.ActionState;
-import it.polimi.ingsw.model.enums.Tower;
+import it.polimi.ingsw.model.entity.GameRuleException;
 
 public class CharacterSix extends Character{
 
@@ -13,7 +10,7 @@ public class CharacterSix extends Character{
      * towers are not counted when calculating the influence of an island group
      * @param playingWizard the player playing the card
      */
-    public void useEffect(Integer playingWizard) throws Exception{
+    public void useEffect(Integer playingWizard) throws GameRuleException{
         characterSixValidator(playingWizard);
         useCard(playingWizard);
     }
@@ -21,9 +18,9 @@ public class CharacterSix extends Character{
     /**
      * Validator for character six useEffect method
      * @param playingWizard the player playing the card
-     * @throws Exception if it is not the player turn, or he does not have enough money to activate the card
+     * @throws GameRuleException if it is not the player turn, or he does not have enough money to activate the card
      */
-    public void characterSixValidator(Integer playingWizard) throws Exception {
+    public void characterSixValidator(Integer playingWizard) throws GameRuleException {
         characterValidator(playingWizard);
     }
 }

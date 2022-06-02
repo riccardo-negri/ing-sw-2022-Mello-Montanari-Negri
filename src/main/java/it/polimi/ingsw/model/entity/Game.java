@@ -346,10 +346,10 @@ public class Game {
         return gameMode;
     }
 
-    public Character getCharacter(int characterId) throws Exception {
+    public Character getCharacter(int characterId) throws GameRuleException {
         for (Character c : characters)
             if (c.getId() == characterId) return c;
-        throw new Exception("Character not found");
+        throw new GameRuleException("Character not found");
     }
 
     public Bag getBag() {

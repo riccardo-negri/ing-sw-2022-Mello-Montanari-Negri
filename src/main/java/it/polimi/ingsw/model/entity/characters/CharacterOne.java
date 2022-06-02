@@ -1,9 +1,9 @@
 package it.polimi.ingsw.model.entity.characters;
 
+import it.polimi.ingsw.model.entity.GameRuleException;
 import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Bag;
 import it.polimi.ingsw.model.enums.StudentColor;
-import it.polimi.ingsw.model.enums.Tower;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class CharacterOne extends Character{
      * @param studentColor the color of the student to take
      * @param islandId the island to put the student on
      */
-    public void useEffect(Integer playingWizard, StudentColor studentColor, Integer islandId) throws Exception{
+    public void useEffect(Integer playingWizard, StudentColor studentColor, Integer islandId) throws GameRuleException {
         characterOneValidator(playingWizard, studentColor, islandId);
         useCard(playingWizard);
         studentColorList.remove(studentColor);
@@ -37,13 +37,13 @@ public class CharacterOne extends Character{
      * @param playingWizard the player playing the card
      * @param studentColor the color of the student to take
      * @param islandId the island to put the student on
-     * @throws Exception if it is not the player turn, he does not have enough money to activate the card,
+     * @throws GameRuleException if it is not the player turn, he does not have enough money to activate the card,
      * the card does not contain the student asked or the island does not exist
      */
-    public void characterOneValidator (Integer playingWizard, StudentColor studentColor, Integer islandId) throws Exception{
+    public void characterOneValidator (Integer playingWizard, StudentColor studentColor, Integer islandId) throws GameRuleException{
         characterValidator(playingWizard);
-        if (!studentColorList.contains(studentColor)) throw new Exception("Student color not present on the card");
-        if (islandId<0 || islandId>=12) throw new Exception("Selected island doesn't exist");
+        if (!studentColorList.contains(studentColor)) throw new GameRuleException("Student color not present on the card");
+        if (islandId<0 || islandId>=12) throw new GameRuleException("Selected island doesn't exist");
     }
 
     public void refreshBag (Bag bag) { this.bag = bag; }

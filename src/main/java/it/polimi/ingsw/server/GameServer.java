@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.enums.GameMode;
 import it.polimi.ingsw.model.enums.PlayerNumber;
 import it.polimi.ingsw.networking.*;
-import it.polimi.ingsw.networking.InitialState;
 import it.polimi.ingsw.networking.moves.Move;
 
 import java.util.List;
@@ -14,18 +13,18 @@ import java.util.TimerTask;
 import java.util.logging.Level;
 
 public class GameServer extends Server{
-    private final CapacityVector<String> assignedUsernames;
+    private final CapacityList<String> assignedUsernames;
 
     private final Game game;
 
     private Timer afkTimer;
-    private static final int afkPeriod = 300;  // 5 minutes
+    private static final int AFK_PERIOD = 300;  // 5 minutes
 
     private final GameSavesManager savesManager;
 
     public GameServer(Game game, List<String> usernames, GameSavesManager savesManager) {
         maxUsers = game.getPlayerNumber().getWizardNumber();
-        this.assignedUsernames = new CapacityVector<>(maxUsers);
+        this.assignedUsernames = new CapacityList<>(maxUsers);
         assignedUsernames.addAll(usernames);
         this.game = game;
         this.savesManager = savesManager;
@@ -33,7 +32,7 @@ public class GameServer extends Server{
 
     public GameServer(PlayerNumber playerNumber, GameMode mode, GameSavesManager savesManager) {
         maxUsers = playerNumber.getWizardNumber();
-        this.assignedUsernames = new CapacityVector<>(maxUsers);
+        this.assignedUsernames = new CapacityList<>(maxUsers);
         int id = Game.gameEntityFactory(mode, playerNumber);
         game = Game.request(id);
         this.savesManager = savesManager;
@@ -41,7 +40,7 @@ public class GameServer extends Server{
 
     @Override
     void onStart() {
-
+        // no start actions for the game server
     }
 
     @Override
@@ -68,8 +67,6 @@ public class GameServer extends Server{
             stop();
         } else if (message instanceof Move move) {
             doMove(move, source);
-        } else {
-            throw new RuntimeException("Unknown message" + message);
         }
         return true;
     }
@@ -100,7 +97,7 @@ public class GameServer extends Server{
                 stop();
             }
         };
-        afkTimer.schedule(afkTask, afkPeriod * 1000);
+        afkTimer.schedule(afkTask, (long) AFK_PERIOD * 1000);
     }
 
 
@@ -118,13 +115,17 @@ public class GameServer extends Server{
             // In the game server means that everyone joined once, but we don't know if the connection was lost
             user.getConnection().send(new InitialState(game.serializeGame(), usernames()));
             tellWhoIsDisconnected(user);
-            broadcast(new UserReconnected(user.name));
+            broadcast(new UserConnected(user.name));
         }
     }
 
     @Override
-    void onNewUserConnect(User user, Login info) {
+    void onNewUserConnect(User user) {
         user.getConnection().bindFunction(this::receiveMessage);
+        for (User u: connectedUsers)  // tell to the new user all the other connected in the lobby
+            if (!u.getName().equals(user.getName()))
+                user.getConnection().send(new UserConnected(u.name));
+        broadcast(new UserConnected(user.name));  // tell to the other in the lobby that the new user is joining
         if (isEveryoneConnected()) {
             // Game is starting
             broadcast(new InitialState(game.serializeGame(), usernames()));
@@ -146,7 +147,7 @@ public class GameServer extends Server{
 
     @Override
     boolean isUserAllowed(Login info) {
-        return assignedUsernames.contains(info.getUsername());
+        return assignedUsernames.contains(info.username());
     }
 
     @Override
@@ -184,5 +185,9 @@ public class GameServer extends Server{
             }
         }
         return result;
+    }
+
+    public String getCode() {
+        return savesManager.getCode();
     }
 }

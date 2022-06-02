@@ -18,33 +18,36 @@ public class Connection extends ConnectionBase {
     private final MovesQueue movesQueue = new MovesQueue();
     private final Queue<Message> messagesToProcess = new LinkedList<>();
 
+    private static final Predicate<Connection> DO_NOTHING = c -> false;
+
     public Connection(SafeSocket socket, Predicate<Connection> acceptMessage, Logger logger) {
         super(socket, acceptMessage, logger);
 
     }
 
     public Connection(SafeSocket socket, Logger logger) {
-        super(socket, Connection::doNothing, logger);
+        super(socket, DO_NOTHING, logger);
 
     }
 
     public Connection(String address, int port, Predicate<Connection> acceptMessage, Logger logger) {
-        super(Connection.createSocket(address, port), acceptMessage, logger);
+        super(Connection.createSocket(address, port, logger), acceptMessage, logger);
 
     }
 
     public Connection(String address, int port, Logger logger) {
-        super(Connection.createSocket(address, port), Connection::doNothing, logger);
+        super(Connection.createSocket(address, port, logger), DO_NOTHING, logger);
     }
 
-    static private boolean doNothing(Connection source) {return false;}
-
-    static private SafeSocket createSocket(String address, int port) {
+    private static SafeSocket createSocket(String address, int port, Logger logger) {
+        SafeSocket result = null;
         try {
-            return new SafeSocket(new Socket(address, port));
+            result = new SafeSocket(new Socket(address, port));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            String toLog = "Failed to create connection socket: " + e.getMessage();
+            logger.log(Level.SEVERE, toLog);
         }
+        return result;
     }
 
     public void bindFunction(Predicate<Connection> acceptMessage) {
@@ -71,8 +74,8 @@ public class Connection extends ConnectionBase {
         while (isRunning()) {
             try {
                 Message msg = (Message) reader.readObject();
-                if (msg instanceof Move) {
-                    updateQueue((Move) msg);
+                if (msg instanceof Move move) {
+                    updateQueue(move);
                 }
                 else if(!(msg instanceof Ping)) {
                     processMessage(msg);
@@ -112,8 +115,8 @@ public class Connection extends ConnectionBase {
         notifyAll();
     }
 
-    static boolean matchFileter(Message message, List<Class> filter) {
-        for (Class c: filter) {
+    static boolean matchFileter(Message message, List<Class<?>> filter) {
+        for (Class<?> c: filter) {
             if(c.isInstance(message))
                 return true;
         }
@@ -124,27 +127,34 @@ public class Connection extends ConnectionBase {
         return waitMessage(Message.class);
     }
 
-    public Message waitMessage(Class filter) {
-        List<Class> filterList = new ArrayList<>();
+    public Message waitMessage(Class<?> filter) {
+        List<Class<?>> filterList = new ArrayList<>();
         filterList.add(filter);
         return waitMessage(filterList);
     }
 
-    public synchronized Message waitMessage(List<Class> filter) {
-        for (Message m: messagesToProcess) {  // if message was received before the call of waitMessage
+    public synchronized Message waitMessage(List<Class<?>> filter) {
+        Message m = pollFirstMatch(filter); // eventual message that was received before the call of waitMessage
+        while (m == null) {  // if no compatible found wait for one
+            try {
+                wait();
+                m = pollFirstMatch(filter);
+            } catch (InterruptedException e) {
+                logger.log(Level.WARNING, "Interrupted", e);
+                Thread.currentThread().interrupt();
+            }
+        }
+        return m;
+    }
+
+    synchronized Message pollFirstMatch(List<Class<?>> filter) {
+        for (Message m: messagesToProcess) {
             if(matchFileter(m, filter)) {
                 messagesToProcess.remove(m);
                 return m;
             }
         }
-        while (!matchFileter(getLastMessage(), filter)) {  // if no compatible found wait for one
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return messagesToProcess.poll();
+        return null;
     }
 
     public synchronized Message getLastMessage () {
@@ -156,12 +166,12 @@ public class Connection extends ConnectionBase {
             Move move = (Move) message;
             int next = movesCount.increment();
             move.setNumber(next-1);
-        } catch (ClassCastException ignored) {}
+        } catch (ClassCastException ignored) { /*ignored*/ }
         try {
             synchronized (writer) {
                 writer.writeObject(message);
             }
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) { /*ignored*/ }
     }
 
     boolean isRunning() {
@@ -171,7 +181,7 @@ public class Connection extends ConnectionBase {
     void stop() {
         try {
             socket.close();
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) { /*ignored*/ }
         pingTimer.cancel();
     }
 
@@ -180,6 +190,9 @@ public class Connection extends ConnectionBase {
             stop();
             if (!Thread.currentThread().equals(thread))
                 thread.join();
-        } catch (InterruptedException ignored) {}
+        } catch (InterruptedException e) {
+            logger.log(Level.WARNING, "Interrupted", e);
+            Thread.currentThread().interrupt();
+        }
     }
 }

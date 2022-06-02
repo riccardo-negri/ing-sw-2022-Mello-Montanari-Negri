@@ -1,5 +1,6 @@
 package it.polimi.ingsw.networking.moves;
 
+import it.polimi.ingsw.model.entity.GameRuleException;
 import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.entity.characters.CharacterTwelve;
@@ -14,13 +15,13 @@ public class UseCharacter12 extends UseCharacter {
     }
 
     @Override
-    protected void applyEffect(Game game) throws Exception {
+    protected void applyEffect(Game game) throws GameRuleException {
         CharacterTwelve character = ((CharacterTwelve) game.getCharacter(12));
         character.useEffect(authorId, color);
     }
 
     @Override
-    public void validate(Game game) throws Exception {
+    public void validate(Game game) throws GameRuleException {
         CharacterTwelve character = ((CharacterTwelve) game.getCharacter(12));
         character.characterTwelveValidator(authorId);
     }

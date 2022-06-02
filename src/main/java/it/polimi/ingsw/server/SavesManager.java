@@ -10,9 +10,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class SavesManager {
-    static final String savesRoot = "game_states";
+    static final String SAVES_ROOT = "game_states";
 
-    static final String usernamesFileName = "usernames";
+    static final String USERNAMES_FILE_NAME = "usernames";
 
     final Logger logger;
 
@@ -21,11 +21,11 @@ public class SavesManager {
     }
 
     public static Path gameFolderPath(String code) {
-        return Paths.get(savesRoot, code);
+        return Paths.get(SAVES_ROOT, code);
     }
 
     public static Path gameFilePath(String code, String fileName) {
-        return Paths.get(savesRoot, code, fileName);
+        return Paths.get(SAVES_ROOT, code, fileName);
     }
 
     boolean createFolder(Path path) {
@@ -41,10 +41,6 @@ public class SavesManager {
         return true;
     }
 
-    boolean touchFile(Path path) {
-        return writeFile(path, "");
-    }
-
     // replaces the file if already exists or creates it otherwise
     boolean writeFile(Path path, String text) {
         byte[] bytes = text.getBytes();
@@ -58,15 +54,13 @@ public class SavesManager {
         return true;
     }
 
-    boolean deleteFile(Path path) {
+    void deleteFile(Path path) {
         try {
             Files.deleteIfExists(path);
         } catch (IOException e) {
             String toLog = "Unable to delete file: " + e.getMessage();
             logger.log(Level.SEVERE, toLog);
-            return false;
         }
-        return true;
     }
 
     String readFile(Path path) {

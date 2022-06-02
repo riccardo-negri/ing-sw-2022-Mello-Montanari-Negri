@@ -1,10 +1,7 @@
 package it.polimi.ingsw.model.entity.characters;
 
-import it.polimi.ingsw.model.entity.Game;
-import it.polimi.ingsw.model.entity.Wizard;
-import it.polimi.ingsw.model.entity.gameState.ActionState;
+import it.polimi.ingsw.model.entity.GameRuleException;
 import it.polimi.ingsw.model.enums.StudentColor;
-import it.polimi.ingsw.model.enums.Tower;
 
 public class CharacterNine extends Character{
 
@@ -19,7 +16,7 @@ public class CharacterNine extends Character{
      * @param playingWizard the player playing the card
      * @param studentColor the color not to consider in the calculation
      */
-    public void useEffect(Integer playingWizard, StudentColor studentColor) throws Exception {
+    public void useEffect(Integer playingWizard, StudentColor studentColor) throws GameRuleException {
         characterNineValidator(playingWizard);
         useCard(playingWizard);
         this.studentColor = studentColor;
@@ -28,9 +25,9 @@ public class CharacterNine extends Character{
     /**
      * Validator for character nine useEffect method
      * @param playingWizard the player playing the card
-     * @throws Exception if it is not the player turn, or he does not have enough money to activate the card
+     * @throws GameRuleException if it is not the player turn, or he does not have enough money to activate the card
      */
-    public void characterNineValidator(Integer playingWizard) throws Exception {
+    public void characterNineValidator(Integer playingWizard) throws GameRuleException {
         characterValidator(playingWizard);
     }
 

@@ -1,11 +1,10 @@
 package it.polimi.ingsw.model.entity.characters;
 
+import it.polimi.ingsw.model.entity.GameRuleException;
 import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.enums.StudentColor;
-import it.polimi.ingsw.model.enums.Tower;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -21,7 +20,7 @@ public class CharacterTen extends Character {
      * @param take students to take from your entrance
      * @param give students to take from your dining room
      */
-    public void useEffect(Integer playingWizard, List<StudentColor> take, List<StudentColor> give) throws Exception {
+    public void useEffect(Integer playingWizard, List<StudentColor> take, List<StudentColor> give) throws GameRuleException {
         characterTenValidator(playingWizard, take, give);
         useCard(playingWizard);
         Wizard wizard = Game.request(gameId).getWizard(playingWizard);
@@ -36,21 +35,21 @@ public class CharacterTen extends Character {
      * @param playingWizard the player playing the card
      * @param take students to take from your entrance
      * @param give students to take from your dining room
-     * @throws Exception if it is not the player turn, he does not have enough money to activate the card,
+     * @throws GameRuleException if it is not the player turn, he does not have enough money to activate the card,
      * the students he is asking are not available, or he is asking an incorrect number of students
      */
-    public void characterTenValidator(Integer playingWizard, List<StudentColor> take, List<StudentColor> give) throws Exception {
+    public void characterTenValidator(Integer playingWizard, List<StudentColor> take, List<StudentColor> give) throws GameRuleException {
         characterValidator(playingWizard);
         if (!new HashSet<>(Game.request(gameId).getWizard(playingWizard).getEntranceStudents()).containsAll(take))
-            throw new Exception("Students not present in entrance");
+            throw new GameRuleException("Students not present in entrance");
         for (StudentColor color : StudentColor.values()) {
             if (Game.request(gameId).getWizard(playingWizard).getDiningStudents(color) +
                     take.stream().filter(x -> x == color).count() - give.stream().filter(x -> x == color).count() > 10)
-                throw new Exception("Not enough free spots in dining room");
+                throw new GameRuleException("Not enough free spots in dining room");
             if (give.stream().filter(x -> x == color).count() - take.stream().filter(x -> x == color).count() >
                     Game.request(gameId).getWizard(playingWizard).getDiningStudents(color))
-                throw new Exception("Students not present in dining room");
+                throw new GameRuleException("Students not present in dining room");
         }
-        if (take.size() > 2 || take.size() != give.size()) throw new Exception("Inexact number of students");
+        if (take.size() > 2 || take.size() != give.size()) throw new GameRuleException("Inexact number of students");
     }
 }

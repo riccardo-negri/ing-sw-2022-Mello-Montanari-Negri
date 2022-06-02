@@ -1,23 +1,21 @@
 package it.polimi.ingsw.server;
 
-import it.polimi.ingsw.networking.Login;
-import it.polimi.ingsw.networking.Redirect;
-
+import it.polimi.ingsw.networking.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 import java.util.logging.Level;
 
 public class MatchmakingServer extends Server {
-    private static final int wellKnownPort = 50000;
-    private final Vector<GameServer> startedGames = new Vector<>();
+    private static final int WELL_KNOWN_PORT = 50000;
+    private final List<GameServer> startedGames = new SafeList<>();
 
-    private final List<Thread> gameThreads = new Vector<>();
+    private final List<Thread> gameThreads = new SafeList<>();
 
     private final MainSavesManager savesManager = new MainSavesManager(logger);
 
+    @Override
     int getPortToBind() {
-        return wellKnownPort;
+        return WELL_KNOWN_PORT;
     }
 
     @Override
@@ -68,42 +66,79 @@ public class MatchmakingServer extends Server {
             try {
                 thread.join();
             } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                logger.log(Level.WARNING, "Interrupted", e);
+                Thread.currentThread().interrupt();
             }
         }
     }
 
     @Override
     void onUserReconnected(User user) {
-        for (GameServer g : getStartedGames()) {
-            if (g.getAssignedUsernames().contains(user.getName())) {
-                user.getConnection().send(new Redirect(g.getPort()));
-            }
-        }
-    }
-
-    // if game with desired parameters doesn't exist create it and redirect the user to that game server
-    @Override
-    void onNewUserConnect(User user, Login info) {
-        for (GameServer g : getStartedGames()) {
-            if (g.getPlayerNumber() == info.getPlayerNumber() && g.getGameMode() == info.getGameMode()) {
-                if (g.assignUser(user.getName())) {
-                    moveToGame(user, g);
+        for (GameServer g : getStartedGames()) {  // if user is already connected refuse new connection
+            for (User u: g.connectedUsers) {
+                GameUser gu = (GameUser) u;
+                if (gu.getName().equals(user.getName()) && !gu.isDisconnected()) {
+                    user.getConnection().send(new ErrorMessage());
+                    user.getConnection().close(); // don't remove the user, just close the connection
                     return;
                 }
             }
         }
-        // reach this point only if no compatible game exists
-        GameSavesManager sm = savesManager.createGameSavesManager();
-        GameServer game = new GameServer(info.getPlayerNumber(), info.getGameMode(), sm);
-        runGameServer(game);
-        game.assignUser(user.name);
-        moveToGame(user, game);
+        // after handling the refuse treat exactly as a new user
+        onNewUserConnect(user);
     }
 
     @Override
-    boolean isUserAllowed(Login login) {
-        return login.getPlayerNumber() != null && login.getGameMode() != null;
+    void onNewUserConnect(User user) {
+        for (GameServer g : getStartedGames()) {
+            if (g.getAssignedUsernames().contains(user.getName())) {
+                user.getConnection().send(new Redirect(g.getPort()));
+                return;
+            }
+        }
+        // this part runs if the user is assigned to no game (means he quit while in lobby selection)
+        // he should be treated as a new user
+        user.getConnection().bindFunction(this::onLobbyAction);
+        user.getConnection().send(getLobbiesList());
+    }
+
+    LobbiesList getLobbiesList() {
+        List<LobbyDescriptor> lobbies = new ArrayList<>();
+        for (GameServer g: getStartedGames()) {
+            List<String> connected = g.getAssignedUsernames();
+            if (connected.size() < g.maxUsers)
+                lobbies.add(new LobbyDescriptor(g.getCode(), g.getPlayerNumber(), g.getGameMode(), connected));
+        }
+        return new LobbiesList(lobbies);
+    }
+
+    boolean onLobbyAction(Connection connection) {
+        Message message = connection.getLastMessage();
+        User user = userFromConnection(connection);
+        if (message instanceof LobbyChoice lobbyChoice) {
+            for (GameServer g : getStartedGames()) {
+                if (g.getCode().equals(lobbyChoice.code())) {
+                    if (g.assignUser(user.getName()))  // if lobby is full returns false and sends ErrorMessage
+                        moveToGame(user, g);
+                    else
+                        connection.send(getLobbiesList());
+                    return true;
+                }
+            }
+            // no matching lobby found for this code
+            connection.send(getLobbiesList());
+            return true;
+        } else if (message instanceof CreateLobby createLobby) {
+            if (createLobby.getGameMode() == null || createLobby.getPlayerNumber() == null)
+                return true;  // skip this message and do nothing because mal formatted
+            GameSavesManager sm = savesManager.createGameSavesManager();
+            GameServer game = new GameServer(createLobby.getPlayerNumber(), createLobby.getGameMode(), sm);
+            runGameServer(game);
+            game.assignUser(user.name);
+            moveToGame(user, game);
+            return true;
+        }
+        return false;
     }
 
     List<GameServer> getStartedGames() {

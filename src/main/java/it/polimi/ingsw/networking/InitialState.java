@@ -3,7 +3,7 @@ package it.polimi.ingsw.networking;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InitialState extends Message {
+public class InitialState implements Message {
     private final String state;
 
     // the list of the usernames of the wizards ordered by wizard id
@@ -19,11 +19,7 @@ public class InitialState extends Message {
         return state;
     }
 
-    public ArrayList<String> getUsernames() {
+    public List<String> getUsernames() {
         return usernames;
-    }
-
-    public int idFromUsername(String name) {
-        return usernames.indexOf(name);
     }
 }

@@ -11,13 +11,13 @@ public class SavedGameRecord {
 
     private final GameSavesManager savesManager;
 
-    public SavedGameRecord(String gameString, String usernamesString, GameSavesManager savesManager) throws Exception {
+    public SavedGameRecord(String gameString, String usernamesString, GameSavesManager savesManager) throws BadRecordException {
         Integer id = Game.deserializeGameFromString(gameString);
         this.game = Game.request(id);
         this.usernames = Arrays.stream(usernamesString.split("\n")).toList();
         this.savesManager = savesManager;
         if (usernames.size() != game.getPlayerNumber().getWizardNumber())
-            throw new Exception("Bad record format");
+            throw new BadRecordException();
     }
 
     public Game getGame() {

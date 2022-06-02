@@ -19,7 +19,7 @@ public class GameServer extends Server{
     private final Game game;
 
     private Timer afkTimer;
-    private static final int afkPeriod = 300;  // 5 minutes
+    private static final int AFK_PERIOD = 300;  // 5 minutes
 
     private final GameSavesManager savesManager;
 
@@ -41,7 +41,7 @@ public class GameServer extends Server{
 
     @Override
     void onStart() {
-
+        // no start actions for the game server
     }
 
     @Override
@@ -68,8 +68,6 @@ public class GameServer extends Server{
             stop();
         } else if (message instanceof Move move) {
             doMove(move, source);
-        } else {
-            throw new RuntimeException("Unknown message" + message);
         }
         return true;
     }
@@ -100,7 +98,7 @@ public class GameServer extends Server{
                 stop();
             }
         };
-        afkTimer.schedule(afkTask, afkPeriod * 1000);
+        afkTimer.schedule(afkTask, (long) AFK_PERIOD * 1000);
     }
 
 

@@ -12,22 +12,23 @@ import java.util.logging.Logger;
 public class MainSavesManager extends SavesManager{
 
     final List<String> gameCodes = new ArrayList<>();
+    static final Random r = new Random();
 
     public MainSavesManager(Logger logger) {
         super(logger);
     }
 
     public boolean createSavesFolder() {
-        Path path = Paths.get(savesRoot);
+        Path path = Paths.get(SAVES_ROOT);
         return createFolder(path);
     }
 
     public List<SavedGameRecord> restoreAll() {
-        Path folder = Paths.get(savesRoot);
+        Path folder = Paths.get(SAVES_ROOT);
         File[] files = folder.toFile().listFiles();
         List<SavedGameRecord> result = new ArrayList<>();
         if (files == null) {
-            String toLog = "Unable to read " + savesRoot + " directory";
+            String toLog = "Unable to read " + SAVES_ROOT + " directory";
             logger.log(Level.SEVERE, toLog);
             return result;
         }
@@ -35,7 +36,7 @@ public class MainSavesManager extends SavesManager{
             String code = f.getName();
             try {
                 result.add(restoreGame(code));
-            } catch (Exception e) {
+            } catch (BadRecordException e) {
                 String toLog = "Skipping bad record " + e.getMessage();
                 logger.log(Level.WARNING, toLog);
             }
@@ -44,7 +45,7 @@ public class MainSavesManager extends SavesManager{
     }
 
     // restore the saved game and when it's done delete the folder
-    public SavedGameRecord restoreGame(String folderCode) throws Exception {
+    public SavedGameRecord restoreGame(String folderCode) throws BadRecordException {
         Path folder = gameFolderPath(folderCode);
         File[] files = folder.toFile().listFiles();
         String usernames = null;
@@ -52,10 +53,10 @@ public class MainSavesManager extends SavesManager{
         int minCount = Integer.MAX_VALUE;
         if (files == null || gameCodes.contains(folderCode)) {
             deleteGameFolder(folderCode);
-            throw new Exception("Bad record format");
+            throw new BadRecordException();
         }
         for (File f : files) {
-            if (f.getName().equals(usernamesFileName)) {
+            if (f.getName().equals(USERNAMES_FILE_NAME)) {
                 usernames = readFile(f.toPath());
             }
             else {
@@ -66,7 +67,7 @@ public class MainSavesManager extends SavesManager{
         }
         if (minCount == Integer.MAX_VALUE || usernames == null) {
             deleteGameFolder(folderCode);
-            throw new Exception("Bad record format");
+            throw new BadRecordException();
         }
         String game = readFile(gameFilePath(folderCode, Long.toString(minCount)));
         GameSavesManager sm = new GameSavesManager(logger, folderCode, minCount);
@@ -83,7 +84,6 @@ public class MainSavesManager extends SavesManager{
     }
 
     static String randomString() {
-        Random r = new Random();
         char[] letters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
         StringBuilder string = new StringBuilder("#");
         for (int i = 0; i < 3; i++) {

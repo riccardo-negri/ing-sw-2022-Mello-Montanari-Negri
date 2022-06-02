@@ -9,15 +9,16 @@ import java.util.Vector;
 import java.util.logging.Level;
 
 public class MatchmakingServer extends Server {
-    private static final int wellKnownPort = 50000;
+    private static final int WELL_KNOWN_PORT = 50000;
     private final Vector<GameServer> startedGames = new Vector<>();
 
     private final List<Thread> gameThreads = new Vector<>();
 
     private final MainSavesManager savesManager = new MainSavesManager(logger);
 
+    @Override
     int getPortToBind() {
-        return wellKnownPort;
+        return WELL_KNOWN_PORT;
     }
 
     @Override
@@ -68,7 +69,8 @@ public class MatchmakingServer extends Server {
             try {
                 thread.join();
             } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                logger.log(Level.WARNING, "Interrupted", e);
+                Thread.currentThread().interrupt();
             }
         }
     }

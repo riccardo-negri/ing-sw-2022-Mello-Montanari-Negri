@@ -31,10 +31,10 @@ public class GameSavesManager extends SavesManager {
 
     public boolean createSnapshot(Game game) {
         int current = counter.increment() - 1;
-        Path snapshotPath = gameFilePath(code, Long.toString(current));
+        Path snapshotPath = gameFilePath(code, Integer.toString(current));
         boolean success = writeFile(snapshotPath, game.serializeGame());
         if (success) {
-            Path oldSnapshot = gameFilePath(code, Long.toString(current-1));
+            Path oldSnapshot = gameFilePath(code, Integer.toString(current-1));
             deleteFile(oldSnapshot);
         }
         return success;
@@ -47,12 +47,10 @@ public class GameSavesManager extends SavesManager {
         // in theory there should be no folder with the same name because they are removed in the beginning
         deleteGameFolder();
         Path folderPath = gameFolderPath(code);
-        Path usernamesPath = gameFilePath(code, usernamesFileName);
+        Path usernamesPath = gameFilePath(code, USERNAMES_FILE_NAME);
         String text = usernames.stream().reduce("", (a, b) -> a + "\n" + b).substring(1);
-        if (createFolder(folderPath)) {
-            if (writeFile(usernamesPath, text)) {
-                return createSnapshot(game);
-            }
+        if (createFolder(folderPath) && writeFile(usernamesPath, text)) {
+            return createSnapshot(game);
         }
         return false;
     }

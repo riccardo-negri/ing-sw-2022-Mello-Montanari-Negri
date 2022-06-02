@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 public abstract class Server {
     // using Vector instead of ArrayList because Vector class is thread-safe
@@ -33,7 +32,7 @@ public abstract class Server {
     }
 
     // initialize variables but don't run server code yet
-    public Server() {
+    protected Server() {
         connectedUsers = new UniqueUserVector();
         connecting = new Vector<>();
         logger = LogFormatter.getLogger("Server");
@@ -51,7 +50,7 @@ public abstract class Server {
     }
 
     List<String> usernames() {
-        return getConnectedUsers().stream().map(User::getName).collect(Collectors.toList());
+        return getConnectedUsers().stream().map(User::getName).toList();
     }
 
     abstract void onStart();
@@ -61,9 +60,7 @@ public abstract class Server {
     public void stop() {
         try {
             socket.close(); // this should stop the connectionThread and cause the termination of the server
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        } catch (IOException ignored) { /*ignored*/ }
     }
 
     // open the socket and run server code
@@ -96,16 +93,13 @@ public abstract class Server {
         boolean running = true;
         while (running) {
             try {
-                SafeSocket socket;
-                socket = new SafeSocket(this.socket.accept());
-                toLog = "Accepted new connection from: " + socket.getInetAddress();
+                SafeSocket acceptedSocket = new SafeSocket(this.socket.accept());
+                toLog = "Accepted new connection from: " + acceptedSocket.getInetAddress();
                 logger.log(Level.INFO, toLog);
-                connecting.add(new Connection(socket, this::userLogin, logger));
-            } catch (IOException e) {
-                if (e instanceof SocketException) {
-                    running = false;
-                }
-            }
+                connecting.add(new Connection(acceptedSocket, this::userLogin, logger));
+            } catch (SocketException e) {
+                running = false;
+            } catch (IOException ignored) { /*ignored*/ }
         }
     }
 

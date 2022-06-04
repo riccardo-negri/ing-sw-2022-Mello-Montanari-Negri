@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Kdam+Thmor+Pro&display=swap');
+
+.welcomePageImage {
+    -fx-background-image: url('assets/WelcomePageImage.jpg');
+    -fx-background-size: 100% 100%;
+    -fx-font-family: 'Kdam Thmor Pro', sans-serif;
+    -fx-font-size: 30.0;
+}
+
+.welcomePageButton {
+    -fx-alignment: CENTER;
+    -fx-background-color:hsla(0,0%,100%,1);
+    -fx-border-width: 3;
+    -fx-border-radius: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+}

@@ -140,7 +140,7 @@ public class BoardUtilsCLI {
         return switch (tower) {
             case "WHITE" -> ansi().fgRgb(255, 255, 255).a("W-Tower");
             case "BLACK" -> ansi().fgBrightBlack().a("B-Tower");
-            case "GREY" -> ansi().fgRgb(180, 180, 180).a("G-Tower");
+            case "GRAY" -> ansi().fgRgb(180, 180, 180).a("G-Tower");
             default -> ansi().a("       ");
         };
     }
@@ -149,7 +149,7 @@ public class BoardUtilsCLI {
         return switch (tower) {
             case "WHITE" -> ansi().fgRgb(255, 255, 255).a(number + " W-Tower");
             case "BLACK" -> ansi().fgBrightBlack().a(number + " B-Tower");
-            case "GREY" -> ansi().fgRgb(180, 180, 180).a(number + " G-Tower");
+            case "GRAY" -> ansi().fgRgb(180, 180, 180).a(number + " G-Tower");
             default -> ansi().a("       ");
         };
     }

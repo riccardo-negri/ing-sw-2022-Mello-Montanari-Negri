@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.SocketException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,8 +44,14 @@ public abstract class Server {
             } catch (IOException e) {
                 String toLog = "Unable to open server socket: " + e.getMessage();
                 logger.log(Level.SEVERE, toLog);
+                try {
+                    TimeUnit.SECONDS.sleep(10);
+                } catch (InterruptedException e2) {
+                    logger.log(Level.WARNING, "Interrupted", e2);
+                    Thread.currentThread().interrupt();
+                }
             }
-        } while (socket == null && attempts <= 3);
+        } while (socket == null && attempts <= 10);
     }
 
     List<String> usernames() {

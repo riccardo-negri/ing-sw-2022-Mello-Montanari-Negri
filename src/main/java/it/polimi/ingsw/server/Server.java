@@ -45,13 +45,13 @@ public abstract class Server {
                 String toLog = "Unable to open server socket: " + e.getMessage();
                 logger.log(Level.SEVERE, toLog);
                 try {
-                    TimeUnit.SECONDS.sleep(10);
+                    TimeUnit.MILLISECONDS.sleep(500);
                 } catch (InterruptedException e2) {
                     logger.log(Level.WARNING, "Interrupted", e2);
                     Thread.currentThread().interrupt();
                 }
             }
-        } while (socket == null && attempts <= 10);
+        } while (socket == null && attempts <= 20);
     }
 
     List<String> usernames() {
@@ -172,6 +172,7 @@ public abstract class Server {
     }
 
     public void abortConnection(Connection connection) {
+        // no error message because only a malevolent client can reach this situation (connecting to forbidden server)
         connection.close();
         connecting.remove(connection);
     }

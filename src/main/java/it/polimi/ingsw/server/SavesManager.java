@@ -2,6 +2,7 @@ package it.polimi.ingsw.server;
 
 import org.apache.commons.io.FileUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -63,7 +64,7 @@ public class SavesManager {
         }
     }
 
-    String readFile(Path path) {
+    public String readFile(Path path) {
         byte[] bytes;
         try {
             bytes = Files.readAllBytes(path);
@@ -83,5 +84,14 @@ public class SavesManager {
             String toLog = "Unable to delete folder: " + e.getMessage();
             logger.log(Level.SEVERE, toLog);
         }
+    }
+
+    static public File[] listDirectory(String path) {
+        Path folder = Paths.get(path);
+        return listDirectory(folder);
+    }
+
+    static public File[] listDirectory(Path folder) {
+        return folder.toFile().listFiles();
     }
 }

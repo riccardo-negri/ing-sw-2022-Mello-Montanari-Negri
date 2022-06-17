@@ -28,6 +28,7 @@ class NetworkingTest {
         assert !ld1.equals(ld3);
         assert !ld1.equals(ld4);
         assert !ld1.equals(ld5);
+        assert !ld1.equals(new Object());
     }
 
     @Test

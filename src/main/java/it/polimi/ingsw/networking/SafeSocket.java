@@ -30,6 +30,10 @@ public class SafeSocket {
         return socket.getInetAddress();
     }
 
+    public synchronized int getRemotePort() {
+        return socket.getPort();
+    }
+
     public synchronized OutputStream getOutputStream() throws IOException {
         return socket.getOutputStream();
     }

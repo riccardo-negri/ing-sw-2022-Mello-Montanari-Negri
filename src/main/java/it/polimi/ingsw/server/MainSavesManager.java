@@ -24,8 +24,7 @@ public class MainSavesManager extends SavesManager{
     }
 
     public List<SavedGameRecord> restoreAll() {
-        Path folder = Paths.get(SAVES_ROOT);
-        File[] files = folder.toFile().listFiles();
+        File[] files = listDirectory(SAVES_ROOT);
         List<SavedGameRecord> result = new ArrayList<>();
         if (files == null) {
             String toLog = "Unable to read " + SAVES_ROOT + " directory";

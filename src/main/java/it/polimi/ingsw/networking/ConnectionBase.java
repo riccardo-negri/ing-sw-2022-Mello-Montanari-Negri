@@ -53,4 +53,8 @@ public abstract class ConnectionBase {
     protected abstract void listenMessages();
 
     public abstract void send(Message message);
+
+    public SafeSocket getSocket() {
+        return socket;
+    }
 }

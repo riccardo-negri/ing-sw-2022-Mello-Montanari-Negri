@@ -47,9 +47,16 @@ public class MatchmakingServer extends Server {
                     disconnectUser(u);
                 }
             }
+            deleteGameServer(server);
         });
         addGameServer(server, t);
         t.start();
+    }
+
+    synchronized void deleteGameServer(GameServer server) {
+        int index = startedGames.indexOf(server);
+        startedGames.remove(index);
+        gameThreads.remove(index);
     }
 
     synchronized void addGameServer(GameServer server, Thread t) {
@@ -58,11 +65,17 @@ public class MatchmakingServer extends Server {
     }
 
     @Override
-    synchronized void onQuit() {
-        for (GameServer game: getStartedGames()) {
+    void onQuit() {
+        List<GameServer> sg;
+        List<Thread> gt;
+        synchronized (this) {
+            sg = getStartedGames();
+            gt = getGameThreads();
+        }
+        for (GameServer game: sg) {
             game.stop();
         }
-        for (Thread thread: gameThreads) {
+        for (Thread thread: gt) {
             try {
                 thread.join();
             } catch (InterruptedException e) {
@@ -74,11 +87,11 @@ public class MatchmakingServer extends Server {
 
     @Override
     void onUserReconnected(User user) {
-        for (GameServer g : getStartedGames()) {  // if user is already connected refuse new connection
+        for (GameServer g : getStartedGames()) {  // if user is already connected properly refuse new connection
             for (User u: g.connectedUsers) {
                 GameUser gu = (GameUser) u;
                 if (gu.getName().equals(user.getName()) && !gu.isDisconnected()) {
-                    user.getConnection().send(new ErrorMessage());
+                    user.getConnection().send(new ErrorMessage());  // tell to client that this name is already taken
                     user.getConnection().close(); // don't remove the user, just close the connection
                     return;
                 }
@@ -141,7 +154,15 @@ public class MatchmakingServer extends Server {
         return false;
     }
 
-    List<GameServer> getStartedGames() {
-        return startedGames;
+    synchronized List<GameServer> getStartedGames() {
+        return new ArrayList<>(startedGames);
+    }
+
+    synchronized List<Thread> getGameThreads() {
+        return new ArrayList<>(gameThreads);
+    }
+
+    public synchronized boolean noGamesRunning() {
+        return gameThreads.size() == 0 && startedGames.size() == 0;
     }
 }

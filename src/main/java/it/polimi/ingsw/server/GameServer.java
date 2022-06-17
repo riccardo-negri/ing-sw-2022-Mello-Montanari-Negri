@@ -109,6 +109,14 @@ public class GameServer extends Server{
 
     @Override
     void onUserReconnected(User user) {
+        for (User u: connectedUsers) {  // if user is already connected properly refuse new connection
+            GameUser gu = (GameUser) u;
+            if (gu.getName().equals(user.getName()) && !gu.isDisconnected()) {
+                // don't send error message because only malevolent client can reach this point
+                user.getConnection().close(); // don't remove the user, just close the connection
+                return;
+            }
+        }
         user.getConnection().bindFunction(this::receiveMessage);
         ((GameUser) user).setDisconnected(false);
         if (isEveryoneConnected()) {

@@ -3,6 +3,8 @@ package it.polimi.ingsw.server;
 import it.polimi.ingsw.model.enums.GameMode;
 import it.polimi.ingsw.model.enums.PlayerNumber;
 import it.polimi.ingsw.networking.*;
+
+import java.util.Arrays;
 import java.util.logging.Logger;
 
 public class Procedures {
@@ -18,7 +20,6 @@ public class Procedures {
         connection.send(login);
         if (wait) {
             Message m = connection.waitMessage(InitialState.class);
-            connection.close();
         }
         return connection;
     }
@@ -35,22 +36,26 @@ public class Procedures {
         connection.send(login);
         if (wait) {
             Message m = connection.waitMessage(InitialState.class);
-            connection.close();
         }
         return connection;
     }
 
     static Connection reconnectLogin(String username, boolean wait, Logger logger) {
+        return reconnectLogin(username, wait, logger, MatchmakingServer.WELL_KNOWN_PORT);
+    }
+
+    static Connection reconnectLogin(String username, boolean wait, Logger logger, int port) {
         Login login = new Login(username);
-        Connection connection = new Connection("localhost", 50000, logger);
+        Connection connection = new Connection("localhost", port, logger);
         connection.send(login);
-        Redirect redirect = (Redirect) connection.waitMessage(Redirect.class);
-        connection.close();
-        connection = new Connection("localhost", redirect.port(), logger);
-        connection.send(login);
-        if (wait) {
-            Message m = connection.waitMessage(InitialState.class);
+        Message message = connection.waitMessage(Arrays.asList(Redirect.class, ErrorMessage.class));
+        if (message instanceof Redirect redirect) {
             connection.close();
+            connection = new Connection("localhost", redirect.port(), logger);
+            connection.send(login);
+            if (wait) {
+                Message m = connection.waitMessage(InitialState.class);
+            }
         }
         return connection;
     }

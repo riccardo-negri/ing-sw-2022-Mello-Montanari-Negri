@@ -19,4 +19,18 @@ public class SafeList<E> extends ArrayList<E> {
             return super.remove(o);
         }
     }
+
+    @Override
+    public E remove(int index) {
+        synchronized (this) {
+            return super.remove(index);
+        }
+    }
+
+    @Override
+    public int indexOf(Object o) {
+        synchronized (this) {
+            return super.indexOf(o);
+        }
+    }
 }

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 public class MatchmakingServer extends Server {
-    private static final int WELL_KNOWN_PORT = 50000;
+    public static final int WELL_KNOWN_PORT = 50000;
     private final List<GameServer> startedGames = new SafeList<>();
 
     private final List<Thread> gameThreads = new SafeList<>();

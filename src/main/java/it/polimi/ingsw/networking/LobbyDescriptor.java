@@ -36,4 +36,13 @@ public class LobbyDescriptor implements Serializable {
     public List<String> getConnected () {
         return connected;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof LobbyDescriptor o) {
+            return code.equals(o.code) && playerNumber.equals(o.playerNumber) && gameMode.equals(o.gameMode) &&
+                    connected.equals(o.connected);
+        }
+        return false;
+    }
 }

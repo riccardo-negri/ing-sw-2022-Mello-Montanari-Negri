@@ -108,9 +108,16 @@ public class Connection extends ConnectionBase {
     private synchronized void processMessage(Message message) {
         String toLog = "Received new object from " + socket.getInetAddress() + ": " + message;
         logger.log(Level.INFO, toLog);
+        // put the new element first for the initial test
+        List<Message> previousContent = messagesToProcess.stream().toList();
+        messagesToProcess.clear();
         messagesToProcess.add(message);
+        messagesToProcess.addAll(previousContent);
         if(acceptMessage.test(this)) {
             messagesToProcess.poll();  // remove the only message accessible by acceptMessage
+        }
+        else {
+            messagesToProcess.add(messagesToProcess.poll());  // put in queue the new message
         }
         notifyAll();
     }
@@ -194,5 +201,9 @@ public class Connection extends ConnectionBase {
             logger.log(Level.WARNING, "Interrupted", e);
             Thread.currentThread().interrupt();
         }
+    }
+
+    public synchronized boolean noMessageLeft() {
+        return messagesToProcess.size() == 0;
     }
 }

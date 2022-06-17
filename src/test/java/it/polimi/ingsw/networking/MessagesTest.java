@@ -1,7 +1,11 @@
 package it.polimi.ingsw.networking;
 
+import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.enums.GameMode;
 import it.polimi.ingsw.model.enums.PlayerNumber;
+import it.polimi.ingsw.model.enums.StudentColor;
+import it.polimi.ingsw.model.enums.Tower;
+import it.polimi.ingsw.networking.moves.*;
 import it.polimi.ingsw.utils.LogFormatter;
 import org.junit.jupiter.api.Test;
 
@@ -58,6 +62,15 @@ class MessagesTest {
         } else if (m instanceof UserConnected uc) {
             assert (uc.username().equals("connectedGuy"));
             return true;
+        } else if (m instanceof CardChoice cc) {
+            assert (cc.getAuthorId() == 1 && cc.getCard() == 4);
+            return true;
+        } else if (m instanceof DiningRoomMovement drm) {
+            assert (drm.getAuthorId() == 1 && drm.getStudent().equals(StudentColor.BLUE));
+            return true;
+        } else if (m instanceof MotherNatureMovement mnm) {
+            assert (mnm.getAuthorId() == 1 && mnm.getSteps() == 5);
+            return true;
         }
         return false;
     }
@@ -78,12 +91,19 @@ class MessagesTest {
         } else if (m instanceof UserDisconnected ud) {
             assert (ud.username().equals("disconnectedGuy"));
             return true;
+        } else if (m instanceof IslandMovement im) {
+            assert (im.getAuthorId() == 1 && im.getStudent().equals(StudentColor.GREEN) && im.getIslandId() == 9);
+            return true;
+        } else if (m instanceof CloudChoice cc) {
+            assert (cc.getAuthorId() == 1 && cc.getCloudId() == 2);
+            return true;
         }
         return false;
     }
 
     void sendAllMessages(Connection sender) {
         List<Message> allMessages = new ArrayList<>();
+        Wizard w = new Wizard(1, new ArrayList<>(), Tower.BLACK, 8);
 
         allMessages.add(new CreateLobby(PlayerNumber.THREE, GameMode.EASY));
         allMessages.add(new ErrorMessage());
@@ -96,6 +116,11 @@ class MessagesTest {
         allMessages.add(new UserConnected("connectedGuy"));
         allMessages.add(new UserDisconnected("disconnectedGuy"));
         allMessages.add(new UserResigned("resignedGuy"));
+        allMessages.add(new CardChoice(w, 4));
+        allMessages.add(new CloudChoice(w, 2));
+        allMessages.add(new DiningRoomMovement(w, StudentColor.BLUE));
+        allMessages.add(new IslandMovement(w, StudentColor.GREEN, 9));
+        allMessages.add(new MotherNatureMovement(w, 5));
 
         for (Message m: allMessages) {
             sender.send(m);
@@ -111,7 +136,13 @@ class MessagesTest {
         assert (cl.getPlayerNumber().equals(PlayerNumber.THREE) && cl.getGameMode().equals(GameMode.EASY));
         Login l = (Login) receiver.waitMessage(Login.class);
         assert (l.username().equals("loggedGuy"));
-        Redirect r = (Redirect) receiver.waitMessage(Redirect.class);
+        CardChoice cc = (CardChoice) receiver.waitMessage(CardChoice.class);
+        assert (cc.getAuthorId() == 1 && cc.getCard() == 4);
+        DiningRoomMovement drm = (DiningRoomMovement) receiver.waitMessage(DiningRoomMovement.class);
+        assert (drm.getAuthorId() == 1 && drm.getStudent().equals(StudentColor.BLUE));
+        MotherNatureMovement mnm = (MotherNatureMovement) receiver.waitMessage(MotherNatureMovement.class);
+        assert (mnm.getAuthorId() == 1 && mnm.getSteps() == 5);
+        Redirect r = (Redirect) receiver.waitMessage();
         assert (r.port() == 41124);
         assert receiver.noMessageLeft();
     }
@@ -124,7 +155,11 @@ class MessagesTest {
         ErrorMessage em = (ErrorMessage) receiver.waitMessage(ErrorMessage.class);
         UserResigned ur = (UserResigned) receiver.waitMessage(UserResigned.class);
         assert (ur.getUsername().equals("resignedGuy"));
-        UserDisconnected ud = (UserDisconnected) receiver.waitMessage(UserDisconnected.class);
+        IslandMovement im = (IslandMovement) receiver.waitMessage(IslandMovement.class);
+        assert (im.getAuthorId() == 1 && im.getStudent().equals(StudentColor.GREEN) && im.getIslandId() == 9);
+        CloudChoice cc = (CloudChoice) receiver.waitMessage(CloudChoice.class);
+        assert (cc.getAuthorId() == 1 && cc.getCloudId() == 2);
+        UserDisconnected ud = (UserDisconnected) receiver.waitMessage();
         assert (ud.username().equals("disconnectedGuy"));
         assert receiver.noMessageLeft();
     }

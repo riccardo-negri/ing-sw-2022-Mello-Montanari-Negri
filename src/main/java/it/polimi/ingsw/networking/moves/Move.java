@@ -43,4 +43,8 @@ public abstract class Move implements Message {
     public void setNumber(int number) {
         this.number = number;
     }
+
+    public int getAuthorId() {
+        return authorId;
+    }
 }

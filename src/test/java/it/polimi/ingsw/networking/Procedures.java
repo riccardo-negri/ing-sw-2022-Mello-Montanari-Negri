@@ -6,11 +6,16 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.logging.Logger;
 
 public class Procedures {
 
     static List<Connection> twoBoundedConnections(Logger logger) {
+        return twoBoundedConnectionsWithFunction(logger, null);
+    }
+
+    static List<Connection> twoBoundedConnectionsWithFunction(Logger logger, Predicate<Connection> pc) {
         ServerSocket serverSocket;
         try {
             serverSocket = new ServerSocket(MatchmakingServer.WELL_KNOWN_PORT);
@@ -20,7 +25,12 @@ public class Procedures {
         List<Connection> result = new ArrayList<>();
         Thread t = new Thread(() -> {
             try {
-                Connection c = new Connection(new SafeSocket(serverSocket.accept()), logger);
+                SafeSocket s = new SafeSocket(serverSocket.accept());
+                Connection c;
+                if (pc == null)
+                    c = new Connection(s, logger);
+                else
+                    c = new Connection(s, pc, logger);
                 synchronized (result) {
                     result.add(c);
                 }
@@ -29,13 +39,22 @@ public class Procedures {
             }
         });
         t.start();
-        Connection c = new Connection("localhost", MatchmakingServer.WELL_KNOWN_PORT, logger);
+        Connection c;
+        if (pc == null)
+            c = new Connection("localhost", MatchmakingServer.WELL_KNOWN_PORT, logger);
+        else
+            c = new Connection("localhost", MatchmakingServer.WELL_KNOWN_PORT, pc, logger);
         synchronized (result) {
             result.add(c);
         }
         try {
             t.join();
         } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            serverSocket.close();
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
         return result;

@@ -8,6 +8,7 @@ import it.polimi.ingsw.client.ui.gui.GUI;
 import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.networking.*;
 import it.polimi.ingsw.utils.LogFormatter;
+import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,24 +29,36 @@ public class Client {
     private final ArrayList<String> usernamesDisconnected = new ArrayList<>();
     private Game model;
 
-    public Client (boolean hasGUI) {
-        if (hasGUI) {
-            ui = new GUI();
-        }
-        else {
-            ui = new CLI();
-            ((CLI) ui).init();
-        }
+
+    public Client(Stage stage) {
+        ui = new GUI(stage);
+        nextState = ClientPage.WELCOME_PAGE;
+
+        logger = LogFormatter.getLogger("Client");
+    }
+
+    public Client () {
+        ui = new CLI();
+        ((CLI) ui).init();
         nextState = ClientPage.WELCOME_PAGE;
 
         logger = LogFormatter.getLogger("Client");
     }
 
     public void start () {
-        while (nextState != null) {
-            AbstractPage currState = ui.getState(this, nextState);
-            currState.draw(this);   // draw does everything
+        if (ui instanceof GUI) {
+            drawNextPage();
         }
+        else {
+            while (nextState != null) {
+                drawNextPage();   // draw does everything
+            }
+        }
+    }
+
+    public void drawNextPage() {
+        AbstractPage currState = ui.getState(this, nextState);
+        currState.draw(this);
     }
 
     public ClientPage getNextState () {

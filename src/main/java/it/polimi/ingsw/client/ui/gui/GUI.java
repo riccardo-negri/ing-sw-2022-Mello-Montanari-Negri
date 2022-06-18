@@ -5,8 +5,16 @@ import it.polimi.ingsw.client.page.AbstractPage;
 import it.polimi.ingsw.client.page.ClientPage;
 import it.polimi.ingsw.client.ui.UI;
 import it.polimi.ingsw.client.ui.cli.*;
+import javafx.stage.Stage;
 
 public class GUI implements UI {
+
+    Stage stage;
+
+    public GUI(Stage stage) {
+        this.stage = stage;
+    }
+
     @Override
     public AbstractPage getState (Client client, ClientPage nextState) {
         return switch (nextState) {
@@ -21,5 +29,9 @@ public class GUI implements UI {
             case BOARD_PAGE -> null;
             case END_PAGE -> null;
         };
+    }
+
+    public Stage getStage() {
+        return stage;
     }
 }

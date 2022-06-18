@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="520.0" prefWidth="620.0" styleClass="welcomePageImage" stylesheets="@../css/StyleSheet.css"
-            xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="it.polimi.ingsw.client.ui.gui.javaFX.FakeController">
+<AnchorPane id="AnchorPane" prefHeight="520.0" prefWidth="620.0"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="it.polimi.ingsw.client.ui.gui.javaFX.WelcomePageController">
     <GridPane prefHeight="500.0" prefWidth="600.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
         <columnConstraints>
             <ColumnConstraints halignment="CENTER" percentWidth="20.0" prefWidth="150.0"/>
@@ -19,7 +18,7 @@
         </rowConstraints>
         <children>
             <Button fx:id="welcomeButton" lineSpacing="1.0" mnemonicParsing="false" mouseTransparent="true"
-                    onAction="#goToMenu" prefHeight="75.0" prefWidth="450.0" styleClass="welcomePageButton"
+                    onAction="#handleButtonAction" prefHeight="75.0" prefWidth="450.0" styleClass="welcomePageButton"
                     text="GO TO MENU" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
         </children>
     </GridPane>

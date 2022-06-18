@@ -1,12 +1,13 @@
-package it.polimi.ingsw.client.ui.gui.javaFX;
+package it.polimi.ingsw.client.ui.gui.controllers;
 
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class WelcomePageController {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class MenuPageController {
 
     @FXML
     private Label label;

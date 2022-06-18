@@ -27,19 +27,19 @@
                     <RowConstraints maxHeight="234.0" minHeight="10.0" prefHeight="145.0" vgrow="SOMETIMES" />
                 </rowConstraints>
                 <children>
-                    <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handlePlay" prefHeight="50.0" prefWidth="250.0" styleClass="titlebutton" text="%play" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                    <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handlePlay" prefHeight="50.0" prefWidth="250.0" styleClass="titlebutton" text="play" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                         <GridPane.margin>
                             <Insets />
                         </GridPane.margin>
                     </Button>
-                    <Button alignment="CENTER" mnemonicParsing="false" onAction="#handleSettings" prefHeight="50.0" prefWidth="250.0" styleClass="titlebutton" text="%credits" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+                    <Button alignment="CENTER" mnemonicParsing="false" onAction="#handleSettings" prefHeight="50.0" prefWidth="250.0" styleClass="titlebutton" text="credits" GridPane.halignment="CENTER" GridPane.rowIndex="3">
                     </Button>
-                    <Button alignment="CENTER" mnemonicParsing="false" onAction="#handleQuit" prefHeight="50.0" prefWidth="250.0" styleClass="titlebutton" text="%quit" GridPane.halignment="CENTER" GridPane.rowIndex="4">
+                    <Button alignment="CENTER" mnemonicParsing="false" onAction="#handleQuit" prefHeight="50.0" prefWidth="250.0" styleClass="titlebutton" text="quit" GridPane.halignment="CENTER" GridPane.rowIndex="4">
                         <GridPane.margin>
                             <Insets />
                         </GridPane.margin>
                     </Button>
-                    <Button alignment="CENTER" layoutX="525.0" layoutY="490.0" mnemonicParsing="false" onAction="#handleStoryline" prefHeight="50.0" prefWidth="250.0" styleClass="titlebutton" text="%storyline" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+                    <Button alignment="CENTER" layoutX="525.0" layoutY="490.0" mnemonicParsing="false" onAction="#handleStoryline" prefHeight="50.0" prefWidth="250.0" styleClass="titlebutton" text="storyline" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
                     <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="50.0" prefWidth="500.0" text="MENU" GridPane.halignment="CENTER">
                         <font>
                             <Font size="50.0" />

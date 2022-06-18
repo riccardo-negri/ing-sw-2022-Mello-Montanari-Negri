@@ -19,7 +19,7 @@ public class GUI implements UI {
     public AbstractPage getState (Client client, ClientPage nextState) {
         return switch (nextState) {
             case WELCOME_PAGE -> new WelcomePageGUI(client);
-            case MENU_PAGE -> null;
+            case MENU_PAGE -> new MenuPageGUI(client);
             case STORYLINE_PAGE -> null;
             case CREDITS_PAGE -> null;
             case CONNECTION_PAGE -> null;

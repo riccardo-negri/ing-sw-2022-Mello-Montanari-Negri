@@ -13,15 +13,22 @@ public class MenuPageController {
     private Label label;
 
     @FXML
-    private void handleButtonAction(ActionEvent event) {
-        System.out.println("You clicked me!");
-        label.setText("Hello World!");
+    private void handlePlay(ActionEvent event) {
+        System.out.println("play!");
     }
 
-
-    public void initialize(URL url, ResourceBundle resources) {
-        // Initialization code can go here.
-        // The parameters url and resources can be omitted if they are not needed
+    @FXML
+    private void handleSettings(ActionEvent event) {
+        System.out.println("credits!");
     }
 
+    @FXML
+    private void handleQuit(ActionEvent event) {
+        System.out.println("quit!");
+    }
+
+    @FXML
+    private void handleStoryline(ActionEvent event) {
+        System.out.println("story!");
+    }
 }

@@ -1,32 +1,28 @@
 package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.Client;
-import it.polimi.ingsw.client.page.AbstractWelcomePage;
-import it.polimi.ingsw.client.ui.gui.controllers.WelcomePageController;
+import it.polimi.ingsw.client.page.AbstractMenuPage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
-public class WelcomePageGUI extends AbstractWelcomePage{
+public class MenuPageGUI extends AbstractMenuPage {
 
-    protected WelcomePageGUI(Client client) {
+    protected MenuPageGUI(Client client) {
         super(client);
-        WelcomePageController.welcomePageGUI = this;
-        WelcomePageController.client = client;
     }
 
     @Override
     public void draw(Client client) {
         Stage stage = ((GUI) client.getUI()).getStage();
         client.setNextState(null);
-        stage.setTitle("Eriantys");
+        stage.setTitle("Menu");
 
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/fxml/WelcomePage.fxml"));
+        loader.setLocation(getClass().getResource("/fxml/MenuPage.fxml"));
         Parent root = null;
         try {
             root = loader.load();

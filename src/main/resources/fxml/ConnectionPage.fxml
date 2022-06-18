@@ -47,8 +47,8 @@
                  </rowConstraints>
                   <children>
                      <Label text="IP address" GridPane.halignment="RIGHT" />
-                     <TextField fx:id="ip" maxWidth="300.0" GridPane.columnIndex="1" />
-                     <TextField fx:id="port" layoutX="650.0" layoutY="22.0" maxWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                     <TextField fx:id="ip" text="localhost" maxWidth="300.0" GridPane.columnIndex="1" />
+                     <TextField fx:id="port" text="50000" layoutX="650.0" layoutY="22.0" maxWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                      <TextField fx:id="username" layoutX="650.0" layoutY="22.0" maxWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                      <Label text="Port number" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
                      <Label layoutX="617.0" layoutY="76.0" text="Username" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
@@ -56,7 +56,7 @@
                </GridPane>
                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="320.0" GridPane.rowIndex="3">
                   <children>
-                     <DialogPane fx:id="dialog" contentText="Do you want to create a new game?\n\n\n\n\n\n\n\n\" headerText="You don't have any game running" layoutX="290.0" layoutY="-176.0" prefHeight="500.0" prefWidth="700.0" visible="false">
+                     <DialogPane fx:id="dialog" contentText="Do you want to create a new game?" headerText="You don't have any game running" layoutX="290.0" layoutY="-176.0" prefHeight="500.0" prefWidth="700.0" visible="false">
                         <buttonTypes>
                            <ButtonType fx:constant="YES" />
                            <ButtonType fx:constant="NO" />

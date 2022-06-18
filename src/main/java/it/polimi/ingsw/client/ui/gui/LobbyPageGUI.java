@@ -11,6 +11,6 @@ public class LobbyPageGUI extends AbstractCreateGamePage {
 
     @Override
     public void draw(Client client) {
-        showGUIPage("Create Game", "/fxml/LobbyPage.fxml");
+        showGUIPage("Lobbies", "/fxml/LobbyPage.fxml");
     }
 }

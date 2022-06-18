@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.page.AbstractWelcomePage;
+import it.polimi.ingsw.client.ui.gui.controllers.MenuPageController;
 import it.polimi.ingsw.client.ui.gui.controllers.WelcomePageController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,8 +16,6 @@ public class WelcomePageGUI extends AbstractWelcomePage{
 
     protected WelcomePageGUI(Client client) {
         super(client);
-        WelcomePageController.welcomePageGUI = this;
-        WelcomePageController.client = client;
     }
 
     @Override
@@ -33,6 +32,9 @@ public class WelcomePageGUI extends AbstractWelcomePage{
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        WelcomePageController controller = loader.getController();
+        controller.client = client;
 
         Scene scene = new Scene(root);
 

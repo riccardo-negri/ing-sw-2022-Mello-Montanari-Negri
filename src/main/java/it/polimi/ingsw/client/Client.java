@@ -29,6 +29,8 @@ public class Client {
     private final ArrayList<String> usernamesDisconnected = new ArrayList<>();
     private Game model;
 
+    private AbstractPage currState;
+
 
     public Client(Stage stage) {
         ui = new GUI(stage);
@@ -57,7 +59,7 @@ public class Client {
     }
 
     public void drawNextPage() {
-        AbstractPage currState = ui.getState(this, nextState);
+        currState = ui.getState(this, nextState);
         currState.draw(this);
     }
 
@@ -153,4 +155,7 @@ public class Client {
         return usernamesDisconnected;
     }
 
+    public AbstractPage getCurrState() {
+        return currState;
+    }
 }

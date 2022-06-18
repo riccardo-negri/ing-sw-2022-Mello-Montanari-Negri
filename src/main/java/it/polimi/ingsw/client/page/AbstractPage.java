@@ -6,10 +6,13 @@ import it.polimi.ingsw.client.ui.gui.GUI;
 import it.polimi.ingsw.client.ui.gui.controllers.AbstractController;
 import it.polimi.ingsw.model.entity.Game;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.jline.reader.History;
 import org.jline.terminal.Terminal;
 
@@ -42,6 +45,8 @@ public abstract class AbstractPage {
     protected void showGUIPage(String title, String file) {
         Stage stage = ((GUI) client.getUI()).getStage();
         stage.setTitle(title);
+        stage.setOnCloseRequest(t -> Platform.exit());  // stop process when window is closed
+
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource(file));
@@ -54,6 +59,7 @@ public abstract class AbstractPage {
 
         AbstractController controller = loader.getController();
         controller.setClient(client);
+        controller.setStage(stage);
         Scene scene = new Scene(root);
 
         stage.setScene(scene);

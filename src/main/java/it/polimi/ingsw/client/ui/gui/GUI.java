@@ -20,8 +20,8 @@ public class GUI implements UI {
         return switch (nextState) {
             case WELCOME_PAGE -> new WelcomePageGUI(client);
             case MENU_PAGE -> new MenuPageGUI(client);
-            case STORYLINE_PAGE -> null;
-            case CREDITS_PAGE -> null;
+            case STORYLINE_PAGE -> new StorylinePageGUI(client);
+            case CREDITS_PAGE -> new CreditsPageGUI(client);
             case CONNECTION_PAGE -> new ConnectionPageGUI(client);
             case CREATE_GAME_PAGE -> new CreateGamePageGUI(client);
             case LOBBY_SELECTION_PAGE -> null;

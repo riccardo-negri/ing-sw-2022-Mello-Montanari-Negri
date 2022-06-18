@@ -13,14 +13,13 @@ public class MenuPageController extends AbstractController {
     }
 
     @FXML
-    private void handleCredits(ActionEvent event) {
-        ((AbstractMenuPage) client.getCurrState()).onEnd(1);
+    private void handleStoryline(ActionEvent event) {
+        ((AbstractMenuPage) client.getCurrState()).onEnd(2);
         client.drawNextPage();
     }
 
-
     @FXML
-    private void handleStoryline(ActionEvent event) {
+    private void handleCredits(ActionEvent event) {
         ((AbstractMenuPage) client.getCurrState()).onEnd(3);
         client.drawNextPage();
     }

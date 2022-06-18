@@ -13,6 +13,7 @@ public abstract class AbstractConnectionPage extends AbstractPage {
     }
 
     public void connectToMatchmakingServer (String ip, int port, String username) throws java.lang.RuntimeException {
+        System.out.println("kfdnjdknsjf");
         client.setIpAddress(ip);
         client.setPort(port);
         client.setUsername(username);

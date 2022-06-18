@@ -20,25 +20,6 @@ public class WelcomePageGUI extends AbstractWelcomePage{
 
     @Override
     public void draw(Client client) {
-        Stage stage = ((GUI) client.getUI()).getStage();
-        client.setNextState(null);
-        stage.setTitle("Eriantys");
-
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/fxml/WelcomePage.fxml"));
-        Parent root = null;
-        try {
-            root = loader.load();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        WelcomePageController controller = loader.getController();
-        controller.client = client;
-
-        Scene scene = new Scene(root);
-
-        stage.setScene(scene);
-        stage.show();
+        showGUIPage("Welcome!", "/fxml/WelcomePage.fxml");
     }
 }

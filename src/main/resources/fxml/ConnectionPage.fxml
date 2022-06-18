@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.ui.gui.guicontrollers.ConnectionPageController">
+<StackPane xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.ui.gui.controllers.ConnectionPageController">
     <AnchorPane id="GradientPane" prefHeight="200.0" prefWidth="200.0" />
     <BorderPane id="MainMenuBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" styleClass="maintitle" StackPane.alignment="CENTER_RIGHT">
         <center>
@@ -27,7 +27,7 @@
                     <RowConstraints maxHeight="234.0" minHeight="10.0" prefHeight="145.0" vgrow="SOMETIMES" />
                 </rowConstraints>
                 <children>
-                    <Button alignment="CENTER" layoutX="525.0" layoutY="490.0" mnemonicParsing="false" onAction="#handleStoryline" prefHeight="50.0" prefWidth="250.0" styleClass="titlebutton" text="%connect" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+                    <Button alignment="CENTER" layoutX="525.0" layoutY="490.0" mnemonicParsing="false" onAction="#handleConnect" prefHeight="50.0" prefWidth="250.0" styleClass="titlebutton" text="connect" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
                     <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="50.0" prefWidth="500.0" text="CONNECTION" GridPane.halignment="CENTER">
                         <font>
                             <Font size="50.0" />
@@ -45,9 +45,9 @@
                  </rowConstraints>
                   <children>
                      <Label text="IP address" GridPane.halignment="RIGHT" />
-                     <TextField maxWidth="300.0" GridPane.columnIndex="1" />
-                     <TextField layoutX="650.0" layoutY="22.0" maxWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                     <TextField layoutX="650.0" layoutY="22.0" maxWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                     <TextField fx:id="ip" maxWidth="300.0" GridPane.columnIndex="1" />
+                     <TextField fx:id="port" layoutX="650.0" layoutY="22.0" maxWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                     <TextField fx:id="username" layoutX="650.0" layoutY="22.0" maxWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                      <Label text="Port number" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
                      <Label layoutX="617.0" layoutY="76.0" text="Username" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
                   </children>

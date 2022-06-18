@@ -22,7 +22,7 @@ public class GUI implements UI {
             case MENU_PAGE -> new MenuPageGUI(client);
             case STORYLINE_PAGE -> null;
             case CREDITS_PAGE -> null;
-            case CONNECTION_PAGE -> null;
+            case CONNECTION_PAGE -> new ConnectionPageGUI(client);
             case CREATE_GAME_PAGE -> null;
             case LOBBY_SELECTION_PAGE -> null;
             case LOBBY_PAGE -> null;

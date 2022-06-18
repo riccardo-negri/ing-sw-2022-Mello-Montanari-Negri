@@ -1,14 +1,11 @@
 package it.polimi.ingsw.client.ui.gui.controllers;
 
-import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.ui.gui.WelcomePageGUI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class WelcomePageController {
-
-    public Client client;
+public class WelcomePageController extends AbstractController{
 
     @FXML
     private Label label;

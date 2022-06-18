@@ -2,11 +2,18 @@ package it.polimi.ingsw.client.page;
 
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.ui.cli.CLI;
+import it.polimi.ingsw.client.ui.gui.GUI;
+import it.polimi.ingsw.client.ui.gui.controllers.AbstractController;
 import it.polimi.ingsw.model.entity.Game;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import org.jline.reader.History;
 import org.jline.terminal.Terminal;
 
+import java.io.IOException;
 import java.util.logging.Logger;
 
 public abstract class AbstractPage {
@@ -30,6 +37,27 @@ public abstract class AbstractPage {
 
     }
 
-    public abstract void draw (Client client);
+    public abstract void draw (Client client); //TODO: remove useless parameter client, is present since creation class wide
+
+    protected void showGUIPage(String title, String file) {
+        Stage stage = ((GUI) client.getUI()).getStage();
+        stage.setTitle(title);
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource(file));
+        Parent root;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        AbstractController controller = loader.getController();
+        controller.setClient(client);
+        Scene scene = new Scene(root);
+
+        stage.setScene(scene);
+        stage.show();
+    }
 
 }

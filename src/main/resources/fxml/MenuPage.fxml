@@ -32,7 +32,7 @@
                             <Insets />
                         </GridPane.margin>
                     </Button>
-                    <Button alignment="CENTER" mnemonicParsing="false" onAction="#handleSettings" prefHeight="50.0" prefWidth="250.0" styleClass="titlebutton" text="credits" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+                    <Button alignment="CENTER" mnemonicParsing="false" onAction="#handleCredits" prefHeight="50.0" prefWidth="250.0" styleClass="titlebutton" text="credits" GridPane.halignment="CENTER" GridPane.rowIndex="3">
                     </Button>
                     <Button alignment="CENTER" mnemonicParsing="false" onAction="#handleQuit" prefHeight="50.0" prefWidth="250.0" styleClass="titlebutton" text="quit" GridPane.halignment="CENTER" GridPane.rowIndex="4">
                         <GridPane.margin>

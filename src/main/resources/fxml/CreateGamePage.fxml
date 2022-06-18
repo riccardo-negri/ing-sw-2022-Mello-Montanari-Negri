@@ -45,9 +45,9 @@
                         </rowConstraints>
                         <children>
                             <Label text="Number of players" GridPane.halignment="RIGHT" />
-                            <TextField maxWidth="300.0" GridPane.columnIndex="1" />
+                            <TextField fx:id="playersNumber" maxWidth="300.0" GridPane.columnIndex="1" />
                             <Label text="Advanced rules" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
-                     <CheckBox mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                     <CheckBox fx:id="advancedRules" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         </children>
                     </GridPane>
                 </children>

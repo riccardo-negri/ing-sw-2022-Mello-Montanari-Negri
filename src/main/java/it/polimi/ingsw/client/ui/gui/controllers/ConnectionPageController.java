@@ -7,6 +7,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
+import static it.polimi.ingsw.client.page.ClientPage.LOBBY_PAGE;
+import static it.polimi.ingsw.client.ui.cli.utils.CoreUtilsCLI.*;
+
 public class ConnectionPageController extends AbstractController{
 
     @FXML
@@ -21,7 +24,12 @@ public class ConnectionPageController extends AbstractController{
         AbstractConnectionPage page = (AbstractConnectionPage) client.getCurrState();
         int p = Integer.parseInt(port.getText());
         page.connectToMatchmakingServer(ip.getText(), p, username.getText());
-        System.out.println("connected");
+        page.waitForLobbiesListOrRedirect();
 
+        if (client.getNextState() != LOBBY_PAGE) {
+            boolean createGame = true;
+            page.onEnd(createGame);
+        }
+        client.drawNextPage();
     }
 }

@@ -2,6 +2,8 @@ package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.page.AbstractMenuPage;
+import it.polimi.ingsw.client.ui.gui.controllers.MenuPageController;
+
 public class MenuPageGUI extends AbstractMenuPage {
 
     protected MenuPageGUI(Client client) {
@@ -10,6 +12,6 @@ public class MenuPageGUI extends AbstractMenuPage {
 
     @Override
     public void draw(Client client) {
-        showGUIPage("Menu", "/fxml/MenuPage.fxml");
+        showGUIPage("Menu", "/fxml/MenuPage.fxml", new MenuPageController());
     }
 }

@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.page.AbstractCreateGamePage;
+import it.polimi.ingsw.client.ui.gui.controllers.LobbyPageController;
 
 public class LobbyPageGUI extends AbstractCreateGamePage {
 
@@ -11,6 +12,6 @@ public class LobbyPageGUI extends AbstractCreateGamePage {
 
     @Override
     public void draw(Client client) {
-        showGUIPage("Lobbies", "/fxml/LobbyPage.fxml");
+        showGUIPage("Lobbies", "/fxml/LobbyPage.fxml", new LobbyPageController());
     }
 }

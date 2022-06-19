@@ -42,14 +42,24 @@ public abstract class AbstractPage {
 
     public abstract void draw (Client client); //TODO: remove useless parameter client, is present since creation class wide
 
-    protected void showGUIPage(String title, String file) {
+    protected void showGUIPage(String title, String file, AbstractController controller) {
         Stage stage = ((GUI) client.getUI()).getStage();
         stage.setTitle(title);
-        stage.setOnCloseRequest(t -> Platform.exit());  // stop process when window is closed
+        stage.setOnCloseRequest(t -> {
+            if (client.getConnection() != null)
+                client.getConnection().close();
+            Platform.exit();
+        });  // stop process when window is closed
 
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource(file));
+
+        controller.setClient(client);
+        controller.setStage(stage);
+
+        loader.setController(controller);
+
         Parent root;
         try {
             root = loader.load();
@@ -57,9 +67,7 @@ public abstract class AbstractPage {
             throw new RuntimeException(e);
         }
 
-        AbstractController controller = loader.getController();
-        controller.setClient(client);
-        controller.setStage(stage);
+
         Scene scene = new Scene(root);
 
         stage.setScene(scene);

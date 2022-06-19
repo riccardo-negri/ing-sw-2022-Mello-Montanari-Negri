@@ -14,10 +14,19 @@ import java.util.PriorityQueue;
 
 public class MovesQueue extends PriorityQueue<Move> {
     private final Counter receivedCount = new Counter();
+
+    /**
+     * creates a priority queue of moves that orders the elements by the sending order
+     */
     public MovesQueue() {
         super(Comparator.comparingInt(Move::getNumber));
     }
 
+    /**
+     * add a move in the correct position of the queue
+     * @param move the move to add to the queue
+     * @return if the move was added
+     */
     @Override
     public boolean add(Move move) {
         synchronized (this) {
@@ -25,6 +34,10 @@ public class MovesQueue extends PriorityQueue<Move> {
         }
     }
 
+    /**
+     * starting from the head poll all the moves in order, stop if one is missing
+     * @return a list of the moves removed from the queue
+     */
     public synchronized List<Move> pollAvailable() {
         List<Move> result = new ArrayList<>();
         while (super.peek() != null && super.peek().getNumber() == receivedCount.get()) {

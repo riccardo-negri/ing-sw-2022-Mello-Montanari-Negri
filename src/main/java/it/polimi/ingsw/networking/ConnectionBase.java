@@ -26,6 +26,13 @@ public abstract class ConnectionBase {
 
     protected final Logger logger;
 
+    /**
+     * base class used to share common operations among all the Connection class different constructors
+     * also contains the final variables that must be initialized in the constructor
+     * @param socket the socket this connection will use to send and receive messages
+     * @param acceptMessage the callback function to execute when a message is received
+     * @param logger the connection debug info will be sent to logger
+     */
     protected ConnectionBase(SafeSocket socket, Predicate<Connection> acceptMessage, Logger logger) {
         this.socket = socket;
         this.acceptMessage = new ConnectionPredicate(acceptMessage);
@@ -50,14 +57,29 @@ public abstract class ConnectionBase {
         pingTimer.scheduleAtFixedRate(pingTask, (long) PING_PERIOD * 1000, (long) PING_PERIOD * 1000);
     }
 
+    /**
+     * contains the code of the connection that always run and waits for new messages
+     */
     protected abstract void listenMessages();
 
+    /**
+     * send message through the network using the socket
+     * @param message the message to be serialized and sent
+     */
     public abstract void send(Message message);
 
+    /**
+     * used only in tests to access socket information and check correct behaviour
+     * @return the socket of this connection
+     */
     public SafeSocket getSocket() {
         return socket;
     }
 
+    /**
+     * used only in tests to access writer and send messages without calling send() which performs additional actions
+     * @return the output stream attached to the socket
+     */
     public ObjectOutputStream getWriter() {
         return writer;
     }

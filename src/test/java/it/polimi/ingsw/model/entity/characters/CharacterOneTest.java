@@ -33,8 +33,8 @@ class CharacterOneTest {
                 ((CharacterOne) game.getCharacter(1)).characterOneValidator(0, StudentColor.BLUE, 13)
         ).getMessage());
         Assertions.assertDoesNotThrow(() -> {
-            ((CharacterOne) game.getCharacter(1)).characterOneValidator(0, StudentColor.BLUE, 10);
-            //game.serializeGame("./src/test/java/it/polimi/ingsw/model/entity/serialized_tests/character_test/character1TestAfter.json");
+            ((CharacterOne) game.getCharacter(1)).useEffect(0, StudentColor.BLUE, 10);
+            game.serializeGame("./src/test/java/it/polimi/ingsw/model/entity/serialized_tests/character_test/character1TestAfter.json");
             Assertions.assertEquals( new BufferedReader(new FileReader("./src/test/java/it/polimi/ingsw/model/entity/serialized_tests/character_test/character1TestAfter.json")).readLine(), game.serializeGame());
         });
     }

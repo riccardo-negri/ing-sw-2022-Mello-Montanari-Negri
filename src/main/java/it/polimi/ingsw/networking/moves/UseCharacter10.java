@@ -31,11 +31,11 @@ public class UseCharacter10 extends UseCharacter {
         character.characterTenValidator(authorId, taken, given);
     }
 
-    public ArrayList<StudentColor> getTaken() {
+    public List<StudentColor> getTaken() {
         return taken;
     }
 
-    public ArrayList<StudentColor> getGiven() {
+    public List<StudentColor> getGiven() {
         return given;
     }
 }

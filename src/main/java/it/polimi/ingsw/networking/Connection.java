@@ -204,6 +204,6 @@ public class Connection extends ConnectionBase {
     }
 
     public synchronized boolean noMessageLeft() {
-        return messagesToProcess.size() == 0;
+        return messagesToProcess.isEmpty();
     }
 }

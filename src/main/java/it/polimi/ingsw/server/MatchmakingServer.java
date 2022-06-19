@@ -163,6 +163,6 @@ public class MatchmakingServer extends Server {
     }
 
     public synchronized boolean noGamesRunning() {
-        return gameThreads.size() == 0 && startedGames.size() == 0;
+        return gameThreads.isEmpty() && startedGames.isEmpty();
     }
 }

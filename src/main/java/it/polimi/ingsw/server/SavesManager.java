@@ -86,12 +86,12 @@ public class SavesManager {
         }
     }
 
-    static public File[] listDirectory(String path) {
+    public static File[] listDirectory(String path) {
         Path folder = Paths.get(path);
         return listDirectory(folder);
     }
 
-    static public File[] listDirectory(Path folder) {
+    public static File[] listDirectory(Path folder) {
         return folder.toFile().listFiles();
     }
 }

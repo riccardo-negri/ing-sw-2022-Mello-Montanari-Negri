@@ -61,8 +61,4 @@ public abstract class ConnectionBase {
     public ObjectOutputStream getWriter() {
         return writer;
     }
-
-    public ObjectInputStream getReader() {
-        return reader;
-    }
 }

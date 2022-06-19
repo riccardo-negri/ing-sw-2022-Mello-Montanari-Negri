@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,9 +35,10 @@ class CharacterOneTest {
                 ((CharacterOne) game.getCharacter(1)).characterOneValidator(0, StudentColor.BLUE, 13)
         ).getMessage());
         Assertions.assertDoesNotThrow(() -> {
+            List<StudentColor> studentListBefore = new ArrayList<>(game.getIsland(10).getStudentColorList());
+            studentListBefore.add(StudentColor.BLUE);
             ((CharacterOne) game.getCharacter(1)).useEffect(0, StudentColor.BLUE, 10);
-            game.serializeGame("./src/test/java/it/polimi/ingsw/model/entity/serialized_tests/character_test/character1TestAfter.json");
-            Assertions.assertEquals( new BufferedReader(new FileReader("./src/test/java/it/polimi/ingsw/model/entity/serialized_tests/character_test/character1TestAfter.json")).readLine(), game.serializeGame());
+            Assertions.assertEquals( studentListBefore, game.getIsland(10).getStudentColorList());
         });
     }
 }

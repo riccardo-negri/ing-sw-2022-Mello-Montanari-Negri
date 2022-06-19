@@ -5,6 +5,7 @@ import it.polimi.ingsw.client.page.AbstractPage;
 import it.polimi.ingsw.client.page.ClientPage;
 import it.polimi.ingsw.client.ui.UI;
 import it.polimi.ingsw.client.ui.cli.*;
+import it.polimi.ingsw.client.ui.gui.controllers.BoardPageController;
 import javafx.stage.Stage;
 
 public class GUI implements UI {
@@ -26,7 +27,7 @@ public class GUI implements UI {
             case CREATE_GAME_PAGE -> new CreateGamePageGUI(client);
             case LOBBY_SELECTION_PAGE -> null;
             case LOBBY_PAGE -> new LobbyPageGUI(client);
-            case BOARD_PAGE -> null;
+            case BOARD_PAGE -> new BoardPageGUI(client);
             case END_PAGE -> new EndPageGUI(client);
         };
     }

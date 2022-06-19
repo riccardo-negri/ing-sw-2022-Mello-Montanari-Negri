@@ -13,6 +13,7 @@ public class BoardPageController extends AbstractController{
     private void handleResign(ActionEvent event) {
         client.getConnection().send(new UserResigned(client.getUsername()));
         ((AbstractBoardPage) client.getCurrState()).onEnd(false);
+        client.getConnection().close();
         client.drawNextPage();
     }
 }

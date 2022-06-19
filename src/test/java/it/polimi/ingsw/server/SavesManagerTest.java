@@ -6,13 +6,9 @@ import it.polimi.ingsw.model.enums.GameMode;
 import it.polimi.ingsw.model.enums.PlayerNumber;
 import it.polimi.ingsw.networking.Connection;
 import it.polimi.ingsw.networking.InitialState;
-import it.polimi.ingsw.networking.SafeSocket;
-import it.polimi.ingsw.networking.UserResigned;
 import it.polimi.ingsw.networking.moves.CardChoice;
 import it.polimi.ingsw.utils.LogFormatter;
-import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
@@ -25,7 +21,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static it.polimi.ingsw.server.Procedures.clearFolder;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class SavesManagerTest {
@@ -35,19 +31,14 @@ class SavesManagerTest {
     String state;
 
     ServerSocket socket;
-    void clearFolder() throws IOException {
-        File f = new File(SavesManager.SAVES_ROOT);
-        FileUtils.deleteDirectory(f);
-        new MainSavesManager(logger).createSavesFolder();
-    }
 
     @Test
     void reloadTest() throws IOException, InterruptedException {
-        clearFolder();
+        clearFolder(logger);
         firstRun();
         secondRun();
         socket.close();
-        clearFolder();
+        clearFolder(logger);
     }
 
     void firstRun() throws InterruptedException, IOException {

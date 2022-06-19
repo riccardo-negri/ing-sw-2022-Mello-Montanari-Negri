@@ -161,7 +161,7 @@ public class GameServer extends Server{
         ((GameUser) user).setDisconnected(false);
         if (isEveryoneConnected()) {
             // In the game server means that everyone joined once, but we don't know if the connection was lost
-            user.getConnection().send(new InitialState(game.serializeGame(), usernames()));
+            user.getConnection().send(new InitialState(game.serializeGame(), assignedUsernames));
             tellWhoIsDisconnected(user);
             broadcast(new UserConnected(user.name));
         }
@@ -180,7 +180,7 @@ public class GameServer extends Server{
         broadcast(new UserConnected(user.name));  // tell to the other in the lobby that the new user is joining
         if (isEveryoneConnected()) {
             // Game is starting
-            broadcast(new InitialState(game.serializeGame(), usernames()));
+            broadcast(new InitialState(game.serializeGame(), assignedUsernames));
             for (User u: connectedUsers)
                 tellWhoIsDisconnected(u);
             setAfkTimer();
@@ -220,7 +220,7 @@ public class GameServer extends Server{
     @Override
     User createUser(String name, Connection connection) {
         int id;
-        id = connectedUsers.size();
+        id = assignedUsernames.indexOf(name);  // respect this order because is the one saved in the file
         return new GameUser(name, connection, game.getWizard(id));
     }
 

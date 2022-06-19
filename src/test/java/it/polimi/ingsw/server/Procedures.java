@@ -3,11 +3,21 @@ package it.polimi.ingsw.server;
 import it.polimi.ingsw.model.enums.GameMode;
 import it.polimi.ingsw.model.enums.PlayerNumber;
 import it.polimi.ingsw.networking.*;
+import org.apache.commons.io.FileUtils;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
 public class Procedures {
+
+    static void clearFolder(Logger logger) throws IOException {
+        File f = new File(SavesManager.SAVES_ROOT);
+        FileUtils.deleteDirectory(f);
+        new MainSavesManager(logger).createSavesFolder();
+    }
+
     static Connection creatorLogin(String username, PlayerNumber number, GameMode mode, boolean wait, Logger logger) {
         Login login = new Login(username);
         Connection connection = new Connection("localhost", 50000, logger);

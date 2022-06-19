@@ -68,7 +68,7 @@ public class SavesManager {
      * @param text the content to write in the file
      * @return if the file is written correctly
      */
-    boolean writeFile(Path path, String text) {
+    public boolean writeFile(Path path, String text) {
         byte[] bytes = text.getBytes();
         try {
             Files.write(path, bytes);

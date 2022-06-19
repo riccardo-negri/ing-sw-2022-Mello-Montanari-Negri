@@ -80,7 +80,7 @@ public class GameServer extends Server{
      * @return if the message is processed and therefore should be consumed
      */
     boolean receiveMessage(Connection source) {
-        Message message = source.getLastMessage();
+        Message message = source.getFirstMessage();
         GameUser user = userFromConnection(source);
         if (message instanceof Disconnected) {
             user.setDisconnected(true);

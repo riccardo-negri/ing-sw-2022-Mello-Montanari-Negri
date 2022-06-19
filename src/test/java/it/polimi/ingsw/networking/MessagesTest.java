@@ -49,7 +49,7 @@ class MessagesTest {
     }
 
     boolean processSet1(Connection connection) {
-        Message m = connection.getLastMessage();
+        Message m = connection.getFirstMessage();
         if (m instanceof InitialState is) {
             assert (is.getState().equals(sampleState) && is.getUsernames().equals(usernames));
             return true;
@@ -97,7 +97,7 @@ class MessagesTest {
     }
 
     boolean processSet2(Connection connection) {
-        Message m = connection.getLastMessage();
+        Message m = connection.getFirstMessage();
         if (m instanceof ErrorMessage em) {
             return true;
         } else if (m instanceof LobbiesList ll) {

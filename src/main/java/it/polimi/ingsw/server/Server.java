@@ -161,7 +161,7 @@ public abstract class Server {
     public boolean userLogin(Connection source) {
         Login login;
         try {
-            login = (Login) source.getLastMessage();
+            login = (Login) source.getFirstMessage();
         } catch (ClassCastException e) {
             abortConnection(source);
             return false;

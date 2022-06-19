@@ -173,7 +173,7 @@ public class MatchmakingServer extends Server {
      * @return if the message was processed and therefore should be consumed
      */
     boolean onLobbyAction(Connection connection) {
-        Message message = connection.getLastMessage();
+        Message message = connection.getFirstMessage();
         User user = userFromConnection(connection);
         if (message instanceof LobbyChoice lobbyChoice) {
             for (GameServer g : getStartedGames()) {

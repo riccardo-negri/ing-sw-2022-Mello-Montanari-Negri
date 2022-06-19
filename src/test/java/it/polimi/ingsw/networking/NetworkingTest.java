@@ -50,7 +50,7 @@ class NetworkingTest {
     }
 
     boolean acceptRedirect(Connection c) {
-        if (c.getLastMessage() instanceof Redirect r) {
+        if (c.getFirstMessage() instanceof Redirect r) {
             assert r.port() == 30000;
             return true;
         }

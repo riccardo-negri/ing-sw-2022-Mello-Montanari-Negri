@@ -242,7 +242,7 @@ public class Connection extends ConnectionBase {
      * remove the first message in the messagesToProcess queue and return it
      * @return the removed message
      */
-    public synchronized Message getLastMessage () {
+    public synchronized Message getFirstMessage() {
         return messagesToProcess.peek();
     }
 

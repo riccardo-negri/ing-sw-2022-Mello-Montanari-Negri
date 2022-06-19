@@ -27,7 +27,7 @@ public class GUI implements UI {
             case LOBBY_SELECTION_PAGE -> null;
             case LOBBY_PAGE -> new LobbyPageGUI(client);
             case BOARD_PAGE -> null;
-            case END_PAGE -> null;
+            case END_PAGE -> new EndPageGUI(client);
         };
     }
 

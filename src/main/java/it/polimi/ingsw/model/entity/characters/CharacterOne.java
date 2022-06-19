@@ -19,7 +19,7 @@ public class CharacterOne extends Character{
     }
 
     /**
-     * take one student and put it on a chosen island, then refill the island from the bag
+     * take one student and put it on a chosen island, then refill the card from the bag
      * @param playingWizard the player playing the card
      * @param studentColor the color of the student to take
      * @param islandId the island to put the student on

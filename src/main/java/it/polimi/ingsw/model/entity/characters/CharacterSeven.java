@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.entity.characters;
 import it.polimi.ingsw.model.entity.GameRuleException;
 import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Bag;
+import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.enums.StudentColor;
 
 import java.util.HashSet;
@@ -43,9 +44,13 @@ public class CharacterSeven extends Character{
      */
     public void characterSevenValidator(Integer playingWizard, List<StudentColor> take, List<StudentColor> give) throws GameRuleException {
         characterValidator(playingWizard);
-        if (!new HashSet<>(studentColorList).containsAll(take)) throw new GameRuleException("Students not available on the card");
-        if (!new HashSet<>(Game.request(gameId).getWizard(playingWizard).getEntranceStudents()).containsAll(give))
-            throw new GameRuleException("Students not available in the entrance");
+        List<StudentColor> entrance = Game.request(gameId).getWizard(playingWizard).getEntranceStudents();
+        for (StudentColor color : StudentColor.values()) {
+            if (take.stream().filter(c -> color == c).count() > studentColorList.stream().filter(c -> color == c).count())
+                throw new GameRuleException("Students not available on the card");
+            if (give.stream().filter(c -> color == c).count() > entrance.stream().filter(c -> color == c).count())
+                throw new GameRuleException("Students not available in the entrance");
+        }
         if(give.size()>3 || give.size() != take.size()) throw new GameRuleException("Inexact number of students");
     }
 

@@ -39,7 +39,7 @@ class CharacterSevenTest {
         ).getMessage());
         Assertions.assertDoesNotThrow(() -> {
             ((CharacterSeven) game.getCharacter(7)).useEffect(0, Arrays.asList(StudentColor.GREEN, StudentColor.GREEN, StudentColor.YELLOW), Arrays.asList(StudentColor.RED, StudentColor.RED, StudentColor.RED));
-            game.serializeGame("./src/test/java/it/polimi/ingsw/model/entity/serialized_tests/character_test/character7TestAfter.json");
+            //game.serializeGame("./src/test/java/it/polimi/ingsw/model/entity/serialized_tests/character_test/character7TestAfter.json");
             Assertions.assertEquals( new BufferedReader(new FileReader("./src/test/java/it/polimi/ingsw/model/entity/serialized_tests/character_test/character7TestAfter.json")).readLine(), game.serializeGame());
         });
     }

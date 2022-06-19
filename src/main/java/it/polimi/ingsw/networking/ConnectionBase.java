@@ -57,4 +57,12 @@ public abstract class ConnectionBase {
     public SafeSocket getSocket() {
         return socket;
     }
+
+    public ObjectOutputStream getWriter() {
+        return writer;
+    }
+
+    public ObjectInputStream getReader() {
+        return reader;
+    }
 }

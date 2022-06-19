@@ -25,4 +25,8 @@ public class UseCharacter12 extends UseCharacter {
         CharacterTwelve character = ((CharacterTwelve) game.getCharacter(12));
         character.characterTwelveValidator(authorId);
     }
+
+    public StudentColor getColor() {
+        return color;
+    }
 }

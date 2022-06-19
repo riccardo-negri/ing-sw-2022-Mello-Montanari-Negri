@@ -27,4 +27,12 @@ public class UseCharacter1 extends UseCharacter {
         CharacterOne character = ((CharacterOne) game.getCharacter(1));
         character.characterOneValidator(authorId, student, islandId);
     }
+
+    public StudentColor getStudent() {
+        return student;
+    }
+
+    public int getIslandId() {
+        return islandId;
+    }
 }

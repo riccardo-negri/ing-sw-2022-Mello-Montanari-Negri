@@ -30,4 +30,12 @@ public class UseCharacter10 extends UseCharacter {
         CharacterTen character = ((CharacterTen) game.getCharacter(10));
         character.characterTenValidator(authorId, taken, given);
     }
+
+    public ArrayList<StudentColor> getTaken() {
+        return taken;
+    }
+
+    public ArrayList<StudentColor> getGiven() {
+        return given;
+    }
 }

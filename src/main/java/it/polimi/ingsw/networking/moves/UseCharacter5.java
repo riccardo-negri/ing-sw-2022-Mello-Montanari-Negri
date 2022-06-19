@@ -24,4 +24,8 @@ public class UseCharacter5 extends UseCharacter {
         CharacterFive character = ((CharacterFive) game.getCharacter(5));
         character.characterFiveValidator(authorId, islandId);
     }
+
+    public int getIslandId() {
+        return islandId;
+    }
 }

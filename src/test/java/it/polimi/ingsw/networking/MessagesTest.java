@@ -30,6 +30,9 @@ class MessagesTest {
             new LobbyDescriptor("#199", PlayerNumber.TWO, GameMode.EASY, usernames)
     );
 
+    private static final List<StudentColor> studentList1 = Arrays.asList(StudentColor.PINK, StudentColor.GREEN, StudentColor.YELLOW);
+    private static final List<StudentColor> studentList2 = Arrays.asList(StudentColor.BLUE, StudentColor.RED, StudentColor.RED);
+
     @Test
     void startTest(){
         List<Connection> connections = Procedures.twoBoundedConnections(logger);
@@ -71,6 +74,24 @@ class MessagesTest {
         } else if (m instanceof MotherNatureMovement mnm) {
             assert (mnm.getAuthorId() == 1 && mnm.getSteps() == 5);
             return true;
+        } else if (m instanceof UseCharacter1 uc1) {
+            assert (uc1.getAuthorId() == 1 && uc1.getStudent() == StudentColor.RED && uc1.getIslandId() == 5);
+            return true;
+        } else if (m instanceof UseCharacter3 uc3) {
+            assert (uc3.getAuthorId() == 1 && uc3.getIslandGroupId() == 2);
+            return true;
+        } else if (m instanceof UseCharacter5 uc5) {
+            assert (uc5.getAuthorId() == 1 && uc5.getIslandId() == 6);
+            return true;
+        } else if (m instanceof UseCharacter7 uc7) {
+            assert (uc7.getAuthorId() == 1 && uc7.getTaken().equals(studentList1) && uc7.getGiven().equals(studentList2));
+            return true;
+        } else if (m instanceof UseCharacter9 uc9) {
+            assert (uc9.getAuthorId() == 1 && uc9.getColor() == StudentColor.GREEN);
+            return true;
+        } else if (m instanceof UseCharacter11 uc11) {
+            assert (uc11.getAuthorId() == 1 && uc11.getStudent() == StudentColor.YELLOW);
+            return true;
         }
         return false;
     }
@@ -97,6 +118,24 @@ class MessagesTest {
         } else if (m instanceof CloudChoice cc) {
             assert (cc.getAuthorId() == 1 && cc.getCloudId() == 2);
             return true;
+        } else if (m instanceof UseCharacter2 uc2) {
+            assert (uc2.getAuthorId() == 1);
+            return true;
+        } else if (m instanceof UseCharacter4 uc4) {
+            assert (uc4.getAuthorId() == 1);
+            return true;
+        } else if (m instanceof UseCharacter6 uc6) {
+            assert (uc6.getAuthorId() == 1);
+            return true;
+        } else if (m instanceof UseCharacter8 uc8) {
+            assert (uc8.getAuthorId() == 1);
+            return true;
+        } else if (m instanceof UseCharacter10 uc10) {
+            assert (uc10.getAuthorId() == 1 && uc10.getTaken().equals(studentList2) && uc10.getGiven().equals(studentList1));
+            return true;
+        } else if (m instanceof UseCharacter12 uc12) {
+            assert (uc12.getAuthorId() == 1 && uc12.getColor() == StudentColor.BLUE);
+            return true;
         }
         return false;
     }
@@ -121,6 +160,18 @@ class MessagesTest {
         allMessages.add(new DiningRoomMovement(w, StudentColor.BLUE));
         allMessages.add(new IslandMovement(w, StudentColor.GREEN, 9));
         allMessages.add(new MotherNatureMovement(w, 5));
+        allMessages.add(new UseCharacter1(w, StudentColor.RED, 5));
+        allMessages.add(new UseCharacter2(w));
+        allMessages.add(new UseCharacter3(w, 2));
+        allMessages.add(new UseCharacter4(w));
+        allMessages.add(new UseCharacter5(w, 6));
+        allMessages.add(new UseCharacter6(w));
+        allMessages.add(new UseCharacter7(w,  studentList1, studentList2));
+        allMessages.add(new UseCharacter8(w));
+        allMessages.add(new UseCharacter9(w, StudentColor.GREEN));
+        allMessages.add(new UseCharacter10(w, studentList2, studentList1));
+        allMessages.add(new UseCharacter11(w, StudentColor.YELLOW));
+        allMessages.add(new UseCharacter12(w, StudentColor. BLUE));
 
         for (Message m: allMessages) {
             sender.send(m);
@@ -142,6 +193,18 @@ class MessagesTest {
         assert (drm.getAuthorId() == 1 && drm.getStudent().equals(StudentColor.BLUE));
         MotherNatureMovement mnm = (MotherNatureMovement) receiver.waitMessage(MotherNatureMovement.class);
         assert (mnm.getAuthorId() == 1 && mnm.getSteps() == 5);
+        UseCharacter1 uc1 = (UseCharacter1) receiver.waitMessage(UseCharacter1.class);
+        assert (uc1.getAuthorId() == 1 && uc1.getStudent() == StudentColor.RED && uc1.getIslandId() == 5);
+        UseCharacter3 uc3 = (UseCharacter3) receiver.waitMessage(UseCharacter3.class);
+        assert (uc3.getAuthorId() == 1 && uc3.getIslandGroupId() == 2);
+        UseCharacter5 uc5 = (UseCharacter5) receiver.waitMessage(UseCharacter5.class);
+        assert (uc5.getAuthorId() == 1 && uc5.getIslandId() == 6);
+        UseCharacter7 uc7 = (UseCharacter7) receiver.waitMessage(UseCharacter7.class);
+        assert (uc7.getAuthorId() == 1 && uc7.getTaken().equals(studentList1) && uc7.getGiven().equals(studentList2));
+        UseCharacter9 uc9 = (UseCharacter9) receiver.waitMessage(UseCharacter9.class);
+        assert (uc9.getAuthorId() == 1 && uc9.getColor() == StudentColor.GREEN);
+        UseCharacter11 uc11 = (UseCharacter11) receiver.waitMessage(UseCharacter11.class);
+        assert (uc11.getAuthorId() == 1 && uc11.getStudent() == StudentColor.YELLOW);
         Redirect r = (Redirect) receiver.waitMessage();
         assert (r.port() == 41124);
         assert receiver.noMessageLeft();
@@ -159,6 +222,18 @@ class MessagesTest {
         assert (im.getAuthorId() == 1 && im.getStudent().equals(StudentColor.GREEN) && im.getIslandId() == 9);
         CloudChoice cc = (CloudChoice) receiver.waitMessage(CloudChoice.class);
         assert (cc.getAuthorId() == 1 && cc.getCloudId() == 2);
+        UseCharacter2 uc2 = (UseCharacter2) receiver.waitMessage(UseCharacter2.class);
+        assert (uc2.getAuthorId() == 1);
+        UseCharacter4 uc4 = (UseCharacter4) receiver.waitMessage(UseCharacter4.class);
+        assert (uc4.getAuthorId() == 1);
+        UseCharacter6 uc6 = (UseCharacter6) receiver.waitMessage(UseCharacter6.class);
+        assert (uc6.getAuthorId() == 1);
+        UseCharacter8 uc8 = (UseCharacter8) receiver.waitMessage(UseCharacter8.class);
+        assert (uc8.getAuthorId() == 1);
+        UseCharacter10 uc10 = (UseCharacter10) receiver.waitMessage(UseCharacter10.class);
+        assert (uc10.getAuthorId() == 1 && uc10.getTaken().equals(studentList2) && uc10.getGiven().equals(studentList1));
+        UseCharacter12 uc12 = (UseCharacter12) receiver.waitMessage(UseCharacter12.class);
+        assert (uc12.getAuthorId() == 1 && uc12.getColor() == StudentColor.BLUE);
         UserDisconnected ud = (UserDisconnected) receiver.waitMessage();
         assert (ud.username().equals("disconnectedGuy"));
         assert receiver.noMessageLeft();

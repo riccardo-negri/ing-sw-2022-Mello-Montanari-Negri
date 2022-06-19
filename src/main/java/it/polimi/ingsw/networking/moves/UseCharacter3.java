@@ -24,4 +24,8 @@ public class UseCharacter3 extends UseCharacter {
         CharacterThree character = ((CharacterThree) game.getCharacter(3));
         character.characterThreeValidator(authorId, islandGroupId);
     }
+
+    public int getIslandGroupId() {
+        return islandGroupId;
+    }
 }

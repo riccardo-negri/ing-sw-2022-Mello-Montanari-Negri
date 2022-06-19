@@ -20,6 +20,7 @@ class CharacterTwoTest {
         try{ game = Game.request(Game.deserializeGameFromFile("./src/test/java/it/polimi/ingsw/model/entity/serialized_tests/character_test/character2TestBefore.json"));
         } catch (Exception e) { System.err.println("Can't find file in test initialization..."); }
     }
+
     @Test
     void useEffect() {
         Assertions.assertEquals("Wrong player", Assertions.assertThrows(Exception.class, () ->

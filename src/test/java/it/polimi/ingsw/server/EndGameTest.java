@@ -102,18 +102,18 @@ class EndGameTest {
         pit.send(new CloudChoice(wPit, 2));
         waitOnAllWithCheck(CloudChoice.class);
 
-        tom.send(new DiningRoomMovement(wTom, StudentColor.YELLOW));
-        waitOnAllWithCheck(DiningRoomMovement.class);
-        tom.send(new DiningRoomMovement(wTom, StudentColor.YELLOW));
-        waitOnAllWithCheck(DiningRoomMovement.class);
-        tom.send(new DiningRoomMovement(wTom, StudentColor.YELLOW));
-        waitOnAllWithCheck(DiningRoomMovement.class);
+        tom.send(new IslandMovement(wTom, StudentColor.YELLOW, 4));
+        waitOnAllWithCheck(IslandMovement.class);
+        tom.send(new IslandMovement(wTom, StudentColor.YELLOW, 4));
+        waitOnAllWithCheck(IslandMovement.class);
+        tom.send(new IslandMovement(wTom, StudentColor.YELLOW, 4));
+        waitOnAllWithCheck(IslandMovement.class);
         tom.send(new DiningRoomMovement(wTom, StudentColor.BLUE));
         waitOnAllWithCheck(DiningRoomMovement.class);
         tom.send(new MotherNatureMovement(wTom, 2));
         waitOnAllWithCheck(MotherNatureMovement.class);
         tom.send(new CloudChoice(wTom, 1));
-        waitOnAllWithCheck(CloudChoice.class);
+        waitOnAll(CloudChoice.class);
 
         waitOnAll(Disconnected.class);
 

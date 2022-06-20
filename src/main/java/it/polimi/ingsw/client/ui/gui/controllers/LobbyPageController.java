@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.ui.gui.controllers;
 
 import it.polimi.ingsw.client.page.AbstractBoardPage;
 import it.polimi.ingsw.client.page.AbstractLobbyPage;
+import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.networking.Connection;
 import it.polimi.ingsw.networking.InitialState;
 import it.polimi.ingsw.networking.Message;
@@ -38,6 +39,8 @@ public class LobbyPageController extends AbstractController{
             connected.setText(connected.getText() + "\n" + uc.username());
             return true;
         } else if (m instanceof InitialState is) {
+            int id = Game.deserializeGameFromString(is.getState());
+            client.setModel(Game.request(id));
             ((AbstractLobbyPage) client.getCurrState()).onEnd();
             Platform.runLater(()->{client.drawNextPage();});
             return true;

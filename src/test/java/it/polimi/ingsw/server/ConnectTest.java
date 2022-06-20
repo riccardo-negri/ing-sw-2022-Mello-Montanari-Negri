@@ -45,6 +45,81 @@ class ConnectTest {
     }
 
     @Test
+    void lobbyReconnectTest() throws InterruptedException {
+        Server s = new MatchmakingServer();
+        Thread t = new Thread(s::run);
+        t.start();
+
+        /* four are three user connecting to the server
+         * one creates a game and tries to reconnect when the game is started
+         * one joins the game and tries to reconnect while still in the lobby
+         * one joins the game and waits in the lobby
+         * one joins the game at the end and makes it start
+         * */
+
+        Connection creator = Procedures.creatorLogin("tommaso", PlayerNumber.FOUR, GameMode.COMPLETE, false, logger);
+        creator.waitMessage(UserConnected.class);
+        assert creator.noMessageLeft();
+        Connection reconnectGuy = Procedures.joinerLogin("riccardo", false, logger);
+        creator.waitMessage(UserConnected.class);
+        reconnectGuy.waitMessage(UserConnected.class);
+        reconnectGuy.waitMessage(UserConnected.class);
+        assert creator.noMessageLeft();
+        assert reconnectGuy.noMessageLeft();
+        creator.close();
+        reconnectGuy.close();
+
+        Connection joiner = Procedures.joinerLogin("pietro", false, logger);
+        joiner.waitMessage(UserConnected.class);
+        joiner.waitMessage(UserConnected.class);
+        joiner.waitMessage(UserConnected.class);
+        assert joiner.noMessageLeft();
+
+        reconnectGuy = Procedures.reconnectLogin("riccardo", false, logger);
+        reconnectGuy.waitMessage(UserConnected.class);
+        reconnectGuy.waitMessage(UserConnected.class);
+        reconnectGuy.waitMessage(UserConnected.class);
+        assert reconnectGuy.noMessageLeft();
+        assert joiner.noMessageLeft();
+        assert creator.noMessageLeft();
+
+        Connection lastGuy = Procedures.joinerLogin("davide", false, logger);
+        lastGuy.waitMessage(UserConnected.class);
+        lastGuy.waitMessage(UserConnected.class);
+        lastGuy.waitMessage(UserConnected.class);
+        lastGuy.waitMessage(UserConnected.class);
+        reconnectGuy.waitMessage(UserConnected.class);
+        joiner.waitMessage(UserConnected.class);
+
+        lastGuy.waitMessage(InitialState.class);
+        reconnectGuy.waitMessage(InitialState.class);
+        joiner.waitMessage(InitialState.class);
+
+        lastGuy.waitMessage(UserDisconnected.class);
+        reconnectGuy.waitMessage(UserDisconnected.class);
+        joiner.waitMessage(UserDisconnected.class);
+
+        assert reconnectGuy.noMessageLeft();
+        assert joiner.noMessageLeft();
+        assert lastGuy.noMessageLeft();
+
+        creator = Procedures.reconnectLogin("tommaso", false, logger);
+        creator.waitMessage(InitialState.class);
+        creator.waitMessage(UserConnected.class);
+        joiner.waitMessage(UserConnected.class);
+        reconnectGuy.waitMessage(UserConnected.class);
+        lastGuy.waitMessage(UserConnected.class);
+
+        assert reconnectGuy.noMessageLeft();
+        assert joiner.noMessageLeft();
+        assert creator.noMessageLeft();
+        assert lastGuy.noMessageLeft();
+
+        s.stop();
+        t.join();
+    }
+
+    @Test
     void connectionRefusedTest() throws InterruptedException {
         Server s = new MatchmakingServer();
         Thread t = new Thread(s::run);

@@ -42,25 +42,35 @@
                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                        </rowConstraints>
                         <children>
-                           <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER">
-                              <image>
-                                 <Image url="@../assets/cards/wizards/1.png" />
-                              </image>
-                           </ImageView>
-                           <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER">
-                              <image>
-                                 <Image url="@../assets/cards/assistants/1.png" />
-                              </image>
-                              <GridPane.margin>
-                                 <Insets left="50.0" top="50.0" />
-                              </GridPane.margin>
-                           </ImageView>
-                           <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
                            <ImageView fitHeight="450.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER">
                               <image>
                                  <Image url="@../assets/realm/schoolboard.png" />
                               </image>
                            </ImageView>
+                           <GridPane>
+                             <columnConstraints>
+                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                             </columnConstraints>
+                             <rowConstraints>
+                               <RowConstraints maxHeight="167.0" minHeight="10.0" prefHeight="97.6666259765625" vgrow="SOMETIMES" />
+                               <RowConstraints maxHeight="259.0" minHeight="10.0" prefHeight="252.3333740234375" vgrow="SOMETIMES" />
+                             </rowConstraints>
+                              <children>
+                                 <ImageView fx:id="wizard0" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                                    <image>
+                                       <Image url="@../assets/cards/wizards/1.png" />
+                                    </image>
+                                 </ImageView>
+                                 <ImageView fx:id="assistant0" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                                    <image>
+                                       <Image url="@../assets/cards/assistants/1.png" />
+                                    </image>
+                                    <GridPane.margin>
+                                       <Insets left="50.0" top="50.0" />
+                                    </GridPane.margin>
+                                 </ImageView>
+                              </children>
+                           </GridPane>
                         </children>
                      </GridPane>
                      <GridPane prefHeight="472.0" prefWidth="1000.0">
@@ -202,52 +212,52 @@
                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                        </rowConstraints>
                         <children>
-                           <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                           <ImageView fx:id="card1" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                               <image>
                                  <Image url="@../assets/cards/assistants/1.png" />
                               </image>
                            </ImageView>
-                           <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+                           <ImageView fx:id="card2" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
                               <image>
                                  <Image url="@../assets/cards/assistants/2.png" />
                               </image>
                            </ImageView>
-                           <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+                           <ImageView fx:id="card3" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
                               <image>
                                  <Image url="@../assets/cards/assistants/3.png" />
                               </image>
                            </ImageView>
-                           <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3">
+                           <ImageView fx:id="card4" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3">
                               <image>
                                  <Image url="@../assets/cards/assistants/4.png" />
                               </image>
                            </ImageView>
-                           <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4">
+                           <ImageView fx:id="card5" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4">
                               <image>
                                  <Image url="@../assets/cards/assistants/5.png" />
                               </image>
                            </ImageView>
-                           <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5">
+                           <ImageView fx:id="card6" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5">
                               <image>
                                  <Image url="@../assets/cards/assistants/6.png" />
                               </image>
                            </ImageView>
-                           <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6">
+                           <ImageView fx:id="card7" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6">
                               <image>
                                  <Image url="@../assets/cards/assistants/7.png" />
                               </image>
                            </ImageView>
-                           <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7">
+                           <ImageView fx:id="card8" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7">
                               <image>
                                  <Image url="@../assets/cards/assistants/8.png" />
                               </image>
                            </ImageView>
-                           <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8">
+                           <ImageView fx:id="card9" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8">
                               <image>
                                  <Image url="@../assets/cards/assistants/9.png" />
                               </image>
                            </ImageView>
-                           <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9">
+                           <ImageView fx:id="card10" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9">
                               <image>
                                  <Image url="@../assets/cards/assistants/10.png" />
                               </image>
@@ -314,22 +324,22 @@
                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                              </rowConstraints>
                               <children>
-                                 <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER">
+                                 <ImageView fx:id="wizard1" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER">
                                     <image>
                                        <Image url="@../assets/cards/wizards/2.png" />
                                     </image>
                                  </ImageView>
-                                 <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                                 <ImageView fx:id="wizard2" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                                     <image>
                                        <Image url="@../assets/cards/wizards/3.png" />
                                     </image>
                                  </ImageView>
-                                 <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                                 <ImageView fx:id="wizard3" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                                     <image>
                                        <Image url="@../assets/cards/wizards/4.png" />
                                     </image>
                                  </ImageView>
-                                 <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                 <ImageView fx:id="assistant1" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                                     <image>
                                        <Image url="@../assets/cards/assistants/2.png" />
                                     </image>
@@ -337,7 +347,7 @@
                                        <Insets left="50.0" top="50.0" />
                                     </GridPane.margin>
                                  </ImageView>
-                                 <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                                 <ImageView fx:id="assistant2" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                                     <image>
                                        <Image url="@../assets/cards/assistants/3.png" />
                                     </image>
@@ -345,7 +355,7 @@
                                        <Insets left="50.0" top="50.0" />
                                     </GridPane.margin>
                                  </ImageView>
-                                 <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                                 <ImageView fx:id="assistant3" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                                     <image>
                                        <Image url="@../assets/cards/assistants/4.png" />
                                     </image>

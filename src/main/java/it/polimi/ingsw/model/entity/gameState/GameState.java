@@ -15,17 +15,30 @@ public abstract class GameState {
     protected Integer currentlyPlaying;
     protected transient Integer gameId;
 
+    /**
+     * initial costructor, called when the game start
+     * @param playerOrder random order of the turn
+     * @param gameId id of the game
+     */
     public GameState (List<Integer> playerOrder, Integer gameId) {
         this.currentlyPlaying = 0;
         this.gameId = gameId;
         this.playerOrder = playerOrder;
     }
 
+    /**
+     * constructor to be called from existing previous state
+     * @param oldGameState previous state
+     */
     public GameState (GameState oldGameState) {
         this.gameId = oldGameState.gameId;
         this.playerOrder = oldGameState.playerOrder;
     }
 
+    /**
+     * updates the id of the game (to be done after deserialization)
+     * @param game game to take the id from
+     */
     public void refreshGameId(Game game) { this.gameId = game.getId(); }
 
     public Integer getCurrentPlayer() { return playerOrder.get(currentlyPlaying); }

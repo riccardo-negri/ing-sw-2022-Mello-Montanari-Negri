@@ -5,6 +5,10 @@ import it.polimi.ingsw.model.entity.characters.Character;
 public abstract class ActionState extends GameState {
     protected Character activatedCharacter;
 
+    /**
+     * Constructor to call when a new turn starts, it clears previous activator
+     * @param oldState previous state to update from
+     */
     public ActionState(GameState oldState) {
         super(oldState);
 
@@ -19,6 +23,10 @@ public abstract class ActionState extends GameState {
         }
     }
 
+    /**
+     * sets the activator of the effect
+     * @param activatedCharacter character to activate
+     */
     public void activateEffect(Character activatedCharacter) {
         this.activatedCharacter = activatedCharacter;
     }

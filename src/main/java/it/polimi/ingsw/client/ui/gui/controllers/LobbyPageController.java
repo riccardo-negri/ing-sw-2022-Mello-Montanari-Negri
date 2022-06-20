@@ -35,7 +35,7 @@ public class LobbyPageController extends AbstractController{
     boolean onNewMessage(Connection c) {
         Message m = c.getLastMessage();
         if (m instanceof UserConnected uc) {
-            connected.setText(connected.getText() + "\n" + uc.username());
+            connected.setText(connected.getText() + uc.username() + "\n");
             return true;
         } else if (m instanceof InitialState is) {
             int id = Game.deserializeGameFromString(is.getState());

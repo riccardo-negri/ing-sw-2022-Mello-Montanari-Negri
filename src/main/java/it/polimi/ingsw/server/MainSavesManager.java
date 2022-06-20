@@ -14,18 +14,29 @@ public class MainSavesManager extends SavesManager{
     final List<String> gameCodes = new ArrayList<>();
     static final Random r = new Random();
 
+    /**
+     * create a manager for the main folder which contains all the games folders
+     * @param logger the eventual filesystem errors are sent to log
+     */
     public MainSavesManager(Logger logger) {
         super(logger);
     }
 
+    /**
+     * create the main folder at the defined location
+     * @return if the creation is successful
+     */
     public boolean createSavesFolder() {
         Path path = Paths.get(SAVES_ROOT);
         return createFolder(path);
     }
 
+    /**
+     * read all the game folders and create a game record for each one
+     * @return the list of game records
+     */
     public List<SavedGameRecord> restoreAll() {
-        Path folder = Paths.get(SAVES_ROOT);
-        File[] files = folder.toFile().listFiles();
+        File[] files = listDirectory(SAVES_ROOT);
         List<SavedGameRecord> result = new ArrayList<>();
         if (files == null) {
             String toLog = "Unable to read " + SAVES_ROOT + " directory";
@@ -44,7 +55,12 @@ public class MainSavesManager extends SavesManager{
         return result;
     }
 
-    // restore the saved game and when it's done delete the folder
+    /**
+     * read the game folder and create a game record
+     * @param folderCode the code of the game to restore
+     * @return the game record of this game save
+     * @throws BadRecordException if the game save folder is not structured correctly, in this case folder was deleted
+     */
     public SavedGameRecord restoreGame(String folderCode) throws BadRecordException {
         Path folder = gameFolderPath(folderCode);
         File[] files = folder.toFile().listFiles();
@@ -75,6 +91,10 @@ public class MainSavesManager extends SavesManager{
         return new SavedGameRecord(game, usernames, sm);
     }
 
+    /**
+     * create a game saves manager with a code that is not already in use
+     * @return the new game saves manager
+     */
     GameSavesManager createGameSavesManager() {
         String code;
         do {
@@ -83,6 +103,10 @@ public class MainSavesManager extends SavesManager{
         return new GameSavesManager(logger, code);
     }
 
+    /**
+     * generate a random string of a # and 3 other characters
+     * @return the 4 characters code generated
+     */
     static String randomString() {
         char[] letters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
         StringBuilder string = new StringBuilder("#");

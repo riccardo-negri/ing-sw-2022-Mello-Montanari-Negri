@@ -22,7 +22,7 @@ public class BoardPageController extends AbstractController{
     }
 
     boolean onNewMessage(Connection source) {
-        Message m = source.getLastMessage();
+        Message m = source.getFirstMessage();
         if (m instanceof UserResigned ur) {
             client.setResigned(ur.getUsername());
             ((AbstractBoardPage) client.getCurrState()).onEnd(false);

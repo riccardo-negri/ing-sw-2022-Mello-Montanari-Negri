@@ -8,11 +8,21 @@ import it.polimi.ingsw.model.entity.gameState.PlanningState;
 public class CardChoice extends Move{
     private final int card;
 
+    /**
+     * create a message requesting to play an assistant card
+     * @param author the wizard playing the card
+     * @param card the number of the assistant card
+     */
     public CardChoice(Wizard author, int card) {
         super(author);
         this.card = card;
     }
 
+    /**
+     * change the game state according to the card choice effect
+     * @param game the game that is modified by the effect
+     * @throws GameRuleException if the move is not valid
+     */
     @Override
     protected void applyEffect(Game game) throws GameRuleException {
         try {
@@ -22,6 +32,11 @@ public class CardChoice extends Move{
         }
     }
 
+    /**
+     * check the validity of the card choice without changing the game state
+     * @param game the game that gives the information needed for the validation
+     * @throws GameRuleException if the move is not valid
+     */
     @Override
     public void validate(Game game) throws GameRuleException {
         try {
@@ -31,6 +46,10 @@ public class CardChoice extends Move{
         }
     }
 
+    /**
+     * get card value
+     * @return the number of the assistant card
+     */
     public int getCard() {
         return card;
     }

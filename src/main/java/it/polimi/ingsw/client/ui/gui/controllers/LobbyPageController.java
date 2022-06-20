@@ -45,7 +45,7 @@ public class LobbyPageController extends AbstractController{
     }
 
     boolean onNewMessage(Connection c) {
-        Message m = c.getLastMessage();
+        Message m = c.getFirstMessage();
         if (m instanceof UserConnected uc) {
             connected.setText(connected.getText() + uc.username() + "\n");
             return true;

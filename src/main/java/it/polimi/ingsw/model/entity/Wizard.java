@@ -47,7 +47,7 @@ public class Wizard {
 
     }
 
-    public void checkDiningStudentNUmber (StudentColor studentColor) throws GameRuleException {
+    public void checkDiningStudentNumber(StudentColor studentColor) throws GameRuleException {
         if (diningStudents[studentColor.getValue()] >= 10)
             throw new GameRuleException("The dining room is full");
     }

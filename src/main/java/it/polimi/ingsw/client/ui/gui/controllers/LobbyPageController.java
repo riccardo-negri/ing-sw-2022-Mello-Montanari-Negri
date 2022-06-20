@@ -52,6 +52,7 @@ public class LobbyPageController extends AbstractController{
         } else if (m instanceof InitialState is) {
             int id = Game.deserializeGameFromString(is.getState());
             client.setModel(Game.request(id));
+            client.setUsernames(is.getUsernames());
             ((AbstractLobbyPage) client.getCurrState()).onEnd();
             Platform.runLater(()-> client.drawNextPage());
             return true;

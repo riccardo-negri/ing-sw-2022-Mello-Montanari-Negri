@@ -4,20 +4,12 @@ import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.page.AbstractPage;
 import it.polimi.ingsw.client.page.ClientPage;
 import it.polimi.ingsw.client.ui.UI;
-import it.polimi.ingsw.client.ui.cli.*;
-import it.polimi.ingsw.client.ui.gui.controllers.BoardPageController;
 import javafx.stage.Stage;
 
-public class GUI implements UI {
-
-    Stage stage;
-
-    public GUI(Stage stage) {
-        this.stage = stage;
-    }
+public record GUI(Stage stage) implements UI {
 
     @Override
-    public AbstractPage getState (Client client, ClientPage nextState) {
+    public AbstractPage getState(Client client, ClientPage nextState) {
         return switch (nextState) {
             case WELCOME_PAGE -> new WelcomePageGUI(client);
             case MENU_PAGE -> new MenuPageGUI(client);
@@ -25,14 +17,10 @@ public class GUI implements UI {
             case CREDITS_PAGE -> new CreditsPageGUI(client);
             case CONNECTION_PAGE -> new ConnectionPageGUI(client);
             case CREATE_GAME_PAGE -> new CreateGamePageGUI(client);
-            case LOBBY_SELECTION_PAGE -> null;
+            case LOBBY_SELECTION_PAGE -> new LobbySelectionPageGUI(client);
             case LOBBY_PAGE -> new LobbyPageGUI(client);
             case BOARD_PAGE -> new BoardPageGUI(client);
             case END_PAGE -> new EndPageGUI(client);
         };
-    }
-
-    public Stage getStage() {
-        return stage;
     }
 }

@@ -1,7 +1,6 @@
 package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.Client;
-import it.polimi.ingsw.client.page.AbstractConnectionPage;
 import it.polimi.ingsw.client.page.AbstractCreateGamePage;
 import it.polimi.ingsw.client.ui.gui.controllers.CreateGamePageController;
 

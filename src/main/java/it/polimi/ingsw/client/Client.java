@@ -31,6 +31,8 @@ public class Client {
 
     private AbstractPage currState;
 
+    private String resigned; // the name of the user who resigned
+
 
     public Client(Stage stage) {
         ui = new GUI(stage);
@@ -157,5 +159,13 @@ public class Client {
 
     public AbstractPage getCurrState() {
         return currState;
+    }
+
+    public void setResigned(String newValue) {
+        resigned = newValue;
+    }
+
+    public String getResigned() {
+        return resigned;
     }
 }

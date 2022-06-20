@@ -8,6 +8,8 @@ import javafx.scene.layout.GridPane;
 
 import java.util.logging.Level;
 
+import static it.polimi.ingsw.client.page.ClientPage.LOBBY_PAGE;
+
 public class ConnectionPageController extends AbstractController{
 
     @FXML
@@ -30,7 +32,11 @@ public class ConnectionPageController extends AbstractController{
             client.getLogger().log(Level.SEVERE, "Got an exception");
         }
 
-        askCreateSection.setVisible(true);
+        if (client.getNextState() == LOBBY_PAGE) {
+            client.drawNextPage();
+        } else {
+            askCreateSection.setVisible(true);
+        }
     }
 
     @FXML

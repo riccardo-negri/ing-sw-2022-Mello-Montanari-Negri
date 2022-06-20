@@ -35,6 +35,11 @@ public class CardDeck {
         assistantCards.remove(currentCard);
     }
 
+    /**
+     * checks if there is at least a card available to be used without playing the opponent card
+     * @param cards cards already played by the opponents
+     * @return if there is at least an available card
+     */
     public boolean checkAvailableCards(List<Integer> cards) {
         return assistantCards.stream().map(AssistantCard::getNumber).anyMatch(x -> ! cards.contains(x));
     }
@@ -43,6 +48,9 @@ public class CardDeck {
 
     public void removeCurrentCard() { currentCard = null; }
 
+    /**
+     * @return returns all the still available assistant cards
+     */
     public int[] getDeckCards() {
         int[] cards = new int[assistantCards.size()];
         for (int i = 0; i < assistantCards.size(); i++) {

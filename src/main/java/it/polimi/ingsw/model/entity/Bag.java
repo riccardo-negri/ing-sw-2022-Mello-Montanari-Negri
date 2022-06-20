@@ -19,6 +19,10 @@ public class Bag {
     private Integer total;
     private boolean empty;
 
+    /**
+     * constructor to generate the bag with 130 students at the beginning of the game
+     * @param randomGenerator random generator object for future extractions
+     */
     public Bag (Random randomGenerator) {
         colorNumber = new Integer[5];
         for (int i=0; i<5; i++)
@@ -90,12 +94,20 @@ public class Bag {
         return students;
     }
 
+    /**
+     * takes the recently selected students since the last call of the method
+     * @return list of the students, then deleted from the object
+     */
     public List<StudentColor> takeRecentlySelected() {
         List<StudentColor> out = studentListOut;
         studentListOut = new ArrayList<>();
         return out;
     }
 
+    /**
+     * adds list of students in the input buffer (used to create selections in the client)
+     * @param studentColorList students to add to the buffer
+     */
     public void putRecentlySelected(List<StudentColor> studentColorList) {
         studentListIn.addAll(studentColorList);
     }

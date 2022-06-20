@@ -14,7 +14,7 @@ public class LobbySelectionPageController extends AbstractController{
     ListView<String> lobbies;
 
     long lastClickTime = 0;
-    String lastClickElement = "";
+    String lastClickElement = null;
     private static final long doubleClickTime = 400;
 
     @FXML
@@ -23,9 +23,11 @@ public class LobbySelectionPageController extends AbstractController{
     }
 
     void drawList() {
-        lobbies.getItems().clear();
-        for (LobbyDescriptor ld : client.getLobbies()) {
-            lobbies.getItems().add(formatLobby(ld));
+        if (client.getLobbies() != null) {
+            lobbies.getItems().clear();
+            for (LobbyDescriptor ld : client.getLobbies()) {
+                lobbies.getItems().add(formatLobby(ld));
+            }
         }
     }
 
@@ -33,7 +35,7 @@ public class LobbySelectionPageController extends AbstractController{
     void handleJoin() {
         long currentTime = new Date().getTime();
         String row = lobbies.getSelectionModel().getSelectedItem();
-        if(currentTime - lastClickTime <= doubleClickTime && lastClickElement.equals(row)) {
+        if(currentTime - lastClickTime <= doubleClickTime && lastClickElement != null && lastClickElement.equals(row)) {
             String code = row.substring(0, 4);
             AbstractLobbySelectionPages page = (AbstractLobbySelectionPages) client.getCurrState();
             if(page.tryToJoinLobby(code)) {
@@ -46,6 +48,13 @@ public class LobbySelectionPageController extends AbstractController{
         }
         lastClickTime = currentTime;
         lastClickElement = row;
+    }
+
+    @FXML
+    void handleRefresh() {
+        AbstractLobbySelectionPages page = (AbstractLobbySelectionPages) client.getCurrState();
+        page.tryToJoinLobby("#");  // always wrong but the server will send the new list in response
+        drawList();
     }
 
     String formatLobby(LobbyDescriptor ld) {

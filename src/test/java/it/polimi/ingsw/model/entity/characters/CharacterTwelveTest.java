@@ -32,5 +32,8 @@ class CharacterTwelveTest {
             //game.serializeGame("./src/test/java/it/polimi/ingsw/model/entity/serialized_tests/character_test/character12TestAfter.json");
             Assertions.assertEquals( new BufferedReader(new FileReader("./src/test/java/it/polimi/ingsw/model/entity/serialized_tests/character_test/character12TestAfter.json")).readLine(), game.serializeGame());
         });
+        Assertions.assertEquals("A character is already active", Assertions.assertThrows(Exception.class, () ->
+                game.getCharacter(11).characterValidator(1)
+        ).getMessage());
     }
 }

@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model.entity.characters;
 
 import it.polimi.ingsw.model.entity.Game;
+import it.polimi.ingsw.model.enums.GameMode;
+import it.polimi.ingsw.model.enums.PlayerNumber;
 import it.polimi.ingsw.model.enums.StudentColor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,6 +27,10 @@ class CharacterOneTest {
 
     @Test
     void useEffect() {
+        Assertions.assertEquals("Wrong game phase", Assertions.assertThrows(Exception.class, () -> {
+            Game game1 = Game.request(Game.gameEntityFactory(GameMode.COMPLETE, PlayerNumber.TWO));
+            game1.getCharacters()[0].characterValidator(game1.getGameState().getCurrentPlayer());
+        }).getMessage());
         Assertions.assertEquals("Wrong player", Assertions.assertThrows(Exception.class, () ->
                 game.getCharacter(1).characterValidator(1)
         ).getMessage());

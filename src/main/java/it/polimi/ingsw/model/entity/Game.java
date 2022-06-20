@@ -268,8 +268,10 @@ public class Game {
         int[] professorNumber = new int[winningTowers.size()];
         List<Tower> finalWinners = new ArrayList<>();
         for (Professor p : professors) {
-            Tower t = p.getMaster(null).getTowerColor();
-            if (winningTowers.contains(t)) professorNumber[winningTowers.indexOf(t)]++;
+            if (p.getMaster(null) != null) {
+                Tower t = p.getMaster(null).getTowerColor();
+                if (winningTowers.contains(t)) professorNumber[winningTowers.indexOf(t)]++;
+            }
         }
         int maxValue = -1;
         for (int i=0; i<winningTowers.size(); i++) {

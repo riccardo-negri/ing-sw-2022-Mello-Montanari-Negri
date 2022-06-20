@@ -17,7 +17,11 @@ public class LobbyPageController extends AbstractController{
     private Label numPlayersLabel;
 
     @FXML
-    private Label advancedRulesField;
+    private Label advancedRulesLabel;
+    @FXML
+    private Label fieldName1;
+    @FXML
+    private Label fieldName2;
 
     @FXML
     private ColumnConstraints connectedUsers;
@@ -27,8 +31,16 @@ public class LobbyPageController extends AbstractController{
 
     @FXML
     void initialize() {
-        numPlayersLabel.setText(String.valueOf(client.getPlayerNumber()));
-        advancedRulesField.setText(client.isAdvancedGame() ? "Advanced" : "Simple");
+        if (client.getPlayerNumber() != 0) {
+            numPlayersLabel.setText(String.valueOf(client.getPlayerNumber()));
+            advancedRulesLabel.setText(client.isAdvancedGame() ? "Advanced" : "Simple");
+        }
+        else {
+            numPlayersLabel.setText("");
+            advancedRulesLabel.setText("");
+            fieldName1.setText("");
+            fieldName2.setText("");
+        }
         client.getConnection().bindFunctionAndTestPrevious(this::onNewMessage);
     }
 

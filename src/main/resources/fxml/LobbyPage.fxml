@@ -41,11 +41,11 @@
                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         </rowConstraints>
                         <children>
-                            <Label text="Number of players:" GridPane.halignment="LEFT">
+                            <Label fx:id="fieldName1" text="Number of players:" GridPane.halignment="LEFT">
                         <GridPane.margin>
                            <Insets />
                         </GridPane.margin></Label>
-                            <Label text="Advanced rules:" GridPane.halignment="LEFT" GridPane.rowIndex="1">
+                            <Label fx:id="fieldName2" text="Advanced rules:" GridPane.halignment="LEFT" GridPane.rowIndex="1">
                         <GridPane.margin>
                            <Insets />
                         </GridPane.margin></Label>
@@ -53,7 +53,7 @@
                         <GridPane.margin>
                            <Insets left="10.0" />
                         </GridPane.margin></Label>
-                     <Label fx:id="advancedRulesField" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <Label fx:id="advancedRulesLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1">
                         <GridPane.margin>
                            <Insets left="10.0" />
                         </GridPane.margin></Label>

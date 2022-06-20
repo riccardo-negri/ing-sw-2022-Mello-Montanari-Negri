@@ -1,7 +1,6 @@
 package it.polimi.ingsw.client.ui.gui.controllers;
 
 import it.polimi.ingsw.client.page.AbstractBoardPage;
-import it.polimi.ingsw.client.page.AbstractEndPage;
 import it.polimi.ingsw.networking.Connection;
 import it.polimi.ingsw.networking.Message;
 import it.polimi.ingsw.networking.UserResigned;
@@ -28,7 +27,7 @@ public class BoardPageController extends AbstractController{
             client.setResigned(ur.getUsername());
             ((AbstractBoardPage) client.getCurrState()).onEnd(false);
             client.getConnection().close();
-            Platform.runLater(()->{client.drawNextPage();});
+            Platform.runLater(()-> client.drawNextPage());
             return true;
         }
         return false;

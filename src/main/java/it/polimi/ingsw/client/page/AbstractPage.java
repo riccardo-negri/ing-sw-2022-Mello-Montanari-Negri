@@ -5,14 +5,11 @@ import it.polimi.ingsw.client.ui.cli.CLI;
 import it.polimi.ingsw.client.ui.gui.GUI;
 import it.polimi.ingsw.client.ui.gui.controllers.AbstractController;
 import it.polimi.ingsw.model.entity.Game;
-import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import org.jline.reader.History;
 import org.jline.terminal.Terminal;
 
@@ -43,7 +40,7 @@ public abstract class AbstractPage {
     public abstract void draw (Client client); //TODO: remove useless parameter client, is present since creation class wide
 
     protected void showGUIPage(String title, String file, AbstractController controller) {
-        Stage stage = ((GUI) client.getUI()).getStage();
+        Stage stage = ((GUI) client.getUI()).stage();
         stage.setTitle(title);
         stage.setOnCloseRequest(t -> {
             if (client.getConnection() != null)

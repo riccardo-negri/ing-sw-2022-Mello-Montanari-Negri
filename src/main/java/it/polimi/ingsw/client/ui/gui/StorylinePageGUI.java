@@ -2,7 +2,6 @@ package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.page.AbstractStorylinePage;
-import it.polimi.ingsw.client.page.AbstractWelcomePage;
 import it.polimi.ingsw.client.ui.gui.controllers.StorylinePageController;
 
 public class StorylinePageGUI extends AbstractStorylinePage {

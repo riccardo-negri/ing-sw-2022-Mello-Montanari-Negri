@@ -1,7 +1,6 @@
 package it.polimi.ingsw.client.ui.gui.controllers;
 
 import it.polimi.ingsw.client.page.AbstractEndPage;
-import it.polimi.ingsw.client.page.AbstractStorylinePage;
 import it.polimi.ingsw.model.entity.Game;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

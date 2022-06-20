@@ -1,15 +1,11 @@
 package it.polimi.ingsw.client.ui.gui.controllers;
 
-import it.polimi.ingsw.client.page.AbstractConnectionPage;
 import it.polimi.ingsw.client.page.AbstractCreateGamePage;
-import it.polimi.ingsw.model.enums.GameMode;
-import it.polimi.ingsw.model.enums.PlayerNumber;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
-import javafx.scene.control.TextField;
 
 public class CreateGamePageController extends AbstractController{
 

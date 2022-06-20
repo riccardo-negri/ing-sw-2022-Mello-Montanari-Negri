@@ -116,6 +116,9 @@ public class GameServer extends Server{
             user.getConnection().send(new InitialState(game.serializeGame(), usernames()));
             tellWhoIsDisconnected(user);
             broadcast(new UserConnected(user.name));
+        } else {
+            for (User u: connectedUsers)  // tell to the user all the other connected in the lobby
+                user.getConnection().send(new UserConnected(u.name));
         }
     }
 

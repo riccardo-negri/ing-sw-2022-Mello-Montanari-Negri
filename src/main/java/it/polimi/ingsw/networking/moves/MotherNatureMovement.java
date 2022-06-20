@@ -8,11 +8,21 @@ import it.polimi.ingsw.model.entity.gameState.MoveMotherNatureActionState;
 public class MotherNatureMovement extends Move{
     private final int steps;
 
+    /**
+     * create a message requesting to move mother nature
+     * @param author the id of the wizard who required the move
+     * @param steps the number of island groups mother nature moves
+     */
     public MotherNatureMovement(Wizard author, int steps) {
         super(author);
         this.steps = steps;
     }
 
+    /**
+     * change the game state according to the movement effect
+     * @param game the game that is modified by the effect
+     * @throws GameRuleException if the move is not valid
+     */
     @Override
     protected void applyEffect(Game game) throws GameRuleException {
         try {
@@ -22,6 +32,11 @@ public class MotherNatureMovement extends Move{
         }
     }
 
+    /**
+     * check the validity of the movement without changing the game state
+     * @param game the game that gives the information needed for the validation
+     * @throws GameRuleException if the move is not valid
+     */
     @Override
     public void validate(Game game) throws GameRuleException {
         try {
@@ -31,6 +46,10 @@ public class MotherNatureMovement extends Move{
         }
     }
 
+    /**
+     * get steps value
+     * @return the number of island groups mother nature moves
+     */
     public int getSteps() {
         return steps;
     }

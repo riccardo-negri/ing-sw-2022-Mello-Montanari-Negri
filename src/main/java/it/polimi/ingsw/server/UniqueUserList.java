@@ -6,6 +6,12 @@ package it.polimi.ingsw.server;
  */
 
 public class UniqueUserList extends SafeList<User> {
+
+    /**
+     * add a user to the list if there is no other user with the same name already
+     * @param user the user to add to the list
+     * @return if the user is added successfully
+     */
     @Override
     public synchronized boolean add(User user) {
         for (User u: this) {
@@ -16,6 +22,12 @@ public class UniqueUserList extends SafeList<User> {
         return super.add(user);
     }
 
+    /**
+     * add a user to the list respecting user unicity and capacity limit
+     * @param user the user to add to the list
+     * @param capacity the maximum number of element accepted after the add method execution
+     * @return if the user is added successfully
+     */
     public synchronized boolean addWithLimit(User user, int capacity) {
         if (size() < capacity) {
             return add(user);

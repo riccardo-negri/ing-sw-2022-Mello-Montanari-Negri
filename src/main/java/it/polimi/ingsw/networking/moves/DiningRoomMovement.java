@@ -9,11 +9,21 @@ import it.polimi.ingsw.model.enums.StudentColor;
 public class DiningRoomMovement extends Move{
     private final StudentColor student;
 
+    /**
+     * create a message requesting to move a student from the entrance to the dining room
+     * @param author author the id of the wizard who required the move
+     * @param student the color of the student that is moved
+     */
     public DiningRoomMovement(Wizard author, StudentColor student) {
         super(author);
         this.student = student;
     }
 
+    /**
+     * change the game state according to the movement effect
+     * @param game the game that is modified by the effect
+     * @throws GameRuleException if the move is not valid
+     */
     @Override
     protected void applyEffect(Game game) throws GameRuleException {
         try {
@@ -23,6 +33,11 @@ public class DiningRoomMovement extends Move{
         }
     }
 
+    /**
+     * check the validity of the movement without changing the game state
+     * @param game the game that gives the information needed for the validation
+     * @throws GameRuleException if the move is not valid
+     */
     @Override
     public void validate(Game game) throws GameRuleException {
         try {
@@ -32,6 +47,10 @@ public class DiningRoomMovement extends Move{
         }
     }
 
+    /**
+     * get student value
+     * @return the color of the student that is moved
+     */
     public StudentColor getStudent() {
         return student;
     }

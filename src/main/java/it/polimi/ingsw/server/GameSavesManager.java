@@ -15,6 +15,11 @@ public class GameSavesManager extends SavesManager {
 
     final boolean restored;
 
+    /**
+     * create a manager for a specific game folder starting from the first snapshot
+     * @param logger the eventual filesystem errors are sent to log
+     * @param code the string that identifies the game folder (is the same used for the lobby)
+     */
     public GameSavesManager(Logger logger, String code) {
         super(logger);
         this.code = code;
@@ -22,6 +27,12 @@ public class GameSavesManager extends SavesManager {
         restored = false;
     }
 
+    /**
+     * create a manager for a specific game folder starting from a specified snapshot
+     * @param logger the eventual filesystem errors are sent to log
+     * @param code the string that identifies the game folder (is the same used for the lobby)
+     * @param lastSnapshotId the id of the snapshot already created
+     */
     public GameSavesManager (Logger logger, String code, int lastSnapshotId) {
         super(logger);
         this.code = code;
@@ -29,6 +40,11 @@ public class GameSavesManager extends SavesManager {
         restored = true;
     }
 
+    /**
+     * create a file containing the new game state and remove the previous
+     * @param game the game to serialize into a json string
+     * @return if the operation on files is successful
+     */
     public boolean createSnapshot(Game game) {
         int current = counter.increment() - 1;
         Path snapshotPath = gameFilePath(code, Integer.toString(current));
@@ -40,6 +56,12 @@ public class GameSavesManager extends SavesManager {
         return success;
     }
 
+    /**
+     * create a folder with the game code and initialize it with usernames file and first snapshot
+     * @param game the game to save in the folder
+     * @param usernames the list of usernames connected to each wizard in order of wizard id
+     * @return if the operation on the folder is successful
+     */
     public boolean createGameFolder(Game game, List<String> usernames) {
         if (restored)
             return true;
@@ -55,10 +77,17 @@ public class GameSavesManager extends SavesManager {
         return false;
     }
 
+    /**
+     * delete the game folder managed from this saves manager
+     */
     public void deleteGameFolder() {
         super.deleteGameFolder(code);
     }
 
+    /**
+     * get code value
+     * @return the string that identifies the game folder
+     */
     public String getCode() {
         return code;
     }

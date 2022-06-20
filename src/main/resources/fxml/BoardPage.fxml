@@ -151,6 +151,38 @@
                                  <Insets top="30.0" />
                               </GridPane.margin>
                            </ImageView>
+                           <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BASELINE">
+                              <image>
+                                 <Image url="@../assets/realm/clouds/1.png" />
+                              </image>
+                              <GridPane.margin>
+                                 <Insets top="25.0" />
+                              </GridPane.margin>
+                           </ImageView>
+                           <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BASELINE">
+                              <image>
+                                 <Image url="@../assets/realm/clouds/2.png" />
+                              </image>
+                              <GridPane.margin>
+                                 <Insets top="25.0" />
+                              </GridPane.margin>
+                           </ImageView>
+                           <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BASELINE">
+                              <image>
+                                 <Image url="@../assets/realm/clouds/3.png" />
+                              </image>
+                              <GridPane.margin>
+                                 <Insets top="25.0" />
+                              </GridPane.margin>
+                           </ImageView>
+                           <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BASELINE">
+                              <image>
+                                 <Image url="@../assets/realm/clouds/4.png" />
+                              </image>
+                              <GridPane.margin>
+                                 <Insets top="25.0" />
+                              </GridPane.margin>
+                           </ImageView>
                         </children>
                      </GridPane>
                      <GridPane GridPane.rowIndex="2">

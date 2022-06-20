@@ -16,8 +16,14 @@ public abstract class Character {
     private final Integer price;
     private boolean used;
 
+    /**
+     * factory method to generate character
+     * @param gameId id of the game
+     * @param number id of the character
+     * @param bag bag object for some characters who need it
+     * @return returns the created object
+     */
     public static Character generateCharacter(int gameId, int number, Bag bag) {
-
         return switch (number) {
             case 1 -> new CharacterOne(gameId, 1, bag);
             case 2 -> new CharacterTwo(gameId, 2);
@@ -35,6 +41,12 @@ public abstract class Character {
         };
     }
 
+    /**
+     * Super Constructor for charcaters, sets price and id
+     * @param gameId id of the game
+     * @param characterId id of the character
+     * @param price cost of the character
+     */
     protected Character(Integer gameId, Integer characterId, Integer price) {
         this.gameId = gameId;
         this.characterId = characterId;
@@ -42,8 +54,17 @@ public abstract class Character {
         this.used = false;
     }
 
+    /**
+     * changes the gameId of the character
+     * @param game game to get the id from
+     */
     public void refreshGameId(Game game) { this.gameId = game.getId(); }
 
+    /**
+     * sets the activated character in the state and pays the price for the character
+     * @param playingWizard player who is using the effect
+     * @throws GameRuleException if the money is not enough
+     */
     protected void useCard(Integer playingWizard) throws GameRuleException{
         Game.request(gameId).getWizard(playingWizard).payEffect(price + (used ? 1 : 0));
         ((ActionState) Game.request(gameId).getGameState()).activateEffect(this);

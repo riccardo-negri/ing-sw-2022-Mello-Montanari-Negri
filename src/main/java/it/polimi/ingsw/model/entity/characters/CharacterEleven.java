@@ -45,6 +45,10 @@ public class CharacterEleven extends Character{
         Game.request(gameId).getWizard(playingWizard).checkDiningStudentNumber(studentColor);
     }
 
+    /**
+     * sets the new bag (to do after deserialization)
+     * @param bag the new bag
+     */
     public void refreshBag (Bag bag) { this.bag = bag; }
 
     public List<StudentColor> getStudentColorList() { return studentColorList; }

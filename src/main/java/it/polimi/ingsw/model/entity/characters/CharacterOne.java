@@ -46,6 +46,10 @@ public class CharacterOne extends Character{
         if (islandId<0 || islandId>=12) throw new GameRuleException("Selected island doesn't exist");
     }
 
+    /**
+     * sets the new bag (to do after deserialization)
+     * @param bag the new bag
+     */
     public void refreshBag (Bag bag) { this.bag = bag; }
 
     public List<StudentColor> getStudentColorList() { return studentColorList; }

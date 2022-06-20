@@ -25,14 +25,11 @@ public class EndPageController extends AbstractController{
     void initialize() {
         Game model = client.getModel();
         if(model.getWinner() == null) {
-            if (client.getResigned().equals(client.getUsername())) {
-                result.setText("YOU LOST!");
+            result.setText("USER RESIGNED");
+            if (client.getResigned().equals(client.getUsername()))
                 info.setText("You resigned from the game.");
-            }
-            else {
-                result.setText("YOU WON!");
+            else
                 info.setText(client.getResigned() + " resigned from the game.");
-            }
             client.setResigned(null);  // reset the default value for the next game
         } else {
             if (model.getWinner() == model.getWizard(client.getUsernames().indexOf(client.getUsername())).getTowerColor())

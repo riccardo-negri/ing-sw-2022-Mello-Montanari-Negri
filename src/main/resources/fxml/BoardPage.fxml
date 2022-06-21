@@ -8,6 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
@@ -286,6 +287,28 @@
                                        <Image url="@../assets/pawns/students/3d/yellow.png" />
                                     </image>
                                  </ImageView>
+                                 <FlowPane fx:id="myRedTable" alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                    <GridPane.margin>
+                                       <Insets left="25.0" right="16.0" />
+                                    </GridPane.margin>
+                                 </FlowPane>
+                                 <FlowPane fx:id="myGreenTable" alignment="CENTER_LEFT" layoutX="105.0" layoutY="53.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2">
+                                    <GridPane.margin>
+                                       <Insets left="25.0" right="16.0" />
+                                    </GridPane.margin></FlowPane>
+                                 <FlowPane fx:id="myYellowTable" alignment="CENTER_LEFT" layoutX="80.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                                    <GridPane.margin>
+                                       <Insets left="25.0" right="16.0" />
+                                    </GridPane.margin></FlowPane>
+                                 <FlowPane fx:id="myFuchsiaTable" alignment="CENTER_LEFT" layoutX="80.0" layoutY="96.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                                    <GridPane.margin>
+                                       <Insets left="25.0" right="16.0" />
+                                    </GridPane.margin></FlowPane>
+                                 <FlowPane fx:id="myBlueTable" alignment="CENTER_LEFT" layoutX="80.0" layoutY="139.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="4">
+                                    <GridPane.margin>
+                                       <Insets left="25.0" right="16.0" />
+                                    </GridPane.margin>
+                                 </FlowPane>
                               </children>
                            </GridPane>
                         </children>
@@ -2037,6 +2060,162 @@
                                  <Image url="@../assets/realm/schoolboard-vertical.png" />
                               </image>
                            </ImageView>
+                           <GridPane>
+                              <columnConstraints>
+                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="30.0" />
+                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="30.0" />
+                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="30.0" />
+                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="30.0" />
+                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="30.0" />
+                              </columnConstraints>
+                              <rowConstraints>
+                                 <RowConstraints maxHeight="60.0" minHeight="10.0" prefHeight="52.66667175292969" vgrow="SOMETIMES" />
+                                 <RowConstraints maxHeight="77.0" minHeight="10.0" prefHeight="55.333343505859375" vgrow="SOMETIMES" />
+                                 <RowConstraints maxHeight="89.99999237060547" minHeight="10.0" prefHeight="85.66667175292969" vgrow="SOMETIMES" />
+                                 <RowConstraints maxHeight="335.0" minHeight="10.0" prefHeight="312.0" vgrow="SOMETIMES" />
+                                 <RowConstraints maxHeight="243.0" minHeight="7.666656494140625" prefHeight="32.0" vgrow="SOMETIMES" />
+                                 <RowConstraints maxHeight="91.00003051757812" minHeight="0.0" prefHeight="37.33331298828125" vgrow="SOMETIMES" />
+                              </rowConstraints>
+                              <children>
+                                 <ImageView fx:id="otherStudent2" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4">
+                                    <image>
+                                       <Image url="@../assets/pawns/students/3d/yellow.png" />
+                                    </image>
+                                 </ImageView>
+                                 <ImageView fx:id="otherTower1" fitHeight="65.0" fitWidth="37.0" layoutX="460.0" layoutY="120.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
+                                    <image>
+                                       <Image url="@../assets/pawns/towers/board/white.png" />
+                                    </image>
+                                 </ImageView>
+                                 <ImageView fx:id="otherTower7" fitHeight="65.0" fitWidth="37.0" layoutX="470.0" layoutY="88.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
+                                    <image>
+                                       <Image url="@../assets/pawns/towers/board/white.png" />
+                                    </image>
+                                 </ImageView>
+                                 <ImageView fx:id="otherTower0" fitHeight="65.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+                                    <image>
+                                       <Image url="@../assets/pawns/towers/board/white.png" />
+                                    </image>
+                                 </ImageView>
+                                 <ImageView fx:id="otherStudent1" fitHeight="24.0" fitWidth="24.0" layoutX="54.0" layoutY="61.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5">
+                                    <image>
+                                       <Image url="@../assets/pawns/students/3d/yellow.png" />
+                                    </image>
+                                 </ImageView>
+                                 <ImageView fx:id="otherRedProfessor" fitHeight="30.0" fitWidth="30.0" layoutX="54.0" layoutY="61.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                                    <image>
+                                       <Image url="@../assets/pawns/professors/3d/red.png" />
+                                    </image>
+                                    <GridPane.margin>
+                                       <Insets />
+                                    </GridPane.margin>
+                                 </ImageView>
+                                 <ImageView fx:id="otherTower3" fitHeight="65.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
+                                    <image>
+                                       <Image url="@../assets/pawns/towers/board/white.png" />
+                                    </image>
+                                 </ImageView>
+                                 <ImageView fx:id="otherTower5" fitHeight="65.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
+                                    <image>
+                                       <Image url="@../assets/pawns/towers/board/white.png" />
+                                    </image>
+                                 </ImageView>
+                                 <ImageView fx:id="otherTower2" fitHeight="65.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+                                    <image>
+                                       <Image url="@../assets/pawns/towers/board/white.png" />
+                                    </image>
+                                 </ImageView>
+                                 <ImageView fx:id="otherTower4" fitHeight="65.0" fitWidth="37.0" layoutX="475.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+                                    <image>
+                                       <Image url="@../assets/pawns/towers/board/white.png" />
+                                    </image>
+                                 </ImageView>
+                                 <ImageView fx:id="otherTower6" fitHeight="65.0" fitWidth="37.0" layoutX="460.0" layoutY="78.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+                                    <image>
+                                       <Image url="@../assets/pawns/towers/board/white.png" />
+                                    </image>
+                                 </ImageView>
+                                 <ImageView fx:id="otherGreenProfessor" fitHeight="30.0" fitWidth="30.0" layoutX="421.0" layoutY="58.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                                    <image>
+                                       <Image url="@../assets/pawns/professors/3d/green.png" />
+                                    </image>
+                                 </ImageView>
+                                 <ImageView fx:id="otherYellowProfessor" fitHeight="30.0" fitWidth="30.0" layoutX="410.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                                    <image>
+                                       <Image url="@../assets/pawns/professors/3d/yellow.png" />
+                                    </image>
+                                 </ImageView>
+                                 <ImageView fx:id="otherFuchsiaProfessor" fitHeight="30.0" fitWidth="30.0" layoutX="410.0" layoutY="100.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                                    <image>
+                                       <Image url="@../assets/pawns/professors/3d/fuchsia.png" />
+                                    </image>
+                                 </ImageView>
+                                 <ImageView fx:id="otherBlueProfessor" fitHeight="30.0" fitWidth="30.0" layoutX="420.0" layoutY="110.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                                    <image>
+                                       <Image url="@../assets/pawns/professors/3d/blue.png" />
+                                    </image>
+                                 </ImageView>
+                                 <ImageView fx:id="otherStudent0" fitHeight="24.0" fitWidth="24.0" layoutX="53.0" layoutY="61.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="4">
+                                    <image>
+                                       <Image url="@../assets/pawns/students/3d/yellow.png" />
+                                    </image>
+                                 </ImageView>
+                                 <ImageView fx:id="otherStudent3" fitHeight="24.0" fitWidth="24.0" layoutX="53.0" layoutY="19.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="5">
+                                    <image>
+                                       <Image url="@../assets/pawns/students/3d/yellow.png" />
+                                    </image>
+                                 </ImageView>
+                                 <ImageView fx:id="otherStudent4" fitHeight="24.0" fitWidth="24.0" layoutX="10.0" layoutY="103.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="4">
+                                    <image>
+                                       <Image url="@../assets/pawns/students/3d/yellow.png" />
+                                    </image>
+                                 </ImageView>
+                                 <ImageView fx:id="otherStudent5" fitHeight="24.0" fitWidth="24.0" layoutX="49.0" layoutY="103.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="5">
+                                    <image>
+                                       <Image url="@../assets/pawns/students/3d/yellow.png" />
+                                    </image>
+                                 </ImageView>
+                                 <ImageView fx:id="otherStudent6" fitHeight="24.0" fitWidth="24.0" layoutX="10.0" layoutY="145.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="4">
+                                    <image>
+                                       <Image url="@../assets/pawns/students/3d/yellow.png" />
+                                    </image>
+                                 </ImageView>
+                                 <ImageView fx:id="otherStudent7" fitHeight="24.0" fitWidth="24.0" layoutX="18.0" layoutY="145.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="5">
+                                    <image>
+                                       <Image url="@../assets/pawns/students/3d/yellow.png" />
+                                    </image>
+                                 </ImageView>
+                                 <ImageView fx:id="otherStudent8" fitHeight="24.0" fitWidth="24.0" layoutX="10.0" layoutY="187.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="4">
+                                    <image>
+                                       <Image url="@../assets/pawns/students/3d/yellow.png" />
+                                    </image>
+                                 </ImageView>
+                                 <FlowPane fx:id="otherGreenTable" alignment="BOTTOM_CENTER" orientation="VERTICAL" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">
+                                    <GridPane.margin>
+                                       <Insets bottom="24.0" top="-2.0" />
+                                    </GridPane.margin></FlowPane>
+                                 <FlowPane fx:id="otherRedTable" alignment="BOTTOM_CENTER" orientation="VERTICAL" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                    <GridPane.margin>
+                                       <Insets bottom="24.0" top="-2.0" />
+                                    </GridPane.margin></FlowPane>
+                                 <FlowPane fx:id="otherYellowTable" alignment="BOTTOM_CENTER" orientation="VERTICAL" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                                    <GridPane.margin>
+                                       <Insets bottom="24.0" top="-2.0" />
+                                    </GridPane.margin></FlowPane>
+                                 <FlowPane fx:id="otherFuchsiaTable" alignment="BOTTOM_CENTER" orientation="VERTICAL" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="3">
+                                    <GridPane.margin>
+                                       <Insets bottom="24.0" top="-2.0" />
+                                    </GridPane.margin></FlowPane>
+                                 <FlowPane fx:id="otherBlueTable" alignment="BOTTOM_CENTER" orientation="VERTICAL" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.rowIndex="3">
+                                    <GridPane.margin>
+                                       <Insets bottom="24.0" top="-2.0" />
+                                    </GridPane.margin>
+                                 </FlowPane>
+                              </children>
+                              <GridPane.margin>
+                                 <Insets bottom="30.0" left="50.0" right="51.0" top="30.0" />
+                              </GridPane.margin>
+                           </GridPane>
                         </children>
                      </GridPane>
                   </children>

@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.ui.gui.records.*;
 import it.polimi.ingsw.model.entity.*;
 import it.polimi.ingsw.model.enums.GameMode;
+import it.polimi.ingsw.model.enums.PlayerNumber;
 import it.polimi.ingsw.model.enums.StudentColor;
 import it.polimi.ingsw.model.enums.Tower;
 import javafx.collections.ObservableList;
@@ -13,6 +14,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -124,30 +126,7 @@ public class BoardUtils {
         }
     }
 
-    public static void updateSchoolBoard (BoardRecord board, Client client, String username) {
-        SchoolBoardRecord school;
-        boolean isMyBoard = username.equals(client.getUsername());
-        if (isMyBoard) {
-            school = board.myBoard();
-        }
-        else {
-            school = board.otherBoard();
-        }
-
-        Wizard wizard = client.getModel().getWizard(client.getUsernames().indexOf(username));
-
-        // update entrance
-        int i = 0;
-        for (StudentColor student : wizard.getEntranceStudents()) {
-            school.entrance().get(i).setImage(getStudentImageFromColor(student));
-            school.entrance().get(i).setVisible(true);
-            i++;
-        }
-        for (; i < 9; i++) {
-            school.entrance().get(i).setVisible(false);
-        }
-
-        // update dining
+    private static void updateDining (Wizard wizard, SchoolBoardRecord school, boolean isMyBoard) {
         int[] diningColors = new int[]{
                 wizard.getDiningStudents(StudentColor.YELLOW),
                 wizard.getDiningStudents(StudentColor.BLUE),
@@ -155,7 +134,8 @@ public class BoardUtils {
                 wizard.getDiningStudents(StudentColor.RED),
                 wizard.getDiningStudents(StudentColor.PINK)
         };
-        i = 0;
+
+        int i = 0;
         for (FlowPane flowPane : school.dining()) {
             if (isMyBoard) {
                 // padding left
@@ -183,6 +163,34 @@ public class BoardUtils {
             }
             i++;
         }
+    }
+
+    public static void updateSchoolBoard (BoardRecord board, Client client, String username) {
+        SchoolBoardRecord school;
+        boolean isMyBoard = username.equals(client.getUsername());
+
+        if (isMyBoard) {
+            school = board.myBoard();
+        }
+        else {
+            school = board.otherBoard();
+        }
+
+        Wizard wizard = client.getModel().getWizard(client.getUsernames().indexOf(username));
+
+        // update entrance
+        int i = 0;
+        for (StudentColor student : wizard.getEntranceStudents()) {
+            school.entrance().get(i).setImage(getStudentImageFromColor(student));
+            school.entrance().get(i).setVisible(true);
+            i++;
+        }
+        for (; i < 9; i++) {
+            school.entrance().get(i).setVisible(false);
+        }
+
+        // update dining
+        updateDining(wizard, school, isMyBoard);
 
         // update professors
         Game model = client.getModel();
@@ -202,10 +210,24 @@ public class BoardUtils {
         // update towers
         Tower towerColor = wizard.getTowerColor();
         int towerNumber = wizard.getTowerNumber();
+        if (client.getModel().getPlayerNumber().equals(PlayerNumber.FOUR)) {
+            towerNumber = towerNumber / 2 + (wizard.getId() > 1 ? towerNumber % 2 : 0);
+        }
         for (i = 0; i < 8; i++) {
             school.towers().get(i).setVisible(i < towerNumber);
             if (i < towerNumber) school.towers().get(i).setImage(getTowerImageFromColor(towerColor));
         }
+
+        // draw arrows
+        List<String> usersNotMyUser = new ArrayList<>(client.getUsernames());
+        usersNotMyUser.remove(client.getUsername());
+
+        if (!isMyBoard) {
+            for (ImageView arrow : board.arrows()) {
+                arrow.setVisible(board.arrows().indexOf(arrow) == usersNotMyUser.indexOf(username));
+            }
+        }
+
     }
 
     public static void updateUsersArea (BoardRecord board, Client client) {
@@ -301,8 +323,15 @@ public class BoardUtils {
         updateSchoolBoard(board, client, client.getUsername());
 
         // otherSchoolBoard
-        String otherUsername = client.getUsernames().get(client.getUsernames().indexOf(client.getUsername()) == 0 ? 1 : 0);
-        updateSchoolBoard(board, client, otherUsername);
+        List<String> usersNotMyUser = new ArrayList<>(client.getUsernames());
+        usersNotMyUser.remove(client.getUsername());
+        String currPlayerclient = client.getUsernames().get(client.getModel().getGameState().getCurrentPlayer());
+        if (usersNotMyUser.contains(currPlayerclient)) {
+            updateSchoolBoard(board, client, currPlayerclient);
+        }
+        else {
+            updateSchoolBoard(board, client, usersNotMyUser.get(0));
+        }
 
         updateUsersArea(board, client);
 

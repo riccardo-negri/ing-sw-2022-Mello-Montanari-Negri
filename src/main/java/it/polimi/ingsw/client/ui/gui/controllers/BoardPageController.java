@@ -3,12 +3,9 @@ package it.polimi.ingsw.client.ui.gui.controllers;
 import it.polimi.ingsw.client.page.AbstractBoardPage;
 import it.polimi.ingsw.client.ui.gui.records.*;
 import it.polimi.ingsw.client.ui.gui.records.CharacterRecord;
-import it.polimi.ingsw.model.entity.GameRuleException;
-import it.polimi.ingsw.model.entity.gameState.PlanningState;
 import it.polimi.ingsw.networking.Connection;
 import it.polimi.ingsw.networking.Message;
 import it.polimi.ingsw.networking.UserResigned;
-import it.polimi.ingsw.networking.moves.CardChoice;
 import it.polimi.ingsw.networking.moves.Move;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -20,12 +17,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static it.polimi.ingsw.client.ui.gui.utils.BoardUtils.*;
 
@@ -393,6 +388,22 @@ public class BoardPageController extends AbstractController {
             client.getLogger().log(Level.INFO, e.getMessage());
         }
     }
+
+    @FXML
+    private void handleUserChange1() {  handleUserChange(1); }
+
+    @FXML
+    private void handleUserChange2() {  handleUserChange(2); }
+
+    @FXML
+    private void handleUserChange3() {  handleUserChange(3); }
+
+    private void handleUserChange (int userId) {
+        List<String> usersNotMyUser = new ArrayList<>(client.getUsernames());
+        usersNotMyUser.remove(client.getUsername());
+        Platform.runLater(() -> updateSchoolBoard(board, client, usersNotMyUser.get(userId - 1)));
+    }
+
     @FXML
     private void handleStudentPick0(Event event) { handleStudentPick(0); }
     @FXML

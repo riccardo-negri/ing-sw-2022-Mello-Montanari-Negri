@@ -31,6 +31,9 @@ class CharacterOneTest {
             Game game1 = Game.request(Game.gameEntityFactory(GameMode.COMPLETE, PlayerNumber.TWO));
             game1.getCharacters()[0].characterValidator(game1.getGameState().getCurrentPlayer());
         }).getMessage());
+        Assertions.assertEquals("Character not found", Assertions.assertThrows(Exception.class, () ->
+                game.getCharacter(10).characterValidator(1)
+        ).getMessage());
         Assertions.assertEquals("Wrong player", Assertions.assertThrows(Exception.class, () ->
                 game.getCharacter(1).characterValidator(1)
         ).getMessage());

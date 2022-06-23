@@ -86,12 +86,9 @@ public class MoveStudentActionState extends ActionState {
      * he moved too many students already or the student is not present
      */
     private void moveStudentValidator(Integer playingWizard, StudentColor studentColor) throws GameRuleException {
-        if (!Objects.equals(playingWizard, playerOrder.get(currentlyPlaying)))
-            throw new GameRuleException("Wrong player");
-        if (!Objects.equals(gameState, "MSS"))
-            throw new GameRuleException("Wrong game phase");
-        if (!Game.request(gameId).getWizard(playingWizard).getEntranceStudents().contains(studentColor))
-            throw new GameRuleException("No students available in the selected color");
+        if (!Objects.equals(playingWizard, playerOrder.get(currentlyPlaying))) throw new GameRuleException("Wrong player");
+        if (!Objects.equals(gameState, "MSS")) throw new GameRuleException("Wrong game phase");
+        if (!Game.request(gameId).getWizard(playingWizard).getEntranceStudents().contains(studentColor)) throw new GameRuleException("No students available in the selected color");
     }
 
     /**

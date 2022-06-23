@@ -172,7 +172,7 @@ public class BoardUtils {
 
             // retrieving the observable list of the flow Pane
             ObservableList<Node> list = flowPane.getChildren();
-            list.removeAll();
+            list.clear();
 
             //Adding all the nodes to the flow pane
             for (int j = 0; j < diningColors[i]; j++) {
@@ -271,6 +271,26 @@ public class BoardUtils {
         }
     }
 
+    public static void updateDeck(BoardRecord board, Client client) {
+        Wizard wizard =  client.getModel().getWizard(client.getUsernames().indexOf(client.getUsername()));
+        int[] cards = wizard.getCardDeck().getDeckCards();
+
+        for (int i = 1; i <= 10; i++) {
+            boolean found = false;
+            for(int x : cards){
+                if(x == i){
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                board.myDeck().get(i-1).setVisible(false);
+            }
+        }
+
+    }
+
     public static void updateBoard (BoardRecord board, Client client) {
 
         updateIslands(board, client);
@@ -285,6 +305,8 @@ public class BoardUtils {
         updateSchoolBoard(board, client, otherUsername);
 
         updateUsersArea(board, client);
+
+        updateDeck(board, client);
 
         board.round().setText(String.valueOf(findRoundNumber(client.getModel())));
 

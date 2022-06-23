@@ -461,7 +461,7 @@ public class BoardPageController extends AbstractController {
                 // TODO handle invalid move
                 e.printStackTrace();
             }
-            updateBoard(board, client);
+            Platform.runLater(() -> updateBoard(board, client));
         }
         return false;
     }

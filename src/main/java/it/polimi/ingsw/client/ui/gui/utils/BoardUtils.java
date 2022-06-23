@@ -2,21 +2,30 @@ package it.polimi.ingsw.client.ui.gui.utils;
 
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.ui.gui.records.*;
-import it.polimi.ingsw.model.entity.Cloud;
-import it.polimi.ingsw.model.entity.Island;
-import it.polimi.ingsw.model.entity.IslandGroup;
-import it.polimi.ingsw.model.entity.Wizard;
+import it.polimi.ingsw.model.entity.*;
+import it.polimi.ingsw.model.enums.GameMode;
 import it.polimi.ingsw.model.enums.StudentColor;
 import it.polimi.ingsw.model.enums.Tower;
+import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.FlowPane;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
 public class BoardUtils {
-    private BoardUtils() {
+    private BoardUtils () {
+    }
+
+    private static int findRoundNumber (Game model) {
+        if (model.getGameState().getGameStateName().equals("PS")) {
+            return 11 - model.getWizard(model.getGameState().getCurrentPlayer()).getCardDeck().getDeckCards().length;
+        }
+        return 10 - model.getWizard(model.getGameState().getCurrentPlayer()).getCardDeck().getDeckCards().length;
     }
 
     public static Object getElementFromNodesAndIdSubstring (List<Node> nodes, String idSubstring) {
@@ -31,9 +40,9 @@ public class BoardUtils {
 
     private static Image getTowerImageFromColor (Tower tower) {
         return switch (tower) {
-            case WHITE -> new Image("assets/pawns/towers/white.png");
-            case BLACK -> new Image("assets/pawns/towers/black.png");
-            case GRAY -> new Image("assets/pawns/towers/gray.png");
+            case WHITE -> new Image("assets/pawns/towers/board/white.png");
+            case BLACK -> new Image("assets/pawns/towers/board/black.png");
+            case GRAY -> new Image("assets/pawns/towers/board/gray.png");
         };
     }
 
@@ -101,7 +110,9 @@ public class BoardUtils {
                 cloudRecord.pawns().get(j).setVisible(true);
                 j++;
             }
-            if (j == 3) cloudRecord.pawns().get(3).setVisible(false);
+            for (; j < 4; j++) {
+                cloudRecord.pawns().get(j).setVisible(false);
+            }
             i++;
         }
 
@@ -113,9 +124,10 @@ public class BoardUtils {
         }
     }
 
-    public static void updateSchoolBoard(BoardRecord board, Client client, String username) {
+    public static void updateSchoolBoard (BoardRecord board, Client client, String username) {
         SchoolBoardRecord school;
-        if (username.equals(client.getUsername())) {
+        boolean isMyBoard = username.equals(client.getUsername());
+        if (isMyBoard) {
             school = board.myBoard();
         }
         else {
@@ -136,27 +148,86 @@ public class BoardUtils {
         }
 
         // update dining
+        int[] diningColors = new int[]{
+                wizard.getDiningStudents(StudentColor.YELLOW),
+                wizard.getDiningStudents(StudentColor.BLUE),
+                wizard.getDiningStudents(StudentColor.GREEN),
+                wizard.getDiningStudents(StudentColor.RED),
+                wizard.getDiningStudents(StudentColor.PINK)
+        };
+        i = 0;
+        for (FlowPane flowPane : school.dining()) {
+            if (isMyBoard) {
+                // padding left
+                flowPane.setPadding(new Insets(0, 0, 0, 4));
+                // horizontal gap between students
+                flowPane.setHgap(4.5);
+            }
+            else {
+                // padding bottom
+                flowPane.setPadding(new Insets(0, 0, 4, 0));
+                // vertical gap between students
+                flowPane.setVgap(4.5);
+            }
+
+            // retrieving the observable list of the flow Pane
+            ObservableList<Node> list = flowPane.getChildren();
+            list.removeAll();
+
+            //Adding all the nodes to the flow pane
+            for (int j = 0; j < diningColors[i]; j++) {
+                ImageView imageView = new ImageView(getStudentImageFromColor(StudentColor.fromNumber(i)));
+                imageView.setFitWidth(24);
+                imageView.setFitHeight(24);
+                list.add(imageView);
+            }
+            i++;
+        }
 
         // update professors
+        Game model = client.getModel();
+        boolean[] professors = new boolean[]{
+                model.getProfessor(StudentColor.YELLOW).getMaster() != null && model.getProfessor(StudentColor.YELLOW).getMaster().equals(wizard),
+                model.getProfessor(StudentColor.BLUE).getMaster() != null && model.getProfessor(StudentColor.BLUE).getMaster().equals(wizard),
+                model.getProfessor(StudentColor.GREEN).getMaster() != null && model.getProfessor(StudentColor.GREEN).getMaster().equals(wizard),
+                model.getProfessor(StudentColor.RED).getMaster() != null && model.getProfessor(StudentColor.RED).getMaster().equals(wizard),
+                model.getProfessor(StudentColor.PINK).getMaster() != null && model.getProfessor(StudentColor.PINK).getMaster().equals(wizard)
+        };
+        i = 0;
+        for (ImageView professor : school.professors()) {
+            professor.setVisible(professors[i]);
+            i++;
+        }
 
         // update towers
+        Tower towerColor = wizard.getTowerColor();
+        int towerNumber = wizard.getTowerNumber();
+        for (i = 0; i < 8; i++) {
+            school.towers().get(i).setVisible(i < towerNumber);
+            if (i < towerNumber) school.towers().get(i).setImage(getTowerImageFromColor(towerColor));
+        }
     }
 
     public static void updateUsersArea (BoardRecord board, Client client) {
         int indexOfMyUser = client.getUsernames().indexOf(client.getUsername());
+
         int i = 0;
-        for (String user: client.getUsernames()) {
+        for (String user : client.getUsernames()) {
             Wizard wizard = client.getModel().getWizard(client.getUsernames().indexOf(user));
 
             UserRecord userRecord;
-            if(wizard.getId() == indexOfMyUser) userRecord = board.users().get(0);
-            else userRecord = board.users().get(wizard.getId() > indexOfMyUser ? wizard.getId() : wizard.getId()+1);
+            if (wizard.getId() == indexOfMyUser) {
+                userRecord = board.users().get(0);
+            }
+            else {
+                userRecord = board.users().get(wizard.getId() > indexOfMyUser ? wizard.getId() : wizard.getId() + 1);
+            }
 
             // set username
             userRecord.username().setText(user);
 
             // set wizard cover image
-            userRecord.wizard().setImage(getWizardImageFromId(wizard.getId()+1));
+            userRecord.wizard().setImage(getWizardImageFromId(wizard.getId() + 1));
 
             // set assistant
             if (wizard.getCardDeck().getCurrentCard() != null) {
@@ -166,10 +237,28 @@ public class BoardUtils {
             else {
                 userRecord.assistant().setVisible(false);
             }
+
+            // set hourglass if the user is playing
+            userRecord.hourGlass().setVisible(client.getModel().getGameState().getCurrentPlayer().equals(wizard.getId()));
+
+            // display coin image and set amount
+            if (client.getModel().getGameMode().equals(GameMode.COMPLETE)) {
+                userRecord.coinNumber().setText(String.valueOf(wizard.getMoney()));
+                userRecord.coinImage().setVisible(true);
+            }
+            else {
+                userRecord.coinNumber().setVisible(false);
+                userRecord.coinImage().setVisible(false);
+            }
+
+            // set disconnected image
+            if (wizard.getId() != indexOfMyUser)
+                userRecord.disconnected().setVisible(client.getUsernamesDisconnected().contains(user));
+
             i++;
         }
 
-        // hide the other assistants
+        // hide the other users
         for (; i < 4; i++) {
             UserRecord userRecord = board.users().get(i);
             userRecord.assistant().setVisible(false);
@@ -190,19 +279,15 @@ public class BoardUtils {
 
         // mySchoolBoard
         updateSchoolBoard(board, client, client.getUsername());
+
         // otherSchoolBoard
         String otherUsername = client.getUsernames().get(client.getUsernames().indexOf(client.getUsername()) == 0 ? 1 : 0);
         updateSchoolBoard(board, client, otherUsername);
 
         updateUsersArea(board, client);
-        // display only the correct amount of wizards and assistants
-        for (int i = 4; i > client.getUsernames().size(); i--) {
-            UserRecord user = board.users().get(i - 1);
-            user.wizard().setVisible(false);
-            user.assistant().setVisible(false);
-            user.hourGlass().setVisible(false);
-            user.disconnected().setVisible(false);
-            if (client.isAdvancedGame()) user.coinNumber().setVisible(false);
-        }
+
+        board.round().setText(String.valueOf(findRoundNumber(client.getModel())));
+
+        board.phase().setText(client.getModel().getGameState().getGameStateName());
     }
 }

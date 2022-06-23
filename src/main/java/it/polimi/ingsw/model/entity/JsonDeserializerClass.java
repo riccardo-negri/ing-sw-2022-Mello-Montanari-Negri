@@ -17,37 +17,47 @@ public class JsonDeserializerClass {
 
     public static class CharacterDeserializer implements JsonDeserializer<Character> {
 
+        /**
+         * gson deserialization method for character class, using the id as deserialization criteria
+         * @return the deserialized character
+         * @throws JsonParseException error in the deserialization process
+         */
         @Override
         public Character deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-            switch (jsonElement.getAsJsonObject().get("characterId").getAsInt()) {
-                case 1: return gson.fromJson(jsonElement, CharacterOne.class);
-                case 2: return gson.fromJson(jsonElement, CharacterTwo.class);
-                case 3: return gson.fromJson(jsonElement, CharacterThree.class);
-                case 4: return gson.fromJson(jsonElement, CharacterFour.class);
-                case 5: return gson.fromJson(jsonElement, CharacterFive.class);
-                case 6: return gson.fromJson(jsonElement, CharacterSix.class);
-                case 7: return gson.fromJson(jsonElement, CharacterSeven.class);
-                case 8: return gson.fromJson(jsonElement, CharacterEight.class);
-                case 9: return gson.fromJson(jsonElement, CharacterNine.class);
-                case 10: return gson.fromJson(jsonElement, CharacterTen.class);
-                case 11: return gson.fromJson(jsonElement, CharacterEleven.class);
-                case 12: return gson.fromJson(jsonElement, CharacterTwelve.class);
-                default: return null;
-            }
+            return switch (jsonElement.getAsJsonObject().get("characterId").getAsInt()) {
+                case 1 -> gson.fromJson(jsonElement, CharacterOne.class);
+                case 2 -> gson.fromJson(jsonElement, CharacterTwo.class);
+                case 3 -> gson.fromJson(jsonElement, CharacterThree.class);
+                case 4 -> gson.fromJson(jsonElement, CharacterFour.class);
+                case 5 -> gson.fromJson(jsonElement, CharacterFive.class);
+                case 6 -> gson.fromJson(jsonElement, CharacterSix.class);
+                case 7 -> gson.fromJson(jsonElement, CharacterSeven.class);
+                case 8 -> gson.fromJson(jsonElement, CharacterEight.class);
+                case 9 -> gson.fromJson(jsonElement, CharacterNine.class);
+                case 10 -> gson.fromJson(jsonElement, CharacterTen.class);
+                case 11 -> gson.fromJson(jsonElement, CharacterEleven.class);
+                case 12 -> gson.fromJson(jsonElement, CharacterTwelve.class);
+                default -> null;
+            };
         }
     }
 
     public static class GameStateDeserializer implements JsonDeserializer<GameState> {
 
+        /**
+         * Deserialization method for gameState, using the game state string as criteria
+         * @return the deserialized game state subclass
+         * @throws JsonParseException an error in the deserialization process
+         */
         @Override
         public GameState deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-            switch (jsonElement.getAsJsonObject().get("gameState").getAsString()) {
-                case "PS": return gson.fromJson(jsonElement, PlanningState.class);
-                case "MSS": return gson.fromJson(jsonElement, MoveStudentActionState.class);
-                case "MMNS": return gson.fromJson(jsonElement, MoveMotherNatureActionState.class);
-                case "CCS": return gson.fromJson(jsonElement, ChooseCloudActionState.class);
-                default: return null;
-            }
+            return switch (jsonElement.getAsJsonObject().get("gameState").getAsString()) {
+                case "PS" -> gson.fromJson(jsonElement, PlanningState.class);
+                case "MSS" -> gson.fromJson(jsonElement, MoveStudentActionState.class);
+                case "MMNS" -> gson.fromJson(jsonElement, MoveMotherNatureActionState.class);
+                case "CCS" -> gson.fromJson(jsonElement, ChooseCloudActionState.class);
+                default -> null;
+            };
         }
     }
 

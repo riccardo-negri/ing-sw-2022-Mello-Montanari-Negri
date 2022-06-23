@@ -480,11 +480,11 @@ public class BoardUtilsCLI {
         final String towerColor = wizard.getTowerColor().toString();
         final int towerNumber = wizard.getTowerNumber();
         boolean[] professors = new boolean[]{
-                model.getProfessor(StudentColor.GREEN).getMaster(null) != null && model.getProfessor(StudentColor.GREEN).getMaster(null).equals(wizard),
-                model.getProfessor(StudentColor.RED).getMaster(null) != null && model.getProfessor(StudentColor.RED).getMaster(null).equals(wizard),
-                model.getProfessor(StudentColor.YELLOW).getMaster(null) != null && model.getProfessor(StudentColor.YELLOW).getMaster(null).equals(wizard),
-                model.getProfessor(StudentColor.PINK).getMaster(null) != null && model.getProfessor(StudentColor.PINK).getMaster(null).equals(wizard),
-                model.getProfessor(StudentColor.BLUE).getMaster(null) != null && model.getProfessor(StudentColor.BLUE).getMaster(null).equals(wizard)
+                model.getProfessor(StudentColor.GREEN).getMaster() != null && model.getProfessor(StudentColor.GREEN).getMaster().equals(wizard),
+                model.getProfessor(StudentColor.RED).getMaster() != null && model.getProfessor(StudentColor.RED).getMaster().equals(wizard),
+                model.getProfessor(StudentColor.YELLOW).getMaster() != null && model.getProfessor(StudentColor.YELLOW).getMaster().equals(wizard),
+                model.getProfessor(StudentColor.PINK).getMaster() != null && model.getProfessor(StudentColor.PINK).getMaster().equals(wizard),
+                model.getProfessor(StudentColor.BLUE).getMaster() != null && model.getProfessor(StudentColor.BLUE).getMaster().equals(wizard)
         };
         int[] diningColors = new int[]{
                 wizard.getDiningStudents(StudentColor.GREEN),

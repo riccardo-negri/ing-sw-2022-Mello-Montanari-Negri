@@ -23,6 +23,10 @@ public class Professor {
         this.master = null;
     }
 
+    /**
+     * Reset the game id after the deserialization process
+     * @param game the new game object
+     */
     public void refreshGameId(Game game) { this.gameId = game.getId(); }
 
     /**
@@ -39,6 +43,12 @@ public class Professor {
             master = contestant;
     }
 
-    public Wizard getMaster(Character activatedCharacter) { return Game.request(gameId).getWizard(master); }
+    /**
+     * get the wizard owning the professor
+     * @return the wizard owning the professor
+     */
+    public Wizard getMaster() {
+        return Game.request(gameId).getWizard(master);
+    }
 
 }

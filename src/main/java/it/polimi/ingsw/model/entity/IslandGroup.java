@@ -20,6 +20,11 @@ public class IslandGroup {
     private final List<Island> islandList;
     private Tower tower;
 
+    /**
+     * Constructor for island group, that automatically creates the starting island of the group
+     * @param studentColors the student to put on the island
+     * @param islandGroupId the id of the group
+     */
     public IslandGroup(List<StudentColor> studentColors, Integer islandGroupId) {
         islandList = new ArrayList<>();
         islandList.add(new Island(studentColors, islandGroupId));
@@ -49,7 +54,7 @@ public class IslandGroup {
             for (StudentColor color : StudentColor.values()) {
                 Wizard w;
                 if ((!(activatedCharacter != null && activatedCharacter.getId() == 9) || ((CharacterNine) activatedCharacter).getStudentColor() != color)
-                        && (w = game.getProfessor(color).getMaster(activatedCharacter)) != null) {
+                        && (w = game.getProfessor(color).getMaster()) != null) {
                     values[w.getTowerColor().getValue()] += (int) islandList.stream()
                             .flatMap(x -> x.getStudentColorList().stream())
                             .filter(x -> x == color).count();

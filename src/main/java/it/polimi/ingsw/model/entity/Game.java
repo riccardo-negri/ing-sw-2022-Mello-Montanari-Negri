@@ -277,8 +277,8 @@ public class Game {
         int[] professorNumber = new int[winningTowers.size()];
         List<Tower> finalWinners = new ArrayList<>();
         for (Professor p : professors) {
-            if (p.getMaster(null) != null) {
-                Tower t = p.getMaster(null).getTowerColor();
+            if (p.getMaster() != null) {
+                Tower t = p.getMaster().getTowerColor();
                 if (winningTowers.contains(t)) professorNumber[winningTowers.indexOf(t)]++;
             }
         }

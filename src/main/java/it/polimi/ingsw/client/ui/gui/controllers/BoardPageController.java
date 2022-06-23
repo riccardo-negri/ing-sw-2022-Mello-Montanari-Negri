@@ -3,12 +3,16 @@ package it.polimi.ingsw.client.ui.gui.controllers;
 import it.polimi.ingsw.client.page.AbstractBoardPage;
 import it.polimi.ingsw.client.ui.gui.records.*;
 import it.polimi.ingsw.client.ui.gui.records.CharacterRecord;
+import it.polimi.ingsw.model.entity.GameRuleException;
+import it.polimi.ingsw.model.entity.gameState.PlanningState;
 import it.polimi.ingsw.networking.Connection;
 import it.polimi.ingsw.networking.Message;
 import it.polimi.ingsw.networking.UserResigned;
+import it.polimi.ingsw.networking.moves.CardChoice;
 import it.polimi.ingsw.networking.moves.Move;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -16,9 +20,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static it.polimi.ingsw.client.ui.gui.utils.BoardUtils.*;
 
@@ -350,6 +357,61 @@ public class BoardPageController extends AbstractController {
     private void handleResign (ActionEvent event) {
         client.getConnection().send(new UserResigned(client.getUsername()));
     }
+
+    private void handleAssistantCard(int card) {
+        try {
+            ((AbstractBoardPage) client.getCurrState()).doCardChoice(card);
+        } catch (Exception e) {
+            client.getLogger().log(Level.INFO, e.getMessage());
+        }
+    }
+    @FXML
+    private void handleAssistantCard1 (Event event) { handleAssistantCard(1); }
+    @FXML
+    private void handleAssistantCard2 (Event event) { handleAssistantCard(2); }
+    @FXML
+    private void handleAssistantCard3 (Event event) { handleAssistantCard(3); }
+    @FXML
+    private void handleAssistantCard4 (Event event) { handleAssistantCard(4); }
+    @FXML
+    private void handleAssistantCard5 (Event event) { handleAssistantCard(5); }
+    @FXML
+    private void handleAssistantCard6 (Event event) { handleAssistantCard(6); }
+    @FXML
+    private void handleAssistantCard7 (Event event) { handleAssistantCard(7); }
+    @FXML
+    private void handleAssistantCard8 (Event event) { handleAssistantCard(8); }
+    @FXML
+    private void handleAssistantCard9 (Event event) { handleAssistantCard(9); }
+    @FXML
+    private void handleAssistantCard10 (Event event) { handleAssistantCard(10); }
+
+    private void handleStudentPick (int number) {
+        try {
+            ((AbstractBoardPage) client.getCurrState()).pickStudent(number);
+        } catch (Exception e) {
+            client.getLogger().log(Level.INFO, e.getMessage());
+        }
+    }
+    @FXML
+    private void handleStudentPick0(Event event) { handleStudentPick(0); }
+    @FXML
+    private void handleStudentPick1(Event event) { handleStudentPick(1); }
+    @FXML
+    private void handleStudentPick2(Event event) { handleStudentPick(2); }
+    @FXML
+    private void handleStudentPick3(Event event) { handleStudentPick(3); }
+    @FXML
+    private void handleStudentPick4(Event event) { handleStudentPick(4); }
+    @FXML
+    private void handleStudentPick5(Event event) { handleStudentPick(5); }
+    @FXML
+    private void handleStudentPick6(Event event) { handleStudentPick(6); }
+    @FXML
+    private void handleStudentPick7(Event event) { handleStudentPick(7); }
+    @FXML
+    private void handleStudentPick8(Event event) { handleStudentPick(8); }
+
 
     @FXML
     void initialize () {

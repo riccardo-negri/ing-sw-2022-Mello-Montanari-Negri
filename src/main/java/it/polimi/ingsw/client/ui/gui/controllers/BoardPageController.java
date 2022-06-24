@@ -465,6 +465,16 @@ public class BoardPageController extends AbstractController {
     private void handleIsland10(Event event) { ((BoardPageGUI) client.getCurrState()).handleIsland(10); }
     @FXML
     private void handleIsland11(Event event) { ((BoardPageGUI) client.getCurrState()).handleIsland(11); }
+
+    @FXML
+    private void handleCloud0(Event event) { ((BoardPageGUI) client.getCurrState()).handleCloud(0); }
+    @FXML
+    private void handleCloud1(Event event) { ((BoardPageGUI) client.getCurrState()).handleCloud(1); }
+    @FXML
+    private void handleCloud2(Event event) { ((BoardPageGUI) client.getCurrState()).handleCloud(2); }
+    @FXML
+    private void handleCloud3(Event event) { ((BoardPageGUI) client.getCurrState()).handleCloud(3); }
+
     @FXML
     void initialize () {
         client.getConnection().bindFunctionAndTestPrevious(this::onNewMessage);

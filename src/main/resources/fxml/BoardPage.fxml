@@ -334,7 +334,7 @@
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <ImageView fx:id="cloud2" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                              <ImageView fx:id="cloud2" fitHeight="150.0" fitWidth="200.0" onMouseReleased="#handleCloud2" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                                  <image>
                                     <Image url="@../assets/realm/clouds/1.png" />
                                  </image>
@@ -342,7 +342,7 @@
                                     <Insets />
                                  </GridPane.margin>
                               </ImageView>
-                              <ImageView fx:id="cloud1" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                              <ImageView fx:id="cloud1" fitHeight="150.0" fitWidth="200.0" onMouseReleased="#handleCloud1" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                                  <image>
                                     <Image url="@../assets/realm/clouds/2.png" />
                                  </image>
@@ -350,7 +350,7 @@
                                     <Insets />
                                  </GridPane.margin>
                               </ImageView>
-                              <ImageView fx:id="cloud3" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                              <ImageView fx:id="cloud3" fitHeight="150.0" fitWidth="200.0" onMouseReleased="#handleCloud3" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                                  <image>
                                     <Image url="@../assets/realm/clouds/3.png" />
                                  </image>
@@ -358,7 +358,7 @@
                                     <Insets />
                                  </GridPane.margin>
                               </ImageView>
-                              <ImageView fx:id="cloud0" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                              <ImageView fx:id="cloud0" fitHeight="150.0" fitWidth="200.0" onMouseReleased="#handleCloud0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                                  <image>
                                     <Image url="@../assets/realm/clouds/4.png" />
                                  </image>

@@ -8,9 +8,7 @@ import it.polimi.ingsw.client.ui.gui.records.CharacterRecord;
 import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.gameState.GameState;
 import it.polimi.ingsw.model.enums.StudentColor;
-import it.polimi.ingsw.networking.Connection;
-import it.polimi.ingsw.networking.Message;
-import it.polimi.ingsw.networking.UserResigned;
+import it.polimi.ingsw.networking.*;
 import it.polimi.ingsw.networking.moves.Move;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -630,9 +628,19 @@ public class BoardPageController extends AbstractController {
             try {
                 move.applyEffectClient(client.getModel());
             } catch (Exception e) {
-                // TODO handle invalid move
-                e.printStackTrace();
+                String toLog = "Received an invalid move: " + e.getMessage();
+                client.getLogger().log(Level.WARNING, toLog);
             }
+            Platform.runLater(() -> updateBoard(board, client, selectedOtherUser));
+        } else if (m instanceof Disconnected) {
+            ((AbstractBoardPage) client.getCurrState()).onEnd(true);
+            client.getConnection().close();
+            Platform.runLater(() -> client.drawNextPage());
+        } else if (m instanceof UserDisconnected userDisconnected) {
+            client.getUsernamesDisconnected().add(userDisconnected.username());
+            Platform.runLater(() -> updateBoard(board, client, selectedOtherUser));
+        } else if (m instanceof UserConnected userConnected) {
+            client.getUsernamesDisconnected().remove(userConnected.username());
             Platform.runLater(() -> updateBoard(board, client, selectedOtherUser));
         }
         return false;

@@ -1,8 +1,10 @@
 package it.polimi.ingsw.client.ui.gui.controllers;
 
 import it.polimi.ingsw.client.page.AbstractBoardPage;
+import it.polimi.ingsw.client.ui.gui.BoardPageGUI;
 import it.polimi.ingsw.client.ui.gui.records.*;
 import it.polimi.ingsw.client.ui.gui.records.CharacterRecord;
+import it.polimi.ingsw.model.enums.StudentColor;
 import it.polimi.ingsw.networking.Connection;
 import it.polimi.ingsw.networking.Message;
 import it.polimi.ingsw.networking.UserResigned;
@@ -20,7 +22,6 @@ import javafx.scene.layout.GridPane;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
 
 import static it.polimi.ingsw.client.ui.gui.utils.BoardUtils.*;
 
@@ -353,41 +354,26 @@ public class BoardPageController extends AbstractController {
         client.getConnection().send(new UserResigned(client.getUsername()));
     }
 
-    private void handleAssistantCard(int card) {
-        try {
-            ((AbstractBoardPage) client.getCurrState()).doCardChoice(card);
-        } catch (Exception e) {
-            client.getLogger().log(Level.INFO, e.getMessage());
-        }
-    }
     @FXML
-    private void handleAssistantCard1 (Event event) { handleAssistantCard(1); }
+    private void handleAssistantCard1 (Event event) { ((BoardPageGUI) client.getCurrState()).handleAssistantCard(1); }
     @FXML
-    private void handleAssistantCard2 (Event event) { handleAssistantCard(2); }
+    private void handleAssistantCard2 (Event event) { ((BoardPageGUI) client.getCurrState()).handleAssistantCard(2); }
     @FXML
-    private void handleAssistantCard3 (Event event) { handleAssistantCard(3); }
+    private void handleAssistantCard3 (Event event) { ((BoardPageGUI) client.getCurrState()).handleAssistantCard(3); }
     @FXML
-    private void handleAssistantCard4 (Event event) { handleAssistantCard(4); }
+    private void handleAssistantCard4 (Event event) { ((BoardPageGUI) client.getCurrState()).handleAssistantCard(4); }
     @FXML
-    private void handleAssistantCard5 (Event event) { handleAssistantCard(5); }
+    private void handleAssistantCard5 (Event event) { ((BoardPageGUI) client.getCurrState()).handleAssistantCard(5); }
     @FXML
-    private void handleAssistantCard6 (Event event) { handleAssistantCard(6); }
+    private void handleAssistantCard6 (Event event) { ((BoardPageGUI) client.getCurrState()).handleAssistantCard(6); }
     @FXML
-    private void handleAssistantCard7 (Event event) { handleAssistantCard(7); }
+    private void handleAssistantCard7 (Event event) { ((BoardPageGUI) client.getCurrState()).handleAssistantCard(7); }
     @FXML
-    private void handleAssistantCard8 (Event event) { handleAssistantCard(8); }
+    private void handleAssistantCard8 (Event event) { ((BoardPageGUI) client.getCurrState()).handleAssistantCard(8); }
     @FXML
-    private void handleAssistantCard9 (Event event) { handleAssistantCard(9); }
+    private void handleAssistantCard9 (Event event) { ((BoardPageGUI) client.getCurrState()).handleAssistantCard(9); }
     @FXML
-    private void handleAssistantCard10 (Event event) { handleAssistantCard(10); }
-
-    private void handleStudentPick (int number) {
-        try {
-            ((AbstractBoardPage) client.getCurrState()).pickStudent(number);
-        } catch (Exception e) {
-            client.getLogger().log(Level.INFO, e.getMessage());
-        }
-    }
+    private void handleAssistantCard10 (Event event) { ((BoardPageGUI) client.getCurrState()).handleAssistantCard(10); }
 
     @FXML
     private void handleUserChange1() {  handleUserChange(1); }
@@ -405,24 +391,34 @@ public class BoardPageController extends AbstractController {
     }
 
     @FXML
-    private void handleStudentPick0(Event event) { handleStudentPick(0); }
+    private void handleStudentPick0(Event event) { ((BoardPageGUI) client.getCurrState()).handleStudentPick(0); }
     @FXML
-    private void handleStudentPick1(Event event) { handleStudentPick(1); }
+    private void handleStudentPick1(Event event) { ((BoardPageGUI) client.getCurrState()).handleStudentPick(1); }
     @FXML
-    private void handleStudentPick2(Event event) { handleStudentPick(2); }
+    private void handleStudentPick2(Event event) { ((BoardPageGUI) client.getCurrState()).handleStudentPick(2); }
     @FXML
-    private void handleStudentPick3(Event event) { handleStudentPick(3); }
+    private void handleStudentPick3(Event event) { ((BoardPageGUI) client.getCurrState()).handleStudentPick(3); }
     @FXML
-    private void handleStudentPick4(Event event) { handleStudentPick(4); }
+    private void handleStudentPick4(Event event) { ((BoardPageGUI) client.getCurrState()).handleStudentPick(4); }
     @FXML
-    private void handleStudentPick5(Event event) { handleStudentPick(5); }
+    private void handleStudentPick5(Event event) { ((BoardPageGUI) client.getCurrState()).handleStudentPick(5); }
     @FXML
-    private void handleStudentPick6(Event event) { handleStudentPick(6); }
+    private void handleStudentPick6(Event event) { ((BoardPageGUI) client.getCurrState()).handleStudentPick(6); }
     @FXML
-    private void handleStudentPick7(Event event) { handleStudentPick(7); }
+    private void handleStudentPick7(Event event) { ((BoardPageGUI) client.getCurrState()).handleStudentPick(7); }
     @FXML
-    private void handleStudentPick8(Event event) { handleStudentPick(8); }
+    private void handleStudentPick8(Event event) { ((BoardPageGUI) client.getCurrState()).handleStudentPick(8); }
 
+    @FXML
+    private void handleDiningRed(Event event) { ((BoardPageGUI) client.getCurrState()).handleDiningTable(StudentColor.RED); }
+    @FXML
+    private void handleDiningGreen(Event event) { ((BoardPageGUI) client.getCurrState()).handleDiningTable(StudentColor.GREEN); }
+    @FXML
+    private void handleDiningBlue(Event event) { ((BoardPageGUI) client.getCurrState()).handleDiningTable(StudentColor.BLUE); }
+    @FXML
+    private void handleDiningPink(Event event) { ((BoardPageGUI) client.getCurrState()).handleDiningTable(StudentColor.PINK); }
+    @FXML
+    private void handleDiningYellow(Event event) { ((BoardPageGUI) client.getCurrState()).handleDiningTable(StudentColor.YELLOW); }
 
     @FXML
     void initialize () {

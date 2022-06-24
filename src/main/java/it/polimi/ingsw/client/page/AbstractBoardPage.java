@@ -15,8 +15,6 @@ import static it.polimi.ingsw.client.page.ClientPage.*;
 
 public abstract class AbstractBoardPage extends AbstractPage {
 
-    private int studentPicked;
-
     protected AbstractBoardPage (Client client) {
         super(client);
     }
@@ -43,8 +41,6 @@ public abstract class AbstractBoardPage extends AbstractPage {
 
         validateAndSendMove(moveToSend);
     }
-
-    public void pickStudent(int number) { studentPicked = number; }
 
     public void doMotherNatureMovement (int steps) throws Exception { // destination can either be "dining-room" or "island-ID"
         Move moveToSend = new MotherNatureMovement(client.getModel().getWizard(client.getUsernames().indexOf(client.getUsername())), steps);

@@ -288,27 +288,27 @@
                                           <Image url="@../assets/pawns/students/3d/yellow.png" />
                                        </image>
                                     </ImageView>
-                                    <FlowPane fx:id="myRedTable" alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                    <FlowPane fx:id="myRedTable" alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1" onMouseReleased="#handleDiningRed">
                                        <GridPane.margin>
                                           <Insets left="25.0" right="16.0" />
                                        </GridPane.margin>
                                     </FlowPane>
-                                    <FlowPane fx:id="myGreenTable" alignment="CENTER_LEFT" layoutX="105.0" layoutY="53.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2">
+                                    <FlowPane fx:id="myGreenTable" alignment="CENTER_LEFT" layoutX="105.0" layoutY="53.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" onMouseReleased="#handleDiningGreen">
                                        <GridPane.margin>
                                           <Insets left="25.0" right="16.0" />
                                        </GridPane.margin>
                                     </FlowPane>
-                                    <FlowPane fx:id="myYellowTable" alignment="CENTER_LEFT" layoutX="80.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                                    <FlowPane fx:id="myYellowTable" alignment="CENTER_LEFT" layoutX="80.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2" onMouseReleased="#handleDiningYellow">
                                        <GridPane.margin>
                                           <Insets left="25.0" right="16.0" />
                                        </GridPane.margin>
                                     </FlowPane>
-                                    <FlowPane fx:id="myFuchsiaTable" alignment="CENTER_LEFT" layoutX="80.0" layoutY="96.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                                    <FlowPane fx:id="myFuchsiaTable" alignment="CENTER_LEFT" layoutX="80.0" layoutY="96.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3" onMouseReleased="#handleDiningPink">
                                        <GridPane.margin>
                                           <Insets left="25.0" right="16.0" />
                                        </GridPane.margin>
                                     </FlowPane>
-                                    <FlowPane fx:id="myBlueTable" alignment="CENTER_LEFT" layoutX="80.0" layoutY="139.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="4">
+                                    <FlowPane fx:id="myBlueTable" alignment="CENTER_LEFT" layoutX="80.0" layoutY="139.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="4" onMouseReleased="#handleDiningBlue">
                                        <GridPane.margin>
                                           <Insets left="25.0" right="16.0" />
                                        </GridPane.margin>

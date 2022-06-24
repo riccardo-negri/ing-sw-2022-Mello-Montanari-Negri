@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.page;
 
 import it.polimi.ingsw.client.Client;
+import it.polimi.ingsw.client.ui.cli.CLI;
 import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.enums.StudentColor;
 import it.polimi.ingsw.networking.UserResigned;
@@ -136,16 +137,19 @@ public abstract class AbstractBoardPage extends AbstractPage {
         logger.log(Level.INFO, toLog);
         client.getConnection().send(moveToSend);
 
-        toLog = "Waiting for message to come back. Move:" + moveToSend;
-        logger.log(Level.INFO, toLog);
-        Move moveToApply = (Move) client.getConnection().waitMessage(Move.class);
+        // wait and apply message if the suer is using a CLI, in the GUI this is handled in a different way in the controller
+        if (client.getUI() instanceof CLI) {
+            toLog = "Waiting for message to come back. Move:" + moveToSend;
+            logger.log(Level.INFO, toLog);
+            Move moveToApply = (Move) client.getConnection().waitMessage(Move.class);
 
-        toLog = "Applying effects of message. Move:" + moveToSend;
-        logger.log(Level.INFO, toLog);
-        moveToApply.applyEffectClient(client.getModel());
+            toLog = "Applying effects of message. Move:" + moveToSend;
+            logger.log(Level.INFO, toLog);
+            moveToApply.applyEffectClient(client.getModel());
 
-        toLog = "Applied effect of message. Move:" + moveToSend;
-        logger.log(Level.INFO, toLog);
+            toLog = "Applied effect of message. Move:" + moveToSend;
+            logger.log(Level.INFO, toLog);
+        }
     }
 
     private void savePreviousState () {

@@ -17,10 +17,17 @@ import java.util.stream.Collectors;
 public class BoardPageGUI extends AbstractBoardPage {
 
     private int studentPicked = -1;
-    private int[] characterStudentPicked = Arrays.stream(new int[3]).map(x -> -1).toArray();
+    private Integer[][] characterStudentPicked;
+
+    private boolean activatedCharacter[] = new boolean[3];
 
     protected BoardPageGUI(Client client) {
         super(client);
+        for(int i=0; i<3; i++) {
+            for (int j=0; j<3; j++)
+                characterStudentPicked[i][j] = -1;
+            activatedCharacter[i] = false;
+        }
     }
 
     @Override
@@ -32,11 +39,19 @@ public class BoardPageGUI extends AbstractBoardPage {
 
     public void setStudentPicked(int studentPicked) { this.studentPicked = studentPicked; }
 
-    public int getCharacterStudentPicked(int characterNumber) {
-        return characterStudentPicked[characterNumber];
+    public int getCharacterStudentPicked(int characterNumber, int index) {
+        return characterStudentPicked[characterNumber][index];
     }
 
-    public void setCharacterStudentPicked(int characterNumber, int characterStudentValue) {
-        characterStudentPicked[characterNumber] = characterStudentValue;
+    public void setCharacterStudentPicked(int characterNumber, int index, int characterStudentValue) {
+        characterStudentPicked[characterNumber][index] = characterStudentValue;
+    }
+
+    public boolean getActivatedCharacter(int characterNumber) {
+        return activatedCharacter[characterNumber];
+    }
+
+    public void setActivatedCharacter (int characterNumber, boolean status) {
+        activatedCharacter[characterNumber] = status;
     }
 }

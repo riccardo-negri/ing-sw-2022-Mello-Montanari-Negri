@@ -4,15 +4,20 @@ import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.ui.cli.CLI;
 import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.enums.StudentColor;
+import it.polimi.ingsw.networking.Disconnected;
+import it.polimi.ingsw.networking.Message;
 import it.polimi.ingsw.networking.UserResigned;
 import it.polimi.ingsw.networking.moves.*;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 
 import static it.polimi.ingsw.client.page.ClientPage.*;
+import static it.polimi.ingsw.client.ui.cli.utils.BoardUtilsCLI.printConsoleWarning;
+import static it.polimi.ingsw.client.ui.cli.utils.CoreUtilsCLI.waitEnterPressed;
 
 public abstract class AbstractBoardPage extends AbstractPage {
 
@@ -141,7 +146,23 @@ public abstract class AbstractBoardPage extends AbstractPage {
         if (client.getUI() instanceof CLI) {
             toLog = "Waiting for message to come back. Move:" + moveToSend;
             logger.log(Level.INFO, toLog);
-            Move moveToApply = (Move) client.getConnection().waitMessage(Move.class);
+            Message message = client.getConnection().waitMessage(Arrays.asList(Move.class, Disconnected.class, UserResigned.class));
+
+            if (message instanceof Disconnected) {
+                printConsoleWarning(terminal, "You got disconnected from the game, rejoin the game with the same username. Press enter to go back to the connection page...");
+                waitEnterPressed(terminal);
+                onEnd(true);
+                return;
+            }
+
+            else if (message instanceof UserResigned userResigned) {
+                printConsoleWarning(terminal, "Player " + userResigned.getUsername() + " resigned from the game. Press enter to go back to the menu...");
+                waitEnterPressed(terminal);
+                onQuit(false);
+                return;
+            }
+
+            Move moveToApply = (Move) message;
 
             toLog = "Applying effects of message. Move:" + moveToSend;
             logger.log(Level.INFO, toLog);

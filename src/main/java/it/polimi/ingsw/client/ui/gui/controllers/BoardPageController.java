@@ -708,6 +708,7 @@ public class BoardPageController extends AbstractController {
         } else if (m instanceof Disconnected) {
             ((AbstractBoardPage) client.getCurrState()).onEnd(true);
             client.getConnection().close();
+            client.setJustDisconnected(true);
             Platform.runLater(() -> client.drawNextPage());
         } else if (m instanceof UserDisconnected userDisconnected) {
             client.getUsernamesDisconnected().add(userDisconnected.username());

@@ -25,6 +25,13 @@ public class ConnectionPageController extends AbstractController{
     @FXML
     Text messageLabel;
 
+    @FXML void initialize() {
+        if (client.isJustDisconnected()) {
+            messageLabel.setText("You got disconnected from the game, rejoin the game with the same username");
+            client.setJustDisconnected(false);
+        }
+    }
+
     @FXML
     private void handleConnect(ActionEvent event) {
         AbstractConnectionPage page = (AbstractConnectionPage) client.getCurrState();

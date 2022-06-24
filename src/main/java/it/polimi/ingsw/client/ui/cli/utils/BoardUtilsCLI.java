@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.entity.characters.*;
 import it.polimi.ingsw.model.entity.characters.Character;
 import it.polimi.ingsw.model.entity.gameState.ActionState;
 import it.polimi.ingsw.model.enums.GameMode;
+import it.polimi.ingsw.model.enums.PlayerNumber;
 import it.polimi.ingsw.model.enums.StudentColor;
 import org.fusesource.jansi.Ansi;
 import org.jline.terminal.Terminal;
@@ -478,7 +479,11 @@ public class BoardUtilsCLI {
         final int coins = wizard.getMoney();
         final int playedCharacter = getPlayedCharacter(model, playerID);
         final String towerColor = wizard.getTowerColor().toString();
-        final int towerNumber = wizard.getTowerNumber();
+        int towerNumber = wizard.getTowerNumber();
+        if (model.getPlayerNumber().equals(PlayerNumber.FOUR)) {
+            towerNumber = towerNumber / 2 + (wizard.getId() > 1 ? towerNumber % 2 : 0);
+        }
+
         boolean[] professors = new boolean[]{
                 model.getProfessor(StudentColor.GREEN).getMaster() != null && model.getProfessor(StudentColor.GREEN).getMaster().equals(wizard),
                 model.getProfessor(StudentColor.RED).getMaster() != null && model.getProfessor(StudentColor.RED).getMaster().equals(wizard),

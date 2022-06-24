@@ -18,7 +18,7 @@ public class GameServer extends Server{
     private final Game game;
 
     private Timer afkTimer;
-    private static final int AFK_PERIOD = 300;  // 5 minutes
+    private static final int AFK_PERIOD = 600;  // 10 minutes
 
     private final GameSavesManager savesManager;
 

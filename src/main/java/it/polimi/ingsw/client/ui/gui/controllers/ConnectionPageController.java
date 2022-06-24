@@ -42,7 +42,8 @@ public class ConnectionPageController extends AbstractController{
             usernameAvailable = page.waitForLobbiesListOrRedirect();
         }
         catch (Exception e) {
-            client.getLogger().log(Level.SEVERE, "Got an exception");
+            messageLabel.setText("Failed to connect to the server");
+            return;
         }
 
         if (usernameAvailable) {

@@ -15,7 +15,9 @@ public class LobbySelectionPageController extends AbstractController{
 
     long lastClickTime = 0;
     String lastClickElement = null;
-    private static final long doubleClickTime = 400;
+    private static final long DOUBLE_CLICK_TIME = 400;
+
+    private static final String TITLE_ROW = "CODE\tN°\tMODE\t\tPLAYERS";
 
     @FXML
     void initialize() {
@@ -25,6 +27,7 @@ public class LobbySelectionPageController extends AbstractController{
     void drawList() {
         if (client.getLobbies() != null) {
             lobbies.getItems().clear();
+            lobbies.getItems().add(TITLE_ROW);
             for (LobbyDescriptor ld : client.getLobbies()) {
                 lobbies.getItems().add(formatLobby(ld));
             }
@@ -35,7 +38,8 @@ public class LobbySelectionPageController extends AbstractController{
     void handleJoin() {
         long currentTime = new Date().getTime();
         String row = lobbies.getSelectionModel().getSelectedItem();
-        if(currentTime - lastClickTime <= doubleClickTime && lastClickElement != null && lastClickElement.equals(row)) {
+        if (currentTime - lastClickTime <= DOUBLE_CLICK_TIME && !row.equals(TITLE_ROW) &&
+                lastClickElement != null && lastClickElement.equals(row)) {
             String code = row.substring(0, 4);
             AbstractLobbySelectionPages page = (AbstractLobbySelectionPages) client.getCurrState();
             if(page.tryToJoinLobby(code)) {

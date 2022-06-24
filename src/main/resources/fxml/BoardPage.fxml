@@ -1644,17 +1644,17 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <ImageView fx:id="characterCard0" fitHeight="246.0" fitWidth="178.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER">
+                              <ImageView fx:id="characterCard0" fitHeight="246.0" fitWidth="178.0" onMouseReleased="#handleCharacter0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER">
                                  <image>
                                     <Image url="@../assets/cards/characters/1.png" />
                                  </image>
                               </ImageView>
-                              <ImageView fx:id="characterCard1" fitHeight="246.0" fitWidth="178.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+                              <ImageView fx:id="characterCard1" fitHeight="246.0" fitWidth="178.0" onMouseReleased="#handleCharacter1" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER">
                                  <image>
                                     <Image url="@../assets/cards/characters/2.png" />
                                  </image>
                               </ImageView>
-                              <ImageView fx:id="characterCard2" fitHeight="246.0" fitWidth="178.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER">
+                              <ImageView fx:id="characterCard2" fitHeight="246.0" fitWidth="178.0" onMouseReleased="#handleCharacter2" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER">
                                  <image>
                                     <Image url="@../assets/cards/characters/3.png" />
                                  </image>

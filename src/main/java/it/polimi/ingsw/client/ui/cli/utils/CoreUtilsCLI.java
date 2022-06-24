@@ -220,7 +220,7 @@ public class CoreUtilsCLI {
                     break;
                 }
             }
-            if (correct) break;
+            if (correct || lobbyCode.equals("r")) break;
             printTopErrorBanner(terminal, "Insert a correct code!");
             terminal.writer().print(ansi().cursorUpLine(2));
             terminal.writer().print(ansi().eraseLine());

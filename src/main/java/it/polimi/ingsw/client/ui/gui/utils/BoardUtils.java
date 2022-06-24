@@ -313,7 +313,7 @@ public class BoardUtils {
 
     }
 
-    public static void updateBoard (BoardRecord board, Client client) {
+    public static void updateBoard (BoardRecord board, Client client, Integer selectedOtherUser) {
 
         updateIslands(board, client);
 
@@ -326,7 +326,11 @@ public class BoardUtils {
         List<String> usersNotMyUser = new ArrayList<>(client.getUsernames());
         usersNotMyUser.remove(client.getUsername());
         String currPlayerclient = client.getUsernames().get(client.getModel().getGameState().getCurrentPlayer());
-        if (usersNotMyUser.contains(currPlayerclient)) {
+        if (selectedOtherUser != null) {
+            updateSchoolBoard(board, client, usersNotMyUser.get(selectedOtherUser-1));
+
+        }
+        else if (usersNotMyUser.contains(currPlayerclient)) {
             updateSchoolBoard(board, client, currPlayerclient);
         }
         else {

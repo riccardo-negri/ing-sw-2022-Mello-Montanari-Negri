@@ -348,6 +348,8 @@ public class BoardPageController extends AbstractController {
 
     BoardRecord board;
 
+    Integer selectedOtherUser = null;
+
     @FXML
     private void handleResign (ActionEvent event) {
         client.getConnection().send(new UserResigned(client.getUsername()));
@@ -401,7 +403,26 @@ public class BoardPageController extends AbstractController {
     private void handleUserChange (int userId) {
         List<String> usersNotMyUser = new ArrayList<>(client.getUsernames());
         usersNotMyUser.remove(client.getUsername());
-        Platform.runLater(() -> updateSchoolBoard(board, client, usersNotMyUser.get(userId - 1)));
+        if (selectedOtherUser != null && userId == selectedOtherUser) {
+            // is a deselection
+            removeHighlight(board.users().get(userId).wizard());
+            // the board to show is the one from the playing player
+            int currentWizardIndex = client.getModel().getGameState().getCurrentPlayer();
+            String currentUsername = client.getUsernames().get(currentWizardIndex);
+            int currentUserArea = usersNotMyUser.indexOf(currentUsername);
+            if (currentUserArea != -1)
+                userId = currentUserArea + 1;
+            selectedOtherUser = null;
+        }
+        else {
+            // is a new selection
+            if (selectedOtherUser != null)
+                removeHighlight(board.users().get(selectedOtherUser).wizard());
+            highlight(board.users().get(userId).wizard());
+            selectedOtherUser = userId;
+        }
+        int toShow = userId;
+        Platform.runLater(() -> updateSchoolBoard(board, client, usersNotMyUser.get(toShow - 1)));
     }
 
     @FXML
@@ -453,7 +474,7 @@ public class BoardPageController extends AbstractController {
 
         board = new BoardRecord(islandRecords, cloudRecords, myBoard, otherBoard, users, characters, myDeck, arrows, roundNumber, turnPhaseCode);
 
-        updateBoard(board, client);
+        updateBoard(board, client, selectedOtherUser);
     }
 
     boolean onNewMessage (Connection source) {
@@ -472,10 +493,27 @@ public class BoardPageController extends AbstractController {
                 // TODO handle invalid move
                 e.printStackTrace();
             }
-            Platform.runLater(() -> updateBoard(board, client));
+            Platform.runLater(() -> updateBoard(board, client, selectedOtherUser));
         }
         return false;
     }
 
+    void highlight(ImageView image) {
+        image.setStyle("-fx-effect : dropshadow(gaussian, yellow, 4, 1, 0, 0);");
+    }
+
+    void highlight(List<ImageView> images) {
+        for (ImageView i: images)
+            highlight(i);
+    }
+
+    void removeHighlight(ImageView image) {
+        image.setStyle("");
+    }
+
+    void removeHighlight(List<ImageView> images) {
+        for (ImageView i: images)
+            removeHighlight(i);
+    }
 
 }

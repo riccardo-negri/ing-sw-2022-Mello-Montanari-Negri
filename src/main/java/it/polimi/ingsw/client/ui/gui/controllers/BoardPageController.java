@@ -1,9 +1,12 @@
 package it.polimi.ingsw.client.ui.gui.controllers;
 
+import com.sun.scenario.effect.Blend;
 import it.polimi.ingsw.client.page.AbstractBoardPage;
 import it.polimi.ingsw.client.ui.gui.BoardPageGUI;
 import it.polimi.ingsw.client.ui.gui.records.*;
 import it.polimi.ingsw.client.ui.gui.records.CharacterRecord;
+import it.polimi.ingsw.model.entity.Game;
+import it.polimi.ingsw.model.entity.gameState.GameState;
 import it.polimi.ingsw.model.enums.StudentColor;
 import it.polimi.ingsw.networking.Connection;
 import it.polimi.ingsw.networking.Message;
@@ -22,6 +25,7 @@ import javafx.scene.layout.GridPane;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
 
 import static it.polimi.ingsw.client.ui.gui.utils.BoardUtils.*;
 
@@ -357,25 +361,25 @@ public class BoardPageController extends AbstractController {
     }
 
     @FXML
-    private void handleAssistantCard1 (Event event) { ((BoardPageGUI) client.getCurrState()).handleAssistantCard(1); }
+    private void handleAssistantCard1 (Event event) { handleAssistantCard(1); }
     @FXML
-    private void handleAssistantCard2 (Event event) { ((BoardPageGUI) client.getCurrState()).handleAssistantCard(2); }
+    private void handleAssistantCard2 (Event event) { handleAssistantCard(2); }
     @FXML
-    private void handleAssistantCard3 (Event event) { ((BoardPageGUI) client.getCurrState()).handleAssistantCard(3); }
+    private void handleAssistantCard3 (Event event) { handleAssistantCard(3); }
     @FXML
-    private void handleAssistantCard4 (Event event) { ((BoardPageGUI) client.getCurrState()).handleAssistantCard(4); }
+    private void handleAssistantCard4 (Event event) { handleAssistantCard(4); }
     @FXML
-    private void handleAssistantCard5 (Event event) { ((BoardPageGUI) client.getCurrState()).handleAssistantCard(5); }
+    private void handleAssistantCard5 (Event event) { handleAssistantCard(5); }
     @FXML
-    private void handleAssistantCard6 (Event event) { ((BoardPageGUI) client.getCurrState()).handleAssistantCard(6); }
+    private void handleAssistantCard6 (Event event) { handleAssistantCard(6); }
     @FXML
-    private void handleAssistantCard7 (Event event) { ((BoardPageGUI) client.getCurrState()).handleAssistantCard(7); }
+    private void handleAssistantCard7 (Event event) { handleAssistantCard(7); }
     @FXML
-    private void handleAssistantCard8 (Event event) { ((BoardPageGUI) client.getCurrState()).handleAssistantCard(8); }
+    private void handleAssistantCard8 (Event event) { handleAssistantCard(8); }
     @FXML
-    private void handleAssistantCard9 (Event event) { ((BoardPageGUI) client.getCurrState()).handleAssistantCard(9); }
+    private void handleAssistantCard9 (Event event) { handleAssistantCard(9); }
     @FXML
-    private void handleAssistantCard10 (Event event) { ((BoardPageGUI) client.getCurrState()).handleAssistantCard(10); }
+    private void handleAssistantCard10 (Event event) { handleAssistantCard(10); }
 
     @FXML
     private void handleUserChange1() {  handleUserChange(1); }
@@ -412,69 +416,175 @@ public class BoardPageController extends AbstractController {
     }
 
     @FXML
-    private void handleStudentPick0(Event event) { ((BoardPageGUI) client.getCurrState()).handleStudentPick(0); }
+    private void handleStudentPick0(Event event) { handleStudentPick(0); }
     @FXML
-    private void handleStudentPick1(Event event) { ((BoardPageGUI) client.getCurrState()).handleStudentPick(1); }
+    private void handleStudentPick1(Event event) { handleStudentPick(1); }
     @FXML
-    private void handleStudentPick2(Event event) { ((BoardPageGUI) client.getCurrState()).handleStudentPick(2); }
+    private void handleStudentPick2(Event event) { handleStudentPick(2); }
     @FXML
-    private void handleStudentPick3(Event event) { ((BoardPageGUI) client.getCurrState()).handleStudentPick(3); }
+    private void handleStudentPick3(Event event) { handleStudentPick(3); }
     @FXML
-    private void handleStudentPick4(Event event) { ((BoardPageGUI) client.getCurrState()).handleStudentPick(4); }
+    private void handleStudentPick4(Event event) { handleStudentPick(4); }
     @FXML
-    private void handleStudentPick5(Event event) { ((BoardPageGUI) client.getCurrState()).handleStudentPick(5); }
+    private void handleStudentPick5(Event event) { handleStudentPick(5); }
     @FXML
-    private void handleStudentPick6(Event event) { ((BoardPageGUI) client.getCurrState()).handleStudentPick(6); }
+    private void handleStudentPick6(Event event) { handleStudentPick(6); }
     @FXML
-    private void handleStudentPick7(Event event) { ((BoardPageGUI) client.getCurrState()).handleStudentPick(7); }
+    private void handleStudentPick7(Event event) { handleStudentPick(7); }
     @FXML
-    private void handleStudentPick8(Event event) { ((BoardPageGUI) client.getCurrState()).handleStudentPick(8); }
+    private void handleStudentPick8(Event event) { handleStudentPick(8); }
 
     @FXML
-    private void handleDiningRed(Event event) { ((BoardPageGUI) client.getCurrState()).handleDiningTable(StudentColor.RED); }
+    private void handleDiningRed(Event event) { handleDiningTable(StudentColor.RED); }
     @FXML
-    private void handleDiningGreen(Event event) { ((BoardPageGUI) client.getCurrState()).handleDiningTable(StudentColor.GREEN); }
+    private void handleDiningGreen(Event event) { handleDiningTable(StudentColor.GREEN); }
     @FXML
-    private void handleDiningBlue(Event event) { ((BoardPageGUI) client.getCurrState()).handleDiningTable(StudentColor.BLUE); }
+    private void handleDiningBlue(Event event) { handleDiningTable(StudentColor.BLUE); }
     @FXML
-    private void handleDiningPink(Event event) { ((BoardPageGUI) client.getCurrState()).handleDiningTable(StudentColor.PINK); }
+    private void handleDiningPink(Event event) { handleDiningTable(StudentColor.PINK); }
     @FXML
-    private void handleDiningYellow(Event event) { ((BoardPageGUI) client.getCurrState()).handleDiningTable(StudentColor.YELLOW); }
+    private void handleDiningYellow(Event event) { handleDiningTable(StudentColor.YELLOW); }
 
     @FXML
-    private void handleIsland0(Event event) { ((BoardPageGUI) client.getCurrState()).handleIsland(0); }
+    private void handleIsland0(Event event) { handleIsland(0); }
     @FXML
-    private void handleIsland1(Event event) { ((BoardPageGUI) client.getCurrState()).handleIsland(1); }
+    private void handleIsland1(Event event) { handleIsland(1); }
     @FXML
-    private void handleIsland2(Event event) { ((BoardPageGUI) client.getCurrState()).handleIsland(2); }
+    private void handleIsland2(Event event) { handleIsland(2); }
     @FXML
-    private void handleIsland3(Event event) { ((BoardPageGUI) client.getCurrState()).handleIsland(3); }
+    private void handleIsland3(Event event) { handleIsland(3); }
     @FXML
-    private void handleIsland4(Event event) { ((BoardPageGUI) client.getCurrState()).handleIsland(4); }
+    private void handleIsland4(Event event) { handleIsland(4); }
     @FXML
-    private void handleIsland5(Event event) { ((BoardPageGUI) client.getCurrState()).handleIsland(5); }
+    private void handleIsland5(Event event) { handleIsland(5); }
     @FXML
-    private void handleIsland6(Event event) { ((BoardPageGUI) client.getCurrState()).handleIsland(6); }
+    private void handleIsland6(Event event) { handleIsland(6); }
     @FXML
-    private void handleIsland7(Event event) { ((BoardPageGUI) client.getCurrState()).handleIsland(7); }
+    private void handleIsland7(Event event) { handleIsland(7); }
     @FXML
-    private void handleIsland8(Event event) { ((BoardPageGUI) client.getCurrState()).handleIsland(8); }
+    private void handleIsland8(Event event) { handleIsland(8); }
     @FXML
-    private void handleIsland9(Event event) { ((BoardPageGUI) client.getCurrState()).handleIsland(9); }
+    private void handleIsland9(Event event) { handleIsland(9); }
     @FXML
-    private void handleIsland10(Event event) { ((BoardPageGUI) client.getCurrState()).handleIsland(10); }
+    private void handleIsland10(Event event) { handleIsland(10); }
     @FXML
-    private void handleIsland11(Event event) { ((BoardPageGUI) client.getCurrState()).handleIsland(11); }
+    private void handleIsland11(Event event) { handleIsland(11); }
 
     @FXML
-    private void handleCloud0(Event event) { ((BoardPageGUI) client.getCurrState()).handleCloud(0); }
+    private void handleCloud0(Event event) { handleCloud(0); }
     @FXML
-    private void handleCloud1(Event event) { ((BoardPageGUI) client.getCurrState()).handleCloud(1); }
+    private void handleCloud1(Event event) { handleCloud(1); }
     @FXML
-    private void handleCloud2(Event event) { ((BoardPageGUI) client.getCurrState()).handleCloud(2); }
+    private void handleCloud2(Event event) { handleCloud(2); }
     @FXML
-    private void handleCloud3(Event event) { ((BoardPageGUI) client.getCurrState()).handleCloud(3); }
+    private void handleCloud3(Event event) { handleCloud(3); }
 
+    @FXML
+    private void handleCharacter0(Event event) { handleCharacter(0); }
+    @FXML
+    private void handleCharacter1(Event event) { handleCharacter(1); }
+    @FXML
+    private void handleCharacter2(Event event) { handleCharacter(2); }
+
+
+    public void handleStudentPick (int number) {
+        Game model = client.getModel();
+        BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
+
+        switch (model.getGameState().getGameStateName()) {
+            case "MSS":
+                removeHighlight(board.myBoard().entrance());
+                if (gui.getStudentPicked() == number) gui.setStudentPicked(-1);
+                else {
+                    gui.setStudentPicked(number);
+                    highlight(board.myBoard().entrance().get(number));
+                }
+                break;
+        }
+    }
+
+    public void handleAssistantCard(int card) {
+        Game model = client.getModel();
+        BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
+
+        switch (model.getGameState().getGameStateName()) {
+            case "PS":
+                try {
+                    gui.doCardChoice(card);
+                } catch (Exception e) {
+                    client.getLogger().log(Level.INFO, e.getMessage());
+                } break;
+        }
+
+    }
+
+    public void handleDiningTable(StudentColor color) {
+        Game model = client.getModel();
+        BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
+
+        switch (model.getGameState().getGameStateName()) {
+            case "MSS":
+                if (gui.getStudentPicked() == -1 || model.getWizard(client.getUsernames().indexOf(client.getUsername())).getEntranceStudents().get(gui.getStudentPicked()) != color) {
+                    gui.setStudentPicked(-1);
+                    removeHighlight(board.myBoard().entrance());
+                } else {
+                    try {
+                        gui.doStudentMovement(color, "dining-room");
+                    } catch (Exception e) {
+                        client.getLogger().log(Level.INFO, e.getMessage());
+                    }
+                    gui.setStudentPicked(-1);
+                    removeHighlight(board.myBoard().entrance());
+                } break;
+        }
+    }
+
+    public void handleIsland(int islandId) {
+        Game model = client.getModel();
+        BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
+
+        switch (model.getGameState().getGameStateName()) {
+            case "MSS":
+                if (gui.getStudentPicked() == -1)
+                    client.getLogger().log(Level.INFO, "No student selected in entrance");
+                else {
+                    try {
+                        gui.doStudentMovement(model.getWizard(client.getUsernames().indexOf(client.getUsername())).getEntranceStudents().get(gui.getStudentPicked()), "island-" + islandId);
+                    } catch (Exception e) {
+                        client.getLogger().log(Level.INFO, e.getMessage());
+                    }
+                    gui.setStudentPicked(-1);
+                    removeHighlight(board.myBoard().entrance());
+                } break;
+            case "MMNS":
+                try { gui.doMotherNatureMovement(model.getIslandGroupList().indexOf(
+                        model.getIslandGroupList().stream().filter(islandGroup ->
+                                islandGroup.getIslandList().contains(model.getIsland(islandId))).toList().get(0)));
+                } catch (Exception e) {
+                    client.getLogger().log(Level.INFO, e.getMessage());
+                }
+        }
+    }
+
+    public void handleCharacter(int characterNumber) {
+        //if (Objects.equals(model.getGameState().getGameStateName(), "MSS") || Objects.equals(model.getGameState().getGameStateName(), "MMNS") || Objects.equals(model.getGameState().getGameStateName(), "CCS")) {
+        //    try{}catch(Exception e){}
+        //}
+    }
+
+    public void handleCloud(int cloudId) {
+        Game model = client.getModel();
+        BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
+
+        switch (model.getGameState().getGameStateName()) {
+            case "CCS":
+                try {
+                    gui.doCloudChoice(cloudId);
+                } catch (Exception e) {
+                    client.getLogger().log(Level.INFO, e.getMessage());
+                } break;
+        }
+    }
     @FXML
     void initialize () {
         client.getConnection().bindFunctionAndTestPrevious(this::onNewMessage);

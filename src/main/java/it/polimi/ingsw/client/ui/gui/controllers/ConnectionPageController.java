@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.ui.gui.controllers;
 import it.polimi.ingsw.client.page.AbstractConnectionPage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.text.Text;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
@@ -20,22 +21,32 @@ public class ConnectionPageController extends AbstractController{
     TextField ip;
     @FXML
     GridPane askCreateSection;
+
+    @FXML
+    Text messageLabel;
+
     @FXML
     private void handleConnect(ActionEvent event) {
         AbstractConnectionPage page = (AbstractConnectionPage) client.getCurrState();
         int p = Integer.parseInt(port.getText());
+        boolean usernameAvailable = true;
         try {
             page.connectToMatchmakingServer(ip.getText(), p, username.getText());
-            page.waitForLobbiesListOrRedirect();
+            usernameAvailable = page.waitForLobbiesListOrRedirect();
         }
         catch (Exception e) {
             client.getLogger().log(Level.SEVERE, "Got an exception");
         }
 
-        if (client.getNextState() == LOBBY_PAGE) {
-            client.drawNextPage();
+        if (usernameAvailable) {
+            if (client.getNextState() == LOBBY_PAGE) {
+                client.drawNextPage();
+            } else {
+                askCreateSection.setVisible(true);
+                messageLabel.setText("Do you want to create a new game?");
+            }
         } else {
-            askCreateSection.setVisible(true);
+            messageLabel.setText("This username is already taken, change it and try again");
         }
     }
 

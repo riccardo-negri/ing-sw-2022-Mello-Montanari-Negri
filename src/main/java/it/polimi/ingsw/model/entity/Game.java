@@ -291,7 +291,7 @@ public class Game {
                 maxValue = professorNumber[i];
             }
         }
-        if (finalWinners.size() == 1) winner = finalWinners.get(0);
+        if (finalWinners.size() >= 1) winner = finalWinners.get(0);
     }
 
     /**

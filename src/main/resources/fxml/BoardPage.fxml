@@ -288,27 +288,27 @@
                                           <Image url="@../assets/pawns/students/3d/yellow.png" />
                                        </image>
                                     </ImageView>
-                                    <FlowPane fx:id="myRedTable" alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1" onMouseReleased="#handleDiningRed">
+                                    <FlowPane fx:id="myRedTable" alignment="CENTER_LEFT" onMouseReleased="#handleDiningRed" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                                        <GridPane.margin>
                                           <Insets left="25.0" right="16.0" />
                                        </GridPane.margin>
                                     </FlowPane>
-                                    <FlowPane fx:id="myGreenTable" alignment="CENTER_LEFT" layoutX="105.0" layoutY="53.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" onMouseReleased="#handleDiningGreen">
+                                    <FlowPane fx:id="myGreenTable" alignment="CENTER_LEFT" layoutX="105.0" layoutY="53.0" onMouseReleased="#handleDiningGreen" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2">
                                        <GridPane.margin>
                                           <Insets left="25.0" right="16.0" />
                                        </GridPane.margin>
                                     </FlowPane>
-                                    <FlowPane fx:id="myYellowTable" alignment="CENTER_LEFT" layoutX="80.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2" onMouseReleased="#handleDiningYellow">
+                                    <FlowPane fx:id="myYellowTable" alignment="CENTER_LEFT" layoutX="80.0" layoutY="10.0" onMouseReleased="#handleDiningYellow" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
                                        <GridPane.margin>
                                           <Insets left="25.0" right="16.0" />
                                        </GridPane.margin>
                                     </FlowPane>
-                                    <FlowPane fx:id="myFuchsiaTable" alignment="CENTER_LEFT" layoutX="80.0" layoutY="96.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3" onMouseReleased="#handleDiningPink">
+                                    <FlowPane fx:id="myFuchsiaTable" alignment="CENTER_LEFT" layoutX="80.0" layoutY="96.0" onMouseReleased="#handleDiningPink" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
                                        <GridPane.margin>
                                           <Insets left="25.0" right="16.0" />
                                        </GridPane.margin>
                                     </FlowPane>
-                                    <FlowPane fx:id="myBlueTable" alignment="CENTER_LEFT" layoutX="80.0" layoutY="139.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="4" onMouseReleased="#handleDiningBlue">
+                                    <FlowPane fx:id="myBlueTable" alignment="CENTER_LEFT" layoutX="80.0" layoutY="139.0" onMouseReleased="#handleDiningBlue" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="4">
                                        <GridPane.margin>
                                           <Insets left="25.0" right="16.0" />
                                        </GridPane.margin>
@@ -334,7 +334,7 @@
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <ImageView fx:id="cloud2" fitHeight="150.0" fitWidth="200.0" onMouseReleased="#handleCloud2" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                              <ImageView fx:id="cloud2" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                                  <image>
                                     <Image url="@../assets/realm/clouds/1.png" />
                                  </image>
@@ -342,7 +342,7 @@
                                     <Insets />
                                  </GridPane.margin>
                               </ImageView>
-                              <ImageView fx:id="cloud1" fitHeight="150.0" fitWidth="200.0" onMouseReleased="#handleCloud1" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                              <ImageView fx:id="cloud1" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                                  <image>
                                     <Image url="@../assets/realm/clouds/2.png" />
                                  </image>
@@ -350,7 +350,7 @@
                                     <Insets />
                                  </GridPane.margin>
                               </ImageView>
-                              <ImageView fx:id="cloud3" fitHeight="150.0" fitWidth="200.0" onMouseReleased="#handleCloud3" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                              <ImageView fx:id="cloud3" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                                  <image>
                                     <Image url="@../assets/realm/clouds/3.png" />
                                  </image>
@@ -358,7 +358,7 @@
                                     <Insets />
                                  </GridPane.margin>
                               </ImageView>
-                              <ImageView fx:id="cloud0" fitHeight="150.0" fitWidth="200.0" onMouseReleased="#handleCloud0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                              <ImageView fx:id="cloud0" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                                  <image>
                                     <Image url="@../assets/realm/clouds/4.png" />
                                  </image>
@@ -366,7 +366,7 @@
                                     <Insets />
                                  </GridPane.margin>
                               </ImageView>
-                              <GridPane GridPane.columnIndex="1" GridPane.rowIndex="2">
+                              <GridPane onMouseReleased="#handleCloud0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                 <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -400,7 +400,7 @@
                                     </ImageView>
                                  </children>
                               </GridPane>
-                              <GridPane GridPane.columnIndex="2" GridPane.rowIndex="2">
+                              <GridPane onMouseReleased="#handleCloud1" GridPane.columnIndex="2" GridPane.rowIndex="2">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -434,7 +434,7 @@
                                     </ImageView>
                                  </children>
                               </GridPane>
-                              <GridPane GridPane.columnIndex="3" GridPane.rowIndex="2">
+                              <GridPane onMouseReleased="#handleCloud2" GridPane.columnIndex="3" GridPane.rowIndex="2">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -468,7 +468,7 @@
                                     </ImageView>
                                  </children>
                               </GridPane>
-                              <GridPane GridPane.columnIndex="4" GridPane.rowIndex="2">
+                              <GridPane onMouseReleased="#handleCloud3" GridPane.columnIndex="4" GridPane.rowIndex="2">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -502,7 +502,7 @@
                                     </ImageView>
                                  </children>
                               </GridPane>
-                              <GridPane fx:id="island10" GridPane.rowIndex="1" onMouseReleased="#handleIsland10">
+                              <GridPane fx:id="island10" onMouseReleased="#handleIsland10" GridPane.rowIndex="1">
                                 <columnConstraints>
                                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -589,7 +589,7 @@
                                     </Label>
                                  </children>
                               </GridPane>
-                              <GridPane fx:id="island11" GridPane.columnIndex="1"  onMouseReleased="#handleIsland11">
+                              <GridPane fx:id="island11" onMouseReleased="#handleIsland11" GridPane.columnIndex="1">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -676,7 +676,7 @@
                                     </Label>
                                  </children>
                               </GridPane>
-                              <GridPane fx:id="island0" GridPane.columnIndex="2" onMouseReleased="#handleIsland0">
+                              <GridPane fx:id="island0" onMouseReleased="#handleIsland0" GridPane.columnIndex="2">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -763,7 +763,7 @@
                                     </Label>
                                  </children>
                               </GridPane>
-                              <GridPane fx:id="island1" GridPane.columnIndex="3" onMouseReleased="#handleIsland1">
+                              <GridPane fx:id="island1" onMouseReleased="#handleIsland1" GridPane.columnIndex="3">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -850,7 +850,7 @@
                                     </Label>
                                  </children>
                               </GridPane>
-                              <GridPane fx:id="island2" GridPane.columnIndex="4" onMouseReleased="#handleIsland2">
+                              <GridPane fx:id="island2" onMouseReleased="#handleIsland2" GridPane.columnIndex="4">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -937,7 +937,7 @@
                                     </Label>
                                  </children>
                               </GridPane>
-                              <GridPane fx:id="island3" GridPane.columnIndex="5" GridPane.rowIndex="1" onMouseReleased="#handleIsland3">
+                              <GridPane fx:id="island3" onMouseReleased="#handleIsland3" GridPane.columnIndex="5" GridPane.rowIndex="1">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -1024,7 +1024,7 @@
                                     </Label>
                                  </children>
                               </GridPane>
-                              <GridPane fx:id="island4" GridPane.columnIndex="5" GridPane.rowIndex="3" onMouseReleased="#handleIsland4">
+                              <GridPane fx:id="island4" onMouseReleased="#handleIsland4" GridPane.columnIndex="5" GridPane.rowIndex="3">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -1111,7 +1111,7 @@
                                     </Label>
                                  </children>
                               </GridPane>
-                              <GridPane fx:id="island5" GridPane.columnIndex="4" GridPane.rowIndex="4" onMouseReleased="#handleIsland5">
+                              <GridPane fx:id="island5" onMouseReleased="#handleIsland5" GridPane.columnIndex="4" GridPane.rowIndex="4">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -1198,7 +1198,7 @@
                                     </Label>
                                  </children>
                               </GridPane>
-                              <GridPane fx:id="island6" GridPane.columnIndex="3" GridPane.rowIndex="4" onMouseReleased="#handleIsland6">
+                              <GridPane fx:id="island6" onMouseReleased="#handleIsland6" GridPane.columnIndex="3" GridPane.rowIndex="4">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -1285,7 +1285,7 @@
                                     </Label>
                                  </children>
                               </GridPane>
-                              <GridPane fx:id="island7" GridPane.columnIndex="2" GridPane.rowIndex="4" onMouseReleased="#handleIsland7">
+                              <GridPane fx:id="island7" onMouseReleased="#handleIsland7" GridPane.columnIndex="2" GridPane.rowIndex="4">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -1372,7 +1372,7 @@
                                     </Label>
                                  </children>
                               </GridPane>
-                              <GridPane fx:id="island8" GridPane.columnIndex="1" GridPane.rowIndex="4" onMouseReleased="#handleIsland8">
+                              <GridPane fx:id="island8" onMouseReleased="#handleIsland8" GridPane.columnIndex="1" GridPane.rowIndex="4">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -1459,7 +1459,7 @@
                                     </Label>
                                  </children>
                               </GridPane>
-                              <GridPane fx:id="island9" GridPane.rowIndex="3" onMouseReleased="#handleIsland9">
+                              <GridPane fx:id="island9" onMouseReleased="#handleIsland9" GridPane.rowIndex="3">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

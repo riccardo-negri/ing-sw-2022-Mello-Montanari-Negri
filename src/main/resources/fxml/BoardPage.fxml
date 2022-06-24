@@ -1675,32 +1675,32 @@
                                     <Insets bottom="9.0" left="16.0" right="16.0" top="10.0" />
                                  </GridPane.margin>
                                  <children>
-                                    <ImageView fx:id="item0Character0" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                                    <ImageView fx:id="item0Character0" fitHeight="24.0" fitWidth="24.0" onMouseReleased="#handleItem0Character0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                                        <image>
                                           <Image url="@../assets/pawns/students/3d/yellow.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fx:id="item2Character0" fitHeight="24.0" fitWidth="24.0" layoutX="26.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                                    <ImageView fx:id="item2Character0" fitHeight="24.0" fitWidth="24.0" onMouseReleased="#handleItem2Character0" layoutX="26.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                                        <image>
                                           <Image url="@../assets/pawns/students/3d/yellow.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fx:id="item4Character0" fitHeight="24.0" fitWidth="24.0" layoutX="66.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+                                    <ImageView fx:id="item4Character0" fitHeight="24.0" fitWidth="24.0" onMouseReleased="#handleItem4Character0" layoutX="66.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="3">
                                        <image>
                                           <Image url="@../assets/pawns/students/3d/yellow.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fx:id="item3Character0" fitHeight="24.0" fitWidth="24.0" layoutX="10.0" layoutY="217.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                                    <ImageView fx:id="item3Character0" fitHeight="24.0" fitWidth="24.0" onMouseReleased="#handleItem3Character0" layoutX="10.0" layoutY="217.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                                        <image>
                                           <Image url="@../assets/pawns/students/3d/yellow.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fx:id="item1Character0" fitHeight="24.0" fitWidth="24.0" layoutX="66.0" layoutY="217.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                                    <ImageView fx:id="item1Character0" fitHeight="24.0" fitWidth="24.0" onMouseReleased="#handleItem1Character0" layoutX="66.0" layoutY="217.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                                        <image>
                                           <Image url="@../assets/pawns/students/3d/yellow.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fx:id="item5Character0" fitHeight="24.0" fitWidth="24.0" layoutX="122.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+                                    <ImageView fx:id="item5Character0" fitHeight="24.0" fitWidth="24.0" onMouseReleased="#handleItem5Character0" layoutX="122.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3">
                                        <image>
                                           <Image url="@../assets/pawns/students/3d/yellow.png" />
                                        </image>
@@ -1736,32 +1736,32 @@
                                     <RowConstraints maxHeight="60.0" minHeight="10.0" prefHeight="53.25" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
-                                    <ImageView fx:id="item0Character1" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                                    <ImageView fx:id="item0Character1" fitHeight="24.0" fitWidth="24.0" onMouseReleased="#handleItem0Character1" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                                        <image>
                                           <Image url="@../assets/pawns/students/3d/yellow.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fx:id="item2Character1" fitHeight="24.0" fitWidth="24.0" layoutX="26.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                                    <ImageView fx:id="item2Character1" fitHeight="24.0" fitWidth="24.0" onMouseReleased="#handleItem2Character1" layoutX="26.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                                        <image>
                                           <Image url="@../assets/pawns/students/3d/yellow.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fx:id="item4Character1" fitHeight="24.0" fitWidth="24.0" layoutX="66.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+                                    <ImageView fx:id="item4Character1" fitHeight="24.0" fitWidth="24.0" onMouseReleased="#handleItem4Character1" layoutX="66.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="3">
                                        <image>
                                           <Image url="@../assets/pawns/students/3d/yellow.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fx:id="item3Character1" fitHeight="24.0" fitWidth="24.0" layoutX="10.0" layoutY="217.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                                    <ImageView fx:id="item3Character1" fitHeight="24.0" fitWidth="24.0" onMouseReleased="#handleItem3Character1" layoutX="10.0" layoutY="217.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                                        <image>
                                           <Image url="@../assets/pawns/students/3d/yellow.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fx:id="item1Character1" fitHeight="24.0" fitWidth="24.0" layoutX="66.0" layoutY="217.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                                    <ImageView fx:id="item1Character1" fitHeight="24.0" fitWidth="24.0" onMouseReleased="#handleItem1Character1" layoutX="66.0" layoutY="217.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                                        <image>
                                           <Image url="@../assets/pawns/students/3d/yellow.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fx:id="item5Character1" fitHeight="24.0" fitWidth="24.0" layoutX="122.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+                                    <ImageView fx:id="item5Character1" fitHeight="24.0" fitWidth="24.0" onMouseReleased="#handleItem5Character1" layoutX="122.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3">
                                        <image>
                                           <Image url="@../assets/pawns/students/3d/yellow.png" />
                                        </image>
@@ -1800,32 +1800,32 @@
                                     <RowConstraints maxHeight="60.0" minHeight="10.0" prefHeight="53.25" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
-                                    <ImageView fx:id="item0Character2" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                                    <ImageView fx:id="item0Character2" fitHeight="24.0" fitWidth="24.0" onMouseReleased="#handleItem0Character2" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                                        <image>
                                           <Image url="@../assets/ban.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fx:id="item2Character2" fitHeight="24.0" fitWidth="24.0" layoutX="26.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                                    <ImageView fx:id="item2Character2" fitHeight="24.0" fitWidth="24.0" onMouseReleased="#handleItem2Character2" layoutX="26.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                                        <image>
                                           <Image url="@../assets/ban.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fx:id="item4Character2" fitHeight="24.0" fitWidth="24.0" layoutX="66.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+                                    <ImageView fx:id="item4Character2" fitHeight="24.0" fitWidth="24.0" onMouseReleased="#handleItem4Character2" layoutX="66.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="3">
                                        <image>
                                           <Image url="@../assets/ban.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fx:id="item3Character2" fitHeight="24.0" fitWidth="24.0" layoutX="10.0" layoutY="217.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                                    <ImageView fx:id="item3Character2" fitHeight="24.0" fitWidth="24.0" onMouseReleased="#handleItem3Character2" layoutX="10.0" layoutY="217.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                                        <image>
                                           <Image url="@../assets/ban.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fx:id="item1Character2" fitHeight="24.0" fitWidth="24.0" layoutX="66.0" layoutY="217.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                                    <ImageView fx:id="item1Character2" fitHeight="24.0" fitWidth="24.0" onMouseReleased="#handleItem1Character2" layoutX="66.0" layoutY="217.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                                        <image>
                                           <Image url="@../assets/ban.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fx:id="item5Character2" fitHeight="24.0" fitWidth="24.0" layoutX="122.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+                                    <ImageView fx:id="item5Character2" fitHeight="24.0" fitWidth="24.0" onMouseReleased="#handleItem5Character2" layoutX="122.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3">
                                        <image>
                                           <Image url="@../assets/ban.png" />
                                        </image>

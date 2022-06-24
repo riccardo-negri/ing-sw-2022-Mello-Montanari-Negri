@@ -25,6 +25,7 @@ import javafx.scene.layout.GridPane;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 
 import static it.polimi.ingsw.client.ui.gui.utils.BoardUtils.*;
@@ -486,6 +487,45 @@ public class BoardPageController extends AbstractController {
     @FXML
     private void handleCharacter2(Event event) { handleCharacter(2); }
 
+    @FXML
+    private void handleItem0Character0 (Event event) { handleCharacterItem(0,0); }
+    @FXML
+    private void handleItem1Character0 (Event event) { handleCharacterItem(0,1); }
+    @FXML
+    private void handleItem2Character0 (Event event) { handleCharacterItem(0,2); }
+    @FXML
+    private void handleItem3Character0 (Event event) { handleCharacterItem(0,3); }
+    @FXML
+    private void handleItem4Character0 (Event event) { handleCharacterItem(0,4); }
+    @FXML
+    private void handleItem5Character0 (Event event) { handleCharacterItem(0,5); }
+
+    @FXML
+    private void handleItem0Character1 (Event event) { handleCharacterItem(1,0); }
+    @FXML
+    private void handleItem1Character1 (Event event) { handleCharacterItem(1,1); }
+    @FXML
+    private void handleItem2Character1 (Event event) { handleCharacterItem(1,2); }
+    @FXML
+    private void handleItem3Character1 (Event event) { handleCharacterItem(1,3); }
+    @FXML
+    private void handleItem4Character1 (Event event) { handleCharacterItem(1,4); }
+    @FXML
+    private void handleItem5Character1 (Event event) { handleCharacterItem(1,5); }
+
+    @FXML
+    private void handleItem0Character2 (Event event) { handleCharacterItem(2,0); }
+    @FXML
+    private void handleItem1Character2 (Event event) { handleCharacterItem(2,1); }
+    @FXML
+    private void handleItem2Character2 (Event event) { handleCharacterItem(2,2); }
+    @FXML
+    private void handleItem3Character2 (Event event) { handleCharacterItem(2,3); }
+    @FXML
+    private void handleItem4Character2 (Event event) { handleCharacterItem(2,4); }
+    @FXML
+    private void handleItem5Character2 (Event event) { handleCharacterItem(2,5); }
+
 
     public void handleStudentPick (int number) {
         Game model = client.getModel();
@@ -567,9 +607,42 @@ public class BoardPageController extends AbstractController {
     }
 
     public void handleCharacter(int characterNumber) {
-        //if (Objects.equals(model.getGameState().getGameStateName(), "MSS") || Objects.equals(model.getGameState().getGameStateName(), "MMNS") || Objects.equals(model.getGameState().getGameStateName(), "CCS")) {
-        //    try{}catch(Exception e){}
-        //}
+        Game model = client.getModel();
+        BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
+
+        if (Objects.equals(model.getGameState().getGameStateName(), "MSS") || Objects.equals(model.getGameState().getGameStateName(), "MMNS") || Objects.equals(model.getGameState().getGameStateName(), "CCS")) {
+            List<Objects> parameters;
+            switch (model.getCharacters()[characterNumber].getId()) {
+                case 1:
+
+            }
+        }
+    }
+
+    public void handleCharacterItem(int character, int item) {
+        Game model = client.getModel();
+        BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
+
+        if (Objects.equals(model.getGameState().getGameStateName(), "MSS") || Objects.equals(model.getGameState().getGameStateName(), "MMNS") || Objects.equals(model.getGameState().getGameStateName(), "CCS")) {
+            if (gui.getCharacterStudentPicked(character) == -1) {
+                gui.setCharacterStudentPicked(character, item);
+
+                highlight(board.characters().get(character).items().get(item));
+            }
+        }
+    }
+
+    public void undoAllSelections() {
+        BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
+
+        board.characters().stream()
+                .flatMap(characterRecord -> characterRecord.items().stream())
+                .forEach(this::removeHighlight);
+        board.myBoard().entrance().forEach(this::removeHighlight);
+
+        for (int i=0; i<3; i++)
+            gui.setCharacterStudentPicked(i,-1);
+        gui.setStudentPicked(-1);
     }
 
     public void handleCloud(int cloudId) {

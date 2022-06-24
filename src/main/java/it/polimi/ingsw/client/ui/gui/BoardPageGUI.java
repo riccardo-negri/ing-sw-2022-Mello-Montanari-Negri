@@ -8,6 +8,7 @@ import it.polimi.ingsw.model.enums.StudentColor;
 import it.polimi.ingsw.networking.moves.*;
 import javafx.scene.image.ImageView;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 public class BoardPageGUI extends AbstractBoardPage {
 
     private int studentPicked = -1;
+    private int[] characterStudentPicked = Arrays.stream(new int[3]).map(x -> -1).toArray();
 
     protected BoardPageGUI(Client client) {
         super(client);
@@ -29,4 +31,12 @@ public class BoardPageGUI extends AbstractBoardPage {
     public int getStudentPicked() { return studentPicked; }
 
     public void setStudentPicked(int studentPicked) { this.studentPicked = studentPicked; }
+
+    public int getCharacterStudentPicked(int characterNumber) {
+        return characterStudentPicked[characterNumber];
+    }
+
+    public void setCharacterStudentPicked(int characterNumber, int characterStudentValue) {
+        characterStudentPicked[characterNumber] = characterStudentValue;
+    }
 }

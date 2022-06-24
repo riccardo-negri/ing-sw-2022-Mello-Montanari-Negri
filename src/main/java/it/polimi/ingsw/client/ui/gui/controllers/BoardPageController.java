@@ -281,6 +281,19 @@ public class BoardPageController extends AbstractController {
     ImageView arrow3;
 
     @FXML
+    ImageView characterCard0;
+    @FXML
+    ImageView characterCard1;
+    @FXML
+    ImageView characterCard2;
+
+    @FXML
+    ImageView characterCoin0;
+    @FXML
+    ImageView characterCoin1;
+    @FXML
+    ImageView characterCoin2;
+    @FXML
     Label priceCharacter0;
     @FXML
     Label priceCharacter1;
@@ -689,7 +702,7 @@ public class BoardPageController extends AbstractController {
 
         List<UserRecord> users = Arrays.asList(new UserRecord(username0, wizard0, assistant0, null, hourglass0, coinImage0, coinNumber0), new UserRecord(username1, wizard1, assistant1, disconnected1, hourglass1, coinImage1, coinNumber1), new UserRecord(username2, wizard2, assistant2, disconnected2, hourglass2, coinImage2, coinNumber2), new UserRecord(username3, wizard3, assistant3, disconnected3, hourglass3, coinImage3, coinNumber3));
 
-        List<CharacterRecord> characters = Arrays.asList(new CharacterRecord(null, null, priceCharacter0, Arrays.asList(item0Character0, item1Character0, item2Character0, item3Character0, item4Character0, item5Character0)), new CharacterRecord(null, null, priceCharacter1, Arrays.asList(item0Character1, item1Character1, item2Character1, item3Character1, item4Character1, item5Character1)), new CharacterRecord(null, null, priceCharacter2, Arrays.asList(item0Character2, item1Character2, item2Character2, item3Character2, item4Character2, item5Character2)));
+        List<CharacterRecord> characters = Arrays.asList(new CharacterRecord(characterCard0, characterCoin0, priceCharacter0, Arrays.asList(item0Character0, item1Character0, item2Character0, item3Character0, item4Character0, item5Character0)), new CharacterRecord(characterCard1, characterCoin1, priceCharacter1, Arrays.asList(item0Character1, item1Character1, item2Character1, item3Character1, item4Character1, item5Character1)), new CharacterRecord(characterCard2, characterCoin2, priceCharacter2, Arrays.asList(item0Character2, item1Character2, item2Character2, item3Character2, item4Character2, item5Character2)));
 
         List<ImageView> myDeck = Arrays.asList(card1, card2, card3, card4, card5, card6, card7, card8, card9, card10);
 
@@ -720,6 +733,7 @@ public class BoardPageController extends AbstractController {
         } else if (m instanceof Disconnected) {
             ((AbstractBoardPage) client.getCurrState()).onEnd(true);
             client.getConnection().close();
+            client.setJustDisconnected(true);
             Platform.runLater(() -> client.drawNextPage());
         } else if (m instanceof UserDisconnected userDisconnected) {
             client.getUsernamesDisconnected().add(userDisconnected.username());

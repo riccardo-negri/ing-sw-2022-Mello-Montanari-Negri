@@ -33,6 +33,8 @@ public class Client {
 
     private String resigned; // the name of the user who resigned
 
+    private boolean justDisconnected; // if the client is coming to the current page due to disconnection
+
 
     public Client(Stage stage) {
         ui = new GUI(stage);
@@ -167,5 +169,13 @@ public class Client {
 
     public String getResigned() {
         return resigned;
+    }
+
+    public boolean isJustDisconnected() {
+        return justDisconnected;
+    }
+
+    public void setJustDisconnected(boolean justDisconnected) {
+        this.justDisconnected = justDisconnected;
     }
 }

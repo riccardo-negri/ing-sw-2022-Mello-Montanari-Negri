@@ -1705,7 +1705,7 @@
                                           <Image url="@../assets/pawns/students/3d/yellow.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="81.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" GridPane.valignment="TOP">
+                                    <ImageView fx:id="characterCoin0" fitHeight="81.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" GridPane.valignment="TOP">
                                        <image>
                                           <Image url="@../assets/icons/coin.png" />
                                        </image>
@@ -1766,7 +1766,7 @@
                                           <Image url="@../assets/pawns/students/3d/yellow.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="81.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" GridPane.valignment="TOP">
+                                    <ImageView fx:id="characterCoin1" fitHeight="81.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" GridPane.valignment="TOP">
                                        <image>
                                           <Image url="@../assets/icons/coin.png" />
                                        </image>
@@ -1830,7 +1830,7 @@
                                           <Image url="@../assets/ban.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="81.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" GridPane.valignment="TOP">
+                                    <ImageView fx:id="characterCoin2" fitHeight="81.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" GridPane.valignment="TOP">
                                        <image>
                                           <Image url="@../assets/icons/coin.png" />
                                        </image>

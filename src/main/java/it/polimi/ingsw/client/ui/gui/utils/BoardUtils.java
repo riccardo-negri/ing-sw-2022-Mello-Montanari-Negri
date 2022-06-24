@@ -3,6 +3,8 @@ package it.polimi.ingsw.client.ui.gui.utils;
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.ui.gui.records.*;
 import it.polimi.ingsw.model.entity.*;
+import it.polimi.ingsw.model.entity.characters.*;
+import it.polimi.ingsw.model.entity.characters.Character;
 import it.polimi.ingsw.model.enums.GameMode;
 import it.polimi.ingsw.model.enums.PlayerNumber;
 import it.polimi.ingsw.model.enums.StudentColor;
@@ -64,6 +66,14 @@ public class BoardUtils {
 
     private static Image getAssistantImageFromId (int id) {
         return new Image("assets/cards/assistants/" + id + ".png");
+    }
+
+    private static Image getCharacterImageFromId (int id) {
+        return new Image("assets/cards/characters/" + id + ".png");
+    }
+
+    private static Image getNoEntryImage () {
+        return new Image("assets/ban.png");
     }
 
     public static void updateIslands (BoardRecord board, Client client) {
@@ -313,6 +323,91 @@ public class BoardUtils {
 
     }
 
+    private static void updateCharacters(BoardRecord board, Client client) {
+        if (client.getModel().getGameMode().equals(GameMode.COMPLETE)) {
+            for (int i = 0; i < 3; i++) {
+                CharacterRecord characterRecord = board.characters().get(i);
+                Character currCharacter = client.getModel().getCharacters()[i];
+
+                // set image
+                characterRecord.card().setImage(getCharacterImageFromId(currCharacter.getId()));
+                characterRecord.card().setVisible(true);
+
+                // set coins
+                characterRecord.money().setText(String.valueOf(currCharacter.getPrize()));
+
+                // set correct items
+                List<ImageView> items = characterRecord.items();
+                switch (currCharacter.getId()) {
+                    case 2, 3, 4, 6, 8, 9, 10, 12: {
+                        for (ImageView item : items) {
+                            item.setVisible(false);
+                        }
+                        break;
+                    }
+                    case 1: {
+                        int j = 0;
+                        for (StudentColor student : ((CharacterOne) currCharacter).getStudentColorList()) {
+                            items.get(j).setImage(getStudentImageFromColor(student));
+                            items.get(j).setVisible(true);
+                            j++;
+                        }
+                        for (; j < 6; j++) {
+                            items.get(j).setVisible(false);
+                        }
+                        break;
+                    }
+                    case 7: {
+                        int j = 0;
+                        for (StudentColor student : ((CharacterSeven) currCharacter).getStudentColorList()) {
+                            items.get(j).setImage(getStudentImageFromColor(student));
+                            items.get(j).setVisible(true);
+                            j++;
+                        }
+                        for (; j < 6; j++) {
+                            items.get(j).setVisible(false);
+                        }
+                        break;
+                    }
+                    case 11: {
+                        int j = 0;
+                        for (StudentColor student : ((CharacterEleven) currCharacter).getStudentColorList()) {
+                            items.get(j).setImage(getStudentImageFromColor(student));
+                            items.get(j).setVisible(true);
+                            j++;
+                        }
+                        for (; j < 6; j++) {
+                            items.get(j).setVisible(false);
+                        }
+                        break;
+                    }
+                    case 5: {
+                        int j = 0;
+                        for (; j < ((CharacterFive) currCharacter).getStopNumber(); j++) {
+                            items.get(j).setImage(getNoEntryImage());
+                            items.get(j).setVisible(true);
+                        }
+                        for (; j < 6; j++) {
+                            items.get(j).setVisible(false);
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        // hide characters
+        else {
+            for (CharacterRecord characterRecord : board.characters()) {
+                characterRecord.card().setVisible(false);
+                characterRecord.moneyImage().setVisible(false);
+                characterRecord.money().setVisible(false);
+                for (ImageView item : characterRecord.items()) {
+                    item.setVisible(false);
+                }
+            }
+        }
+    }
+
     public static void updateBoard (BoardRecord board, Client client, Integer selectedOtherUser) {
 
         updateIslands(board, client);
@@ -344,5 +439,7 @@ public class BoardUtils {
         board.round().setText(String.valueOf(findRoundNumber(client.getModel())));
 
         board.phase().setText(client.getModel().getGameState().getGameStateName());
+
+        updateCharacters(board, client);
     }
 }

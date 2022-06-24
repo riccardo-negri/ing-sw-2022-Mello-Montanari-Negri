@@ -23,7 +23,10 @@ public class BoardPageGUI extends AbstractBoardPage {
 
     public void handleStudentPick (int number) {
         if (!Objects.equals(model.getGameState().getGameStateName(), "MSS")) logger.log(Level.INFO, "Player " + client.getUsername() + ": Wrong game phase to pick student");
-        else studentPicked = number;
+        else {
+            if (studentPicked == number) studentPicked = -1;
+            else studentPicked = number;
+        }
     }
 
     public void handleAssistantCard(int card) {
@@ -35,12 +38,25 @@ public class BoardPageGUI extends AbstractBoardPage {
     }
 
     public void handleDiningTable(StudentColor color) {
-        client.getLogger().log(Level.WARNING, String.valueOf(client.getUsernames().indexOf(client.getUsername())));
-        if (model.getWizard(client.getUsernames().indexOf(client.getUsername())).getEntranceStudents().get(studentPicked) != color)
-            logger.log(Level.INFO, "Move of student " + model.getWizard(client.getPlayerNumber()).getEntranceStudents().get(studentPicked).toString() + " to dining table " + color.toString() + " not correct");
+        if (studentPicked == -1 || model.getWizard(client.getUsernames().indexOf(client.getUsername())).getEntranceStudents().get(studentPicked) != color)
+            System.out.println("Move of student " + model.getWizard(client.getPlayerNumber()).getEntranceStudents().get(studentPicked).toString() + " to dining table " + color.toString() + " not correct");
         else {
             try {
                 doStudentMovement(color, "dining-room");
+                studentPicked = -1;
+            } catch (Exception e) {
+                client.getLogger().log(Level.INFO, e.getMessage());
+            }
+        }
+    }
+
+    public void handleIsland(int islandId) {
+        if (studentPicked == -1)
+            logger.log(Level.INFO, "No student selected in entrance");
+        else {
+            try {
+                doStudentMovement(model.getWizard(client.getUsernames().indexOf(client.getUsername())).getEntranceStudents().get(studentPicked), "island-" + islandId);
+                studentPicked = -1;
             } catch (Exception e) {
                 client.getLogger().log(Level.INFO, e.getMessage());
             }

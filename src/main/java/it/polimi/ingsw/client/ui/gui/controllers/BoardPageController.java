@@ -442,6 +442,30 @@ public class BoardPageController extends AbstractController {
     private void handleDiningYellow(Event event) { ((BoardPageGUI) client.getCurrState()).handleDiningTable(StudentColor.YELLOW); }
 
     @FXML
+    private void handleIsland0(Event event) { ((BoardPageGUI) client.getCurrState()).handleIsland(0); }
+    @FXML
+    private void handleIsland1(Event event) { ((BoardPageGUI) client.getCurrState()).handleIsland(1); }
+    @FXML
+    private void handleIsland2(Event event) { ((BoardPageGUI) client.getCurrState()).handleIsland(2); }
+    @FXML
+    private void handleIsland3(Event event) { ((BoardPageGUI) client.getCurrState()).handleIsland(3); }
+    @FXML
+    private void handleIsland4(Event event) { ((BoardPageGUI) client.getCurrState()).handleIsland(4); }
+    @FXML
+    private void handleIsland5(Event event) { ((BoardPageGUI) client.getCurrState()).handleIsland(5); }
+    @FXML
+    private void handleIsland6(Event event) { ((BoardPageGUI) client.getCurrState()).handleIsland(6); }
+    @FXML
+    private void handleIsland7(Event event) { ((BoardPageGUI) client.getCurrState()).handleIsland(7); }
+    @FXML
+    private void handleIsland8(Event event) { ((BoardPageGUI) client.getCurrState()).handleIsland(8); }
+    @FXML
+    private void handleIsland9(Event event) { ((BoardPageGUI) client.getCurrState()).handleIsland(9); }
+    @FXML
+    private void handleIsland10(Event event) { ((BoardPageGUI) client.getCurrState()).handleIsland(10); }
+    @FXML
+    private void handleIsland11(Event event) { ((BoardPageGUI) client.getCurrState()).handleIsland(11); }
+    @FXML
     void initialize () {
         client.getConnection().bindFunctionAndTestPrevious(this::onNewMessage);
 

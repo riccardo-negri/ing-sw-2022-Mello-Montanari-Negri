@@ -502,7 +502,7 @@
                                     </ImageView>
                                  </children>
                               </GridPane>
-                              <GridPane fx:id="island10" GridPane.rowIndex="1">
+                              <GridPane fx:id="island10" GridPane.rowIndex="1" onMouseReleased="#handleIsland10">
                                 <columnConstraints>
                                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -589,7 +589,7 @@
                                     </Label>
                                  </children>
                               </GridPane>
-                              <GridPane fx:id="island11" GridPane.columnIndex="1">
+                              <GridPane fx:id="island11" GridPane.columnIndex="1"  onMouseReleased="#handleIsland11">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -676,7 +676,7 @@
                                     </Label>
                                  </children>
                               </GridPane>
-                              <GridPane fx:id="island0" GridPane.columnIndex="2">
+                              <GridPane fx:id="island0" GridPane.columnIndex="2" onMouseReleased="#handleIsland0">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -763,7 +763,7 @@
                                     </Label>
                                  </children>
                               </GridPane>
-                              <GridPane fx:id="island1" GridPane.columnIndex="3">
+                              <GridPane fx:id="island1" GridPane.columnIndex="3" onMouseReleased="#handleIsland1">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -850,7 +850,7 @@
                                     </Label>
                                  </children>
                               </GridPane>
-                              <GridPane fx:id="island2" GridPane.columnIndex="4">
+                              <GridPane fx:id="island2" GridPane.columnIndex="4" onMouseReleased="#handleIsland2">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -937,7 +937,7 @@
                                     </Label>
                                  </children>
                               </GridPane>
-                              <GridPane fx:id="island3" GridPane.columnIndex="5" GridPane.rowIndex="1">
+                              <GridPane fx:id="island3" GridPane.columnIndex="5" GridPane.rowIndex="1" onMouseReleased="#handleIsland3">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -1024,7 +1024,7 @@
                                     </Label>
                                  </children>
                               </GridPane>
-                              <GridPane fx:id="island4" GridPane.columnIndex="5" GridPane.rowIndex="3">
+                              <GridPane fx:id="island4" GridPane.columnIndex="5" GridPane.rowIndex="3" onMouseReleased="#handleIsland4">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -1111,7 +1111,7 @@
                                     </Label>
                                  </children>
                               </GridPane>
-                              <GridPane fx:id="island5" GridPane.columnIndex="4" GridPane.rowIndex="4">
+                              <GridPane fx:id="island5" GridPane.columnIndex="4" GridPane.rowIndex="4" onMouseReleased="#handleIsland5">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -1198,7 +1198,7 @@
                                     </Label>
                                  </children>
                               </GridPane>
-                              <GridPane fx:id="island6" GridPane.columnIndex="3" GridPane.rowIndex="4">
+                              <GridPane fx:id="island6" GridPane.columnIndex="3" GridPane.rowIndex="4" onMouseReleased="#handleIsland6">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -1285,7 +1285,7 @@
                                     </Label>
                                  </children>
                               </GridPane>
-                              <GridPane fx:id="island7" GridPane.columnIndex="2" GridPane.rowIndex="4">
+                              <GridPane fx:id="island7" GridPane.columnIndex="2" GridPane.rowIndex="4" onMouseReleased="#handleIsland7">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -1372,7 +1372,7 @@
                                     </Label>
                                  </children>
                               </GridPane>
-                              <GridPane fx:id="island8" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                              <GridPane fx:id="island8" GridPane.columnIndex="1" GridPane.rowIndex="4" onMouseReleased="#handleIsland8">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -1459,7 +1459,7 @@
                                     </Label>
                                  </children>
                               </GridPane>
-                              <GridPane fx:id="island9" GridPane.rowIndex="3">
+                              <GridPane fx:id="island9" GridPane.rowIndex="3" onMouseReleased="#handleIsland9">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

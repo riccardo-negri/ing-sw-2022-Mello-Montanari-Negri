@@ -6,6 +6,10 @@ import it.polimi.ingsw.client.ui.gui.controllers.StorylinePageController;
 
 public class StorylinePageGUI extends AbstractStorylinePage {
 
+    /**
+     * pass client to AbstractStorylinePage constructor
+     * @param client the client that is showing this page
+     */
     protected StorylinePageGUI(Client client) {
         super(client);
     }

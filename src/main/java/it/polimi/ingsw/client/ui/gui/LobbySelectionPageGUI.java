@@ -6,6 +6,10 @@ import it.polimi.ingsw.client.ui.gui.controllers.LobbySelectionPageController;
 
 public class LobbySelectionPageGUI extends AbstractLobbySelectionPages {
 
+    /**
+     * pass client to AbstractLobbySelectionPages constructor
+     * @param client the client that is showing this page
+     */
     protected LobbySelectionPageGUI(Client client) {
         super(client);
     }

@@ -6,6 +6,10 @@ import it.polimi.ingsw.client.ui.gui.controllers.MenuPageController;
 
 public class MenuPageGUI extends AbstractMenuPage {
 
+    /**
+     * pass client to AbstractMenuPage constructor
+     * @param client the client that is showing this page
+     */
     protected MenuPageGUI(Client client) {
         super(client);
     }

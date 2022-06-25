@@ -6,6 +6,10 @@ import it.polimi.ingsw.client.ui.gui.controllers.CreateGamePageController;
 
 public class CreateGamePageGUI extends AbstractCreateGamePage {
 
+    /**
+     * pass client to AbstractCreateGamePage constructor
+     * @param client the client that is showing this page
+     */
     protected CreateGamePageGUI(Client client) {
         super(client);
     }

@@ -6,6 +6,10 @@ import it.polimi.ingsw.client.ui.gui.controllers.EndPageController;
 
 public class EndPageGUI extends AbstractEndPage {
 
+    /**
+     * pass client to AbstractEndPage constructor
+     * @param client the client that is showing this page
+     */
     protected EndPageGUI(Client client) {
         super(client);
     }

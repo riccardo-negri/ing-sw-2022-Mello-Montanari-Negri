@@ -8,6 +8,12 @@ import javafx.stage.Stage;
 
 public record GUI(Stage stage) implements UI {
 
+    /**
+     * map client states to graphic pages to show
+     * @param client the client that is showing the pages
+     * @param nextState the next state of the client (corresponds to the abstract page is going to)
+     * @return the graphic page the client needs to show
+     */
     @Override
     public AbstractPage getState(Client client, ClientPage nextState) {
         return switch (nextState) {

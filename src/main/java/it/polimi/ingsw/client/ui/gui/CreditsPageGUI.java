@@ -6,6 +6,10 @@ import it.polimi.ingsw.client.ui.gui.controllers.CreditsPageController;
 
 public class CreditsPageGUI extends AbstractCreditsPage {
 
+    /**
+     * pass client to AbstractCreditsPage constructor
+     * @param client the client that is showing this page
+     */
     protected CreditsPageGUI(Client client) {
         super(client);
     }

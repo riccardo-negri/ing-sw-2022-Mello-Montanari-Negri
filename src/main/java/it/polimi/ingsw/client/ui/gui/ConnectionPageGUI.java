@@ -6,6 +6,10 @@ import it.polimi.ingsw.client.ui.gui.controllers.ConnectionPageController;
 
 public class ConnectionPageGUI extends AbstractConnectionPage {
 
+    /**
+     * pass client to AbstractConnectionPage constructor
+     * @param client the client that is showing this page
+     */
     protected ConnectionPageGUI(Client client) {
         super(client);
     }

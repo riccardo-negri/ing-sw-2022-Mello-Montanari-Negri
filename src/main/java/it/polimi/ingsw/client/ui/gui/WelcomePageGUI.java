@@ -6,6 +6,10 @@ import it.polimi.ingsw.client.ui.gui.controllers.WelcomePageController;
 
 public class WelcomePageGUI extends AbstractWelcomePage{
 
+    /**
+     * pass client to AbstractWelcomePage constructor
+     * @param client the client that is showing this page
+     */
     protected WelcomePageGUI(Client client) {
         super(client);
     }

@@ -5,6 +5,10 @@ import it.polimi.ingsw.client.ui.gui.BoardPageGUI;
 import it.polimi.ingsw.client.ui.gui.records.*;
 import it.polimi.ingsw.client.ui.gui.records.CharacterRecord;
 import it.polimi.ingsw.model.entity.Game;
+import it.polimi.ingsw.model.entity.characters.Character;
+import it.polimi.ingsw.model.entity.characters.CharacterEleven;
+import it.polimi.ingsw.model.entity.characters.CharacterOne;
+import it.polimi.ingsw.model.entity.characters.CharacterSeven;
 import it.polimi.ingsw.model.enums.StudentColor;
 import it.polimi.ingsw.networking.*;
 import it.polimi.ingsw.networking.moves.Move;
@@ -18,10 +22,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.logging.Level;
 
 import static it.polimi.ingsw.client.ui.gui.utils.BoardUtils.*;
@@ -560,21 +561,31 @@ public class BoardPageController extends AbstractController {
     @FXML
     private void handleItem5Character2 (Event event) { handleCharacterItem(2,5); }
 
+    boolean characterInputSelectionPhase() {
+        Game model = client.getModel();
+        BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
+        return gui.isAnyCharacterActivated() && Objects.equals(model.getGameState().getGameStateName(), "MSS") || Objects.equals(model.getGameState().getGameStateName(), "MMNS") || Objects.equals(model.getGameState().getGameStateName(), "CCS");
+    }
 
     public void handleStudentPick (int number) {
         Game model = client.getModel();
         BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
 
-        switch (model.getGameState().getGameStateName()) {
-            case "MSS":
-                if (gui.getStudentPicked() == number)
-                    undoAllSelections();
-                else {
-                    undoAllSelections();
-                    gui.setStudentPicked(number);
-                    highlight(board.myBoard().entrance().get(number));
-                }
-                break;
+        if (characterInputSelectionPhase()) {
+            if(gui.getPickedEntranceStudents().contains(number)) {
+                gui.getPickedEntranceStudents().remove(number);
+            } else {
+                if (gui.getPickedEntranceStudents().size() < gui.getEntranceStudentsToPick())
+                    gui.getPickedEntranceStudents().add(number);
+            }
+        } else if (Objects.equals(model.getGameState().getGameStateName(), "MSS")) {
+            if (gui.getStudentPicked() == number)
+                undoAllSelections();
+            else {
+                undoAllSelections();
+                gui.setStudentPicked(number);
+                highlight(board.myBoard().entrance().get(number));
+            }
         }
     }
 
@@ -597,17 +608,26 @@ public class BoardPageController extends AbstractController {
         Game model = client.getModel();
         BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
 
-        switch (model.getGameState().getGameStateName()) {
-            case "MSS":
-                if (gui.getStudentPicked() == -1 || model.getWizard(client.getUsernames().indexOf(client.getUsername()))
-                        .getEntranceStudents().get(gui.getStudentPicked()) != color) {
-                } else {
-                    try {
-                        gui.doStudentMovement(color, "dining-room");
-                    } catch (Exception e) {
-                        client.getLogger().log(Level.INFO, e.getMessage());
-                    }
-                } break;
+        if (characterInputSelectionPhase()) {
+            if(gui.getPickedTables().contains(color)) {
+                gui.getPickedTables().remove(color);
+            } else {
+                if (gui.getPickedTables().size() < gui.getTablesToPick())
+                    gui.getPickedTables().add(color);
+            }
+
+            if (gui.getPickedDiningStudents().size() < gui.getDiningStudentsToPick())
+                gui.getPickedDiningStudents().add(color);
+        } else if (Objects.equals(model.getGameState().getGameStateName(), "MSS")) {
+            if (gui.getStudentPicked() == -1 || model.getWizard(client.getUsernames().indexOf(client.getUsername()))
+                    .getEntranceStudents().get(gui.getStudentPicked()) != color) {
+            } else {
+                try {
+                    gui.doStudentMovement(color, "dining-room");
+                } catch (Exception e) {
+                    client.getLogger().log(Level.INFO, e.getMessage());
+                }
+            }
         }
         undoAllSelections();
     }
@@ -616,26 +636,40 @@ public class BoardPageController extends AbstractController {
         Game model = client.getModel();
         BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
 
-        switch (model.getGameState().getGameStateName()) {
-            case "MSS":
-                if (gui.getStudentPicked() == -1)
-                    client.getLogger().log(Level.INFO, "No student selected in entrance");
-                else {
-                    try {
-                        gui.doStudentMovement(model.getWizard(client.getUsernames().indexOf(client.getUsername())).getEntranceStudents().get(gui.getStudentPicked()), "island-" + islandId);
-                    } catch (Exception e) {
-                        client.getLogger().log(Level.INFO, e.getMessage());
-                    }
-                } break;
-            case "MMNS":
-                try { gui.doMotherNatureMovement(model.getIslandGroupList().indexOf(
-                        model.getIslandGroupList().stream().filter(islandGroup ->
-                                islandGroup.getIslandList().contains(model.getIsland(islandId))).toList().get(0)));
+        if(characterInputSelectionPhase()) {
+            if(gui.getPickedIslands().contains(islandId)) {
+                gui.getPickedIslands().remove(islandId);
+            } else {
+                if (gui.getPickedIslands().size() < gui.getIslandsToPick())
+                    gui.getPickedIslands().add(islandId);
+            }
+        } else if (model.getGameState().getGameStateName().equals("MSS")) {
+            if (gui.getStudentPicked() == -1)
+                client.getLogger().log(Level.INFO, "No student selected in entrance");
+            else {
+                try {
+                    gui.doStudentMovement(model.getWizard(client.getUsernames().indexOf(client.getUsername())).getEntranceStudents().get(gui.getStudentPicked()), "island-" + islandId);
                 } catch (Exception e) {
                     client.getLogger().log(Level.INFO, e.getMessage());
-                } break;
+                }
+            }
+        } else if (model.getGameState().getGameStateName().equals("MMNS")) {
+            try { gui.doMotherNatureMovement(model.getIslandGroupList().indexOf(
+                    model.getIslandGroupList().stream().filter(islandGroup ->
+                            islandGroup.getIslandList().contains(model.getIsland(islandId))).toList().get(0)));
+            } catch (Exception e) {
+                client.getLogger().log(Level.INFO, e.getMessage());
+            }
         }
         undoAllSelections();
+    }
+
+    <E> Object extractIfUnique(List<E> objects) {
+        if (objects.size() == 1)
+            return objects.get(0);
+        if (objects.size() == 0)
+            return null;
+        return objects;
     }
 
     public void handleCharacter(int characterNumber) {
@@ -643,17 +677,50 @@ public class BoardPageController extends AbstractController {
         BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
 
         if (Objects.equals(model.getGameState().getGameStateName(), "MSS") || Objects.equals(model.getGameState().getGameStateName(), "MMNS") || Objects.equals(model.getGameState().getGameStateName(), "CCS")) {
-            if (gui.getActivatedCharacter(characterNumber))
-                for (int i=0; i<3; i++) gui.setActivatedCharacter(i, false);
+            if (gui.isAnyCharacterActivated()) {
+                if (gui.isCharacterActivated(characterNumber) && gui.isEverythingNeededSelected()) {
+                    try {
+                        List<Object> parameters = new ArrayList<>();
+                        parameters.add(extractIfUnique(gui.getPickedEntranceStudents().stream().map(n->model.getWizard(client.getUsernames().indexOf(client.getUsername())).getEntranceStudents().get(n)).toList()));
+                        parameters.add(extractIfUnique(gui.getPickedDiningStudents()));
+                        if(gui.getPickedCardStudents().size() > 0) {
+                            Character character = model.getCharacter(characterNumber);
+                            List<StudentColor> characterStudents = null;
+                            if (character instanceof CharacterOne characterOne)
+                                characterStudents = characterOne.getStudentColorList();
+                            else if (character instanceof CharacterSeven characterSeven)
+                                characterStudents = characterSeven.getStudentColorList();
+                            else if (character instanceof CharacterEleven characterEleven)
+                                characterStudents = characterEleven.getStudentColorList();
+                            final List<StudentColor> cs = characterStudents;
+                            parameters.add(extractIfUnique(gui.getPickedCardStudents().stream().map(n -> cs.get(n)).toList()));
+                        }
+                        parameters.add(extractIfUnique(gui.getPickedTables()));
+                        parameters.add(extractIfUnique(gui.getPickedIslands()));
+                        parameters.removeAll(Collections.singleton(null));
+                        doGuiCharacterMove(gui, model.getCharacters()[characterNumber].getId(), parameters);
+                        for (int i = 0; i < 3; i++) gui.setActivatedCharacter(i, false);
+                    } catch (Exception e) {
+                        client.getLogger().log(Level.INFO, e.getMessage());
+                    }
+                }
+            }
             else {
                 for (int i=0; i<3; i++) gui.setActivatedCharacter(i, false);
-                gui.setActivatedCharacter(characterNumber, true);
                 try{
                     switch (model.getCharacters()[characterNumber].getId()) {
-                        case 2: gui.doCharacterMove(2, null); break;
-                        case 4: gui.doCharacterMove(4, null); break;
-                        case 6: gui.doCharacterMove(6, null); break;
-                        case 8: gui.doCharacterMove(8, null); break;
+                        case 1: gui.activateCharacter(characterNumber, 1, 0, 0, 1, 0); break;
+                        case 2: doGuiCharacterMove(gui, 2, null); break;
+                        case 3: gui.activateCharacter(characterNumber, 0, 0, 0, 1, 0); break;
+                        case 4: doGuiCharacterMove(gui, 4, null); break;
+                        case 5: gui.activateCharacter(characterNumber, 0, 0, 0, 1, 0); break;
+                        case 6: doGuiCharacterMove(gui, 6, null); break;
+                        case 7: gui.activateCharacter(characterNumber, 3, 0, 3, 0, 0); break;
+                        case 8: doGuiCharacterMove(gui, 8, null); break;
+                        case 9: gui.activateCharacter(characterNumber, 0, 0, 0, 0, 1); break;
+                        case 10: gui.activateCharacter(characterNumber, 0, 2, 2, 0, 0); break;
+                        case 11: gui.activateCharacter(characterNumber, 1, 0, 0, 0, 0); break;
+                        case 12: gui.activateCharacter(characterNumber, 0, 0, 0, 0, 1); break;
                     }
                 } catch (Exception e) {
                     client.getLogger().log(Level.INFO, e.getMessage());
@@ -662,17 +729,23 @@ public class BoardPageController extends AbstractController {
         }
     }
 
+    void doGuiCharacterMove(BoardPageGUI gui, int characterID, List<Object> parameters) throws Exception {
+        for (int i=0; i<3; i++) gui.setActivatedCharacter(i, false);
+        gui.doCharacterMove(characterID, parameters);
+    }
+
     public void handleCharacterItem(int character, int item) {
         Game model = client.getModel();
         BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
 
-        if (Objects.equals(model.getGameState().getGameStateName(), "MSS") || Objects.equals(model.getGameState().getGameStateName(), "MMNS") || Objects.equals(model.getGameState().getGameStateName(), "CCS")) {
-            if (gui.getCharacterStudentPicked(character, 0) == -1) {
-                undoAllSelections();
-                gui.setCharacterStudentPicked(character, 0, item);
-                highlight(board.characters().get(character).items().get(item));
-            } else {
-                undoAllSelections();
+        if (characterInputSelectionPhase()) {
+            if(gui.isCharacterActivated(character)) {
+                if(gui.getPickedCardStudents().contains(item)) {
+                    gui.getPickedCardStudents().remove(item);
+                } else {
+                    if (gui.getPickedCardStudents().size() < gui.getCardStudentsToPick())
+                        gui.getPickedCardStudents().add(item);
+                }
             }
         }
     }
@@ -685,8 +758,6 @@ public class BoardPageController extends AbstractController {
                 .forEach(this::removeHighlight);
         board.myBoard().entrance().forEach(this::removeHighlight);
 
-        for (int i=0; i<3; i++)
-            gui.setCharacterStudentPicked(i,0,-1);
         gui.setStudentPicked(-1);
     }
 

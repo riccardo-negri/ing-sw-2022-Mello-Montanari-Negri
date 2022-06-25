@@ -1741,22 +1741,22 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <ImageView fx:id="characterCard0" fitHeight="246.0" fitWidth="178.0" onMouseReleased="#handleCharacter0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER">
+                              <ImageView fx:id="characterCard0" fitHeight="246.0" fitWidth="178.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER">
                                  <image>
                                     <Image url="@../assets/cards/characters/1.png" />
                                  </image>
                               </ImageView>
-                              <ImageView fx:id="characterCard1" fitHeight="246.0" fitWidth="178.0" onMouseReleased="#handleCharacter1" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+                              <ImageView fx:id="characterCard1" fitHeight="246.0" fitWidth="178.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER">
                                  <image>
                                     <Image url="@../assets/cards/characters/2.png" />
                                  </image>
                               </ImageView>
-                              <ImageView fx:id="characterCard2" fitHeight="246.0" fitWidth="178.0" onMouseReleased="#handleCharacter2" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER">
+                              <ImageView fx:id="characterCard2" fitHeight="246.0" fitWidth="178.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER">
                                  <image>
                                     <Image url="@../assets/cards/characters/3.png" />
                                  </image>
                               </ImageView>
-                              <GridPane>
+                              <GridPane onMouseReleased="#handleCharacter0">
                                 <columnConstraints>
                                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="60.333251953125" minWidth="10.0" prefWidth="41.6666259765625" />
                                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.3333740234375" minWidth="10.0" prefWidth="86.3333740234375" />
@@ -1820,7 +1820,7 @@
                                     </Label>
                                  </children>
                               </GridPane>
-                              <GridPane GridPane.columnIndex="1">
+                              <GridPane onMouseReleased="#handleCharacter1" GridPane.columnIndex="1">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="60.333251953125" minWidth="10.0" prefWidth="41.6666259765625" />
                                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.3333740234375" minWidth="10.0" prefWidth="86.3333740234375" />
@@ -1884,7 +1884,7 @@
                                     <Insets bottom="9.0" left="16.0" right="16.0" top="10.0" />
                                  </GridPane.margin>
                               </GridPane>
-                              <GridPane GridPane.columnIndex="2">
+                              <GridPane onMouseReleased="#handleCharacter2" GridPane.columnIndex="2">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="60.333251953125" minWidth="10.0" prefWidth="41.6666259765625" />
                                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.3333740234375" minWidth="10.0" prefWidth="86.3333740234375" />

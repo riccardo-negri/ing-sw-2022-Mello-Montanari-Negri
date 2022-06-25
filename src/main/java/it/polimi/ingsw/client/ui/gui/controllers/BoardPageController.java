@@ -564,7 +564,7 @@ public class BoardPageController extends AbstractController {
     boolean characterInputSelectionPhase() {
         Game model = client.getModel();
         BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
-        return gui.isAnyCharacterActivated() && Objects.equals(model.getGameState().getGameStateName(), "MSS") || Objects.equals(model.getGameState().getGameStateName(), "MMNS") || Objects.equals(model.getGameState().getGameStateName(), "CCS");
+        return gui.isAnyCharacterActivated() && (Objects.equals(model.getGameState().getGameStateName(), "MSS") || Objects.equals(model.getGameState().getGameStateName(), "MMNS") || Objects.equals(model.getGameState().getGameStateName(), "CCS"));
     }
 
     public void handleStudentPick (int number) {
@@ -573,7 +573,7 @@ public class BoardPageController extends AbstractController {
 
         if (characterInputSelectionPhase()) {
             if(gui.getPickedEntranceStudents().contains(number)) {
-                gui.getPickedEntranceStudents().remove(number);
+                gui.getPickedEntranceStudents().remove(Integer.valueOf(number));
             } else {
                 if (gui.getPickedEntranceStudents().size() < gui.getEntranceStudentsToPick())
                     gui.getPickedEntranceStudents().add(number);
@@ -638,7 +638,7 @@ public class BoardPageController extends AbstractController {
 
         if(characterInputSelectionPhase()) {
             if(gui.getPickedIslands().contains(islandId)) {
-                gui.getPickedIslands().remove(islandId);
+                gui.getPickedIslands().remove(Integer.valueOf(islandId));
             } else {
                 if (gui.getPickedIslands().size() < gui.getIslandsToPick())
                     gui.getPickedIslands().add(islandId);
@@ -741,7 +741,7 @@ public class BoardPageController extends AbstractController {
         if (characterInputSelectionPhase()) {
             if(gui.isCharacterActivated(character)) {
                 if(gui.getPickedCardStudents().contains(item)) {
-                    gui.getPickedCardStudents().remove(item);
+                    gui.getPickedCardStudents().remove(Integer.valueOf(item));
                 } else {
                     if (gui.getPickedCardStudents().size() < gui.getCardStudentsToPick())
                         gui.getPickedCardStudents().add(item);

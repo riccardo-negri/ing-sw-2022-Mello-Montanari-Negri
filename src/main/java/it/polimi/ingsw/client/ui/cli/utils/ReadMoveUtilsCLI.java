@@ -47,6 +47,14 @@ public class ReadMoveUtilsCLI {
         
     }
 
+    /**
+     * print bash styled prompt text and ask user for the command
+     * @param terminal JLine terminal
+     * @param history commands history
+     * @param completer completer
+     * @param username user's username
+     * @return typed command
+     */
     public static String askForMove (Terminal terminal, History history, Completer completer, String username) {
         LineReader reader = LineReaderBuilder.builder()
                 .terminal(terminal)
@@ -63,6 +71,15 @@ public class ReadMoveUtilsCLI {
         return reader.readLine(String.valueOf(ansi().fgRgb(255, 128, 0).a(username).fgDefault().a(":").fgBlue().a("~").fgGreen().a("$ ").fgDefault()));
     }
 
+    /**
+     * ask use to type the command and check it against the regex
+     * @param terminal JLine terminal
+     * @param history commands history
+     * @param completer completer
+     * @param username user's username
+     * @param pattern regex
+     * @return typed command
+     */
     private static String askAndCheckMove (Terminal terminal, History history, Completer completer, String username, Pattern pattern) {
         Matcher matcher;
         String move;
@@ -81,6 +98,12 @@ public class ReadMoveUtilsCLI {
         return move;
     }
 
+    /**
+     * to be used only in the planning phase, adds the characters' helper autocompletion
+     * @param characters active characters IDs list
+     * @param completer completer to decorate
+     * @return decorated completer
+     */
     private static AggregateCompleter decorateWithCharacterHelper (int[] characters, ArgumentCompleter completer) {
         if (characters.length == 0) {
             return new AggregateCompleter(completer);
@@ -91,6 +114,12 @@ public class ReadMoveUtilsCLI {
         );
     }
 
+    /**
+     * decorator to add autocompletion for character commands and helper for characters, if the game mode is COMPLETE otherwise it does not add anything
+     * @param characters list of active characters
+     * @param completer current completer to decorate
+     * @return decorated completer
+     */
     private static AggregateCompleter decorateWithCharacterMoveAndHelper (int[] characters, ArgumentCompleter completer) {
         if (characters.length == 0) {
             return new AggregateCompleter(completer);
@@ -104,6 +133,11 @@ public class ReadMoveUtilsCLI {
         );
     }
 
+    /**
+     * create completer for character command
+     * @param id character id
+     * @return completer for character command
+     */
     private static ArgumentCompleter characterCompleter (int id) {        
         final String SELECT = "select";
         final String NOTHING = "nothing";
@@ -212,6 +246,11 @@ public class ReadMoveUtilsCLI {
         };
     }
 
+    /**
+     * create completer for the helper commands for every active character
+     * @param ids array of active characters IDs
+     * @return helper completer
+     */
     private static ArgumentCompleter characterHelper (int[] ids) {
         final String CHARACTER_PREFIX = "character-";
         return new ArgumentCompleter(
@@ -222,6 +261,11 @@ public class ReadMoveUtilsCLI {
                         JlineCommandRegistry.compileCommandOptions(""), 1));
     }
 
+    /**
+     * to be used on in the planning phase, adds also the helpers regex
+     * @param characters active characters list
+     * @return regex for play assistant command and helper commands
+     */
     private static String decorateWithHelperRegex (int[] characters) {
         if (characters.length != 0) {
             StringBuilder regexBuilder = new StringBuilder(Regex.PLAY_ASSISTANT);
@@ -233,6 +277,12 @@ public class ReadMoveUtilsCLI {
         return "";
     }
 
+    /**
+     * add regex for use character commands and helper commands
+     * @param characters list of active character
+     * @param regex regex to decorate
+     * @return decorated regex
+     */
     private static String decorateWithUseCharacterAndHelperRegex (int[] characters, String regex) {
         if (characters.length == 0) {
             return regex;
@@ -242,6 +292,11 @@ public class ReadMoveUtilsCLI {
         }
     }
 
+    /**
+     * get character use command and helper command regex from character id
+     * @param id character id
+     * @return regex of the command to use the character
+     */
     private static String characterRegex (int id) {
         return switch (id) {
             case 1 -> Regex.USE_CHARACTER_1;
@@ -260,6 +315,14 @@ public class ReadMoveUtilsCLI {
         } + "|" + Regex.HELPER_CHARACTER_START + id + Regex.HELPER_CHARACTER_END;
     }
 
+    /**
+     * read command from user while in move student phase with autocompletion
+     * @param terminal JLine terminal
+     * @param history commands history
+     * @param username user's username
+     * @param characters characters list (empty if game mode is SIMPLE)
+     * @param list list where to append the command written by the user if it passed the regex checks
+     */
     public static void getMoveStudentToIsland (Terminal terminal, History history, String username, int[] characters, List<String> list) {
         AggregateCompleter completer = decorateWithCharacterMoveAndHelper(characters, new ArgumentCompleter(
                 new StringsCompleter("move-student"),
@@ -276,6 +339,14 @@ public class ReadMoveUtilsCLI {
         list.add(move);
     }
 
+    /**
+     * read command from user while in move mother nature phase with autocompletion
+     * @param terminal JLine terminal
+     * @param history commands history
+     * @param username user's username
+     * @param characters characters list (empty if game mode is SIMPLE)
+     * @param list list where to append the command written by the user if it passed the regex checks
+     */
     public static void getMoveMotherNature (Terminal terminal, History history, String username, int[] characters, List<String> list) {
         AggregateCompleter completer = decorateWithCharacterMoveAndHelper(characters, new ArgumentCompleter(
                 new StringsCompleter("move-mother-nature"),
@@ -291,6 +362,14 @@ public class ReadMoveUtilsCLI {
         list.add(move);
     }
 
+    /**
+     * read command from user while in select cloud phase with autocompletion
+     * @param terminal JLine terminal
+     * @param history commands history
+     * @param username user's username
+     * @param characters characters list (empty if game mode is SIMPLE)
+     * @param list list where to append the command written by the user if it passed the regex checks
+     */
     public static void getMoveSelectCloud (Terminal terminal, History history, String username, int[] characters, List<String> list) {
         AggregateCompleter completer = decorateWithCharacterMoveAndHelper(characters, new ArgumentCompleter(
                 new StringsCompleter("select-cloud"),
@@ -305,6 +384,14 @@ public class ReadMoveUtilsCLI {
         list.add(move);
     }
 
+    /**
+     * read command from user while in planning phase with autocompletion
+     * @param terminal JLine terminal
+     * @param history commands history
+     * @param username user's username
+     * @param characters characters list (empty if game mode is SIMPLE)
+     * @param list list where to append the command written by the user if it passed the regex checks
+     */
     public static void getMovePlayAssistant (Terminal terminal, History history, String username, int[] characters, List<String> list) {
         AggregateCompleter completer = decorateWithCharacterHelper(characters, new ArgumentCompleter(
                 new StringsCompleter("play-assistant"),

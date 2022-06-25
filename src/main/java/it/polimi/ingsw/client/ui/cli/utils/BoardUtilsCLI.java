@@ -16,6 +16,10 @@ import java.util.stream.IntStream;
 
 import static org.fusesource.jansi.Ansi.ansi;
 
+/**
+ * utils to draw the components of the board
+ * the student order, on which all the arrays, lists etc. are based, is the following: GREEN, RED, YELLOW, PINK, BLUE
+ */
 public class BoardUtilsCLI {
     private BoardUtilsCLI () {
     }
@@ -146,6 +150,12 @@ public class BoardUtilsCLI {
         return array;
     }
 
+    /**
+     * get the active character for the player, if the player is playing
+     * @param model game state
+     * @param playerID player ID
+     * @return characterID or -1 if no character is played of if the player is not playing
+     */
     private static int getPlayedCharacter (Game model, int playerID) {
         if (model.getGameState().getCurrentPlayer() == playerID && model.getGameState() instanceof ActionState actionState && actionState.getActivatedCharacter() != null) {
             return actionState.getActivatedCharacter().getId();
@@ -153,6 +163,13 @@ public class BoardUtilsCLI {
         return -1;
     }
 
+    /**
+     * check if two islands are connected
+     * @param model game state
+     * @param firstIsl first island ID
+     * @param secondIsl second island ID
+     * @return true if they are connected, false otherwise
+     */
     private static boolean areIslandsConnected (Game model, int firstIsl, int secondIsl) {
         for (IslandGroup g : model.getIslandGroupList()) {
             if (2 == g.getIslandList().stream().map(Island::getId).filter(integer -> integer == firstIsl || integer == secondIsl).count()) {
@@ -162,6 +179,11 @@ public class BoardUtilsCLI {
         return false;
     }
 
+    /**
+     * find round number
+     * @param model game state
+     * @return round number
+     */
     private static int findRoundNumber (Game model) {
         if (model.getGameState().getGameStateName().equals("PS")) {
             return 11 - model.getWizard(model.getGameState().getCurrentPlayer()).getCardDeck().getDeckCards().length;
@@ -169,6 +191,11 @@ public class BoardUtilsCLI {
         return 10 - model.getWizard(model.getGameState().getCurrentPlayer()).getCardDeck().getDeckCards().length;
     }
 
+    /**
+     * get colored with ANSI string stating tower color based on tower color
+     * @param tower color of tower
+     * @return string stating tower color  with ANSI codes for color
+     */
     private static Ansi translateTowerColor (String tower) {
         return switch (tower) {
             case "WHITE" -> ansi().fgRgb(255, 255, 255).a("W-Tower");
@@ -178,6 +205,12 @@ public class BoardUtilsCLI {
         };
     }
 
+    /**
+     * get colored string with ANSI stating tower color and number based on tower color
+     * @param tower color of tower
+     * @param number number to display
+     * @return string stating tower color and number
+     */
     private static Ansi translateTowerNumberColor (String tower, int number) {
         return switch (tower) {
             case "WHITE" -> ansi().fgRgb(255, 255, 255).a(number + " W-Tower");
@@ -187,16 +220,31 @@ public class BoardUtilsCLI {
         };
     }
 
+    /**
+     * print a warning message where the cursor is at (supposed to be called when the cursor is in the console area)
+     * @param terminal JLine terminal
+     * @param s message to print
+     */
     public static void printConsoleWarning (Terminal terminal, String s) {
         terminal.writer().println(ansi().fgRgb(255, 0, 0).a(s).fgDefault());
         terminal.writer().flush();
     }
 
+    /**
+     * print an info message where the cursor is at (supposed to be called when the cursor is in the console area)
+     * @param terminal JLine terminal
+     * @param s message to print
+     */
     public static void printConsoleInfo (Terminal terminal, String s) {
         terminal.writer().print(ansi().fgBlue().a(s).fgDefault());
         terminal.writer().flush();
     }
 
+    /**
+     * print character instructions
+     * @param terminal JLine terminal
+     * @param characterID character ID
+     */
     public static void printCharacterHelper (Terminal terminal, int characterID) {
         String help = "Character " + characterID + " description: " + switch (characterID) {
             case 1 -> CharactersDescription.CHARACTER_1;
@@ -217,6 +265,12 @@ public class BoardUtilsCLI {
         terminal.writer().flush();
     }
 
+    /**
+     * draws dashes representing the bridge between islands, direction horizontal
+     * @param terminal JLine terminal
+     * @param baseRow row to start drawing from
+     * @param baseCol column to start drawing from
+     */
     private static void drawConnectionWtoE (Terminal terminal, int baseRow, int baseCol) {
         final String CONNECTION_1 = "-----";
         final String CONNECTION_2 = "---";
@@ -228,6 +282,12 @@ public class BoardUtilsCLI {
         terminal.writer().flush();
     }
 
+    /**
+     * draws dashes representing the bridge between islands, direction from top left to bottom right
+     * @param terminal JLine terminal
+     * @param baseRow row to start drawing from
+     * @param baseCol column to start drawing from
+     */
     private static void drawConnectionNWtoSE (Terminal terminal, int baseRow, int baseCol) {
         final String CONNECTION = "----";
 
@@ -235,6 +295,12 @@ public class BoardUtilsCLI {
         terminal.writer().flush();
     }
 
+    /**
+     * draws dashes representing the bridge between islands, direction vertical
+     * @param terminal JLine terminal
+     * @param baseRow row to start drawing from
+     * @param baseCol column to start drawing from
+     */
     private static void drawConnectionNtoS (Terminal terminal, int baseRow, int baseCol) {
         final String CONNECTION_1 = "| | |";
         final String CONNECTION_2 = "|_|_|";
@@ -244,6 +310,12 @@ public class BoardUtilsCLI {
         terminal.writer().flush();
     }
 
+    /**
+     * draws dashes representing the bridge between islands, direction from bottom left to top right
+     * @param terminal JLine terminal
+     * @param baseRow row to start drawing from
+     * @param baseCol column to start drawing from
+     */
     private static void drawConnectionSWtoNE (Terminal terminal, int baseRow, int baseCol) {
         final String CONNECTION = "----";
 
@@ -251,6 +323,14 @@ public class BoardUtilsCLI {
         terminal.writer().flush();
     }
 
+    /**
+     * draw island on terminal
+     * @param terminal JLine terminal
+     * @param base vector with row to start drawing from and column to start drawing from
+     * @param group island group
+     * @param island island
+     * @param hasMotherNature true if the island has mother nature on it, false otherwise
+     */
     private static void drawIsland (Terminal terminal, List<Integer> base, IslandGroup group, Island island, boolean hasMotherNature) {
         final int baseRow = base.get(0);
         final int baseCol = base.get(1);
@@ -320,6 +400,12 @@ public class BoardUtilsCLI {
         }
     }
 
+    /**
+     * draw cloud on terminal
+     * @param terminal JLine terminal
+     * @param base vector with row to start drawing from and column to start drawing from
+     * @param cloud cloud
+     */
     private static void drawCloud (Terminal terminal, List<Integer> base, Cloud cloud) {
         final int baseRow = base.get(0);
         final int baseCol = base.get(1);
@@ -362,6 +448,12 @@ public class BoardUtilsCLI {
         terminal.writer().println(ansi().cursor(baseRow + 5, baseCol).a(R6));
     }
 
+    /**
+     * draw bridges between islands
+     * @param terminal JLine terminal
+     * @param base vector with row to start drawing from and column to start drawing from
+     * @param model game state
+     */
     private static void drawTilesBridges (Terminal terminal, List<Integer> base, Game model) {
         final int baseRow = base.get(0);
         final int baseCol = base.get(1);
@@ -397,6 +489,12 @@ public class BoardUtilsCLI {
         });
     }
 
+    /**
+     * draw islands anc cloud
+     * @param terminal JLine terminal
+     * @param base vector with row to start drawing from and column to start drawing from
+     * @param model game state
+     */
     public static void drawTilesAndClouds (Terminal terminal, List<Integer> base, Game model) {
         final int baseRow = base.get(0);
         final int baseCol = base.get(1);
@@ -458,14 +556,14 @@ public class BoardUtilsCLI {
     }
 
     /**
-     *
-     * @param terminal
-     * @param base
-     * @param towerColor
-     * @param towerNumber
-     * @param professors
-     * @param diningColors
-     * @param entranceColors
+     * draw single player school board
+     * @param terminal JLine terminal
+     * @param base vector with row to start drawing from and column to start drawing from
+     * @param towerColor tower color
+     * @param towerNumber towers number
+     * @param professors array of booleans stating if the user has the professor of that color
+     * @param diningColors array of counts of students based on color in the dining room
+     * @param entranceColors array of counts of students based on color in the entrance
      */
     private static void drawSchoolBoard (Terminal terminal, List<Integer> base, String towerColor, int towerNumber, boolean[] professors, int[] diningColors, int[] entranceColors) {
         final int baseRow = base.get(0);
@@ -513,6 +611,15 @@ public class BoardUtilsCLI {
 
     }
 
+    /**
+     * draw single player area on terminal
+     * @param terminal JLine terminal
+     * @param base vector with row to start drawing from and column to start drawing from
+     * @param playerID player ID
+     * @param playerUsername player username
+     * @param isDisconnected true if the user is disconnected, false otherwise
+     * @param model game state
+     */
     private static void drawSinglePlayerArea (Terminal terminal, List<Integer> base, int playerID, String playerUsername, boolean isDisconnected, Game model) {
         final int baseRow = base.get(0);
         final int baseCol = base.get(1);
@@ -557,6 +664,14 @@ public class BoardUtilsCLI {
         }
     }
 
+    /**
+     * draw players area
+     * @param terminal JLine terminal
+     * @param base vector with row to start drawing from and column to start drawing from
+     * @param model game state
+     * @param usernames list of players usernames
+     * @param disconnectedUsernames list of usernames of disconnected players
+     */
     public static void drawPlayerBoards (Terminal terminal, List<Integer> base, Game model, List<String> usernames, List<String> disconnectedUsernames) {
         final int baseRow = base.get(0);
         final int baseCol = base.get(1);
@@ -577,6 +692,15 @@ public class BoardUtilsCLI {
         ));
     }
 
+    /**
+     * draw game information section
+     * @param terminal JLine terminal
+     * @param base vector with row to start drawing from and column to start drawing from
+     * @param serverIP server IP
+     * @param serverPort server port
+     * @param gameMode game mode
+     * @param playersNumber number of players in the game
+     */
     private static void drawGameInfoSection (Terminal terminal, List<Integer> base, String serverIP, int serverPort, String gameMode, int playersNumber) {
         final int baseRow = base.get(0);
         final int baseCol = base.get(1);
@@ -598,6 +722,14 @@ public class BoardUtilsCLI {
         terminal.writer().println(ansi().cursor(baseRow + 6, baseCol).a(INFO_R1));
     }
 
+    /**
+     * draw game status section
+     * @param terminal JLine terminal
+     * @param base vector with row to start drawing from and column to start drawing from
+     * @param round round number
+     * @param currPlayer username of the player currently playing
+     * @param currPhase current phase
+     */
     private static void drawGameStatusSection (Terminal terminal, List<Integer> base, int round, String currPlayer, String currPhase) {
         final int baseRow = base.get(0);
         final int baseCol = base.get(1);
@@ -617,6 +749,13 @@ public class BoardUtilsCLI {
         terminal.writer().println(ansi().cursor(baseRow + 5, baseCol).a(INFO_R1));
     }
 
+    /**
+     * draw characters that have a list of students
+     * @param terminal JLine terminal
+     * @param base vector with row to start drawing from and column to start drawing from
+     * @param characterCost cost of character
+     * @param characterColorList list of student on the character
+     */
     private static void drawCharacterWithColors (Terminal terminal, List<Integer> base, int characterCost, int[] characterColorList) {
         final int baseRow = base.get(0);
         final int baseCol = base.get(1);
@@ -639,6 +778,12 @@ public class BoardUtilsCLI {
         ));
     }
 
+    /**
+     * draw characters section
+     * @param terminal JLine terminal
+     * @param base vector with row to start drawing from and column to start drawing from
+     * @param characters characters list
+     */
     private static void drawGameCharactersSection (Terminal terminal, List<Integer> base, Character[] characters) {
         final int baseRow = base.get(0);
         final int baseCol = base.get(1);
@@ -681,6 +826,12 @@ public class BoardUtilsCLI {
         terminal.writer().println(ansi().cursor(baseRow + 10, baseCol).a(INFO_R1));
     }
 
+    /**
+     * draw player deck section
+     * @param terminal JLine terminal
+     * @param base vector with row to start drawing from and column to start drawing from
+     * @param cards list of the player's cards
+     */
     private static void drawDeckSection (Terminal terminal, List<Integer> base, int[] cards) {
         final int baseRow = base.get(0);
         final int baseCol = base.get(1);
@@ -693,6 +844,16 @@ public class BoardUtilsCLI {
         terminal.writer().println(ansi().cursor(baseRow + cards.length + 2, baseCol).a(INFO_R1));
     }
 
+    /**
+     * draw all the info section with its subsections
+     * @param terminal JLine terminal
+     * @param base vector with row to start drawing from and column to start drawing from
+     * @param serverIP server IP
+     * @param serverPort server port
+     * @param username host player username
+     * @param usernames list of the players usernames
+     * @param model game state
+     */
     public static void drawInfoSection (Terminal terminal, List<Integer> base, String serverIP, int serverPort, String username, List<String> usernames, Game model) {
         final int baseRow = base.get(0);
         final int baseCol = base.get(1);
@@ -730,6 +891,11 @@ public class BoardUtilsCLI {
 
     }
 
+    /**
+     * draw the bottom section
+     * @param terminal JLine terminal
+     * @param baseRow row to start drawing from
+     */
     public static void drawConsoleArea (Terminal terminal, int baseRow) {
         final String CONSOLE = "Your Console";
         final String INSTRUCTIONS = "Write here your commands to interact with the game... (press TAB to get suggestions and autocompletion, to resign press CTRL+C)";

@@ -24,6 +24,7 @@ public abstract class AbstractCreateGamePage extends AbstractPage {
 
         Redirect redirect = (Redirect) client.getConnection().waitMessage(Redirect.class);
         client.setPort(redirect.port());
+        client.getConnection().close();
         client.setConnection(new Connection(client.getIpAddress(), client.getPort(), logger));
 
         Login login = new Login(client.getUsername());

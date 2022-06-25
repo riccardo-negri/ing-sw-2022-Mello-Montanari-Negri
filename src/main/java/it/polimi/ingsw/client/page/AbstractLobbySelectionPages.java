@@ -33,6 +33,7 @@ public abstract class AbstractLobbySelectionPages extends AbstractPage {
         Message lastMessage = client.getConnection().waitMessage(Arrays.asList(Redirect.class, LobbiesList.class));
         if (lastMessage instanceof Redirect redirect) {
             client.setPort(redirect.port());
+            client.getConnection().close();
             client.setConnection(new Connection(client.getIpAddress(), client.getPort(), logger));
 
             Login login = new Login(client.getUsername());

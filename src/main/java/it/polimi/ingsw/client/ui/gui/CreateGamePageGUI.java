@@ -15,7 +15,7 @@ public class CreateGamePageGUI extends AbstractCreateGamePage {
     }
 
     @Override
-    public void draw(Client client) {
+    public void draw() {
         showGUIPage("Create Game", "/fxml/CreateGamePage.fxml", new CreateGamePageController());
     }
 }

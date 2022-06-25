@@ -15,7 +15,7 @@ public class CreditsPageGUI extends AbstractCreditsPage {
     }
 
     @Override
-    public void draw(Client client) {
+    public void draw() {
         showGUIPage("Credits", "/fxml/CreditsPage.fxml", new CreditsPageController());
     }
 }

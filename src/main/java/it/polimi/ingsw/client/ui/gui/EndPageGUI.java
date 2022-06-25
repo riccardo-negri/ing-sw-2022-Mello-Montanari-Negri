@@ -15,7 +15,7 @@ public class EndPageGUI extends AbstractEndPage {
     }
 
     @Override
-    public void draw(Client client) {
+    public void draw() {
         showGUIPage("Game Ended", "/fxml/EndPage.fxml", new EndPageController());
     }
 }

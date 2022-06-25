@@ -64,7 +64,7 @@ public class Client {
 
     public void drawNextPage() {
         currState = ui.getState(this, nextState);
-        currState.draw(this);
+        currState.draw();
     }
 
     public ClientPage getNextState () {

@@ -27,7 +27,7 @@ public class BoardPageCLI extends AbstractBoardPage {
     }
 
     @Override
-    public void draw (Client client) {
+    public void draw () {
         Signal.handle(new Signal("INT"),  // SIGINT if the player wants to quit the game
                 signal -> onQuit(true));
 

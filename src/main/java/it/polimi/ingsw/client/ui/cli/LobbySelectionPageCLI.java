@@ -15,7 +15,7 @@ public class LobbySelectionPageCLI extends AbstractLobbySelectionPages {
     }
 
     @Override
-    public void draw (Client client) {
+    public void draw () {
         final String LOBBY = """
                  ██████╗ ██████╗ ███████╗███╗   ██╗    ██╗      ██████╗ ██████╗ ██████╗ ██╗███████╗███████╗
                 ██╔═══██╗██╔══██╗██╔════╝████╗  ██║    ██║     ██╔═══██╗██╔══██╗██╔══██╗██║██╔════╝██╔════╝

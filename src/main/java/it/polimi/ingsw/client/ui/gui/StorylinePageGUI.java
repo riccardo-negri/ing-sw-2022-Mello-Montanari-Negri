@@ -15,7 +15,7 @@ public class StorylinePageGUI extends AbstractStorylinePage {
     }
 
     @Override
-    public void draw(Client client) {
+    public void draw() {
         showGUIPage("Storyline!", "/fxml/StorylinePage.fxml", new StorylinePageController());
     }
 }

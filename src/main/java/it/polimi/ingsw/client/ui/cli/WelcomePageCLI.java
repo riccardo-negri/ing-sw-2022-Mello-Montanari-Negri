@@ -12,7 +12,7 @@ public class WelcomePageCLI extends AbstractWelcomePage {
     }
 
     @Override
-    public void draw (Client client) {
+    public void draw () {
         final String WELCOME_TO = """
                 ██╗    ██╗███████╗██╗      ██████╗ ██████╗ ███╗   ███╗███████╗    ████████╗ ██████╗\040
                 ██║    ██║██╔════╝██║     ██╔════╝██╔═══██╗████╗ ████║██╔════╝    ╚══██╔══╝██╔═══██╗

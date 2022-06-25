@@ -14,7 +14,7 @@ public class MenuPageCLI extends AbstractMenuPage {
     }
 
     @Override
-    public void draw (Client client) {
+    public void draw () {
         final String MENU = """
                 ███╗   ███╗███████╗███╗   ██╗██╗   ██╗
                 ████╗ ████║██╔════╝████╗  ██║██║   ██║

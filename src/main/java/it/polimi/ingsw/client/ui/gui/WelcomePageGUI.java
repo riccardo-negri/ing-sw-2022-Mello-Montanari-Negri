@@ -15,7 +15,7 @@ public class WelcomePageGUI extends AbstractWelcomePage{
     }
 
     @Override
-    public void draw(Client client) {
+    public void draw() {
         showGUIPage("Welcome!", "/fxml/WelcomePage.fxml", new WelcomePageController());
     }
 }

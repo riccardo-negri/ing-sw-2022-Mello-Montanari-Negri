@@ -12,7 +12,7 @@ public class CreditsPageCLI extends AbstractCreditsPage {
     }
 
     @Override
-    public void draw (Client client) {
+    public void draw () {
         final String CREDITS = """
                   ██████╗██████╗ ███████╗██████╗ ██╗████████╗███████╗
                  ██╔════╝██╔══██╗██╔════╝██╔══██╗██║╚══██╔══╝██╔════╝

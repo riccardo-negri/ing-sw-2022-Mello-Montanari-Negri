@@ -37,7 +37,7 @@ public abstract class AbstractPage {
 
     }
 
-    public abstract void draw (Client client); //TODO: remove useless parameter client, is present since creation class wide
+    public abstract void draw ();
 
     protected void showGUIPage(String title, String file, AbstractController controller) {
         Stage stage = ((GUI) client.getUI()).stage();

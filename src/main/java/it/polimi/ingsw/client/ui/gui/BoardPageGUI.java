@@ -31,7 +31,7 @@ public class BoardPageGUI extends AbstractBoardPage {
     }
 
     @Override
-    public void draw(Client client) {
+    public void draw() {
         showGUIPage("Game", "/fxml/BoardPage.fxml", new BoardPageController());
     }
 

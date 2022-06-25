@@ -13,7 +13,7 @@ public class ConnectionPageCLI extends AbstractConnectionPage {
     }
 
     @Override
-    public void draw (Client client) {
+    public void draw () {
         final String CONNECTION = """
                  ██████╗ ██████╗ ███╗   ██╗███╗   ██╗███████╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗
                 ██╔════╝██╔═══██╗████╗  ██║████╗  ██║██╔════╝██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║

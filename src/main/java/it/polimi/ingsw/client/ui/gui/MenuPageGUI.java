@@ -15,7 +15,7 @@ public class MenuPageGUI extends AbstractMenuPage {
     }
 
     @Override
-    public void draw(Client client) {
+    public void draw() {
         showGUIPage("Menu", "/fxml/MenuPage.fxml", new MenuPageController());
     }
 }

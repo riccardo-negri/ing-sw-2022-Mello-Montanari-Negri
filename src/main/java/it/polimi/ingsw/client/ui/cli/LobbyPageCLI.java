@@ -12,7 +12,7 @@ public class LobbyPageCLI extends AbstractLobbyPage {
     }
 
     @Override
-    public void draw (Client client) {
+    public void draw () {
         final String LOBBY = """
                  ██████╗  █████╗ ███╗   ███╗███████╗    ██╗      ██████╗ ██████╗ ██████╗ ██╗   ██╗
                 ██╔════╝ ██╔══██╗████╗ ████║██╔════╝    ██║     ██╔═══██╗██╔══██╗██╔══██╗╚██╗ ██╔╝

@@ -12,7 +12,7 @@ public class StorylinePageCLI extends AbstractStorylinePage {
     }
 
     @Override
-    public void draw (Client client) {
+    public void draw () {
         final String STORYLINE = """
                 ███████╗████████╗ ██████╗ ██████╗ ██╗   ██╗██╗     ██╗███╗   ██╗███████╗
                 ██╔════╝╚══██╔══╝██╔═══██╗██╔══██╗╚██╗ ██╔╝██║     ██║████╗  ██║██╔════╝

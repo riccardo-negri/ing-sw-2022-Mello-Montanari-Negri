@@ -12,7 +12,7 @@ public class CreateGamePageCLI extends AbstractCreateGamePage {
     }
 
     @Override
-    public void draw (Client client) {
+    public void draw () {
         final String CREATE_GAME = """
                  ██████╗██████╗ ███████╗ █████╗ ████████╗███████╗     ██████╗  █████╗ ███╗   ███╗███████╗
                 ██╔════╝██╔══██╗██╔════╝██╔══██╗╚══██╔══╝██╔════╝    ██╔════╝ ██╔══██╗████╗ ████║██╔════╝

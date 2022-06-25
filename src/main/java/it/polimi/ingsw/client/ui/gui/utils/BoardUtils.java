@@ -76,7 +76,7 @@ public class BoardUtils {
         return new Image("assets/ban.png");
     }
 
-    public static void updateIslands (BoardRecord board, Client client) {
+    private static void updateIslands (BoardRecord board, Client client) {
         // update islands
         for (IslandGroup group : client.getModel().getIslandGroupList()) {
             for (Island island : group.getIslandList()) {
@@ -112,7 +112,23 @@ public class BoardUtils {
         }
     }
 
-    public static void updateClouds (BoardRecord board, Client client) {
+    private static boolean areIslandsConnected (Game model, int firstIsl, int secondIsl) {
+        for (IslandGroup g : model.getIslandGroupList()) {
+            if (2 == g.getIslandList().stream().map(Island::getId).filter(integer -> integer == firstIsl || integer == secondIsl).count()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static void updateBridges (BoardRecord board, Client client) {
+        IntStream.range(0, 12).forEach(i -> {
+            int j = i == 11 ? 0 : i + 1;
+            board.bridges().get(i).setVisible(areIslandsConnected(client.getModel(), i, j));
+        });
+    }
+
+    private static void updateClouds (BoardRecord board, Client client) {
         int i = 0;
         for (Cloud cloud : client.getModel().getCloudList()) {
             int j = 0;
@@ -240,7 +256,7 @@ public class BoardUtils {
 
     }
 
-    public static void updateUsersArea (BoardRecord board, Client client) {
+    private static void updateUsersArea (BoardRecord board, Client client) {
         int indexOfMyUser = client.getUsernames().indexOf(client.getUsername());
 
         int i = 0;
@@ -303,27 +319,27 @@ public class BoardUtils {
         }
     }
 
-    public static void updateDeck(BoardRecord board, Client client) {
-        Wizard wizard =  client.getModel().getWizard(client.getUsernames().indexOf(client.getUsername()));
+    private static void updateDeck (BoardRecord board, Client client) {
+        Wizard wizard = client.getModel().getWizard(client.getUsernames().indexOf(client.getUsername()));
         int[] cards = wizard.getCardDeck().getDeckCards();
 
         for (int i = 1; i <= 10; i++) {
             boolean found = false;
-            for(int x : cards){
-                if(x == i){
+            for (int x : cards) {
+                if (x == i) {
                     found = true;
                     break;
                 }
             }
 
             if (!found) {
-                board.myDeck().get(i-1).setVisible(false);
+                board.myDeck().get(i - 1).setVisible(false);
             }
         }
 
     }
 
-    private static void updateCharacters(BoardRecord board, Client client) {
+    private static void updateCharacters (BoardRecord board, Client client) {
         if (client.getModel().getGameMode().equals(GameMode.COMPLETE)) {
             for (int i = 0; i < 3; i++) {
                 CharacterRecord characterRecord = board.characters().get(i);
@@ -412,6 +428,8 @@ public class BoardUtils {
 
         updateIslands(board, client);
 
+        updateBridges(board, client);
+
         updateClouds(board, client);
 
         // mySchoolBoard
@@ -420,13 +438,13 @@ public class BoardUtils {
         // otherSchoolBoard
         List<String> usersNotMyUser = new ArrayList<>(client.getUsernames());
         usersNotMyUser.remove(client.getUsername());
-        String currPlayerclient = client.getUsernames().get(client.getModel().getGameState().getCurrentPlayer());
+        String currPlayerClient = client.getUsernames().get(client.getModel().getGameState().getCurrentPlayer());
         if (selectedOtherUser != null) {
-            updateSchoolBoard(board, client, usersNotMyUser.get(selectedOtherUser-1));
+            updateSchoolBoard(board, client, usersNotMyUser.get(selectedOtherUser - 1));
 
         }
-        else if (usersNotMyUser.contains(currPlayerclient)) {
-            updateSchoolBoard(board, client, currPlayerclient);
+        else if (usersNotMyUser.contains(currPlayerClient)) {
+            updateSchoolBoard(board, client, currPlayerClient);
         }
         else {
             updateSchoolBoard(board, client, usersNotMyUser.get(0));

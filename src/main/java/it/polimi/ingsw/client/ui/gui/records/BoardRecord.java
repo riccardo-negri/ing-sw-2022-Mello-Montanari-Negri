@@ -7,6 +7,7 @@ import java.util.List;
 
 public record BoardRecord(
         List<IslandRecord> islands,
+        List<ImageView> bridges,
         List<CloudRecord> clouds,
         SchoolBoardRecord myBoard,
         SchoolBoardRecord otherBoard,

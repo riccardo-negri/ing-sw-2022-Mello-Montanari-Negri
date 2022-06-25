@@ -674,6 +674,14 @@
                                           <Insets right="8.0" top="27.0" />
                                        </GridPane.margin>
                                     </Label>
+                                    <ImageView fx:id="bridge10to11" fitHeight="150.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2">
+                                       <image>
+                                          <Image url="@../assets/icons/bridge.png" />
+                                       </image>
+                                       <GridPane.margin>
+                                          <Insets left="-35.0" />
+                                       </GridPane.margin>
+                                    </ImageView>
                                  </children>
                               </GridPane>
                               <GridPane fx:id="island0" onMouseReleased="#handleIsland0" GridPane.columnIndex="2">
@@ -761,6 +769,14 @@
                                           <Insets right="8.0" top="27.0" />
                                        </GridPane.margin>
                                     </Label>
+                                    <ImageView fx:id="bridge11to0" fitHeight="150.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1">
+                                       <image>
+                                          <Image url="@../assets/icons/bridge.png" />
+                                       </image>
+                                       <GridPane.margin>
+                                          <Insets left="-28.0" />
+                                       </GridPane.margin>
+                                    </ImageView>
                                  </children>
                               </GridPane>
                               <GridPane fx:id="island1" onMouseReleased="#handleIsland1" GridPane.columnIndex="3">
@@ -848,6 +864,14 @@
                                           <Insets right="8.0" top="27.0" />
                                        </GridPane.margin>
                                     </Label>
+                                    <ImageView fx:id="bridge0to1" fitHeight="85.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1">
+                                       <image>
+                                          <Image url="@../assets/icons/bridge.png" />
+                                       </image>
+                                       <GridPane.margin>
+                                          <Insets left="-28.0" />
+                                       </GridPane.margin>
+                                    </ImageView>
                                  </children>
                               </GridPane>
                               <GridPane fx:id="island2" onMouseReleased="#handleIsland2" GridPane.columnIndex="4">
@@ -935,6 +959,14 @@
                                           <Insets right="8.0" top="27.0" />
                                        </GridPane.margin>
                                     </Label>
+                                    <ImageView fx:id="bridge1to2" fitHeight="150.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1">
+                                       <image>
+                                          <Image url="@../assets/icons/bridge.png" />
+                                       </image>
+                                       <GridPane.margin>
+                                          <Insets left="-28.0" />
+                                       </GridPane.margin>
+                                    </ImageView>
                                  </children>
                               </GridPane>
                               <GridPane fx:id="island3" onMouseReleased="#handleIsland3" GridPane.columnIndex="5" GridPane.rowIndex="1">
@@ -1022,6 +1054,14 @@
                                           <Insets right="8.0" top="27.0" />
                                        </GridPane.margin>
                                     </Label>
+                                    <ImageView fx:id="bridge2to3" fitHeight="150.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../assets/icons/bridge.png" />
+                                       </image>
+                                       <GridPane.margin>
+                                          <Insets left="-25.0" top="-50.0" />
+                                       </GridPane.margin>
+                                    </ImageView>
                                  </children>
                               </GridPane>
                               <GridPane fx:id="island4" onMouseReleased="#handleIsland4" GridPane.columnIndex="5" GridPane.rowIndex="3">
@@ -1109,6 +1149,14 @@
                                           <Insets right="8.0" top="27.0" />
                                        </GridPane.margin>
                                     </Label>
+                                    <ImageView fx:id="bridge3to4" fitHeight="150.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+                                       <image>
+                                          <Image url="@../assets/icons/bridge.png" />
+                                       </image>
+                                       <GridPane.margin>
+                                          <Insets bottom="100.0" />
+                                       </GridPane.margin>
+                                    </ImageView>
                                  </children>
                               </GridPane>
                               <GridPane fx:id="island5" onMouseReleased="#handleIsland5" GridPane.columnIndex="4" GridPane.rowIndex="4">
@@ -1196,6 +1244,14 @@
                                           <Insets right="8.0" top="27.0" />
                                        </GridPane.margin>
                                     </Label>
+                                    <ImageView fx:id="bridge4to5" fitHeight="150.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+                                       <image>
+                                          <Image url="@../assets/icons/bridge.png" />
+                                       </image>
+                                       <GridPane.margin>
+                                          <Insets bottom="50.0" left="22.0" />
+                                       </GridPane.margin>
+                                    </ImageView>
                                  </children>
                               </GridPane>
                               <GridPane fx:id="island6" onMouseReleased="#handleIsland6" GridPane.columnIndex="3" GridPane.rowIndex="4">
@@ -1283,6 +1339,15 @@
                                           <Insets right="8.0" top="27.0" />
                                        </GridPane.margin>
                                     </Label>
+                                    <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1" />
+                                    <ImageView fx:id="bridge5to6" fitHeight="150.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                       <image>
+                                          <Image url="@../assets/icons/bridge.png" />
+                                       </image>
+                                       <GridPane.margin>
+                                          <Insets left="28.0" />
+                                       </GridPane.margin>
+                                    </ImageView>
                                  </children>
                               </GridPane>
                               <GridPane fx:id="island7" onMouseReleased="#handleIsland7" GridPane.columnIndex="2" GridPane.rowIndex="4">
@@ -1370,6 +1435,14 @@
                                           <Insets right="8.0" top="27.0" />
                                        </GridPane.margin>
                                     </Label>
+                                    <ImageView fx:id="bridge6to7" fitHeight="150.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                       <image>
+                                          <Image url="@../assets/icons/bridge.png" />
+                                       </image>
+                                       <GridPane.margin>
+                                          <Insets left="28.0" />
+                                       </GridPane.margin>
+                                    </ImageView>
                                  </children>
                               </GridPane>
                               <GridPane fx:id="island8" onMouseReleased="#handleIsland8" GridPane.columnIndex="1" GridPane.rowIndex="4">
@@ -1457,6 +1530,14 @@
                                           <Insets right="8.0" top="27.0" />
                                        </GridPane.margin>
                                     </Label>
+                                    <ImageView fx:id="bridge7to8" fitHeight="150.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                       <image>
+                                          <Image url="@../assets/icons/bridge.png" />
+                                       </image>
+                                       <GridPane.margin>
+                                          <Insets left="28.0" />
+                                       </GridPane.margin>
+                                    </ImageView>
                                  </children>
                               </GridPane>
                               <GridPane fx:id="island9" onMouseReleased="#handleIsland9" GridPane.rowIndex="3">
@@ -1544,6 +1625,22 @@
                                           <Insets right="8.0" top="27.0" />
                                        </GridPane.margin>
                                     </Label>
+                                    <ImageView fx:id="bridge8to9" fitHeight="150.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                                       <image>
+                                          <Image url="@../assets/icons/bridge.png" />
+                                       </image>
+                                       <GridPane.margin>
+                                          <Insets left="30.0" />
+                                       </GridPane.margin>
+                                    </ImageView>
+                                    <ImageView fx:id="bridge9to10" fitHeight="150.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../assets/icons/bridge.png" />
+                                       </image>
+                                       <GridPane.margin>
+                                          <Insets bottom="100.0" />
+                                       </GridPane.margin>
+                                    </ImageView>
                                  </children>
                               </GridPane>
                            </children>
@@ -1680,27 +1777,27 @@
                                           <Image url="@../assets/pawns/students/3d/yellow.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fx:id="item2Character0" fitHeight="24.0" fitWidth="24.0" onMouseReleased="#handleItem2Character0" layoutX="26.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                                    <ImageView fx:id="item2Character0" fitHeight="24.0" fitWidth="24.0" layoutX="26.0" layoutY="161.0" onMouseReleased="#handleItem2Character0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                                        <image>
                                           <Image url="@../assets/pawns/students/3d/yellow.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fx:id="item4Character0" fitHeight="24.0" fitWidth="24.0" onMouseReleased="#handleItem4Character0" layoutX="66.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+                                    <ImageView fx:id="item4Character0" fitHeight="24.0" fitWidth="24.0" layoutX="66.0" layoutY="161.0" onMouseReleased="#handleItem4Character0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="3">
                                        <image>
                                           <Image url="@../assets/pawns/students/3d/yellow.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fx:id="item3Character0" fitHeight="24.0" fitWidth="24.0" onMouseReleased="#handleItem3Character0" layoutX="10.0" layoutY="217.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                                    <ImageView fx:id="item3Character0" fitHeight="24.0" fitWidth="24.0" layoutX="10.0" layoutY="217.0" onMouseReleased="#handleItem3Character0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                                        <image>
                                           <Image url="@../assets/pawns/students/3d/yellow.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fx:id="item1Character0" fitHeight="24.0" fitWidth="24.0" onMouseReleased="#handleItem1Character0" layoutX="66.0" layoutY="217.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                                    <ImageView fx:id="item1Character0" fitHeight="24.0" fitWidth="24.0" layoutX="66.0" layoutY="217.0" onMouseReleased="#handleItem1Character0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                                        <image>
                                           <Image url="@../assets/pawns/students/3d/yellow.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fx:id="item5Character0" fitHeight="24.0" fitWidth="24.0" onMouseReleased="#handleItem5Character0" layoutX="122.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+                                    <ImageView fx:id="item5Character0" fitHeight="24.0" fitWidth="24.0" layoutX="122.0" layoutY="161.0" onMouseReleased="#handleItem5Character0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3">
                                        <image>
                                           <Image url="@../assets/pawns/students/3d/yellow.png" />
                                        </image>
@@ -1741,27 +1838,27 @@
                                           <Image url="@../assets/pawns/students/3d/yellow.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fx:id="item2Character1" fitHeight="24.0" fitWidth="24.0" onMouseReleased="#handleItem2Character1" layoutX="26.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                                    <ImageView fx:id="item2Character1" fitHeight="24.0" fitWidth="24.0" layoutX="26.0" layoutY="161.0" onMouseReleased="#handleItem2Character1" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                                        <image>
                                           <Image url="@../assets/pawns/students/3d/yellow.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fx:id="item4Character1" fitHeight="24.0" fitWidth="24.0" onMouseReleased="#handleItem4Character1" layoutX="66.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+                                    <ImageView fx:id="item4Character1" fitHeight="24.0" fitWidth="24.0" layoutX="66.0" layoutY="161.0" onMouseReleased="#handleItem4Character1" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="3">
                                        <image>
                                           <Image url="@../assets/pawns/students/3d/yellow.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fx:id="item3Character1" fitHeight="24.0" fitWidth="24.0" onMouseReleased="#handleItem3Character1" layoutX="10.0" layoutY="217.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                                    <ImageView fx:id="item3Character1" fitHeight="24.0" fitWidth="24.0" layoutX="10.0" layoutY="217.0" onMouseReleased="#handleItem3Character1" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                                        <image>
                                           <Image url="@../assets/pawns/students/3d/yellow.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fx:id="item1Character1" fitHeight="24.0" fitWidth="24.0" onMouseReleased="#handleItem1Character1" layoutX="66.0" layoutY="217.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                                    <ImageView fx:id="item1Character1" fitHeight="24.0" fitWidth="24.0" layoutX="66.0" layoutY="217.0" onMouseReleased="#handleItem1Character1" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                                        <image>
                                           <Image url="@../assets/pawns/students/3d/yellow.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fx:id="item5Character1" fitHeight="24.0" fitWidth="24.0" onMouseReleased="#handleItem5Character1" layoutX="122.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+                                    <ImageView fx:id="item5Character1" fitHeight="24.0" fitWidth="24.0" layoutX="122.0" layoutY="161.0" onMouseReleased="#handleItem5Character1" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3">
                                        <image>
                                           <Image url="@../assets/pawns/students/3d/yellow.png" />
                                        </image>
@@ -1805,27 +1902,27 @@
                                           <Image url="@../assets/ban.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fx:id="item2Character2" fitHeight="24.0" fitWidth="24.0" onMouseReleased="#handleItem2Character2" layoutX="26.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                                    <ImageView fx:id="item2Character2" fitHeight="24.0" fitWidth="24.0" layoutX="26.0" layoutY="161.0" onMouseReleased="#handleItem2Character2" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                                        <image>
                                           <Image url="@../assets/ban.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fx:id="item4Character2" fitHeight="24.0" fitWidth="24.0" onMouseReleased="#handleItem4Character2" layoutX="66.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+                                    <ImageView fx:id="item4Character2" fitHeight="24.0" fitWidth="24.0" layoutX="66.0" layoutY="161.0" onMouseReleased="#handleItem4Character2" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="3">
                                        <image>
                                           <Image url="@../assets/ban.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fx:id="item3Character2" fitHeight="24.0" fitWidth="24.0" onMouseReleased="#handleItem3Character2" layoutX="10.0" layoutY="217.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                                    <ImageView fx:id="item3Character2" fitHeight="24.0" fitWidth="24.0" layoutX="10.0" layoutY="217.0" onMouseReleased="#handleItem3Character2" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                                        <image>
                                           <Image url="@../assets/ban.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fx:id="item1Character2" fitHeight="24.0" fitWidth="24.0" onMouseReleased="#handleItem1Character2" layoutX="66.0" layoutY="217.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                                    <ImageView fx:id="item1Character2" fitHeight="24.0" fitWidth="24.0" layoutX="66.0" layoutY="217.0" onMouseReleased="#handleItem1Character2" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                                        <image>
                                           <Image url="@../assets/ban.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fx:id="item5Character2" fitHeight="24.0" fitWidth="24.0" onMouseReleased="#handleItem5Character2" layoutX="122.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+                                    <ImageView fx:id="item5Character2" fitHeight="24.0" fitWidth="24.0" layoutX="122.0" layoutY="161.0" onMouseReleased="#handleItem5Character2" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3">
                                        <image>
                                           <Image url="@../assets/ban.png" />
                                        </image>

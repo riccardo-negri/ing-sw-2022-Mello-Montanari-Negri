@@ -1,12 +1,10 @@
 package it.polimi.ingsw.client.ui.gui.controllers;
 
-import com.sun.scenario.effect.Blend;
 import it.polimi.ingsw.client.page.AbstractBoardPage;
 import it.polimi.ingsw.client.ui.gui.BoardPageGUI;
 import it.polimi.ingsw.client.ui.gui.records.*;
 import it.polimi.ingsw.client.ui.gui.records.CharacterRecord;
 import it.polimi.ingsw.model.entity.Game;
-import it.polimi.ingsw.model.entity.gameState.GameState;
 import it.polimi.ingsw.model.enums.StudentColor;
 import it.polimi.ingsw.networking.*;
 import it.polimi.ingsw.networking.moves.Move;
@@ -54,6 +52,31 @@ public class BoardPageController extends AbstractController {
     GridPane island10;
     @FXML
     GridPane island11;
+
+    @FXML
+    ImageView bridge0to1;
+    @FXML
+    ImageView bridge1to2;
+    @FXML
+    ImageView bridge2to3;
+    @FXML
+    ImageView bridge3to4;
+    @FXML
+    ImageView bridge4to5;
+    @FXML
+    ImageView bridge5to6;
+    @FXML
+    ImageView bridge6to7;
+    @FXML
+    ImageView bridge7to8;
+    @FXML
+    ImageView bridge8to9;
+    @FXML
+    ImageView bridge9to10;
+    @FXML
+    ImageView bridge10to11;
+    @FXML
+    ImageView bridge11to0;
 
     @FXML
     ImageView cloud0;
@@ -694,6 +717,8 @@ public class BoardPageController extends AbstractController {
             islandRecords.add(islandRecord);
         }
 
+        List<ImageView> bridges = Arrays.asList(bridge0to1, bridge1to2, bridge2to3, bridge3to4, bridge4to5, bridge5to6, bridge6to7, bridge7to8, bridge8to9, bridge9to10, bridge10to11, bridge11to0);
+
         List<CloudRecord> cloudRecords = Arrays.asList(new CloudRecord(cloud0, Arrays.asList(student0Cloud0, student1Cloud0, student2Cloud0, student3Cloud0)), new CloudRecord(cloud1, Arrays.asList(student0Cloud1, student1Cloud1, student2Cloud1, student3Cloud1)), new CloudRecord(cloud2, Arrays.asList(student0Cloud2, student1Cloud2, student2Cloud2, student3Cloud2)), new CloudRecord(cloud3, Arrays.asList(student0Cloud3, student1Cloud3, student2Cloud3, student3Cloud3)));
 
         SchoolBoardRecord myBoard = new SchoolBoardRecord(Arrays.asList(myStudent0, myStudent1, myStudent2, myStudent3, myStudent4, myStudent5, myStudent6, myStudent7, myStudent8), Arrays.asList(myYellowTable, myBlueTable, myGreenTable, myRedTable, myFuchsiaTable), Arrays.asList(myYellowProfessor, myBlueProfessor, myGreenProfessor, myRedProfessor, myFuchsiaProfessor), Arrays.asList(myTower0, myTower1, myTower2, myTower3, myTower4, myTower5, myTower6, myTower7));
@@ -708,7 +733,7 @@ public class BoardPageController extends AbstractController {
 
         List<ImageView> arrows = Arrays.asList(arrow1, arrow2, arrow3);
 
-        board = new BoardRecord(islandRecords, cloudRecords, myBoard, otherBoard, users, characters, myDeck, arrows, roundNumber, turnPhaseCode);
+        board = new BoardRecord(islandRecords, bridges, cloudRecords, myBoard, otherBoard, users, characters, myDeck, arrows, roundNumber, turnPhaseCode);
 
         updateBoard(board, client, selectedOtherUser);
     }

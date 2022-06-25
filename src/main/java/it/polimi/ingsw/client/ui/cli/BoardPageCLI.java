@@ -56,6 +56,39 @@ public class BoardPageCLI extends AbstractBoardPage {
         if (client.getNextState() == ClientPage.BOARD_PAGE) onEnd(false);
     }
 
+    @Override
+    protected void validateAndSendMove (Move moveToSend) throws Exception{
+        super.validateAndSendMove(moveToSend);
+
+        // wait and apply message if the suer is using a CLI
+        String toLog = "Waiting for message to come back. Move:" + moveToSend;
+        logger.log(Level.INFO, toLog);
+        Message message = client.getConnection().waitMessage(Arrays.asList(Move.class, Disconnected.class, UserResigned.class));
+
+        if (message instanceof Disconnected) {
+            printConsoleWarning(terminal, "You got disconnected from the game, rejoin the game with the same username. Press enter to go back to the connection page...");
+            waitEnterPressed(terminal);
+            onEnd(true);
+            return;
+        }
+
+        else if (message instanceof UserResigned userResigned) {
+            printConsoleWarning(terminal, "Player " + userResigned.getUsername() + " resigned from the game. Press enter to go back to the menu...");
+            waitEnterPressed(terminal);
+            onQuit(false);
+            return;
+        }
+
+        Move moveToApply = (Move) message;
+
+        toLog = "Applying effects of message. Move:" + moveToSend;
+        logger.log(Level.INFO, toLog);
+        moveToApply.applyEffectClient(client.getModel());
+
+        toLog = "Applied effect of message. Move:" + moveToSend;
+        logger.log(Level.INFO, toLog);
+    }
+
     private void askForMoveBasedOnState () {
         switch (model.getGameState().getGameStateName()) {
             case "PS" ->

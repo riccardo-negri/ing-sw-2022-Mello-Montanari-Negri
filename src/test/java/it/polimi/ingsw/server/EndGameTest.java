@@ -51,6 +51,7 @@ class EndGameTest {
         msm.writeFile(SavesManager.gameFilePath(code, "153"), state);
 
         MatchmakingServer s = new MatchmakingServer();
+        assert s.socket != null;
         Thread t = new Thread(s::run);
         t.start();
 

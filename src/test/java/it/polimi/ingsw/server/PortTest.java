@@ -15,6 +15,7 @@ class PortTest{
     @Test
     void portNotAvailableTest() throws InterruptedException {
         Server s1 = new MatchmakingServer();
+        assert s1.socket != null;
         Thread t1 = new Thread(s1::run);
         t1.start();
 

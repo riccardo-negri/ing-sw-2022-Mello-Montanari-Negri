@@ -16,6 +16,7 @@ class ConnectTest {
     @Test
     void reconnectTest() throws InterruptedException {
         Server s = new MatchmakingServer();
+        assert s.socket != null;
         Thread t = new Thread(s::run);
         t.start();
 
@@ -47,6 +48,7 @@ class ConnectTest {
     @Test
     void lobbyReconnectTest() throws InterruptedException {
         Server s = new MatchmakingServer();
+        assert s.socket != null;
         Thread t = new Thread(s::run);
         t.start();
 
@@ -122,6 +124,7 @@ class ConnectTest {
     @Test
     void connectionRefusedTest() throws InterruptedException {
         Server s = new MatchmakingServer();
+        assert s.socket != null;
         Thread t = new Thread(s::run);
         t.start();
 
@@ -150,6 +153,7 @@ class ConnectTest {
     @Test
     void resignTest() throws InterruptedException {
         MatchmakingServer s = new MatchmakingServer();
+        assert s.socket != null;
         Thread t = new Thread(s::run);
         t.start();
 

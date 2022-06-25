@@ -43,6 +43,7 @@ class SavesManagerTest {
 
     void firstRun() throws InterruptedException, IOException {
         Server s = new MatchmakingServer();
+        assert s.socket != null;
         Thread t = new Thread(s::run);
         t.start();
 
@@ -99,6 +100,7 @@ class SavesManagerTest {
                 return newPort;
             }
         };
+        assert s.socket != null;
         Thread t = new Thread(s::run);
         t.start();
 

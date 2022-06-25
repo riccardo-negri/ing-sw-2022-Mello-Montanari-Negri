@@ -16,6 +16,7 @@ class LobbiesTest {
     @Test
     void wrongCodeTest() throws InterruptedException {
         Server s = new MatchmakingServer();
+        assert s.socket != null;
         Thread t = new Thread(s::run);
         t.start();
 
@@ -44,6 +45,7 @@ class LobbiesTest {
     void badLobbyCreationFormatTest() throws InterruptedException {
 
         Server s = new MatchmakingServer();
+        assert s.socket != null;
         Thread t = new Thread(s::run);
         t.start();
 

@@ -18,7 +18,7 @@ public class Procedures {
     static List<Connection> twoBoundedConnectionsWithFunction(Logger logger, Predicate<Connection> pc) {
         ServerSocket serverSocket;
         try {
-            serverSocket = new ServerSocket(MatchmakingServer.WELL_KNOWN_PORT);
+            serverSocket = new ServerSocket(0);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -41,9 +41,9 @@ public class Procedures {
         t.start();
         Connection c;
         if (pc == null)
-            c = new Connection("localhost", MatchmakingServer.WELL_KNOWN_PORT, logger);
+            c = new Connection("localhost", serverSocket.getLocalPort(), logger);
         else
-            c = new Connection("localhost", MatchmakingServer.WELL_KNOWN_PORT, pc, logger);
+            c = new Connection("localhost", serverSocket.getLocalPort(), pc, logger);
         synchronized (result) {
             result.add(c);
         }

@@ -19,6 +19,7 @@ class MovesTest {
     @Test
     void startTest() {
         Server s = new MatchmakingServer();
+        assert s.socket != null;
         new Thread(s::run).start();
         Connection c1 = Procedures.creatorLogin("tommaso", PlayerNumber.TWO, GameMode.COMPLETE, false, logger);
         Connection c2 = Procedures.joinerLogin("riccardo", false, logger);

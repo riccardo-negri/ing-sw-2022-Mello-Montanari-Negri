@@ -32,10 +32,22 @@ public class BoardUtilsCLI {
     private static final String SPACE = " ";
     private static final int INFO_LENGTH_TO_FILL = 26;
 
+    /**
+     *  wrap value with selected color if present, otherwise do nothing
+     * @param color color to apply to string
+     * @param value integer to color
+     * @return value wrapped with ANSI codes to color it
+     */
     private static String getAnsiFromColor (String color, int value) {
         return getAnsiFromColor(color, String.valueOf(value));
     }
 
+    /**
+     *  wrap value with selected color if present, otherwise do nothing
+     * @param color color to apply to string
+     * @param value string to color
+     * @return value wrapped with ANSI codes to color it
+     */
     private static String getAnsiFromColor (String color, String value) {
         return switch (color) {
             case RED -> ansi().fgRgb(255, 102, 102).a(value) + "" + ansi().fgDefault().bgDefault().a("");
@@ -47,6 +59,11 @@ public class BoardUtilsCLI {
         };
     }
 
+    /**
+     * return array of the IDs of the characters
+     * @param model current state of the game
+     * @return array with the IDs of the characters
+     */
     public static int[] getCharactersID (Game model) {
         if (model.getGameMode().equals(GameMode.COMPLETE)) {
             Character[] characters = model.getCharacters();
@@ -55,10 +72,20 @@ public class BoardUtilsCLI {
         return new int[0];
     }
 
+    /**
+     * get array with characters costs respectively to characters ID returned by getCharactersID
+     * @param characters Characters array
+     * @return array with the costs
+     */
     private static int[] getCharactersCost (Character[] characters) {
         return Arrays.stream(characters).mapToInt(Character::getPrize).toArray();
     }
 
+    /**
+     * get list of students on a character, if present, for every character in the game
+     * @param characters characters in the game
+     * @return hashmap with students list for every character ID
+     */
     private static HashMap<Integer, int[]> getColorsListFromCharacters (Character[] characters) {
         HashMap<Integer, int[]> hashmap = new HashMap<>();
         IntStream.range(0, characters.length).forEach(i -> {
@@ -100,6 +127,11 @@ public class BoardUtilsCLI {
         return hashmap;
     }
 
+    /**
+     * get no entry tiles for every character, if present
+     * @param characters characters in the game
+     * @return array with number of no entry tiles if supported by the character, -1 otherwise
+     */
     private static int[] getNoEntryTilesFromCharacters (Character[] characters) {
         int[] array = new int[characters.length];
         IntStream.range(0, characters.length).forEach(i -> {
@@ -425,6 +457,16 @@ public class BoardUtilsCLI {
         }
     }
 
+    /**
+     *
+     * @param terminal
+     * @param base
+     * @param towerColor
+     * @param towerNumber
+     * @param professors
+     * @param diningColors
+     * @param entranceColors
+     */
     private static void drawSchoolBoard (Terminal terminal, List<Integer> base, String towerColor, int towerNumber, boolean[] professors, int[] diningColors, int[] entranceColors) {
         final int baseRow = base.get(0);
         final int baseCol = base.get(1);

@@ -6,6 +6,10 @@ import javafx.fxml.FXML;
 
 public class StorylinePageController extends AbstractController{
 
+    /**
+     * close the current page and go back to main menu
+     * @param event the button click event
+     */
     @FXML
     private void handleBack(ActionEvent event) {
         ((AbstractStorylinePage) client.getCurrState()).onEnd();

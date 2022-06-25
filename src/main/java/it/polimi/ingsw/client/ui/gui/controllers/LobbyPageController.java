@@ -29,6 +29,10 @@ public class LobbyPageController extends AbstractController{
     @FXML
     private Text connected;
 
+    /**
+     * show game mode and number of players, if the user is reconnecting to the lobby this information is not available
+     * show the usernames of the connected players
+     */
     @FXML
     void initialize() {
         if (client.getPlayerNumber() != 0) {
@@ -44,6 +48,12 @@ public class LobbyPageController extends AbstractController{
         client.getConnection().bindFunctionAndTestPrevious(this::onNewMessage);
     }
 
+    /**
+     * callback function that handles new messages
+     * if new user connects show the username, if the game starts go to board page
+     * @param c the source of this message
+     * @return if the massage was processed and therefore should be consumed
+     */
     boolean onNewMessage(Connection c) {
         Message m = c.getFirstMessage();
         if (m instanceof UserConnected uc) {

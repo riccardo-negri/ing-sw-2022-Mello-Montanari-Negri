@@ -25,6 +25,9 @@ public class ConnectionPageController extends AbstractController{
     @FXML
     Text messageLabel;
 
+    /**
+     * show disconnected message if it is coming from board page
+     */
     @FXML void initialize() {
         if (client.isJustDisconnected()) {
             messageLabel.setText("You got disconnected from the game, rejoin the game with the same username");
@@ -32,6 +35,11 @@ public class ConnectionPageController extends AbstractController{
         }
     }
 
+    /**
+     * connect to the matchmaking server and if the user has already a running game go to lobby page
+     * else show the choice between create and join a game
+     * @param event the button click event
+     */
     @FXML
     private void handleConnect(ActionEvent event) {
         AbstractConnectionPage page = (AbstractConnectionPage) client.getCurrState();
@@ -58,6 +66,9 @@ public class ConnectionPageController extends AbstractController{
         }
     }
 
+    /**
+     * got to lobby selection page
+     */
     @FXML
     private void handleAnswerNo() {
         AbstractConnectionPage page = (AbstractConnectionPage) client.getCurrState();
@@ -65,6 +76,9 @@ public class ConnectionPageController extends AbstractController{
         client.drawNextPage();
     }
 
+    /**
+     * go to create game page
+     */
     @FXML
     private void handleAnswerYes() {
         AbstractConnectionPage page = (AbstractConnectionPage) client.getCurrState();

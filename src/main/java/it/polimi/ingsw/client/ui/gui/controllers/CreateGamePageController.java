@@ -14,12 +14,19 @@ public class CreateGamePageController extends AbstractController{
     @FXML
     CheckBox advancedRules;
 
+    /**
+     * set boundaries and initial value for the playersNumber spinner
+     */
     @FXML
     void initialize() {
         SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(2,4,2);
         playersNumber.setValueFactory(valueFactory);
     }
 
+    /**
+     * retrieve game information from the input fields, ask the server to create a game and got to lobby page
+     * @param event the button click event
+     */
     @FXML
     private void handleCreate(ActionEvent event) {
         AbstractCreateGamePage page = (AbstractCreateGamePage) client.getCurrState();

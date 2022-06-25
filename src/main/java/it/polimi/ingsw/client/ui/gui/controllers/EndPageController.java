@@ -15,12 +15,19 @@ public class EndPageController extends AbstractController{
     @FXML
     Label info;
 
+    /**
+     * close the current page and go back to main menu
+     * @param event the button click event
+     */
     @FXML
     private void handleContinue(ActionEvent event) {
         ((AbstractEndPage) client.getCurrState()).onEnd();
         client.drawNextPage();
     }
 
+    /**
+     * show resign related message if someone resigned or, if it finished normally, the result of the game
+     */
     @FXML
     void initialize() {
         Game model = client.getModel();

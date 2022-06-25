@@ -19,11 +19,17 @@ public class LobbySelectionPageController extends AbstractController{
 
     private static final String TITLE_ROW = "CODE\tN°\tMODE\t\tPLAYERS";
 
+    /**
+     * draw the content of the table
+     */
     @FXML
     void initialize() {
         drawList();
     }
 
+    /**
+     * empty the table and add a new row for each available lobby
+     */
     void drawList() {
         if (client.getLobbies() != null) {
             lobbies.getItems().clear();
@@ -34,6 +40,10 @@ public class LobbySelectionPageController extends AbstractController{
         }
     }
 
+    /**
+     * compare current time and selected element to previous click in order to detect a double click, in this case
+     * join the selected lobby and go to lobby page
+     */
     @FXML
     void handleJoin() {
         long currentTime = new Date().getTime();
@@ -54,6 +64,9 @@ public class LobbySelectionPageController extends AbstractController{
         lastClickElement = row;
     }
 
+    /**
+     * send an invalid code to the server to get a new lobby list and use it to update the table content
+     */
     @FXML
     void handleRefresh() {
         AbstractLobbySelectionPages page = (AbstractLobbySelectionPages) client.getCurrState();
@@ -61,6 +74,11 @@ public class LobbySelectionPageController extends AbstractController{
         drawList();
     }
 
+    /**
+     * format the LobbyDescriptor data into a single string and keep consistent tabulations for any possible value
+     * @param ld the LobbyDescriptor to convert to string
+     * @return the correctly formatted string
+     */
     String formatLobby(LobbyDescriptor ld) {
         StringBuilder record = new StringBuilder(ld.getCode() + "   " + "\t");
         record.append(ld.getPlayerNumber().getWizardNumber()).append("\t");
@@ -72,6 +90,11 @@ public class LobbySelectionPageController extends AbstractController{
         return record.toString();
     }
 
+    /**
+     * convert game mode to string keeping same length for any value
+     * @param gm the game mode to convert to string
+     * @return the correctly formatted string
+     */
     String formatMode(GameMode gm) {
         if(gm.equals(GameMode.EASY))
             return gm + "\t";

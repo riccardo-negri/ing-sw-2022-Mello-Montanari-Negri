@@ -14,6 +14,9 @@ public class CreateGamePageGUI extends AbstractCreateGamePage {
         super(client);
     }
 
+    /**
+     * load the fxml file and give the correct controller and title to it
+     */
     @Override
     public void draw() {
         showGUIPage("Create Game", "/fxml/CreateGamePage.fxml", new CreateGamePageController());

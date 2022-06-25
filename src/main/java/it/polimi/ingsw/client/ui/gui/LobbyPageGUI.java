@@ -14,6 +14,9 @@ public class LobbyPageGUI extends AbstractLobbyPage {
         super(client);
     }
 
+    /**
+     * load the fxml file and give the correct controller and title to it
+     */
     @Override
     public void draw() {
         showGUIPage("Lobbies", "/fxml/LobbyPage.fxml", new LobbyPageController());

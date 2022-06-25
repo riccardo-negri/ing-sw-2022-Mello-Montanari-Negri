@@ -14,6 +14,9 @@ public class ConnectionPageGUI extends AbstractConnectionPage {
         super(client);
     }
 
+    /**
+     * load the fxml file and give the correct controller and title to it
+     */
     @Override
     public void draw() {
         showGUIPage("Connection", "/fxml/ConnectionPage.fxml", new ConnectionPageController());

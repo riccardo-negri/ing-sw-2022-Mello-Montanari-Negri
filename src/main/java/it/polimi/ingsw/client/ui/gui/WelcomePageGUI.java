@@ -14,6 +14,9 @@ public class WelcomePageGUI extends AbstractWelcomePage{
         super(client);
     }
 
+    /**
+     * load the fxml file and give the correct controller and title to it
+     */
     @Override
     public void draw() {
         showGUIPage("Welcome!", "/fxml/WelcomePage.fxml", new WelcomePageController());

@@ -14,6 +14,9 @@ public class LobbySelectionPageGUI extends AbstractLobbySelectionPages {
         super(client);
     }
 
+    /**
+     * load the fxml file and give the correct controller and title to it
+     */
     @Override
     public void draw() {
         showGUIPage("Open Lobbies", "/fxml/LobbySelectionPage.fxml", new LobbySelectionPageController());

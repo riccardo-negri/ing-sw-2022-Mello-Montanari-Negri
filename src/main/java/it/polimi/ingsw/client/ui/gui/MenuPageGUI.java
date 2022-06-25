@@ -14,6 +14,9 @@ public class MenuPageGUI extends AbstractMenuPage {
         super(client);
     }
 
+    /**
+     * load the fxml file and give the correct controller and title to it
+     */
     @Override
     public void draw() {
         showGUIPage("Menu", "/fxml/MenuPage.fxml", new MenuPageController());

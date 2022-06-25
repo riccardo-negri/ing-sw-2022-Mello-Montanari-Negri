@@ -7,14 +7,21 @@ import it.polimi.ingsw.networking.Connection;
 import it.polimi.ingsw.networking.InitialState;
 import it.polimi.ingsw.networking.moves.CardChoice;
 import it.polimi.ingsw.utils.LogFormatter;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 class MovesTest {
 
     Logger logger = LogFormatter.getLogger("Test");
+
+    @BeforeEach
+    void clearSaves() throws IOException {
+        Procedures.clearFolder(logger);
+    }
 
     @Test
     void startTest() {

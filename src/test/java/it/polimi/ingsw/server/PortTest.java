@@ -2,8 +2,10 @@ package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.networking.Connection;
 import it.polimi.ingsw.utils.LogFormatter;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -11,6 +13,11 @@ class PortTest{
     Logger logger = LogFormatter.getLogger("Test");
 
     Server s2;
+
+    @BeforeEach
+    void clearSaves() throws IOException {
+        Procedures.clearFolder(logger);
+    }
 
     @Test
     void portNotAvailableTest() throws InterruptedException {

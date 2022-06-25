@@ -23,7 +23,6 @@ import java.util.logging.Logger;
 
 import static it.polimi.ingsw.server.Procedures.clearFolder;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class SavesManagerTest {
     Logger logger = LogFormatter.getLogger("Test");
 

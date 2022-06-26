@@ -6,7 +6,7 @@ public class Regex {
     }
 
     public static final String MOVE_STUDENT = "^(move-student )(green|red|yellow|pink|blue)( to )(dining-room|((island-)([0-9]|1[0-1])))\s?$";
-    public static final String MOVE_MOTHER_NATURE = "^(move-mother-nature steps )([1-5])\s?$";
+    public static final String MOVE_MOTHER_NATURE = "^(move-mother-nature steps )([1-7])\s?$";
     public static final String SELECT_CLOUD = "^(select-cloud )([0-3])\s?$";
     public static final String PLAY_ASSISTANT = "^(play-assistant )([1-9]|1[0])\s?$";
     public static final String USE_CHARACTER_1 = "^(use-character-1 move )(green|red|yellow|pink|blue)( to )(dining-room|((island-)([0-9]|1[0-1])))\s?$";

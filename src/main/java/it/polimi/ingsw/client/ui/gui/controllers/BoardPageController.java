@@ -2,13 +2,12 @@ package it.polimi.ingsw.client.ui.gui.controllers;
 
 import it.polimi.ingsw.client.page.AbstractBoardPage;
 import it.polimi.ingsw.client.ui.gui.BoardPageGUI;
+import it.polimi.ingsw.client.ui.gui.GUI;
 import it.polimi.ingsw.client.ui.gui.records.*;
 import it.polimi.ingsw.client.ui.gui.records.CharacterRecord;
 import it.polimi.ingsw.model.entity.Game;
+import it.polimi.ingsw.model.entity.characters.*;
 import it.polimi.ingsw.model.entity.characters.Character;
-import it.polimi.ingsw.model.entity.characters.CharacterEleven;
-import it.polimi.ingsw.model.entity.characters.CharacterOne;
-import it.polimi.ingsw.model.entity.characters.CharacterSeven;
 import it.polimi.ingsw.model.entity.gameState.ActionState;
 import it.polimi.ingsw.model.entity.gameState.GameState;
 import it.polimi.ingsw.model.enums.StudentColor;
@@ -23,6 +22,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -602,6 +602,8 @@ public class BoardPageController extends AbstractController {
     @FXML
     private void handleItem5Character2 (Event event) { handleCharacterItem(2,5); }
 
+    static private final List<StudentColor> colorPickList = Arrays.asList(StudentColor.fromNumber(0), StudentColor.fromNumber(1), StudentColor.fromNumber(2), StudentColor.fromNumber(3), StudentColor.fromNumber(4), StudentColor.fromNumber(5));
+
     boolean characterInputSelectionPhase() {
         Game model = client.getModel();
         BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
@@ -791,7 +793,8 @@ public class BoardPageController extends AbstractController {
             if (actionState.getActivatedCharacter() != null)  // can't activate if another was activated
                 return false;
             int index = client.getUsernames().indexOf(client.getUsername());
-            return model.getCharacters()[characterNumber].getPrize() <= model.getWizard(index).getMoney();
+            return model.getCharacters()[characterNumber].getPrize() <= model.getWizard(index).getMoney() &&
+                    model.getGameState().getCurrentPlayer() == index;
         }
         return false;
     }
@@ -893,6 +896,16 @@ public class BoardPageController extends AbstractController {
         board = new BoardRecord(gridPane, islandRecords, bridges, cloudRecords, myBoard, otherBoard, users, characters, myDeck, arrows, roundNumber, turnPhaseCode);
 
         updateBoard(board, client, selectedOtherUser);
+
+        Stage stage = ((GUI) client.getUI()).stage();
+        stage.heightProperty().addListener(e ->{
+            board.mainGrid().setPrefWidth(stage.getWidth() > 1600 ? 1600 : stage.getWidth());
+            board.mainGrid().setPrefHeight(stage.getHeight() > 900 ? 900 : stage.getHeight());
+        });
+        stage.widthProperty().addListener(e ->{
+            board.mainGrid().setPrefWidth(stage.getWidth() > 1600 ? 1600 : stage.getWidth());
+            board.mainGrid().setPrefHeight(stage.getHeight() > 900 ? 900 : stage.getHeight());
+        });
     }
 
     boolean onNewMessage (Connection source) {

@@ -439,18 +439,6 @@ public class BoardUtils {
     }
 
     public static void updateBoard (BoardRecord board, Client client, Integer selectedOtherUser) {
-        Stage stage = ((GUI) client.getUI()).stage();
-
-        stage.heightProperty().addListener(e ->{
-            board.mainGrid().setPrefWidth(stage.getWidth() > 1600 ? 1600 : stage.getWidth());
-            board.mainGrid().setPrefHeight(stage.getHeight() > 900 ? 900 : stage.getHeight());
-        });
-        stage.widthProperty().addListener(e ->{
-            board.mainGrid().setPrefWidth(stage.getWidth() > 1600 ? 1600 : stage.getWidth());
-            board.mainGrid().setPrefHeight(stage.getHeight() > 900 ? 900 : stage.getHeight());
-        });
-
-
         updateIslands(board, client);
 
         updateBridges(board, client);

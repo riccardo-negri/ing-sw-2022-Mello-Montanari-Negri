@@ -722,10 +722,10 @@ public class BoardPageController extends AbstractController {
         }
     }
 
-    <E> Object extractIfUnique(List<E> objects) {
-        if (objects.size() == 1)
+    <E> Object extractIfUnique(List<E> objects, int maximumNumber) {
+        if (maximumNumber == 1)
             return objects.get(0);
-        if (objects.size() == 0)
+        if (maximumNumber == 0)
             return null;
         return objects;
     }
@@ -754,11 +754,11 @@ public class BoardPageController extends AbstractController {
                                 else if (character instanceof CharacterTwelve)
                                     characterStudents = colorPickList;
                                 final List<StudentColor> cs = characterStudents;
-                                parameters.add(extractIfUnique(gui.getPickedCardStudents().stream().map(cs::get).toList()));
+                                parameters.add(extractIfUnique(gui.getPickedCardStudents().stream().map(cs::get).toList(), gui.getCardStudentsToPick()));
                             }
-                            parameters.add(extractIfUnique(gui.getPickedEntranceStudents().stream().map(n->model.getWizard(client.getUsernames().indexOf(client.getUsername())).getEntranceStudents().get(n)).toList()));
-                            parameters.add(extractIfUnique(gui.getPickedDiningStudents()));
-                            parameters.add(extractIfUnique(gui.getPickedIslands()));
+                            parameters.add(extractIfUnique(gui.getPickedEntranceStudents().stream().map(n->model.getWizard(client.getUsernames().indexOf(client.getUsername())).getEntranceStudents().get(n)).toList(), gui.getEntranceStudentsToPick()));
+                            parameters.add(extractIfUnique(gui.getPickedDiningStudents(), gui.getDiningStudentsToPick()));
+                            parameters.add(extractIfUnique(gui.getPickedIslands(), gui.getIslandsToPick()));
                             parameters.removeAll(Collections.singleton(null));
                             doGuiCharacterMove(gui, model.getCharacters()[characterNumber].getId(), parameters);
                         } catch (GameRuleException e) {

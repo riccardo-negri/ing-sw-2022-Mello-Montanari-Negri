@@ -22,6 +22,7 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.IntStream;
 
 public class BoardUtils {
@@ -358,13 +359,12 @@ public class BoardUtils {
                 // set correct items
                 List<ImageView> items = characterRecord.items();
                 switch (currCharacter.getId()) {
-                    case 2, 3, 4, 6, 8, 10: {
+                    case 2, 3, 4, 6, 8, 10 -> {
                         for (ImageView item : items) {
                             item.setVisible(false);
                         }
-                        break;
                     }
-                    case 1: {
+                    case 1 -> {
                         int j = 0;
                         for (StudentColor student : ((CharacterOne) currCharacter).getStudentColorList()) {
                             items.get(j).setImage(getStudentImageFromColor(student));
@@ -374,9 +374,8 @@ public class BoardUtils {
                         for (; j < 6; j++) {
                             items.get(j).setVisible(false);
                         }
-                        break;
                     }
-                    case 7: {
+                    case 7 -> {
                         int j = 0;
                         for (StudentColor student : ((CharacterSeven) currCharacter).getStudentColorList()) {
                             items.get(j).setImage(getStudentImageFromColor(student));
@@ -386,10 +385,8 @@ public class BoardUtils {
                         for (; j < 6; j++) {
                             items.get(j).setVisible(false);
                         }
-                        break;
                     }
-                    case 9:
-                    case 12: {
+                    case 9, 12 -> {
                         int j = 0;
                         for (StudentColor student : StudentColor.values()) {
                             items.get(j).setImage(getStudentImageFromColor(student));
@@ -397,9 +394,8 @@ public class BoardUtils {
                             j++;
                         }
                         items.get(5).setVisible(false);
-                        break;
                     }
-                    case 11: {
+                    case 11 -> {
                         int j = 0;
                         for (StudentColor student : ((CharacterEleven) currCharacter).getStudentColorList()) {
                             items.get(j).setImage(getStudentImageFromColor(student));
@@ -409,9 +405,8 @@ public class BoardUtils {
                         for (; j < 6; j++) {
                             items.get(j).setVisible(false);
                         }
-                        break;
                     }
-                    case 5: {
+                    case 5 -> {
                         int j = 0;
                         for (; j < ((CharacterFive) currCharacter).getStopNumber(); j++) {
                             items.get(j).setImage(getNoEntryImage());
@@ -420,12 +415,13 @@ public class BoardUtils {
                         for (; j < 6; j++) {
                             items.get(j).setVisible(false);
                         }
-                        break;
                     }
                 }
-                if ((client.getModel().getGameState().getGameStateName() == "MSS" || client.getModel().getGameState().getGameStateName() == "MMNS" || client.getModel().getGameState().getGameStateName() == "CCS") &&
+                if ((Objects.equals(client.getModel().getGameState().getGameStateName(), "MSS") || Objects.equals(client.getModel().getGameState().getGameStateName(), "MMNS") || Objects.equals(client.getModel().getGameState().getGameStateName(), "CCS")) &&
                         ((ActionState) client.getModel().getGameState()).getActivatedCharacter() == currCharacter) {
                     board.characters().get(i).card().setStyle("-fx-effect : dropshadow(gaussian, red, 4, 1, 0, 0);");
+                } else {
+                    board.characters().get(i).card().setStyle("");
                 }
             }
         }

@@ -26,6 +26,9 @@ public class BoardPageCLI extends AbstractBoardPage {
         super(client);
     }
 
+    /**
+     * draw the page and handle all expected actions
+     */
     @Override
     public void draw () {
         Signal.handle(new Signal("INT"),  // SIGINT if the player wants to quit the game
@@ -56,6 +59,11 @@ public class BoardPageCLI extends AbstractBoardPage {
         if (client.getNextState() == ClientPage.BOARD_PAGE) onEnd(false);
     }
 
+    /**
+     * validate move against current game state and then send it to the server, overrides abstract page method to also apply it to the model
+     * @param moveToSend move to be validated and then sent
+     * @throws Exception error message if the move is not valid
+     */
     @Override
     protected void validateAndSendMove (Move moveToSend) throws Exception{
         super.validateAndSendMove(moveToSend);
@@ -89,6 +97,9 @@ public class BoardPageCLI extends AbstractBoardPage {
         logger.log(Level.INFO, toLog);
     }
 
+    /**
+     * based on current game state ask user for commands with autocompletion
+     */
     private void askForMoveBasedOnState () {
         switch (model.getGameState().getGameStateName()) {
             case "PS" ->
@@ -103,6 +114,10 @@ public class BoardPageCLI extends AbstractBoardPage {
         }
     }
 
+    /**
+     * handle a message that has been received that is not a move
+     * @param message received message
+     */
     private void handleMessageNotMoveAndPrintStatus (Message message) {
         final String PLAYER = "Player ";
         if (message instanceof Disconnected) {
@@ -134,6 +149,9 @@ public class BoardPageCLI extends AbstractBoardPage {
 
     }
 
+    /**
+     * return when a message has been received or when the user typed a valid command
+     */
     private void waitForMoveOrMessage () {
         final boolean[] isOriginatedByMessage = {false};
         Thread t = new Thread(() -> {
@@ -163,6 +181,9 @@ public class BoardPageCLI extends AbstractBoardPage {
         }
     }
 
+    /**
+     * method to be called when it not your turn, waits for any message and handles it
+     */
     private void waitAndHandleMessage () {
         printConsoleInfo(terminal, "Waiting for the other players to do a move...\n");
         Message message = client.getConnection().waitMessage();
@@ -181,6 +202,9 @@ public class BoardPageCLI extends AbstractBoardPage {
         }
     }
 
+    /**
+     * parse move that passed the regex test and call the method to send it to the server
+     */
     private void processMoveFromInput () {
         String toLog = "Processing input move: " + moveFromStdin + " Game state: " + model.getGameState().getGameStateName();
         logger.log(Level.INFO, toLog);
@@ -208,6 +232,11 @@ public class BoardPageCLI extends AbstractBoardPage {
         }
     }
 
+    /**
+     * parse character move that passed regex check and call the method to send it to the server
+     * @param move move written by the user
+     * @throws Exception error message if the move is not valid
+     */
     private void parseAndDoCharacterMove (String move) throws Exception {
         int id = Integer.parseInt(move.split(" ")[0].split("-")[2]);
         ArrayList<Object> parameters = new ArrayList<>();
@@ -265,6 +294,11 @@ public class BoardPageCLI extends AbstractBoardPage {
         doCharacterMove(id, parameters);
     }
 
+    /**
+     * get student color from string
+     * @param color color text
+     * @return student color
+     */
     private StudentColor parseStudentColorFromString (String color) {
         return switch (color) {
             case "yellow" -> StudentColor.YELLOW;
@@ -276,6 +310,9 @@ public class BoardPageCLI extends AbstractBoardPage {
         };
     }
 
+    /**
+     * print on the console the last warning or info and clear the last warning or info
+     */
     private void printWarningOrHelper () {
         if (lastWarning != null) {
             printConsoleWarning(terminal, lastWarning);
@@ -287,6 +324,9 @@ public class BoardPageCLI extends AbstractBoardPage {
         }
     }
 
+    /**
+     * draw all the elements on the terminal
+     */
     private void drawGameAndConsole () {
         final int baseCol = (terminal.getWidth() - 192) / 2;
         final int baseRow = 1;

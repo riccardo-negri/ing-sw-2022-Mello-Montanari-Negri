@@ -37,8 +37,17 @@ public abstract class AbstractPage {
 
     }
 
+    /**
+     * draw the page and handle all expected actions
+     */
     public abstract void draw ();
 
+    /**
+     * display new page on the stage
+     * @param title window title
+     * @param file FXML file of the page
+     * @param controller page controller
+     */
     protected void showGUIPage(String title, String file, AbstractController controller) {
         Stage stage = ((GUI) client.getUI()).stage();
         stage.setTitle(title);

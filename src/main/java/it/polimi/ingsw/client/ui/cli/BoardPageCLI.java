@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.ui.cli;
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.page.AbstractBoardPage;
 import it.polimi.ingsw.client.page.ClientPage;
+import it.polimi.ingsw.model.entity.GameRuleException;
 import it.polimi.ingsw.model.enums.StudentColor;
 import it.polimi.ingsw.networking.*;
 import it.polimi.ingsw.networking.moves.Move;
@@ -62,10 +63,10 @@ public class BoardPageCLI extends AbstractBoardPage {
     /**
      * validate move against current game state and then send it to the server, overrides abstract page method to also apply it to the model
      * @param moveToSend move to be validated and then sent
-     * @throws Exception error message if the move is not valid
+     * @throws GameRuleException error message if the move is not valid
      */
     @Override
-    protected void validateAndSendMove (Move moveToSend) throws Exception{
+    protected void validateAndSendMove (Move moveToSend) throws GameRuleException {
         super.validateAndSendMove(moveToSend);
 
         // wait and apply message if the suer is using a CLI
@@ -190,7 +191,7 @@ public class BoardPageCLI extends AbstractBoardPage {
         if (message instanceof Move move) {
             try {
                 applyOtherPlayersMove(move);
-            } catch (Exception e) {
+            } catch (GameRuleException e) {
                 String toLog = "Got an invalid move from the server. Exception: " + e;
                 logger.log(Level.WARNING, toLog);
                 e.printStackTrace();
@@ -225,7 +226,7 @@ public class BoardPageCLI extends AbstractBoardPage {
                     default -> logger.log(Level.WARNING, "Current state is not supported");
                 }
             }
-        } catch (Exception e) {
+        } catch (GameRuleException e) {
             toLog = "Got an invalid move (that passed regex check), asking for it again. Exception: " + e;
             logger.log(Level.WARNING, toLog);
             lastWarning = "Please type a valid command. " + e.getMessage();
@@ -235,9 +236,9 @@ public class BoardPageCLI extends AbstractBoardPage {
     /**
      * parse character move that passed regex check and call the method to send it to the server
      * @param move move written by the user
-     * @throws Exception error message if the move is not valid
+     * @throws GameRuleException error message if the move is not valid
      */
-    private void parseAndDoCharacterMove (String move) throws Exception {
+    private void parseAndDoCharacterMove (String move) throws GameRuleException {
         int id = Integer.parseInt(move.split(" ")[0].split("-")[2]);
         ArrayList<Object> parameters = new ArrayList<>();
         final String nothing = "nothing";

@@ -352,7 +352,7 @@ public class ReadMoveUtilsCLI {
                 new StringsCompleter("move-mother-nature"),
                 new Completers.OptionCompleter(Arrays.asList(
                         new StringsCompleter("steps"),
-                        new StringsCompleter("1", "2", "3", "4", "5"), NullCompleter.INSTANCE),
+                        new StringsCompleter("1", "2", "3", "4", "5", "6", "7"), NullCompleter.INSTANCE),
                         JlineCommandRegistry.compileCommandOptions(""), 1)
         ));
         Pattern pattern = Pattern.compile(decorateWithUseCharacterAndHelperRegex(characters, Regex.MOVE_MOTHER_NATURE), Pattern.CASE_INSENSITIVE);

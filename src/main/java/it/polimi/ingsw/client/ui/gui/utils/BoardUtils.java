@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.ui.gui.utils;
 
 import it.polimi.ingsw.client.Client;
+import it.polimi.ingsw.client.ui.gui.GUI;
 import it.polimi.ingsw.client.ui.gui.records.*;
 import it.polimi.ingsw.model.entity.*;
 import it.polimi.ingsw.model.entity.characters.*;
@@ -15,6 +16,7 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
+import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -425,6 +427,10 @@ public class BoardUtils {
     }
 
     public static void updateBoard (BoardRecord board, Client client, Integer selectedOtherUser) {
+        Stage stage = ((GUI) client.getUI()).stage();
+        stage.setFullScreen(true);
+        board.mainGrid().setPrefWidth(stage.getWidth() > 1600 ? 1600 : stage.getWidth());
+        board.mainGrid().setPrefHeight(stage.getHeight() > 900 ? 900 : stage.getHeight());
 
         updateIslands(board, client);
 

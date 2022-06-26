@@ -423,6 +423,9 @@ public class BoardPageController extends AbstractController {
     @FXML
     Label turnPhaseCode;
 
+    @FXML
+    GridPane gridPane;
+
     BoardRecord board;
 
     Integer selectedOtherUser = null;
@@ -863,7 +866,7 @@ public class BoardPageController extends AbstractController {
 
         List<ImageView> arrows = Arrays.asList(arrow1, arrow2, arrow3);
 
-        board = new BoardRecord(islandRecords, bridges, cloudRecords, myBoard, otherBoard, users, characters, myDeck, arrows, roundNumber, turnPhaseCode);
+        board = new BoardRecord(gridPane, islandRecords, bridges, cloudRecords, myBoard, otherBoard, users, characters, myDeck, arrows, roundNumber, turnPhaseCode);
 
         updateBoard(board, client, selectedOtherUser);
     }
@@ -885,15 +888,18 @@ public class BoardPageController extends AbstractController {
                 client.getLogger().log(Level.WARNING, toLog);
             }
             Platform.runLater(() -> updateBoard(board, client, selectedOtherUser));
-        } else if (m instanceof Disconnected) {
+        }
+        else if (m instanceof Disconnected) {
             ((AbstractBoardPage) client.getCurrState()).onEnd(true);
             client.getConnection().close();
             client.setJustDisconnected(true);
             Platform.runLater(() -> client.drawNextPage());
-        } else if (m instanceof UserDisconnected userDisconnected) {
+        }
+        else if (m instanceof UserDisconnected userDisconnected) {
             client.getUsernamesDisconnected().add(userDisconnected.username());
             Platform.runLater(() -> updateBoard(board, client, selectedOtherUser));
-        } else if (m instanceof UserConnected userConnected) {
+        }
+        else if (m instanceof UserConnected userConnected) {
             client.getUsernamesDisconnected().remove(userConnected.username());
             Platform.runLater(() -> updateBoard(board, client, selectedOtherUser));
         }

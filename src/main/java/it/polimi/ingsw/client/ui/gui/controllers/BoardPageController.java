@@ -727,8 +727,6 @@ public class BoardPageController extends AbstractController {
                 if (gui.isCharacterActivated(characterNumber) && gui.isEverythingNeededSelected()) {
                     try {
                         List<Object> parameters = new ArrayList<>();
-                        parameters.add(extractIfUnique(gui.getPickedEntranceStudents().stream().map(n->model.getWizard(client.getUsernames().indexOf(client.getUsername())).getEntranceStudents().get(n)).toList()));
-                        parameters.add(extractIfUnique(gui.getPickedDiningStudents()));
                         if(gui.getPickedCardStudents().size() > 0) {
                             Character character = model.getCharacters()[characterNumber];
                             List<StudentColor> characterStudents = null;
@@ -741,6 +739,8 @@ public class BoardPageController extends AbstractController {
                             final List<StudentColor> cs = characterStudents;
                             parameters.add(extractIfUnique(gui.getPickedCardStudents().stream().map(n -> cs.get(n)).toList()));
                         }
+                        parameters.add(extractIfUnique(gui.getPickedEntranceStudents().stream().map(n->model.getWizard(client.getUsernames().indexOf(client.getUsername())).getEntranceStudents().get(n)).toList()));
+                        parameters.add(extractIfUnique(gui.getPickedDiningStudents()));
                         parameters.add(extractIfUnique(gui.getPickedTables()));
                         parameters.add(extractIfUnique(gui.getPickedIslands()));
                         parameters.removeAll(Collections.singleton(null));

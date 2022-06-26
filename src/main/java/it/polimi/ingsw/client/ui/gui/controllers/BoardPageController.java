@@ -780,7 +780,10 @@ public class BoardPageController extends AbstractController {
         Game model = client.getModel();
         BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
 
-        for (int i=0; i<3; i++) gui.setActivatedCharacter(i, false);
+        for (int i=0; i<3; i++) {
+            gui.setActivatedCharacter(i, false);
+            removeHighlight(board.characters().get(i).card());
+        }
         undoAllSelections();
         highlight(board.characters().get(characterNumber).card());
         try{

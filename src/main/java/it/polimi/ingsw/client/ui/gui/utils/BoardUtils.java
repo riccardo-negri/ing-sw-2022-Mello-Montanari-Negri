@@ -5,6 +5,7 @@ import it.polimi.ingsw.client.ui.gui.records.*;
 import it.polimi.ingsw.model.entity.*;
 import it.polimi.ingsw.model.entity.characters.*;
 import it.polimi.ingsw.model.entity.characters.Character;
+import it.polimi.ingsw.model.entity.gameState.ActionState;
 import it.polimi.ingsw.model.enums.GameMode;
 import it.polimi.ingsw.model.enums.PlayerNumber;
 import it.polimi.ingsw.model.enums.StudentColor;
@@ -355,7 +356,7 @@ public class BoardUtils {
                 // set correct items
                 List<ImageView> items = characterRecord.items();
                 switch (currCharacter.getId()) {
-                    case 2, 3, 4, 6, 8, 9, 10, 12: {
+                    case 2, 3, 4, 6, 8, 10: {
                         for (ImageView item : items) {
                             item.setVisible(false);
                         }
@@ -385,6 +386,17 @@ public class BoardUtils {
                         }
                         break;
                     }
+                    case 9:
+                    case 12: {
+                        int j = 0;
+                        for (StudentColor student : StudentColor.values()) {
+                            items.get(j).setImage(getStudentImageFromColor(student));
+                            items.get(j).setVisible(true);
+                            j++;
+                        }
+                        items.get(5).setVisible(false);
+                        break;
+                    }
                     case 11: {
                         int j = 0;
                         for (StudentColor student : ((CharacterEleven) currCharacter).getStudentColorList()) {
@@ -408,6 +420,10 @@ public class BoardUtils {
                         }
                         break;
                     }
+                }
+                if ((client.getModel().getGameState().getGameStateName() == "MSS" || client.getModel().getGameState().getGameStateName() == "MMNS" || client.getModel().getGameState().getGameStateName() == "CCS") &&
+                        ((ActionState) client.getModel().getGameState()).getActivatedCharacter() == currCharacter) {
+                    board.characters().get(i).card().setStyle("-fx-effect : dropshadow(gaussian, red, 4, 1, 0, 0);");
                 }
             }
         }
@@ -456,7 +472,12 @@ public class BoardUtils {
 
         board.round().setText(String.valueOf(findRoundNumber(client.getModel())));
 
-        board.phase().setText(client.getModel().getGameState().getGameStateName());
+        switch (client.getModel().getGameState().getGameStateName()) {
+            case "PS" -> board.phase().setText("Assistant selection");
+            case "MSS" -> board.phase().setText("Student movement");
+            case "MMNS" -> board.phase().setText("Mother nature movement");
+            case "CCS" -> board.phase().setText("Cloud choice");
+        }
 
         updateCharacters(board, client);
     }

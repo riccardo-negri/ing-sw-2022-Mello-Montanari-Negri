@@ -83,6 +83,7 @@ public class BoardUtils {
     private static void updateIslands (BoardRecord board, Client client) {
         // update islands
         for (IslandGroup group : client.getModel().getIslandGroupList()) {
+            boolean first = true;
             for (Island island : group.getIslandList()) {
                 IslandRecord islandRecord = board.islands().get(island.getId());
 
@@ -100,6 +101,14 @@ public class BoardUtils {
 
                 });
 
+                if(client.getModel().getFistIslandGroup().equals(group) && first) {
+                    first = false;
+                    islandRecord.motherNature().setVisible(true);
+                }
+                else {
+                    islandRecord.motherNature().setVisible(false);
+                }
+
                 islandRecord.noEntry().setVisible(island.hasStopCard());
 
                 if (group.getTower() != null) {
@@ -111,7 +120,6 @@ public class BoardUtils {
                 }
 
             }
-            board.islands().get(group.getIslandList().get(0).getId()).motherNature().setVisible(client.getModel().getFistIslandGroup().equals(group));
         }
     }
 

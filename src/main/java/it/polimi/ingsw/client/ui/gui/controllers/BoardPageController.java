@@ -637,13 +637,12 @@ public class BoardPageController extends AbstractController {
         Game model = client.getModel();
         BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
 
-        switch (model.getGameState().getGameStateName()) {
-            case "PS":
-                try {
-                    gui.doCardChoice(card);
-                } catch (Exception e) {
-                    client.getLogger().log(Level.INFO, e.getMessage());
-                } break;
+        if ("PS".equals(model.getGameState().getGameStateName())) {
+            try {
+                gui.doCardChoice(card);
+            } catch (Exception e) {
+                client.getLogger().log(Level.INFO, e.getMessage());
+            }
         }
         undoAllSelections();
     }
@@ -658,9 +657,8 @@ public class BoardPageController extends AbstractController {
                 highlight((ImageView) board.myBoard().dining().get(color.value).getChildren().get(gui.getPickedDiningStudents().size()-1));
             }
         } else if (Objects.equals(model.getGameState().getGameStateName(), "MSS")) {
-            if (gui.getStudentPicked() == -1 || model.getWizard(client.getUsernames().indexOf(client.getUsername()))
-                    .getEntranceStudents().get(gui.getStudentPicked()) != color) {
-            } else {
+            if (gui.getStudentPicked() != -1 && model.getWizard(client.getUsernames().indexOf(client.getUsername()))
+                    .getEntranceStudents().get(gui.getStudentPicked()) == color) {
                 try {
                     gui.doStudentMovement(color, "dining-room");
                 } catch (Exception e) {
@@ -721,56 +719,67 @@ public class BoardPageController extends AbstractController {
 
         if (Objects.equals(model.getGameState().getGameStateName(), "MSS") || Objects.equals(model.getGameState().getGameStateName(), "MMNS") || Objects.equals(model.getGameState().getGameStateName(), "CCS")) {
             if (gui.isAnyCharacterActivated()) {
-                if (gui.isCharacterActivated(characterNumber) && gui.isEverythingNeededSelected()) {
-                    try {
-                        List<Object> parameters = new ArrayList<>();
-                        if(gui.getPickedCardStudents().size() > 0) {
-                            Character character = model.getCharacters()[characterNumber];
-                            List<StudentColor> characterStudents = null;
-                            if (character instanceof CharacterOne characterOne)
-                                characterStudents = characterOne.getStudentColorList();
-                            else if (character instanceof CharacterSeven characterSeven)
-                                characterStudents = characterSeven.getStudentColorList();
-                            else if (character instanceof CharacterEleven characterEleven)
-                                characterStudents = characterEleven.getStudentColorList();
-                            final List<StudentColor> cs = characterStudents;
-                            parameters.add(extractIfUnique(gui.getPickedCardStudents().stream().map(n -> cs.get(n)).toList()));
+                if (gui.isCharacterActivated(characterNumber)) {
+                    if (gui.isEverythingNeededSelected()) {
+                        try {
+                            List<Object> parameters = new ArrayList<>();
+                            if(gui.getPickedCardStudents().size() > 0) {
+                                Character character = model.getCharacters()[characterNumber];
+                                List<StudentColor> characterStudents = null;
+                                if (character instanceof CharacterOne characterOne)
+                                    characterStudents = characterOne.getStudentColorList();
+                                else if (character instanceof CharacterSeven characterSeven)
+                                    characterStudents = characterSeven.getStudentColorList();
+                                else if (character instanceof CharacterEleven characterEleven)
+                                    characterStudents = characterEleven.getStudentColorList();
+                                final List<StudentColor> cs = characterStudents;
+                                parameters.add(extractIfUnique(gui.getPickedCardStudents().stream().map(cs::get).toList()));
+                            }
+                            parameters.add(extractIfUnique(gui.getPickedEntranceStudents().stream().map(n->model.getWizard(client.getUsernames().indexOf(client.getUsername())).getEntranceStudents().get(n)).toList()));
+                            parameters.add(extractIfUnique(gui.getPickedDiningStudents()));
+                            parameters.add(extractIfUnique(gui.getPickedIslands()));
+                            parameters.removeAll(Collections.singleton(null));
+                            doGuiCharacterMove(gui, model.getCharacters()[characterNumber].getId(), parameters);
+                        } catch (Exception e) {
+                            client.getLogger().log(Level.INFO, e.getMessage());
                         }
-                        parameters.add(extractIfUnique(gui.getPickedEntranceStudents().stream().map(n->model.getWizard(client.getUsernames().indexOf(client.getUsername())).getEntranceStudents().get(n)).toList()));
-                        parameters.add(extractIfUnique(gui.getPickedDiningStudents()));
-                        parameters.add(extractIfUnique(gui.getPickedIslands()));
-                        parameters.removeAll(Collections.singleton(null));
-                        doGuiCharacterMove(gui, model.getCharacters()[characterNumber].getId(), parameters);
-                    } catch (Exception e) {
-                        client.getLogger().log(Level.INFO, e.getMessage());
                     }
+                } else {
+                    activateNewCharacter(characterNumber);
                 }
             }
             else {
                 if (canActivateCharacter(characterNumber)) {
-                    for (int i=0; i<3; i++) gui.setActivatedCharacter(i, false);
-                    undoAllSelections();
-                    highlight(board.characters().get(characterNumber).card());
-                    try{
-                        switch (model.getCharacters()[characterNumber].getId()) {
-                            case 1: gui.activateCharacter(characterNumber, 1, 0, 0, 1); break;
-                            case 2: doGuiCharacterMove(gui, 2, null); break;
-                            case 3: gui.activateCharacter(characterNumber, 0, 0, 0, 1); break;
-                            case 4: doGuiCharacterMove(gui, 4, null); break;
-                            case 5: gui.activateCharacter(characterNumber, 0, 0, 0, 1); break;
-                            case 6: doGuiCharacterMove(gui, 6, null); break;
-                            case 7: gui.activateCharacter(characterNumber, 3, 0, 3, 0); break;
-                            case 8: doGuiCharacterMove(gui, 8, null); break;
-                            case 9: gui.activateCharacter(characterNumber, 1, 0, 0, 0); break;
-                            case 10: gui.activateCharacter(characterNumber, 0, 2, 2, 0); break;
-                            case 11: gui.activateCharacter(characterNumber, 1, 0, 0, 0); break;
-                            case 12: gui.activateCharacter(characterNumber, 1, 0, 0, 0); break;
-                        }
-                    } catch (Exception e) {
-                        client.getLogger().log(Level.INFO, e.getMessage());
-                    }
+                    activateNewCharacter(characterNumber);
                 }
             }
+        }
+    }
+
+    private void activateNewCharacter (int characterNumber) {
+        Game model = client.getModel();
+        BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
+
+        for (int i=0; i<3; i++) gui.setActivatedCharacter(i, false);
+        undoAllSelections();
+        highlight(board.characters().get(characterNumber).card());
+        try{
+            switch (model.getCharacters()[characterNumber].getId()) {
+                case 1 -> gui.activateCharacter(characterNumber, 1, 0, 0, 1);
+                case 2 -> doGuiCharacterMove(gui, 2, null);
+                case 3 -> gui.activateCharacter(characterNumber, 0, 0, 0, 1);
+                case 4 -> doGuiCharacterMove(gui, 4, null);
+                case 5 -> gui.activateCharacter(characterNumber, 0, 0, 0, 1);
+                case 6 -> doGuiCharacterMove(gui, 6, null);
+                case 7 -> gui.activateCharacter(characterNumber, 3, 0, 3, 0);
+                case 8 -> doGuiCharacterMove(gui, 8, null);
+                case 9 -> gui.activateCharacter(characterNumber, 1, 0, 0, 0);
+                case 10 -> gui.activateCharacter(characterNumber, 0, 2, 2, 0);
+                case 11 -> gui.activateCharacter(characterNumber, 1, 0, 0, 0);
+                case 12 -> gui.activateCharacter(characterNumber, 1, 0, 0, 0);
+            }
+        } catch (Exception e) {
+            client.getLogger().log(Level.INFO, e.getMessage());
         }
     }
 
@@ -840,13 +849,12 @@ public class BoardPageController extends AbstractController {
         Game model = client.getModel();
         BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
 
-        switch (model.getGameState().getGameStateName()) {
-            case "CCS":
-                try {
-                    gui.doCloudChoice(cloudId);
-                } catch (Exception e) {
-                    client.getLogger().log(Level.INFO, e.getMessage());
-                } break;
+        if ("CCS".equals(model.getGameState().getGameStateName())) {
+            try {
+                gui.doCloudChoice(cloudId);
+            } catch (Exception e) {
+                client.getLogger().log(Level.INFO, e.getMessage());
+            }
         }
     }
 

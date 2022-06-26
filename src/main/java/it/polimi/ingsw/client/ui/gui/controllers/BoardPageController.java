@@ -732,8 +732,12 @@ public class BoardPageController extends AbstractController {
                                     characterStudents = characterOne.getStudentColorList();
                                 else if (character instanceof CharacterSeven characterSeven)
                                     characterStudents = characterSeven.getStudentColorList();
+                                else if (character instanceof CharacterNine)
+                                    characterStudents = colorPickList;
                                 else if (character instanceof CharacterEleven characterEleven)
                                     characterStudents = characterEleven.getStudentColorList();
+                                else if (character instanceof CharacterTwelve)
+                                    characterStudents = colorPickList;
                                 final List<StudentColor> cs = characterStudents;
                                 parameters.add(extractIfUnique(gui.getPickedCardStudents().stream().map(cs::get).toList()));
                             }

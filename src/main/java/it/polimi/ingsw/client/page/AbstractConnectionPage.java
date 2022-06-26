@@ -45,6 +45,10 @@ public abstract class AbstractConnectionPage extends AbstractPage {
         return true;
     }
 
+    /**
+     * set next state to CREATE_GAME_PAGE if createGame is true, otherwise LOBBY_SELECTION_PAGE
+     * @param createGame true if the user decided to create a new game
+     */
     public void onEnd(boolean createGame) {
         if (createGame) {
             client.setNextState(CREATE_GAME_PAGE);

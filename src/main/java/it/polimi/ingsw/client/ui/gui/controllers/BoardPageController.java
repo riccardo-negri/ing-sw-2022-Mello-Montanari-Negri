@@ -6,6 +6,7 @@ import it.polimi.ingsw.client.ui.gui.GUI;
 import it.polimi.ingsw.client.ui.gui.records.*;
 import it.polimi.ingsw.client.ui.gui.records.CharacterRecord;
 import it.polimi.ingsw.model.entity.Game;
+import it.polimi.ingsw.model.entity.GameRuleException;
 import it.polimi.ingsw.model.entity.characters.*;
 import it.polimi.ingsw.model.entity.characters.Character;
 import it.polimi.ingsw.model.entity.gameState.ActionState;
@@ -642,7 +643,7 @@ public class BoardPageController extends AbstractController {
         if ("PS".equals(model.getGameState().getGameStateName())) {
             try {
                 gui.doCardChoice(card);
-            } catch (Exception e) {
+            } catch (GameRuleException e) {
                 client.getLogger().log(Level.INFO, e.getMessage());
             }
         }
@@ -663,7 +664,7 @@ public class BoardPageController extends AbstractController {
                     .getEntranceStudents().get(gui.getStudentPicked()) == color) {
                 try {
                     gui.doStudentMovement(color, "dining-room");
-                } catch (Exception e) {
+                } catch (GameRuleException e) {
                     client.getLogger().log(Level.INFO, e.getMessage());
                 }
             }
@@ -691,7 +692,7 @@ public class BoardPageController extends AbstractController {
             else {
                 try {
                     gui.doStudentMovement(model.getWizard(client.getUsernames().indexOf(client.getUsername())).getEntranceStudents().get(gui.getStudentPicked()), "island-" + islandId);
-                } catch (Exception e) {
+                } catch (GameRuleException e) {
                     client.getLogger().log(Level.INFO, e.getMessage());
                 }
             }
@@ -700,7 +701,7 @@ public class BoardPageController extends AbstractController {
             try { gui.doMotherNatureMovement(model.getIslandGroupList().indexOf(
                     model.getIslandGroupList().stream().filter(islandGroup ->
                             islandGroup.getIslandList().contains(model.getIsland(islandId))).toList().get(0)));
-            } catch (Exception e) {
+            } catch (GameRuleException e) {
                 client.getLogger().log(Level.INFO, e.getMessage());
             }
             undoAllSelections();
@@ -746,7 +747,7 @@ public class BoardPageController extends AbstractController {
                             parameters.add(extractIfUnique(gui.getPickedIslands()));
                             parameters.removeAll(Collections.singleton(null));
                             doGuiCharacterMove(gui, model.getCharacters()[characterNumber].getId(), parameters);
-                        } catch (Exception e) {
+                        } catch (GameRuleException e) {
                             client.getLogger().log(Level.INFO, e.getMessage());
                         }
                     }
@@ -784,7 +785,7 @@ public class BoardPageController extends AbstractController {
                 case 11 -> gui.activateCharacter(characterNumber, 1, 0, 0, 0);
                 case 12 -> gui.activateCharacter(characterNumber, 1, 0, 0, 0);
             }
-        } catch (Exception e) {
+        } catch (GameRuleException e) {
             client.getLogger().log(Level.INFO, e.getMessage());
         }
     }
@@ -803,7 +804,7 @@ public class BoardPageController extends AbstractController {
         return false;
     }
 
-    void doGuiCharacterMove(BoardPageGUI gui, int characterID, List<Object> parameters) throws Exception {
+    void doGuiCharacterMove(BoardPageGUI gui, int characterID, List<Object> parameters) throws GameRuleException {
         for (int i=0; i<3; i++) gui.setActivatedCharacter(i, false);
         undoAllSelections();
         gui.doCharacterMove(characterID, parameters);
@@ -859,7 +860,7 @@ public class BoardPageController extends AbstractController {
         if ("CCS".equals(model.getGameState().getGameStateName())) {
             try {
                 gui.doCloudChoice(cloudId);
-            } catch (Exception e) {
+            } catch (GameRuleException e) {
                 client.getLogger().log(Level.INFO, e.getMessage());
             }
         }
@@ -924,7 +925,7 @@ public class BoardPageController extends AbstractController {
         else if (m instanceof Move move) {
             try {
                 move.applyEffectClient(client.getModel());
-            } catch (Exception e) {
+            } catch (GameRuleException e) {
                 String toLog = "Received an invalid move: " + e.getMessage();
                 client.getLogger().log(Level.WARNING, toLog);
             }

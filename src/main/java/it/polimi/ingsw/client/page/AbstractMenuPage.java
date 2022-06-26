@@ -10,6 +10,10 @@ public abstract class AbstractMenuPage extends AbstractPage {
         super(client);
     }
 
+    /**
+     * set next state to CONNECTION_PAGE or STORYLINE_PAGE or CREDITS_PAGE or null or MENU_PAGE
+     * @param n number representing next page selection
+     */
     public void onEnd (Integer n) {
         switch (n) {
             case 1 -> client.setNextState(CONNECTION_PAGE);

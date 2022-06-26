@@ -11,6 +11,9 @@ public class StorylinePageCLI extends AbstractStorylinePage {
         super(client);
     }
 
+    /**
+     * draw the page and handle all expected actions
+     */
     @Override
     public void draw () {
         final String STORYLINE = """

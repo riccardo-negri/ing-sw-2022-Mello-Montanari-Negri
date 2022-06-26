@@ -819,8 +819,8 @@ public class BoardPageController extends AbstractController {
 
     void doGuiCharacterMove(BoardPageGUI gui, int characterID, List<Object> parameters) throws Exception {
         for (int i=0; i<3; i++) gui.setActivatedCharacter(i, false);
-        undoAllSelections();
         gui.doCharacterMove(characterID, parameters);
+        undoAllSelections();
     }
 
     public void handleCharacterItem(int character, int item) {

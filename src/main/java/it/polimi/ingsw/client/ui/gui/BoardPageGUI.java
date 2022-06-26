@@ -78,11 +78,17 @@ public class BoardPageGUI extends AbstractBoardPage {
     }
 
     public boolean isEverythingNeededSelected() {
-        return pickedCardStudents.size() == cardStudentsToPick &&
-                pickedDiningStudents.size() == diningStudentsToPick &&
-                pickedEntranceStudents.size() == entranceStudentsToPick &&
-                pickedIslands.size() == islandsToPick &&
-                pickedTables.size() == tablesToPick;
+        if (cardStudentsToPick == 3) {
+            return pickedCardStudents.size() == pickedEntranceStudents.size() && pickedCardStudents.size() > 0;
+        } else if (diningStudentsToPick == 2) {
+            return pickedDiningStudents.size() == pickedEntranceStudents.size() && pickedDiningStudents.size() > 0;
+        } else {
+            return pickedCardStudents.size() == cardStudentsToPick &&
+                    pickedDiningStudents.size() == diningStudentsToPick &&
+                    pickedEntranceStudents.size() == entranceStudentsToPick &&
+                    pickedIslands.size() == islandsToPick &&
+                    pickedTables.size() == tablesToPick;
+        }
     }
 
     public List<Integer> getPickedIslands() {

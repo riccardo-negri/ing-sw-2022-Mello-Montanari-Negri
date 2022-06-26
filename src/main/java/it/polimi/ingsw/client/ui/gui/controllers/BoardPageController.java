@@ -711,9 +711,11 @@ public class BoardPageController extends AbstractController {
             }
             undoAllSelections();
         } else if (model.getGameState().getGameStateName().equals("MMNS")) {
-            try { gui.doMotherNatureMovement(model.getIslandGroupList().indexOf(
-                    model.getIslandGroupList().stream().filter(islandGroup ->
-                            islandGroup.getIslandList().contains(model.getIsland(islandId))).toList().get(0)));
+            try {
+                int steps = model.getIslandGroupList().indexOf(model.getIslandGroupList().stream().filter(islandGroup ->
+                            islandGroup.getIslandList().contains(model.getIsland(islandId))).toList().get(0));
+                steps = steps==0 ? model.getIslandGroupList().size() : steps;
+                gui.doMotherNatureMovement(steps);
             } catch (Exception e) {
                 client.getLogger().log(Level.INFO, e.getMessage());
             }

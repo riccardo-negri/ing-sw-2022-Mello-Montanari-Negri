@@ -788,7 +788,8 @@ public class BoardPageController extends AbstractController {
             if (actionState.getActivatedCharacter() != null)  // can't activate if another was activated
                 return false;
             int index = client.getUsernames().indexOf(client.getUsername());
-            return model.getCharacters()[characterNumber].getPrize() <= model.getWizard(index).getMoney();
+            return model.getCharacters()[characterNumber].getPrize() <= model.getWizard(index).getMoney() &&
+                    model.getGameState().getCurrentPlayer() == index;
         }
         return false;
     }

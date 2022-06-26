@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.ui.gui.controllers;
 
 import it.polimi.ingsw.client.page.AbstractBoardPage;
 import it.polimi.ingsw.client.ui.gui.BoardPageGUI;
+import it.polimi.ingsw.client.ui.gui.GUI;
 import it.polimi.ingsw.client.ui.gui.records.*;
 import it.polimi.ingsw.client.ui.gui.records.CharacterRecord;
 import it.polimi.ingsw.model.entity.Game;
@@ -23,6 +24,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -885,6 +887,16 @@ public class BoardPageController extends AbstractController {
         board = new BoardRecord(gridPane, islandRecords, bridges, cloudRecords, myBoard, otherBoard, users, characters, myDeck, arrows, roundNumber, turnPhaseCode);
 
         updateBoard(board, client, selectedOtherUser);
+
+        Stage stage = ((GUI) client.getUI()).stage();
+        stage.heightProperty().addListener(e ->{
+            board.mainGrid().setPrefWidth(stage.getWidth() > 1600 ? 1600 : stage.getWidth());
+            board.mainGrid().setPrefHeight(stage.getHeight() > 900 ? 900 : stage.getHeight());
+        });
+        stage.widthProperty().addListener(e ->{
+            board.mainGrid().setPrefWidth(stage.getWidth() > 1600 ? 1600 : stage.getWidth());
+            board.mainGrid().setPrefHeight(stage.getHeight() > 900 ? 900 : stage.getHeight());
+        });
     }
 
     boolean onNewMessage (Connection source) {

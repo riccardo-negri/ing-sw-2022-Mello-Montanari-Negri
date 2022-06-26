@@ -13,6 +13,9 @@ public class MenuPageCLI extends AbstractMenuPage {
         super(client);
     }
 
+    /**
+     * draw the page and handle all expected actions
+     */
     @Override
     public void draw () {
         final String MENU = """

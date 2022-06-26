@@ -11,6 +11,9 @@ public class CreditsPageCLI extends AbstractCreditsPage {
         super(client);
     }
 
+    /**
+     * draw the page and handle all expected actions
+     */
     @Override
     public void draw () {
         final String CREDITS = """

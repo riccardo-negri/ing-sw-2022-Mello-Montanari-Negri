@@ -11,6 +11,9 @@ public class WelcomePageCLI extends AbstractWelcomePage {
         super(client);
     }
 
+    /**
+     * draw the page and handle all expected actions
+     */
     @Override
     public void draw () {
         final String WELCOME_TO = """

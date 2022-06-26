@@ -15,6 +15,9 @@ public class CLI implements UI {
     private Terminal terminal;
     private History commandsHistory;
 
+    /**
+     * CLI initializer that initializes JLine terminal and commands history
+     */
     public void init () {
         try {
             terminal = TerminalBuilder.terminal();
@@ -24,6 +27,12 @@ public class CLI implements UI {
         }
     }
 
+    /**
+     * get CLI page based on state
+     * @param client client
+     * @param nextState state to create the page from
+     * @return CLI page
+     */
     @Override
     public AbstractPage getState (Client client, ClientPage nextState) {
         return switch (nextState) {

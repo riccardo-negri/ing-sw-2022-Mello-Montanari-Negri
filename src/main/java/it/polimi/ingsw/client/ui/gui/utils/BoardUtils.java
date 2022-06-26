@@ -100,8 +100,6 @@ public class BoardUtils {
 
                 });
 
-                islandRecord.motherNature().setVisible(client.getModel().getFistIslandGroup().equals(group));
-
                 islandRecord.noEntry().setVisible(island.hasStopCard());
 
                 if (group.getTower() != null) {
@@ -113,6 +111,7 @@ public class BoardUtils {
                 }
 
             }
+            board.islands().get(group.getIslandList().get(0).getId()).motherNature().setVisible(client.getModel().getFistIslandGroup().equals(group));
         }
     }
 

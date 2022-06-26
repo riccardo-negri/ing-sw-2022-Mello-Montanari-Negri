@@ -3,7 +3,6 @@ package it.polimi.ingsw.client.ui.gui;
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.page.AbstractBoardPage;
 import it.polimi.ingsw.client.ui.gui.controllers.BoardPageController;
-import it.polimi.ingsw.model.entity.Island;
 import it.polimi.ingsw.model.enums.StudentColor;
 
 import java.util.ArrayList;
@@ -11,12 +10,7 @@ import java.util.List;
 
 public class BoardPageGUI extends AbstractBoardPage {
     private int studentPicked = -1;
-
-    private int cardStudentsToPick = 0;
-    private int diningStudentsToPick = 0;
-    private int entranceStudentsToPick = 0;
-    private int islandsToPick = 0;
-    private int tablesToPick = 0;
+    private int islandPicked = -1;
 
     private final List<Integer> pickedCardStudents = new ArrayList<>();
     private final List<StudentColor> pickedDiningStudents = new ArrayList<>();
@@ -41,13 +35,8 @@ public class BoardPageGUI extends AbstractBoardPage {
 
     public void setStudentPicked(int studentPicked) { this.studentPicked = studentPicked; }
 
-    public void activateCharacter(int characterNumber, int cardStudentsToPick, int diningStudentsToPick, int entranceStudentsToPick, int islandsToPick, int tablesToPick) {
+    public void activateCharacter(int characterNumber) {
         setActivatedCharacter(characterNumber, true);
-        this.cardStudentsToPick = cardStudentsToPick;
-        this.diningStudentsToPick = diningStudentsToPick;
-        this.entranceStudentsToPick = entranceStudentsToPick;
-        this.islandsToPick = islandsToPick;
-        this.tablesToPick = tablesToPick;
         pickedTables.clear();
         pickedIslands.clear();
         pickedEntranceStudents.clear();
@@ -77,18 +66,6 @@ public class BoardPageGUI extends AbstractBoardPage {
         return null;
     }
 
-    public boolean isEverythingNeededSelected() {
-        return pickedCardStudents.size() == cardStudentsToPick &&
-        pickedDiningStudents.size() == diningStudentsToPick &&
-        pickedEntranceStudents.size() == entranceStudentsToPick &&
-        pickedIslands.size() == islandsToPick &&
-        pickedTables.size() == tablesToPick;
-    }
-
-    public List<Integer> getPickedIslands() {
-        return pickedIslands;
-    }
-
     public List<StudentColor> getPickedDiningStudents() {
         return pickedDiningStudents;
     }
@@ -105,23 +82,6 @@ public class BoardPageGUI extends AbstractBoardPage {
         return pickedTables;
     }
 
-    public int getIslandsToPick() {
-        return islandsToPick;
-    }
+    public List<Integer> getPickedIslands () { return pickedIslands; }
 
-    public int getTablesToPick() {
-        return tablesToPick;
-    }
-
-    public int getDiningStudentsToPick() {
-        return diningStudentsToPick;
-    }
-
-    public int getCardStudentsToPick() {
-        return cardStudentsToPick;
-    }
-
-    public int getEntranceStudentsToPick() {
-        return entranceStudentsToPick;
-    }
 }

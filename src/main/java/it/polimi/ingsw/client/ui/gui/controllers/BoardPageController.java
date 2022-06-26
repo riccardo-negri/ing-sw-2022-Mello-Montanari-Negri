@@ -611,27 +611,33 @@ public class BoardPageController extends AbstractController {
         return gui.isAnyCharacterActivated() && (Objects.equals(model.getGameState().getGameStateName(), "MSS") || Objects.equals(model.getGameState().getGameStateName(), "MMNS") || Objects.equals(model.getGameState().getGameStateName(), "CCS"));
     }
 
+    private boolean isRightPlayer() {
+        return client.getUsernames().indexOf(client.getUsername()) == client.getModel().getGameState().getCurrentPlayer();
+    }
+
     public void handleStudentPick (int number) {
         Game model = client.getModel();
         BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
 
-        if (characterInputSelectionPhase()) {
-            if(gui.getPickedEntranceStudents().contains(number)) {
-                gui.getPickedEntranceStudents().remove(Integer.valueOf(number));
-                removeHighlight(board.myBoard().entrance().get(number));
-            } else {
-                if (gui.getPickedEntranceStudents().size() < gui.getEntranceStudentsToPick()) {
-                    gui.getPickedEntranceStudents().add(number);
+        if (isRightPlayer()) {
+            if (characterInputSelectionPhase()) {
+                if(gui.getPickedEntranceStudents().contains(number)) {
+                    gui.getPickedEntranceStudents().remove(Integer.valueOf(number));
+                    removeHighlight(board.myBoard().entrance().get(number));
+                } else {
+                    if (gui.getPickedEntranceStudents().size() < gui.getEntranceStudentsToPick()) {
+                        gui.getPickedEntranceStudents().add(number);
+                        highlight(board.myBoard().entrance().get(number));
+                    }
+                }
+            } else if (Objects.equals(model.getGameState().getGameStateName(), "MSS")) {
+                if (gui.getStudentPicked() == number)
+                    undoAllSelections();
+                else {
+                    undoAllSelections();
+                    gui.setStudentPicked(number);
                     highlight(board.myBoard().entrance().get(number));
                 }
-            }
-        } else if (Objects.equals(model.getGameState().getGameStateName(), "MSS")) {
-            if (gui.getStudentPicked() == number)
-                undoAllSelections();
-            else {
-                undoAllSelections();
-                gui.setStudentPicked(number);
-                highlight(board.myBoard().entrance().get(number));
             }
         }
     }
@@ -655,9 +661,17 @@ public class BoardPageController extends AbstractController {
         BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
 
         if (characterInputSelectionPhase()) {
-            if (gui.getPickedDiningStudents().size() < gui.getDiningStudentsToPick()) {
-                gui.getPickedDiningStudents().add(color);
-                highlight((ImageView) board.myBoard().dining().get(color.value).getChildren().get(gui.getPickedDiningStudents().size()-1));
+            int index = client.getUsernames().indexOf(client.getUsername());
+            int selectedOfThisColor = 0;
+            for (StudentColor s : gui.getPickedDiningStudents()) {
+                if(s.equals(color))
+                    selectedOfThisColor++;
+            }
+            if (model.getWizard(index).getDiningStudents(color) > selectedOfThisColor) {
+                if (gui.getPickedDiningStudents().size() < gui.getDiningStudentsToPick()) {
+                    gui.getPickedDiningStudents().add(color);
+                    highlight((ImageView) board.myBoard().dining().get(color.value).getChildren().get(gui.getPickedDiningStudents().size() - 1));
+                }
             }
         } else if (Objects.equals(model.getGameState().getGameStateName(), "MSS")) {
             if (gui.getStudentPicked() != -1 && model.getWizard(client.getUsernames().indexOf(client.getUsername()))
@@ -767,7 +781,10 @@ public class BoardPageController extends AbstractController {
         Game model = client.getModel();
         BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
 
-        for (int i=0; i<3; i++) gui.setActivatedCharacter(i, false);
+        for (int i=0; i<3; i++) {
+            gui.setActivatedCharacter(i, false);
+            removeHighlight(board.characters().get(i).card());
+        }
         undoAllSelections();
         highlight(board.characters().get(characterNumber).card());
         try{
@@ -806,8 +823,8 @@ public class BoardPageController extends AbstractController {
 
     void doGuiCharacterMove(BoardPageGUI gui, int characterID, List<Object> parameters) throws GameRuleException {
         for (int i=0; i<3; i++) gui.setActivatedCharacter(i, false);
-        undoAllSelections();
         gui.doCharacterMove(characterID, parameters);
+        undoAllSelections();
     }
 
     public void handleCharacterItem(int character, int item) {

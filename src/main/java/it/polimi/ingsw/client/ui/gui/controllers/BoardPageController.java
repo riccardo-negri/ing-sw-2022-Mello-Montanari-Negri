@@ -648,14 +648,6 @@ public class BoardPageController extends AbstractController {
         BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
 
         if (characterInputSelectionPhase()) {
-            if(gui.getPickedTables().contains(color)) {
-                gui.getPickedTables().remove(color);
-            } else {
-                if (gui.getPickedTables().size() < gui.getTablesToPick()) {
-                    gui.getPickedTables().add(color);
-                }
-            }
-
             if (gui.getPickedDiningStudents().size() < gui.getDiningStudentsToPick()) {
                 gui.getPickedDiningStudents().add(color);
                 highlight((ImageView) board.myBoard().dining().get(color.value).getChildren().get(gui.getPickedDiningStudents().size()-1));
@@ -741,7 +733,6 @@ public class BoardPageController extends AbstractController {
                         }
                         parameters.add(extractIfUnique(gui.getPickedEntranceStudents().stream().map(n->model.getWizard(client.getUsernames().indexOf(client.getUsername())).getEntranceStudents().get(n)).toList()));
                         parameters.add(extractIfUnique(gui.getPickedDiningStudents()));
-                        parameters.add(extractIfUnique(gui.getPickedTables()));
                         parameters.add(extractIfUnique(gui.getPickedIslands()));
                         parameters.removeAll(Collections.singleton(null));
                         doGuiCharacterMove(gui, model.getCharacters()[characterNumber].getId(), parameters);
@@ -756,18 +747,18 @@ public class BoardPageController extends AbstractController {
                 highlight(board.characters().get(characterNumber).card());
                 try{
                     switch (model.getCharacters()[characterNumber].getId()) {
-                        case 1: gui.activateCharacter(characterNumber, 1, 0, 0, 1, 0); break;
+                        case 1: gui.activateCharacter(characterNumber, 1, 0, 0, 1); break;
                         case 2: doGuiCharacterMove(gui, 2, null); break;
-                        case 3: gui.activateCharacter(characterNumber, 0, 0, 0, 1, 0); break;
+                        case 3: gui.activateCharacter(characterNumber, 0, 0, 0, 1); break;
                         case 4: doGuiCharacterMove(gui, 4, null); break;
-                        case 5: gui.activateCharacter(characterNumber, 0, 0, 0, 1, 0); break;
+                        case 5: gui.activateCharacter(characterNumber, 0, 0, 0, 1); break;
                         case 6: doGuiCharacterMove(gui, 6, null); break;
-                        case 7: gui.activateCharacter(characterNumber, 3, 0, 3, 0, 0); break;
+                        case 7: gui.activateCharacter(characterNumber, 3, 0, 3, 0); break;
                         case 8: doGuiCharacterMove(gui, 8, null); break;
-                        case 9: gui.activateCharacter(characterNumber, 0, 0, 0, 0, 1); break;
-                        case 10: gui.activateCharacter(characterNumber, 0, 2, 2, 0, 0); break;
-                        case 11: gui.activateCharacter(characterNumber, 1, 0, 0, 0, 0); break;
-                        case 12: gui.activateCharacter(characterNumber, 0, 0, 0, 0, 1); break;
+                        case 9: gui.activateCharacter(characterNumber, 1, 0, 0, 0); break;
+                        case 10: gui.activateCharacter(characterNumber, 0, 2, 2, 0); break;
+                        case 11: gui.activateCharacter(characterNumber, 1, 0, 0, 0); break;
+                        case 12: gui.activateCharacter(characterNumber, 1, 0, 0, 0); break;
                     }
                 } catch (Exception e) {
                     client.getLogger().log(Level.INFO, e.getMessage());
@@ -813,7 +804,6 @@ public class BoardPageController extends AbstractController {
         gui.getPickedIslands().clear();
         gui.getPickedDiningStudents().clear();
         gui.getPickedEntranceStudents().clear();
-        gui.getPickedTables().clear();
         gui.setStudentPicked(-1);
 
         List<ImageView> toUnselect = new ArrayList<>();

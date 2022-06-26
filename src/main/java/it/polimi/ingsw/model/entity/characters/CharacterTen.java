@@ -42,11 +42,11 @@ public class CharacterTen extends Character {
         characterValidator(playingWizard);
         Wizard player = Game.request(gameId).getWizard(playingWizard);
         for (StudentColor color : StudentColor.values()) {
-            if (give.stream().filter(c -> c==color).count() > player.getEntranceStudents().stream().filter(c -> c==color).count())
+            if (take.stream().filter(c -> c==color).count() > player.getEntranceStudents().stream().filter(c -> c==color).count())
                 throw new GameRuleException("Students not present in entrance");
-            if (take.stream().filter(c -> c==color).count() > player.getDiningStudents(color))
+            if (give.stream().filter(c -> c==color).count() > player.getDiningStudents(color))
                 throw new GameRuleException("Students not present in dining room");
-            if (player.getDiningStudents(color) + give.stream().filter(c -> c==color).count() - take.stream().filter(c -> c==color).count() > 10)
+            if (player.getDiningStudents(color) + take.stream().filter(c -> c==color).count() - give.stream().filter(c -> c==color).count() > 10)
                 throw new GameRuleException("Not enough free spots in dining room");
         }
         if (take.size() > 2 || take.size() != give.size()) throw new GameRuleException("Inexact number of students");

@@ -35,16 +35,16 @@ class CharacterTenTest {
                 ((CharacterTen) game.getCharacter(10)).characterTenValidator(1, Arrays.asList(StudentColor.PINK, StudentColor.YELLOW), Arrays.asList(StudentColor.GREEN, StudentColor.GREEN))
         ).getMessage());
         Assertions.assertEquals("Students not present in entrance", Assertions.assertThrows(Exception.class, () ->
-                ((CharacterTen) game.getCharacter(10)).characterTenValidator(1, Arrays.asList(StudentColor.YELLOW, StudentColor.RED), Arrays.asList(StudentColor.BLUE, StudentColor.BLUE))
+                ((CharacterTen) game.getCharacter(10)).characterTenValidator(1, Arrays.asList(StudentColor.RED, StudentColor.RED), Arrays.asList(StudentColor.BLUE, StudentColor.BLUE))
         ).getMessage());
         Assertions.assertEquals("Inexact number of students", Assertions.assertThrows(Exception.class, () ->
-                ((CharacterTen) game.getCharacter(10)).characterTenValidator(1, List.of(StudentColor.YELLOW), Arrays.asList(StudentColor.GREEN, StudentColor.GREEN))
+                ((CharacterTen) game.getCharacter(10)).characterTenValidator(1, List.of(StudentColor.YELLOW), Arrays.asList(StudentColor.YELLOW, StudentColor.YELLOW))
         ).getMessage());
         Assertions.assertEquals("Not enough free spots in dining room", Assertions.assertThrows(Exception.class, () ->
-                ((CharacterTen) game.getCharacter(10)).characterTenValidator(1, Arrays.asList(StudentColor.PINK, StudentColor.BLUE), Arrays.asList(StudentColor.YELLOW, StudentColor.YELLOW))
+                ((CharacterTen) game.getCharacter(10)).characterTenValidator(1, Arrays.asList(StudentColor.YELLOW, StudentColor.YELLOW), Arrays.asList(StudentColor.BLUE, StudentColor.BLUE))
         ).getMessage());
         Assertions.assertDoesNotThrow(() -> {
-            ((CharacterTen) game.getCharacter(10)).useEffect(1, Arrays.asList(StudentColor.YELLOW, StudentColor.RED), Arrays.asList(StudentColor.GREEN, StudentColor.GREEN));
+            ((CharacterTen) game.getCharacter(10)).useEffect(1, Arrays.asList(StudentColor.RED, StudentColor.GREEN), Arrays.asList(StudentColor.YELLOW, StudentColor.YELLOW));
             //game.serializeGame("./src/test/java/it/polimi/ingsw/model/entity/serialized_tests/character_test/character10TestAfter.json");
             Assertions.assertEquals( new BufferedReader(new FileReader("./src/test/java/it/polimi/ingsw/model/entity/serialized_tests/character_test/character10TestAfter.json")).readLine(), game.serializeGame());
         });

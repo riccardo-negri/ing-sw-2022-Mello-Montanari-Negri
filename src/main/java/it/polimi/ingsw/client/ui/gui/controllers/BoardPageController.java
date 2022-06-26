@@ -822,11 +822,7 @@ public class BoardPageController extends AbstractController {
         toUnselect.addAll(board.characters().get(0).items());
         toUnselect.addAll(board.characters().get(1).items());
         toUnselect.addAll(board.characters().get(2).items());
-        toUnselect.addAll(board.myBoard().dining().get(0).getChildren().stream().map(e->(ImageView) e).toList());
-        toUnselect.addAll(board.myBoard().dining().get(1).getChildren().stream().map(e->(ImageView) e).toList());
-        toUnselect.addAll(board.myBoard().dining().get(2).getChildren().stream().map(e->(ImageView) e).toList());
-        toUnselect.addAll(board.myBoard().dining().get(3).getChildren().stream().map(e->(ImageView) e).toList());
-        toUnselect.addAll(board.myBoard().dining().get(4).getChildren().stream().map(e->(ImageView) e).toList());
+        toUnselect.addAll(board.myBoard().dining().stream().flatMap(pane -> pane.getChildren().stream().map(e->(ImageView) e)).toList());
         toUnselect.addAll(board.characters().stream().map(CharacterRecord::card).toList());
         removeHighlight(toUnselect);
     }

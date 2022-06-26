@@ -48,6 +48,7 @@ public abstract class AbstractPage {
             Platform.exit();
         });  // stop process when window is closed
 
+        stage.setResizable(true);
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource(file));

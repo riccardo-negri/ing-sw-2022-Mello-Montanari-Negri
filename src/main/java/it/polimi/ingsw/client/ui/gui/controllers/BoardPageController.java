@@ -9,6 +9,8 @@ import it.polimi.ingsw.model.entity.characters.Character;
 import it.polimi.ingsw.model.entity.characters.CharacterEleven;
 import it.polimi.ingsw.model.entity.characters.CharacterOne;
 import it.polimi.ingsw.model.entity.characters.CharacterSeven;
+import it.polimi.ingsw.model.entity.gameState.ActionState;
+import it.polimi.ingsw.model.entity.gameState.GameState;
 import it.polimi.ingsw.model.enums.StudentColor;
 import it.polimi.ingsw.networking.*;
 import it.polimi.ingsw.networking.moves.Move;
@@ -423,6 +425,9 @@ public class BoardPageController extends AbstractController {
     @FXML
     Label turnPhaseCode;
 
+    @FXML
+    GridPane gridPane;
+
     BoardRecord board;
 
     Integer selectedOtherUser = null;
@@ -648,14 +653,6 @@ public class BoardPageController extends AbstractController {
         BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
 
         if (characterInputSelectionPhase()) {
-            if(gui.getPickedTables().contains(color)) {
-                gui.getPickedTables().remove(color);
-            } else {
-                if (gui.getPickedTables().size() < gui.getTablesToPick()) {
-                    gui.getPickedTables().add(color);
-                }
-            }
-
             if (gui.getPickedDiningStudents().size() < gui.getDiningStudentsToPick()) {
                 gui.getPickedDiningStudents().add(color);
                 highlight((ImageView) board.myBoard().dining().get(color.value).getChildren().get(gui.getPickedDiningStudents().size()-1));
@@ -741,7 +738,6 @@ public class BoardPageController extends AbstractController {
                         }
                         parameters.add(extractIfUnique(gui.getPickedEntranceStudents().stream().map(n->model.getWizard(client.getUsernames().indexOf(client.getUsername())).getEntranceStudents().get(n)).toList()));
                         parameters.add(extractIfUnique(gui.getPickedDiningStudents()));
-                        parameters.add(extractIfUnique(gui.getPickedTables()));
                         parameters.add(extractIfUnique(gui.getPickedIslands()));
                         parameters.removeAll(Collections.singleton(null));
                         doGuiCharacterMove(gui, model.getCharacters()[characterNumber].getId(), parameters);
@@ -751,29 +747,44 @@ public class BoardPageController extends AbstractController {
                 }
             }
             else {
-                for (int i=0; i<3; i++) gui.setActivatedCharacter(i, false);
-                undoAllSelections();
-                highlight(board.characters().get(characterNumber).card());
-                try{
-                    switch (model.getCharacters()[characterNumber].getId()) {
-                        case 1: gui.activateCharacter(characterNumber, 1, 0, 0, 1, 0); break;
-                        case 2: doGuiCharacterMove(gui, 2, null); break;
-                        case 3: gui.activateCharacter(characterNumber, 0, 0, 0, 1, 0); break;
-                        case 4: doGuiCharacterMove(gui, 4, null); break;
-                        case 5: gui.activateCharacter(characterNumber, 0, 0, 0, 1, 0); break;
-                        case 6: doGuiCharacterMove(gui, 6, null); break;
-                        case 7: gui.activateCharacter(characterNumber, 3, 0, 3, 0, 0); break;
-                        case 8: doGuiCharacterMove(gui, 8, null); break;
-                        case 9: gui.activateCharacter(characterNumber, 0, 0, 0, 0, 1); break;
-                        case 10: gui.activateCharacter(characterNumber, 0, 2, 2, 0, 0); break;
-                        case 11: gui.activateCharacter(characterNumber, 1, 0, 0, 0, 0); break;
-                        case 12: gui.activateCharacter(characterNumber, 0, 0, 0, 0, 1); break;
+                if (canActivateCharacter(characterNumber)) {
+                    for (int i=0; i<3; i++) gui.setActivatedCharacter(i, false);
+                    undoAllSelections();
+                    highlight(board.characters().get(characterNumber).card());
+                    try{
+                        switch (model.getCharacters()[characterNumber].getId()) {
+                            case 1: gui.activateCharacter(characterNumber, 1, 0, 0, 1); break;
+                            case 2: doGuiCharacterMove(gui, 2, null); break;
+                            case 3: gui.activateCharacter(characterNumber, 0, 0, 0, 1); break;
+                            case 4: doGuiCharacterMove(gui, 4, null); break;
+                            case 5: gui.activateCharacter(characterNumber, 0, 0, 0, 1); break;
+                            case 6: doGuiCharacterMove(gui, 6, null); break;
+                            case 7: gui.activateCharacter(characterNumber, 3, 0, 3, 0); break;
+                            case 8: doGuiCharacterMove(gui, 8, null); break;
+                            case 9: gui.activateCharacter(characterNumber, 1, 0, 0, 0); break;
+                            case 10: gui.activateCharacter(characterNumber, 0, 2, 2, 0); break;
+                            case 11: gui.activateCharacter(characterNumber, 1, 0, 0, 0); break;
+                            case 12: gui.activateCharacter(characterNumber, 1, 0, 0, 0); break;
+                        }
+                    } catch (Exception e) {
+                        client.getLogger().log(Level.INFO, e.getMessage());
                     }
-                } catch (Exception e) {
-                    client.getLogger().log(Level.INFO, e.getMessage());
                 }
             }
         }
+    }
+
+    boolean canActivateCharacter(int characterNumber) {
+        Game model = client.getModel();
+        BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
+        GameState gameState = model.getGameState();
+        if (gameState instanceof ActionState actionState) {
+            if (actionState.getActivatedCharacter() != null)  // can't activate if another was activated
+                return false;
+            int index = client.getUsernames().indexOf(client.getUsername());
+            return model.getCharacters()[characterNumber].getPrize() <= model.getWizard(index).getMoney();
+        }
+        return false;
     }
 
     void doGuiCharacterMove(BoardPageGUI gui, int characterID, List<Object> parameters) throws Exception {
@@ -813,7 +824,6 @@ public class BoardPageController extends AbstractController {
         gui.getPickedIslands().clear();
         gui.getPickedDiningStudents().clear();
         gui.getPickedEntranceStudents().clear();
-        gui.getPickedTables().clear();
         gui.setStudentPicked(-1);
 
         List<ImageView> toUnselect = new ArrayList<>();
@@ -823,7 +833,6 @@ public class BoardPageController extends AbstractController {
         toUnselect.addAll(board.characters().get(1).items());
         toUnselect.addAll(board.characters().get(2).items());
         toUnselect.addAll(board.myBoard().dining().stream().flatMap(pane -> pane.getChildren().stream().map(e->(ImageView) e)).toList());
-        toUnselect.addAll(board.characters().stream().map(CharacterRecord::card).toList());
         removeHighlight(toUnselect);
     }
 
@@ -873,7 +882,7 @@ public class BoardPageController extends AbstractController {
 
         List<ImageView> arrows = Arrays.asList(arrow1, arrow2, arrow3);
 
-        board = new BoardRecord(islandRecords, bridges, cloudRecords, myBoard, otherBoard, users, characters, myDeck, arrows, roundNumber, turnPhaseCode);
+        board = new BoardRecord(gridPane, islandRecords, bridges, cloudRecords, myBoard, otherBoard, users, characters, myDeck, arrows, roundNumber, turnPhaseCode);
 
         updateBoard(board, client, selectedOtherUser);
     }
@@ -895,15 +904,18 @@ public class BoardPageController extends AbstractController {
                 client.getLogger().log(Level.WARNING, toLog);
             }
             Platform.runLater(() -> updateBoard(board, client, selectedOtherUser));
-        } else if (m instanceof Disconnected) {
+        }
+        else if (m instanceof Disconnected) {
             ((AbstractBoardPage) client.getCurrState()).onEnd(true);
             client.getConnection().close();
             client.setJustDisconnected(true);
             Platform.runLater(() -> client.drawNextPage());
-        } else if (m instanceof UserDisconnected userDisconnected) {
+        }
+        else if (m instanceof UserDisconnected userDisconnected) {
             client.getUsernamesDisconnected().add(userDisconnected.username());
             Platform.runLater(() -> updateBoard(board, client, selectedOtherUser));
-        } else if (m instanceof UserConnected userConnected) {
+        }
+        else if (m instanceof UserConnected userConnected) {
             client.getUsernamesDisconnected().remove(userConnected.username());
             Platform.runLater(() -> updateBoard(board, client, selectedOtherUser));
         }

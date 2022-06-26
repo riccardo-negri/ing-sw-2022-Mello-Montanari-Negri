@@ -16,13 +16,11 @@ public class BoardPageGUI extends AbstractBoardPage {
     private int diningStudentsToPick = 0;
     private int entranceStudentsToPick = 0;
     private int islandsToPick = 0;
-    private int tablesToPick = 0;
 
     private final List<Integer> pickedCardStudents = new ArrayList<>();
     private final List<StudentColor> pickedDiningStudents = new ArrayList<>();
     private final List<Integer> pickedEntranceStudents = new ArrayList<>();
     private final List<Integer> pickedIslands = new ArrayList<>();
-    private final List<StudentColor> pickedTables = new ArrayList<>();
     private final boolean[] activatedCharacter = new boolean[3];
 
     protected BoardPageGUI(Client client) {
@@ -41,14 +39,12 @@ public class BoardPageGUI extends AbstractBoardPage {
 
     public void setStudentPicked(int studentPicked) { this.studentPicked = studentPicked; }
 
-    public void activateCharacter(int characterNumber, int cardStudentsToPick, int diningStudentsToPick, int entranceStudentsToPick, int islandsToPick, int tablesToPick) {
+    public void activateCharacter(int characterNumber, int cardStudentsToPick, int diningStudentsToPick, int entranceStudentsToPick, int islandsToPick) {
         setActivatedCharacter(characterNumber, true);
         this.cardStudentsToPick = cardStudentsToPick;
         this.diningStudentsToPick = diningStudentsToPick;
         this.entranceStudentsToPick = entranceStudentsToPick;
         this.islandsToPick = islandsToPick;
-        this.tablesToPick = tablesToPick;
-        pickedTables.clear();
         pickedIslands.clear();
         pickedEntranceStudents.clear();
         pickedDiningStudents.clear();
@@ -78,11 +74,16 @@ public class BoardPageGUI extends AbstractBoardPage {
     }
 
     public boolean isEverythingNeededSelected() {
-        return pickedCardStudents.size() == cardStudentsToPick &&
-                pickedDiningStudents.size() == diningStudentsToPick &&
-                pickedEntranceStudents.size() == entranceStudentsToPick &&
-                pickedIslands.size() == islandsToPick &&
-                pickedTables.size() == tablesToPick;
+        if (cardStudentsToPick == 3) {
+            return pickedCardStudents.size() == pickedEntranceStudents.size() && pickedCardStudents.size() > 0;
+        } else if (diningStudentsToPick == 2) {
+            return pickedDiningStudents.size() == pickedEntranceStudents.size() && pickedDiningStudents.size() > 0;
+        } else {
+            return pickedCardStudents.size() == cardStudentsToPick &&
+                    pickedDiningStudents.size() == diningStudentsToPick &&
+                    pickedEntranceStudents.size() == entranceStudentsToPick &&
+                    pickedIslands.size() == islandsToPick;
+        }
     }
 
     public List<Integer> getPickedIslands() {
@@ -101,16 +102,8 @@ public class BoardPageGUI extends AbstractBoardPage {
         return pickedCardStudents;
     }
 
-    public List<StudentColor> getPickedTables() {
-        return pickedTables;
-    }
-
     public int getIslandsToPick() {
         return islandsToPick;
-    }
-
-    public int getTablesToPick() {
-        return tablesToPick;
     }
 
     public int getDiningStudentsToPick() {

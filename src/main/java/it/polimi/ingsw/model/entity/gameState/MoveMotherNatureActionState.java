@@ -35,6 +35,7 @@ public class MoveMotherNatureActionState extends ActionState {
         if (!Objects.equals(playingWizard, playerOrder.get(currentlyPlaying))) throw new GameRuleException("Wrong player");
         if (!Objects.equals(gameState, "MMNS")) throw new GameRuleException("Wrong game phase");
         if (steps > getMaximumSteps(playingWizard)) throw new GameRuleException("Too many steps");
+        if (steps <= 0) throw new GameRuleException("At least one step");
     }
 
     /**

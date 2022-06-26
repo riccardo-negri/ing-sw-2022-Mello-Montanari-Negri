@@ -9,6 +9,7 @@ public record IslandRecord(
         ImageView tower,
         ImageView motherNature,
         ImageView noEntry,
+        ImageView land,
         List<ImageView> pawns,
         List<Label> counts
 ) {

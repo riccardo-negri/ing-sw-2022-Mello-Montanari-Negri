@@ -30,6 +30,42 @@ import static it.polimi.ingsw.client.ui.gui.utils.BoardUtils.*;
 public class BoardPageController extends AbstractController {
 
     @FXML
+    ImageView islandImage0;
+
+    @FXML
+    ImageView islandImage1;
+
+    @FXML
+    ImageView islandImage2;
+
+    @FXML
+    ImageView islandImage3;
+
+    @FXML
+    ImageView islandImage4;
+
+    @FXML
+    ImageView islandImage5;
+
+    @FXML
+    ImageView islandImage6;
+
+    @FXML
+    ImageView islandImage7;
+
+    @FXML
+    ImageView islandImage8;
+
+    @FXML
+    ImageView islandImage9;
+
+    @FXML
+    ImageView islandImage10;
+
+    @FXML
+    ImageView islandImage11;
+
+    @FXML
     GridPane island0;
     @FXML
     GridPane island1;
@@ -574,9 +610,12 @@ public class BoardPageController extends AbstractController {
         if (characterInputSelectionPhase()) {
             if(gui.getPickedEntranceStudents().contains(number)) {
                 gui.getPickedEntranceStudents().remove(Integer.valueOf(number));
+                removeHighlight(board.myBoard().entrance().get(number));
             } else {
-                if (gui.getPickedEntranceStudents().size() < gui.getEntranceStudentsToPick())
+                if (gui.getPickedEntranceStudents().size() < gui.getEntranceStudentsToPick()) {
                     gui.getPickedEntranceStudents().add(number);
+                    highlight(board.myBoard().entrance().get(number));
+                }
             }
         } else if (Objects.equals(model.getGameState().getGameStateName(), "MSS")) {
             if (gui.getStudentPicked() == number)
@@ -612,12 +651,15 @@ public class BoardPageController extends AbstractController {
             if(gui.getPickedTables().contains(color)) {
                 gui.getPickedTables().remove(color);
             } else {
-                if (gui.getPickedTables().size() < gui.getTablesToPick())
+                if (gui.getPickedTables().size() < gui.getTablesToPick()) {
                     gui.getPickedTables().add(color);
+                }
             }
 
-            if (gui.getPickedDiningStudents().size() < gui.getDiningStudentsToPick())
+            if (gui.getPickedDiningStudents().size() < gui.getDiningStudentsToPick()) {
                 gui.getPickedDiningStudents().add(color);
+                highlight((ImageView) board.myBoard().dining().get(color.value).getChildren().get(gui.getPickedDiningStudents().size()-1));
+            }
         } else if (Objects.equals(model.getGameState().getGameStateName(), "MSS")) {
             if (gui.getStudentPicked() == -1 || model.getWizard(client.getUsernames().indexOf(client.getUsername()))
                     .getEntranceStudents().get(gui.getStudentPicked()) != color) {
@@ -628,8 +670,8 @@ public class BoardPageController extends AbstractController {
                     client.getLogger().log(Level.INFO, e.getMessage());
                 }
             }
+            undoAllSelections();
         }
-        undoAllSelections();
     }
 
     public void handleIsland(int islandId) {
@@ -639,9 +681,12 @@ public class BoardPageController extends AbstractController {
         if(characterInputSelectionPhase()) {
             if(gui.getPickedIslands().contains(islandId)) {
                 gui.getPickedIslands().remove(Integer.valueOf(islandId));
+                removeHighlight(board.islands().get(islandId).land());
             } else {
-                if (gui.getPickedIslands().size() < gui.getIslandsToPick())
+                if (gui.getPickedIslands().size() < gui.getIslandsToPick()) {
                     gui.getPickedIslands().add(islandId);
+                    highlight(board.islands().get(islandId).land());
+                }
             }
         } else if (model.getGameState().getGameStateName().equals("MSS")) {
             if (gui.getStudentPicked() == -1)
@@ -653,6 +698,7 @@ public class BoardPageController extends AbstractController {
                     client.getLogger().log(Level.INFO, e.getMessage());
                 }
             }
+            undoAllSelections();
         } else if (model.getGameState().getGameStateName().equals("MMNS")) {
             try { gui.doMotherNatureMovement(model.getIslandGroupList().indexOf(
                     model.getIslandGroupList().stream().filter(islandGroup ->
@@ -660,8 +706,8 @@ public class BoardPageController extends AbstractController {
             } catch (Exception e) {
                 client.getLogger().log(Level.INFO, e.getMessage());
             }
+            undoAllSelections();
         }
-        undoAllSelections();
     }
 
     <E> Object extractIfUnique(List<E> objects) {
@@ -684,7 +730,7 @@ public class BoardPageController extends AbstractController {
                         parameters.add(extractIfUnique(gui.getPickedEntranceStudents().stream().map(n->model.getWizard(client.getUsernames().indexOf(client.getUsername())).getEntranceStudents().get(n)).toList()));
                         parameters.add(extractIfUnique(gui.getPickedDiningStudents()));
                         if(gui.getPickedCardStudents().size() > 0) {
-                            Character character = model.getCharacter(characterNumber);
+                            Character character = model.getCharacters()[characterNumber];
                             List<StudentColor> characterStudents = null;
                             if (character instanceof CharacterOne characterOne)
                                 characterStudents = characterOne.getStudentColorList();
@@ -699,7 +745,6 @@ public class BoardPageController extends AbstractController {
                         parameters.add(extractIfUnique(gui.getPickedIslands()));
                         parameters.removeAll(Collections.singleton(null));
                         doGuiCharacterMove(gui, model.getCharacters()[characterNumber].getId(), parameters);
-                        for (int i = 0; i < 3; i++) gui.setActivatedCharacter(i, false);
                     } catch (Exception e) {
                         client.getLogger().log(Level.INFO, e.getMessage());
                     }
@@ -707,6 +752,8 @@ public class BoardPageController extends AbstractController {
             }
             else {
                 for (int i=0; i<3; i++) gui.setActivatedCharacter(i, false);
+                undoAllSelections();
+                highlight(board.characters().get(characterNumber).card());
                 try{
                     switch (model.getCharacters()[characterNumber].getId()) {
                         case 1: gui.activateCharacter(characterNumber, 1, 0, 0, 1, 0); break;
@@ -731,6 +778,7 @@ public class BoardPageController extends AbstractController {
 
     void doGuiCharacterMove(BoardPageGUI gui, int characterID, List<Object> parameters) throws Exception {
         for (int i=0; i<3; i++) gui.setActivatedCharacter(i, false);
+        undoAllSelections();
         gui.doCharacterMove(characterID, parameters);
     }
 
@@ -742,9 +790,12 @@ public class BoardPageController extends AbstractController {
             if(gui.isCharacterActivated(character)) {
                 if(gui.getPickedCardStudents().contains(item)) {
                     gui.getPickedCardStudents().remove(Integer.valueOf(item));
+                    removeHighlight(board.characters().get(character).items().get(item));
                 } else {
-                    if (gui.getPickedCardStudents().size() < gui.getCardStudentsToPick())
+                    if (gui.getPickedCardStudents().size() < gui.getCardStudentsToPick()){
                         gui.getPickedCardStudents().add(item);
+                        highlight(board.characters().get(character).items().get(item));
+                    }
                 }
             }
         }
@@ -758,7 +809,26 @@ public class BoardPageController extends AbstractController {
                 .forEach(this::removeHighlight);
         board.myBoard().entrance().forEach(this::removeHighlight);
 
+        gui.getPickedCardStudents().clear();
+        gui.getPickedIslands().clear();
+        gui.getPickedDiningStudents().clear();
+        gui.getPickedEntranceStudents().clear();
+        gui.getPickedTables().clear();
         gui.setStudentPicked(-1);
+
+        List<ImageView> toUnselect = new ArrayList<>();
+        toUnselect.addAll(board.islands().stream().map(IslandRecord::land).toList());
+        toUnselect.addAll(board.myBoard().entrance());
+        toUnselect.addAll(board.characters().get(0).items());
+        toUnselect.addAll(board.characters().get(1).items());
+        toUnselect.addAll(board.characters().get(2).items());
+        toUnselect.addAll(board.myBoard().dining().get(0).getChildren().stream().map(e->(ImageView) e).toList());
+        toUnselect.addAll(board.myBoard().dining().get(1).getChildren().stream().map(e->(ImageView) e).toList());
+        toUnselect.addAll(board.myBoard().dining().get(2).getChildren().stream().map(e->(ImageView) e).toList());
+        toUnselect.addAll(board.myBoard().dining().get(3).getChildren().stream().map(e->(ImageView) e).toList());
+        toUnselect.addAll(board.myBoard().dining().get(4).getChildren().stream().map(e->(ImageView) e).toList());
+        toUnselect.addAll(board.characters().stream().map(CharacterRecord::card).toList());
+        removeHighlight(toUnselect);
     }
 
     public void handleCloud(int cloudId) {
@@ -782,10 +852,13 @@ public class BoardPageController extends AbstractController {
         List<GridPane> islandsNodes = Arrays.asList(island0, island1, island2, island3, island4, island5, island6, island7, island8, island9, island10, island11);
         List<IslandRecord> islandRecords = new ArrayList<>();
 
+        List<ImageView> islandLands = Arrays.asList(islandImage0, islandImage1, islandImage2, islandImage3, islandImage4, islandImage5, islandImage6, islandImage7, islandImage8, islandImage9, islandImage10, islandImage11);
+        int landIndex = 0;
         for (GridPane island : islandsNodes) {
             List<Node> nodes = island.getChildren();
-            IslandRecord islandRecord = new IslandRecord((ImageView) getElementFromNodesAndIdSubstring(nodes, "tower"), (ImageView) getElementFromNodesAndIdSubstring(nodes, "motherNature"), (ImageView) getElementFromNodesAndIdSubstring(nodes, "noEntry"), Arrays.asList((ImageView) getElementFromNodesAndIdSubstring(nodes, "yellowPawn"), (ImageView) getElementFromNodesAndIdSubstring(nodes, "bluePawn"), (ImageView) getElementFromNodesAndIdSubstring(nodes, "greenPawn"), (ImageView) getElementFromNodesAndIdSubstring(nodes, "redPawn"), (ImageView) getElementFromNodesAndIdSubstring(nodes, "fuchsiaPawn")), Arrays.asList((Label) getElementFromNodesAndIdSubstring(nodes, "yellowCount"), (Label) getElementFromNodesAndIdSubstring(nodes, "blueCount"), (Label) getElementFromNodesAndIdSubstring(nodes, "greenCount"), (Label) getElementFromNodesAndIdSubstring(nodes, "redCount"), (Label) getElementFromNodesAndIdSubstring(nodes, "fuchsiaCount")));
+            IslandRecord islandRecord = new IslandRecord((ImageView) getElementFromNodesAndIdSubstring(nodes, "tower"), (ImageView) getElementFromNodesAndIdSubstring(nodes, "motherNature"), (ImageView) getElementFromNodesAndIdSubstring(nodes, "noEntry"), islandLands.get(landIndex), Arrays.asList((ImageView) getElementFromNodesAndIdSubstring(nodes, "yellowPawn"), (ImageView) getElementFromNodesAndIdSubstring(nodes, "bluePawn"), (ImageView) getElementFromNodesAndIdSubstring(nodes, "greenPawn"), (ImageView) getElementFromNodesAndIdSubstring(nodes, "redPawn"), (ImageView) getElementFromNodesAndIdSubstring(nodes, "fuchsiaPawn")), Arrays.asList((Label) getElementFromNodesAndIdSubstring(nodes, "yellowCount"), (Label) getElementFromNodesAndIdSubstring(nodes, "blueCount"), (Label) getElementFromNodesAndIdSubstring(nodes, "greenCount"), (Label) getElementFromNodesAndIdSubstring(nodes, "redCount"), (Label) getElementFromNodesAndIdSubstring(nodes, "fuchsiaCount")));
             islandRecords.add(islandRecord);
+            landIndex++;
         }
 
         List<ImageView> bridges = Arrays.asList(bridge0to1, bridge1to2, bridge2to3, bridge3to4, bridge4to5, bridge5to6, bridge6to7, bridge7to8, bridge8to9, bridge9to10, bridge10to11, bridge11to0);

@@ -610,27 +610,33 @@ public class BoardPageController extends AbstractController {
         return gui.isAnyCharacterActivated() && (Objects.equals(model.getGameState().getGameStateName(), "MSS") || Objects.equals(model.getGameState().getGameStateName(), "MMNS") || Objects.equals(model.getGameState().getGameStateName(), "CCS"));
     }
 
+    private boolean isRightPlayer() {
+        return client.getUsernames().indexOf(client.getUsername()) == client.getModel().getGameState().getCurrentPlayer();
+    }
+
     public void handleStudentPick (int number) {
         Game model = client.getModel();
         BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
 
-        if (characterInputSelectionPhase()) {
-            if(gui.getPickedEntranceStudents().contains(number)) {
-                gui.getPickedEntranceStudents().remove(Integer.valueOf(number));
-                removeHighlight(board.myBoard().entrance().get(number));
-            } else {
-                if (gui.getPickedEntranceStudents().size() < gui.getEntranceStudentsToPick()) {
-                    gui.getPickedEntranceStudents().add(number);
+        if (isRightPlayer()) {
+            if (characterInputSelectionPhase()) {
+                if(gui.getPickedEntranceStudents().contains(number)) {
+                    gui.getPickedEntranceStudents().remove(Integer.valueOf(number));
+                    removeHighlight(board.myBoard().entrance().get(number));
+                } else {
+                    if (gui.getPickedEntranceStudents().size() < gui.getEntranceStudentsToPick()) {
+                        gui.getPickedEntranceStudents().add(number);
+                        highlight(board.myBoard().entrance().get(number));
+                    }
+                }
+            } else if (Objects.equals(model.getGameState().getGameStateName(), "MSS")) {
+                if (gui.getStudentPicked() == number)
+                    undoAllSelections();
+                else {
+                    undoAllSelections();
+                    gui.setStudentPicked(number);
                     highlight(board.myBoard().entrance().get(number));
                 }
-            }
-        } else if (Objects.equals(model.getGameState().getGameStateName(), "MSS")) {
-            if (gui.getStudentPicked() == number)
-                undoAllSelections();
-            else {
-                undoAllSelections();
-                gui.setStudentPicked(number);
-                highlight(board.myBoard().entrance().get(number));
             }
         }
     }

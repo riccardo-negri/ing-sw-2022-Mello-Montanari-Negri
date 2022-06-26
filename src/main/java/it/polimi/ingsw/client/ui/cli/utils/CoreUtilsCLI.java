@@ -16,21 +16,37 @@ public class CoreUtilsCLI {
 
     }
 
+    /**
+     * clear terminal
+     * @param terminal JLine terminal
+     */
     public static void clearTerminal (Terminal terminal) {
         terminal.writer().println(ansi().reset().eraseScreen());
         terminal.writer().flush();
     }
 
+    /**
+     * move cursor to first row and first column
+     * @param terminal JLine terminal
+     */
     public static void moveCursorToTop (Terminal terminal) {
         terminal.writer().println(ansi().cursor(0, 0));
         terminal.writer().flush();
     }
 
+    /**
+     * move cursor to last row
+     * @param terminal JLine terminal
+     */
     public static void moveCursorToEnd (Terminal terminal) {
         terminal.writer().println(ansi().cursor(terminal.getHeight() - 1, 0));
         terminal.writer().flush();
     }
 
+    /**
+     * do nothing until the user presses enter
+     * @param terminal JLine terminal
+     */
     public static void waitEnterPressed (Terminal terminal) {
         final LineReader reader = LineReaderBuilder.builder().terminal(terminal).build();
         try {
@@ -40,10 +56,21 @@ public class CoreUtilsCLI {
         }
     }
 
+    /**
+     * print centered vertically and horizontally multiline text
+     * @param terminal JLine terminal
+     * @param s text to print
+     */
     public static void printTerminalCenteredMultilineText (Terminal terminal, String s) {
         printTerminalCenteredMultilineText(terminal, s, 0);
     }
 
+    /**
+     * print centered vertically and horizontally multiline text but when calculating vertical alignment consider following expected lines
+     * @param terminal JLine terminal
+     * @param s text to print
+     * @param expectedFollowingLines number of line excepted to follow
+     */
     public static void printTerminalCenteredMultilineText (Terminal terminal, String s, int expectedFollowingLines) {
         String[] arr = s.split("\n");
         List<String> list = Arrays.asList(arr);
@@ -64,20 +91,40 @@ public class CoreUtilsCLI {
         terminal.writer().flush();
     }
 
+    /**
+     * print a line horizontally centered
+     * @param terminal JLine terminal
+     * @param s line
+     */
     public static void printTerminalCenteredLine (Terminal terminal, String s) {
         printTerminalCenteredLine(terminal, s, 0);
     }
 
+    /**
+     * print a line horizontally centered considering expected length of following inline text
+     * @param terminal JLine terminal
+     * @param s line
+     * @param expectedInputSize excepted length of inline input
+     */
     public static void printTerminalCenteredLine (Terminal terminal, String s, int expectedInputSize) {
         terminal.writer().print(ansi().fgDefault().cursorMove(terminal.getWidth() / 2 - (s.length() + expectedInputSize) / 2, 0).a(s).fgBlue());
         terminal.writer().flush();
     }
 
+    /**
+     * print empty line
+     * @param terminal JLine terminal
+     */
     public static void printEmptyLine (Terminal terminal) {
         terminal.writer().println();
         terminal.writer().flush();
     }
 
+    /**
+     * print an error message centered in the first row and restore cursor to previous position
+     * @param terminal JLine terminal
+     * @param warning waring message
+     */
     public static void printTopErrorBanner (Terminal terminal, String warning) {
         terminal.writer().println(ansi().saveCursorPosition());
         terminal.writer().print(ansi().cursor(1, 0).eraseLine());
@@ -96,6 +143,12 @@ public class CoreUtilsCLI {
         terminal.writer().flush();
     }
 
+    /**
+     * print lobby element
+     * @param terminal JLine terminal
+     * @param base vector with row to start drawing from and column to start drawing from
+     * @param lobby lobby descriptor
+     */
     public static void printLobby (Terminal terminal, List<Integer> base, LobbyDescriptor lobby) {
         final int baseRow = base.get(0);
         final int baseCol = base.get(1);
@@ -134,6 +187,11 @@ public class CoreUtilsCLI {
         terminal.writer().println(ansi().cursor(baseRow + n, baseCol).a(R1));
     }
 
+    /**
+     * read number from user
+     * @param terminal JLine terminal
+     * @return number read if it is a number, -1 otherwise
+     */
     public static Integer readNumber (Terminal terminal) {
         int num;
         final LineReader reader = LineReaderBuilder.builder().terminal(terminal).build();
@@ -146,6 +204,11 @@ public class CoreUtilsCLI {
         }
     }
 
+    /**
+     * read IP address from user and check format validity
+     * @param terminal JLine terminal
+     * @return localhost or inserted IP address
+     */
     public static String readIPAddress (Terminal terminal) {
         final LineReader reader = LineReaderBuilder.builder().terminal(terminal).build();
 
@@ -178,10 +241,23 @@ public class CoreUtilsCLI {
         }
     }
 
+    /**
+     * read text from user
+     * @param terminal JLine
+     * @param requestText prompt text to print before asking for input
+     * @return read string
+     */
     public static String readGenericString (Terminal terminal, String requestText) {
         return readGenericString(terminal, requestText, null);
     }
 
+    /**
+     * read string with default value from user
+     * @param terminal JLine terminal
+     * @param requestText prompt text to print before taking input
+     * @param defaultValue default value
+     * @return default value if nothing is entered otherwise string just read
+     */
     public static String readGenericString (Terminal terminal, String requestText, String defaultValue) {
         String s;
         final LineReader reader = LineReaderBuilder.builder().terminal(terminal).build();
@@ -209,6 +285,13 @@ public class CoreUtilsCLI {
         }
     }
 
+    /**
+     * read lobby code from user
+     * @param terminal JLine terminal
+     * @param requestText prompt text to print before taking input
+     * @param lobbies lobbies descriptors list
+     * @return valid lobby code or 'r' to ask for refresh
+     */
     public static String readLobbyCode (Terminal terminal, String requestText, List<LobbyDescriptor> lobbies) {
         String lobbyCode;
         while (true) {
@@ -228,6 +311,15 @@ public class CoreUtilsCLI {
         return lobbyCode;
     }
 
+    /**
+     * read number from user
+     * @param terminal JLine terminal
+     * @param requestText prompt text to print before taking input
+     * @param minValue min value
+     * @param maxValue max value
+     * @param defaultValue default value
+     * @return valid number between min value and max value or default value if nothing is inserted
+     */
     public static int readNumber (Terminal terminal, String requestText, int minValue, int maxValue, Integer defaultValue) {
         int num;
         final LineReader reader = LineReaderBuilder.builder().terminal(terminal).build();
@@ -264,6 +356,13 @@ public class CoreUtilsCLI {
         }
     }
 
+    /**
+     * read y or n from user
+     * @param terminal JLine terminal
+     * @param requestText prompt text to print before taking input
+     * @param defaultValue default value
+     * @return default if user didn't write anything, true if user wrote 'y' or false if user wrote 'n'
+     */
     public static boolean readBoolean (Terminal terminal, String requestText, Boolean defaultValue) {
         String read;
         printTerminalCenteredLine(terminal, requestText, 1);

@@ -121,7 +121,7 @@ public class MatchmakingServer extends Server {
         for (GameServer g : getStartedGames()) {  // if user is already connected properly refuse new connection
             for (User u: g.connectedUsers) {
                 GameUser gu = (GameUser) u;
-                if (gu.getName().equals(user.getName()) && !gu.isDisconnected()) {
+                if ((gu.getName().equals(user.getName()) && !gu.isDisconnected()) || user.name.equals("")) {
                     user.getConnection().send(new ErrorMessage());  // tell to client that this name is already taken
                     user.getConnection().close(); // don't remove the user, just close the connection
                     return;

@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.entity.gameState;
 
 import it.polimi.ingsw.model.entity.Game;
-import it.polimi.ingsw.model.enums.Tower;
 
 import java.util.List;
 
@@ -20,7 +19,7 @@ public abstract class GameState {
      * @param playerOrder random order of the turn
      * @param gameId id of the game
      */
-    public GameState (List<Integer> playerOrder, Integer gameId) {
+    protected GameState (List<Integer> playerOrder, Integer gameId) {
         this.currentlyPlaying = 0;
         this.gameId = gameId;
         this.playerOrder = playerOrder;
@@ -30,7 +29,7 @@ public abstract class GameState {
      * constructor to be called from existing previous state
      * @param oldGameState previous state
      */
-    public GameState (GameState oldGameState) {
+    protected GameState (GameState oldGameState) {
         this.gameId = oldGameState.gameId;
         this.playerOrder = oldGameState.playerOrder;
     }

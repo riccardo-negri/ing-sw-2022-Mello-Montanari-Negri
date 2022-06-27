@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.enums.StudentColor;
 
-import java.util.HashSet;
 import java.util.List;
 
 public class CharacterTen extends Character {
@@ -23,7 +22,6 @@ public class CharacterTen extends Character {
     public void useEffect(Integer playingWizard, List<StudentColor> take, List<StudentColor> give) throws GameRuleException {
         characterTenValidator(playingWizard, take, give);
         useCard(playingWizard);
-        Wizard wizard = Game.request(gameId).getWizard(playingWizard);
         for (StudentColor color : give) Game.request(gameId).getWizard(playingWizard).takeDiningStudent(color);
         for (StudentColor color : take) Game.request(gameId).getWizard(playingWizard).putDiningStudent(color);
         Game.request(gameId).getWizard(playingWizard).getEntranceStudents().removeAll(take);

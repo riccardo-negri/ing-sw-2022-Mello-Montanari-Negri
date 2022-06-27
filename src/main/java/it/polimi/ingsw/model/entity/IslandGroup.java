@@ -1,15 +1,12 @@
 package it.polimi.ingsw.model.entity;
 
-import it.polimi.ingsw.model.enums.StudentColor;
 import it.polimi.ingsw.model.entity.characters.Character;
-import it.polimi.ingsw.model.entity.characters.CharacterEight;
 import it.polimi.ingsw.model.entity.characters.CharacterNine;
-import it.polimi.ingsw.model.entity.characters.CharacterSix;
+import it.polimi.ingsw.model.enums.StudentColor;
 import it.polimi.ingsw.model.enums.Tower;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * group of island with the same tower color

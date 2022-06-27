@@ -27,7 +27,7 @@ public class PlanningState extends GameState {
 
         for(Cloud c : Game.request(gameId).getCloudList()) c.fillCloud();
 
-        Game game = Game.request(gameId);
+        Game.request(gameId);
 
 
     }

@@ -8,6 +8,7 @@ import it.polimi.ingsw.model.entity.gameState.*;
 import java.lang.reflect.Type;
 
 public class JsonDeserializerClass {
+    private JsonDeserializerClass(){}
 
     private static Gson gson;
 

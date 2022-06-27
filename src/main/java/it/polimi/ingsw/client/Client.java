@@ -140,7 +140,7 @@ public class Client {
     }
 
     public void setUsernames (List<String> usernames) {
-        this.usernames = (ArrayList<String>) usernames;
+        this.usernames = usernames;
     }
 
     public Logger getLogger () {

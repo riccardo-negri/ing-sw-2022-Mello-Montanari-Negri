@@ -9,7 +9,7 @@ public abstract class ActionState extends GameState {
      * Constructor to call when a new turn starts, it clears previous activator
      * @param oldState previous state to update from
      */
-    public ActionState(GameState oldState) {
+    protected ActionState(GameState oldState) {
         super(oldState);
 
         if (oldState instanceof PlanningState) this.currentlyPlaying = 0;
@@ -18,7 +18,6 @@ public abstract class ActionState extends GameState {
         if(oldState instanceof ChooseCloudActionState || oldState instanceof PlanningState) {
             activatedCharacter = null;
         } else {
-            ActionState state = (ActionState) oldState;
             activatedCharacter = ((ActionState) oldState).activatedCharacter;
         }
     }

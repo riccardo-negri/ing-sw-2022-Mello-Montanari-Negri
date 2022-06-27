@@ -20,7 +20,8 @@ import java.util.stream.Collectors;
  */
 public class Game {
 
-    private static Gson serializationGson, deserializationGson;
+    private static Gson serializationGson;
+    private static Gson deserializationGson;
     private static Integer idCount = 0;
     private static List<Game> gameEntities;
 
@@ -111,7 +112,7 @@ public class Game {
         gameEnded = false;
         winner = null;
 
-        List<StudentColor> flush = bag.takeRecentlySelected();
+        bag.takeRecentlySelected();
     }
 
     /**
@@ -291,7 +292,7 @@ public class Game {
                 maxValue = professorNumber[i];
             }
         }
-        if (finalWinners.size() >= 1) winner = finalWinners.get(0);
+        if (!finalWinners.isEmpty()) winner = finalWinners.get(0);
     }
 
     /**

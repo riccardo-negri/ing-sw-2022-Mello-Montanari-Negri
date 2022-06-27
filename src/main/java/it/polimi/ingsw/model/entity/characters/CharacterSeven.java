@@ -3,10 +3,8 @@ package it.polimi.ingsw.model.entity.characters;
 import it.polimi.ingsw.model.entity.GameRuleException;
 import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Bag;
-import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.enums.StudentColor;
 
-import java.util.HashSet;
 import java.util.List;
 
 public class CharacterSeven extends Character{

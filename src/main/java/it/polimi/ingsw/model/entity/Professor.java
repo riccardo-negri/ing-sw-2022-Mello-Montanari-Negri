@@ -2,9 +2,6 @@ package it.polimi.ingsw.model.entity;
 
 import it.polimi.ingsw.model.entity.gameState.ActionState;
 import it.polimi.ingsw.model.enums.StudentColor;
-import it.polimi.ingsw.model.entity.characters.Character;
-import it.polimi.ingsw.model.entity.characters.CharacterTwo;
-import it.polimi.ingsw.model.enums.Tower;
 
 import java.util.Objects;
 

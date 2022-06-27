@@ -194,7 +194,6 @@ public class BoardPageCLI extends AbstractBoardPage {
             } catch (GameRuleException e) {
                 String toLog = "Got an invalid move from the server. Exception: " + e;
                 logger.log(Level.WARNING, toLog);
-                e.printStackTrace();
                 waitEnterPressed(terminal);
             }
         }

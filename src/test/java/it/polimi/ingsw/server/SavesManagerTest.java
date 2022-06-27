@@ -40,7 +40,7 @@ class SavesManagerTest {
         clearFolder(logger);
     }
 
-    void firstRun() throws InterruptedException, IOException {
+    void firstRun() throws InterruptedException {
         Server s = new MatchmakingServer();
         assert s.socket != null;
         Thread t = new Thread(s::run);
@@ -102,6 +102,7 @@ class SavesManagerTest {
         assert s.socket != null;
         Thread t = new Thread(s::run);
         t.start();
+        TimeUnit.MILLISECONDS.sleep(100);
 
         Connection g1 = Procedures.reconnectLogin("riccardo", false, logger, newPort);
         Connection g2 = Procedures.reconnectLogin("tommaso", false, logger, newPort);

@@ -10,6 +10,9 @@ public abstract class AbstractEndPage extends AbstractPage {
         super(client);
     }
 
+    /**
+     * set next state to MENU_PAGE
+     */
     public void onEnd () {
         client.setNextState(MENU_PAGE);
     }

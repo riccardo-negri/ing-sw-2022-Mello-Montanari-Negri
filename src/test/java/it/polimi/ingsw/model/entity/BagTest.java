@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Random;
 
-public class BagTest {
+class BagTest {
     Bag bag;
 
     @BeforeEach

@@ -34,6 +34,7 @@ public class CharacterFive extends Character{
         characterValidator(playingWizard);
         if(stopNumber <= 0) throw new GameRuleException("No more stop cards available");
         if (islandId<0 || islandId>=12) throw new GameRuleException("Island does not exist");
+        if (Game.request(gameId).getIsland(islandId).hasStopCard()) throw new GameRuleException("A stop card is already on the island");
     }
 
     public void removeOneCard() { stopNumber -= 1; }

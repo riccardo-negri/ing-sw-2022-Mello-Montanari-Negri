@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.ui.cli;
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.page.AbstractBoardPage;
 import it.polimi.ingsw.client.page.ClientPage;
+import it.polimi.ingsw.model.entity.GameRuleException;
 import it.polimi.ingsw.model.enums.StudentColor;
 import it.polimi.ingsw.networking.*;
 import it.polimi.ingsw.networking.moves.Move;
@@ -26,8 +27,11 @@ public class BoardPageCLI extends AbstractBoardPage {
         super(client);
     }
 
+    /**
+     * draw the page and handle all expected actions
+     */
     @Override
-    public void draw (Client client) {
+    public void draw () {
         Signal.handle(new Signal("INT"),  // SIGINT if the player wants to quit the game
                 signal -> onQuit(true));
 
@@ -56,6 +60,47 @@ public class BoardPageCLI extends AbstractBoardPage {
         if (client.getNextState() == ClientPage.BOARD_PAGE) onEnd(false);
     }
 
+    /**
+     * validate move against current game state and then send it to the server, overrides abstract page method to also apply it to the model
+     * @param moveToSend move to be validated and then sent
+     * @throws GameRuleException error message if the move is not valid
+     */
+    @Override
+    protected void validateAndSendMove (Move moveToSend) throws GameRuleException {
+        super.validateAndSendMove(moveToSend);
+
+        // wait and apply message if the suer is using a CLI
+        String toLog = "Waiting for message to come back. Move:" + moveToSend;
+        logger.log(Level.INFO, toLog);
+        Message message = client.getConnection().waitMessage(Arrays.asList(Move.class, Disconnected.class, UserResigned.class));
+
+        if (message instanceof Disconnected) {
+            printConsoleWarning(terminal, "You got disconnected from the game, rejoin the game with the same username. Press enter to go back to the connection page...");
+            waitEnterPressed(terminal);
+            onEnd(true);
+            return;
+        }
+
+        else if (message instanceof UserResigned userResigned) {
+            printConsoleWarning(terminal, "Player " + userResigned.getUsername() + " resigned from the game. Press enter to go back to the menu...");
+            waitEnterPressed(terminal);
+            onQuit(false);
+            return;
+        }
+
+        Move moveToApply = (Move) message;
+
+        toLog = "Applying effects of message. Move:" + moveToSend;
+        logger.log(Level.INFO, toLog);
+        moveToApply.applyEffectClient(client.getModel());
+
+        toLog = "Applied effect of message. Move:" + moveToSend;
+        logger.log(Level.INFO, toLog);
+    }
+
+    /**
+     * based on current game state ask user for commands with autocompletion
+     */
     private void askForMoveBasedOnState () {
         switch (model.getGameState().getGameStateName()) {
             case "PS" ->
@@ -70,6 +115,10 @@ public class BoardPageCLI extends AbstractBoardPage {
         }
     }
 
+    /**
+     * handle a message that has been received that is not a move
+     * @param message received message
+     */
     private void handleMessageNotMoveAndPrintStatus (Message message) {
         final String PLAYER = "Player ";
         if (message instanceof Disconnected) {
@@ -101,6 +150,9 @@ public class BoardPageCLI extends AbstractBoardPage {
 
     }
 
+    /**
+     * return when a message has been received or when the user typed a valid command
+     */
     private void waitForMoveOrMessage () {
         final boolean[] isOriginatedByMessage = {false};
         Thread t = new Thread(() -> {
@@ -130,16 +182,18 @@ public class BoardPageCLI extends AbstractBoardPage {
         }
     }
 
+    /**
+     * method to be called when it not your turn, waits for any message and handles it
+     */
     private void waitAndHandleMessage () {
         printConsoleInfo(terminal, "Waiting for the other players to do a move...\n");
         Message message = client.getConnection().waitMessage();
         if (message instanceof Move move) {
             try {
                 applyOtherPlayersMove(move);
-            } catch (Exception e) {
+            } catch (GameRuleException e) {
                 String toLog = "Got an invalid move from the server. Exception: " + e;
                 logger.log(Level.WARNING, toLog);
-                e.printStackTrace();
                 waitEnterPressed(terminal);
             }
         }
@@ -148,6 +202,9 @@ public class BoardPageCLI extends AbstractBoardPage {
         }
     }
 
+    /**
+     * parse move that passed the regex test and call the method to send it to the server
+     */
     private void processMoveFromInput () {
         String toLog = "Processing input move: " + moveFromStdin + " Game state: " + model.getGameState().getGameStateName();
         logger.log(Level.INFO, toLog);
@@ -168,14 +225,19 @@ public class BoardPageCLI extends AbstractBoardPage {
                     default -> logger.log(Level.WARNING, "Current state is not supported");
                 }
             }
-        } catch (Exception e) {
+        } catch (GameRuleException e) {
             toLog = "Got an invalid move (that passed regex check), asking for it again. Exception: " + e;
             logger.log(Level.WARNING, toLog);
             lastWarning = "Please type a valid command. " + e.getMessage();
         }
     }
 
-    private void parseAndDoCharacterMove (String move) throws Exception {
+    /**
+     * parse character move that passed regex check and call the method to send it to the server
+     * @param move move written by the user
+     * @throws GameRuleException error message if the move is not valid
+     */
+    private void parseAndDoCharacterMove (String move) throws GameRuleException {
         int id = Integer.parseInt(move.split(" ")[0].split("-")[2]);
         ArrayList<Object> parameters = new ArrayList<>();
         final String nothing = "nothing";
@@ -232,6 +294,11 @@ public class BoardPageCLI extends AbstractBoardPage {
         doCharacterMove(id, parameters);
     }
 
+    /**
+     * get student color from string
+     * @param color color text
+     * @return student color
+     */
     private StudentColor parseStudentColorFromString (String color) {
         return switch (color) {
             case "yellow" -> StudentColor.YELLOW;
@@ -243,6 +310,9 @@ public class BoardPageCLI extends AbstractBoardPage {
         };
     }
 
+    /**
+     * print on the console the last warning or info and clear the last warning or info
+     */
     private void printWarningOrHelper () {
         if (lastWarning != null) {
             printConsoleWarning(terminal, lastWarning);
@@ -254,6 +324,9 @@ public class BoardPageCLI extends AbstractBoardPage {
         }
     }
 
+    /**
+     * draw all the elements on the terminal
+     */
     private void drawGameAndConsole () {
         final int baseCol = (terminal.getWidth() - 192) / 2;
         final int baseRow = 1;

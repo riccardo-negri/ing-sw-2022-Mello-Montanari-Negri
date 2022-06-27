@@ -36,6 +36,7 @@ public abstract class AbstractConnectionPage extends AbstractPage {
         }
         else if (lastMessage instanceof Redirect redirect) { // the user was already registered in the server, so he must be in a game
             client.setPort(redirect.port());
+            client.getConnection().close();
             client.setConnection(new Connection(client.getIpAddress(), client.getPort(), logger));
             Login login = new Login(client.getUsername());
             client.getConnection().send(login);
@@ -44,6 +45,10 @@ public abstract class AbstractConnectionPage extends AbstractPage {
         return true;
     }
 
+    /**
+     * set next state to CREATE_GAME_PAGE if createGame is true, otherwise LOBBY_SELECTION_PAGE
+     * @param createGame true if the user decided to create a new game
+     */
     public void onEnd(boolean createGame) {
         if (createGame) {
             client.setNextState(CREATE_GAME_PAGE);

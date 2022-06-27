@@ -226,7 +226,7 @@ public class Connection extends ConnectionBase {
     /**
      * remove the first matching message from messagesToProcess queue and returns it
      * @param filter the filter the message must match
-     * @return the message removed from the queue or null it none is available
+     * @return the message removed from the queue or null if none is available
      */
     synchronized Message pollFirstMatch(List<Class<?>> filter) {
         for (Message m: messagesToProcess) {

@@ -14,6 +14,10 @@ public abstract class AbstractLobbyPage extends AbstractPage {
         super(client);
     }
 
+    /**
+     * return when an initial state is received or a new user connected
+     * @return username of connected user or null if a state has been received
+     */
     public String waitForConnectedOrStart () {
         Message lastMessage = client.getConnection().waitMessage(Arrays.asList(InitialState.class, UserConnected.class));
         if (lastMessage instanceof UserConnected userConnected) {
@@ -27,6 +31,9 @@ public abstract class AbstractLobbyPage extends AbstractPage {
         return null;
     }
 
+    /**
+     * set next state to BOARD_PAGE
+     */
     public void onEnd () {
         client.setNextState(BOARD_PAGE);
     }

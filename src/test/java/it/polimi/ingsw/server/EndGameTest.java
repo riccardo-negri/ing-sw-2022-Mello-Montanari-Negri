@@ -9,6 +9,7 @@ import it.polimi.ingsw.networking.InitialState;
 import it.polimi.ingsw.networking.UserConnected;
 import it.polimi.ingsw.networking.moves.*;
 import it.polimi.ingsw.utils.LogFormatter;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -23,6 +24,11 @@ class EndGameTest {
     Connection tom;
     Connection ric;
     Connection pit;
+
+    @BeforeEach
+    void clearSaves() throws IOException {
+        Procedures.clearFolder(logger);
+    }
 
     void waitOnAll(Class<?> filter) {
         tom.waitMessage(filter);
@@ -51,6 +57,7 @@ class EndGameTest {
         msm.writeFile(SavesManager.gameFilePath(code, "153"), state);
 
         MatchmakingServer s = new MatchmakingServer();
+        assert s.socket != null;
         Thread t = new Thread(s::run);
         t.start();
 

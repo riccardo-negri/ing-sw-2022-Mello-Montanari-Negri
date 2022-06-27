@@ -38,8 +38,16 @@ public class Wizard {
 
     public CardDeck getCardDeck() { return cardDeck; }
 
+    /**
+     * Take a student from the entrance
+     * @param studentColor color of the student to take
+     */
     public void takeEntranceStudent (StudentColor studentColor) { entranceStudents.remove(studentColor); }
 
+    /**
+     * Add a student to the dining room
+     * @param studentColor the color of the student to put
+     */
     public void putDiningStudent (StudentColor studentColor) {
         if(++diningStudents[studentColor.getValue()] % 3 == 0 &&
                 Game.request(gameId).getAllWizards().stream().mapToInt(Wizard::getMoney).sum() < 20)
@@ -47,24 +55,47 @@ public class Wizard {
 
     }
 
-    public void checkDiningStudentNUmber (StudentColor studentColor) throws GameRuleException {
+    /**
+     * Check to verify the board is not overpopulated
+     * @param studentColor the color to check
+     * @throws GameRuleException if the board is full
+     */
+    public void checkDiningStudentNumber(StudentColor studentColor) throws GameRuleException {
         if (diningStudents[studentColor.getValue()] >= 10)
             throw new GameRuleException("The dining room is full");
     }
 
+    /**
+     * take a student from the dining room
+     * @param studentColor color of the student
+     */
     public void takeDiningStudent (StudentColor studentColor) { diningStudents[studentColor.getValue()] -= diningStudents[studentColor.getValue()]>0 ? 1 : 0; }
 
+    /**
+     * Adds (positive) or remove (negative) towers to the student board, ending game if the board is empty
+     * @param game game object
+     * @param difference number of towers to add / remove
+     */
     public void changeTowerNumber(Game game, Integer difference) {
         towerNumber += difference;
         if(towerNumber <= 0)
             game.endGame();
     }
 
+    /**
+     * pays the price to activate a character
+     * @param price the price to pay
+     * @throws GameRuleException if the owned money are not enough to buy the effect
+     */
     public void payEffect(Integer price) throws GameRuleException {
         if (price > money) throw new GameRuleException("Not enough money to activate the effect");
         money -= price;
     }
 
+    /**
+     * add all the students in the list to the entrance
+     * @param newStudents student list to add
+     */
     public void addEntranceStudents(List<StudentColor> newStudents) { entranceStudents.addAll(newStudents); }
 
     public Integer getMoney() { return money; }
@@ -79,6 +110,10 @@ public class Wizard {
 
     public Integer getTowerNumber() { return towerNumber; }
 
+    /**
+     * refresh the game id after the game deserialization
+     * @param game the new game object
+     */
     public void refreshGameId(Game game) { this.gameId = game.getId(); }
 }
 

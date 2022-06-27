@@ -24,7 +24,7 @@ public class CardDeck {
     }
 
     /**
-     * to play card during the planning phase, it automatically remove the card from the deck
+     * to play card during the planning phase, it automatically removes the card from the deck
      * @param cardNumber the number of the card to be played
      * @throws GameRuleException if the card does not have an accepted number or is already played
      */
@@ -35,6 +35,11 @@ public class CardDeck {
         assistantCards.remove(currentCard);
     }
 
+    /**
+     * checks if there is at least a card available to be used without playing the opponent card
+     * @param cards cards already played by the opponents
+     * @return if there is at least an available card
+     */
     public boolean checkAvailableCards(List<Integer> cards) {
         return assistantCards.stream().map(AssistantCard::getNumber).anyMatch(x -> ! cards.contains(x));
     }
@@ -43,6 +48,9 @@ public class CardDeck {
 
     public void removeCurrentCard() { currentCard = null; }
 
+    /**
+     * @return returns all the still available assistant cards
+     */
     public int[] getDeckCards() {
         int[] cards = new int[assistantCards.size()];
         for (int i = 0; i < assistantCards.size(); i++) {

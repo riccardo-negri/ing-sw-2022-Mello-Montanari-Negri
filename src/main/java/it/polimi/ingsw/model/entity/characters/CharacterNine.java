@@ -12,7 +12,7 @@ public class CharacterNine extends Character{
     }
 
     /**
-     * during the influence calculation on student color is not considered
+     * during the influence calculation on the island, the selected student color is not considered
      * @param playingWizard the player playing the card
      * @param studentColor the color not to consider in the calculation
      */

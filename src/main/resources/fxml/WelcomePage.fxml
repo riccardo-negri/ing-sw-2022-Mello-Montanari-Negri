@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<StackPane xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+    <AnchorPane id="GradientPane" prefHeight="200.0" prefWidth="200.0" />
+    <BorderPane id="WelcomePageBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" styleClass="maintitle" StackPane.alignment="CENTER_RIGHT">
+        <center>
+            <GridPane alignment="CENTER_RIGHT" prefHeight="720.0" prefWidth="980.0" BorderPane.alignment="CENTER">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints maxHeight="152.0" minHeight="10.0" prefHeight="126.0" vgrow="SOMETIMES" />
+                    <RowConstraints maxHeight="234.0" minHeight="10.0" prefHeight="145.0" vgrow="SOMETIMES" />
+                </rowConstraints>
+                <children>
+                    <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleContinue" prefHeight="50.0" prefWidth="250.0" styleClass="titlebutton" text="Continue" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                        <GridPane.margin>
+                            <Insets />
+                        </GridPane.margin>
+                    </Button>
+                    <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="50.0" prefWidth="500.0" text="WELCOME" GridPane.halignment="CENTER">
+                        <font>
+                            <Font size="50.0" />
+                        </font>
+                    </Label>
+                </children>
+            </GridPane>
+        </center>
+    </BorderPane>
+</StackPane>

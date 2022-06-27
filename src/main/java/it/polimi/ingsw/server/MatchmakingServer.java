@@ -139,6 +139,11 @@ public class MatchmakingServer extends Server {
      */
     @Override
     void onNewUserConnect(User user) {
+        if(user.name.equals("")) {
+            user.getConnection().send(new ErrorMessage());  // tell to client that this name is not available
+            user.getConnection().close(); // don't remove the user, just close the connection
+            return;
+        }
         for (GameServer g : getStartedGames()) {
             if (g.getAssignedUsernames().contains(user.getName())) {
                 user.getConnection().send(new Redirect(g.getPort()));

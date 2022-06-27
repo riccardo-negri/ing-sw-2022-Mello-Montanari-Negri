@@ -30,6 +30,6 @@ public class CharacterThree extends Character {
      */
     public void characterThreeValidator(Integer playingWizard, Integer islandGroupId) throws GameRuleException {
         characterValidator(playingWizard);
-        Game.request(gameId).getIslandGroup(islandGroupId);
+        if (Game.request(gameId).getIslandGroup(islandGroupId) == null) throw new GameRuleException("Selected island group doesn't exist");
     }
 }

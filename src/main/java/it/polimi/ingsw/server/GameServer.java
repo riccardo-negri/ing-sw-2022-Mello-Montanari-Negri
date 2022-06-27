@@ -18,7 +18,7 @@ public class GameServer extends Server{
     private final Game game;
 
     private Timer afkTimer;
-    private static final int AFK_PERIOD = 300;  // 5 minutes
+    private static final int AFK_PERIOD = 600;  // 10 minutes
 
     private final GameSavesManager savesManager;
 
@@ -164,6 +164,9 @@ public class GameServer extends Server{
             user.getConnection().send(new InitialState(game.serializeGame(), assignedUsernames));
             tellWhoIsDisconnected(user);
             broadcast(new UserConnected(user.name));
+        } else {
+            for (User u: connectedUsers)  // tell to the user all the other connected in the lobby
+                user.getConnection().send(new UserConnected(u.name));
         }
     }
 

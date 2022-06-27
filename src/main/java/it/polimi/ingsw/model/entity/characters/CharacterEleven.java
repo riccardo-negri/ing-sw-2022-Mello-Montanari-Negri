@@ -42,9 +42,13 @@ public class CharacterEleven extends Character{
     public void characterElevenValidator(Integer playingWizard, StudentColor studentColor) throws GameRuleException {
         characterValidator(playingWizard);
         if (!studentColorList.contains(studentColor)) throw new GameRuleException("Student color not present on the card");
-        Game.request(gameId).getWizard(playingWizard).checkDiningStudentNUmber(studentColor);
+        Game.request(gameId).getWizard(playingWizard).checkDiningStudentNumber(studentColor);
     }
 
+    /**
+     * sets the new bag (to do after deserialization)
+     * @param bag the new bag
+     */
     public void refreshBag (Bag bag) { this.bag = bag; }
 
     public List<StudentColor> getStudentColorList() { return studentColorList; }

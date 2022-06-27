@@ -6,8 +6,8 @@ import it.polimi.ingsw.model.entity.characters.CharacterEleven;
 import it.polimi.ingsw.model.entity.characters.CharacterOne;
 import it.polimi.ingsw.model.enums.*;
 import it.polimi.ingsw.model.entity.characters.Character;
-import it.polimi.ingsw.model.entity.gameState.GameState;
-import it.polimi.ingsw.model.entity.gameState.PlanningState;
+import it.polimi.ingsw.model.entity.game_state.GameState;
+import it.polimi.ingsw.model.entity.game_state.PlanningState;
 
 import java.io.*;
 import java.util.*;
@@ -20,7 +20,8 @@ import java.util.stream.Collectors;
  */
 public class Game {
 
-    private static Gson serializationGson, deserializationGson;
+    private static Gson serializationGson;
+    private static Gson deserializationGson;
     private static Integer idCount = 0;
     private static List<Game> gameEntities;
 
@@ -51,7 +52,8 @@ public class Game {
     }
 
     /**
-     * Launched after the constructor, helps generate the game
+     * Launched after the constructor, generates all the components of the game:
+     * the islands, characters, wizards, professors, clouds and game state
      */
     private void initializeGame() {
         Random randomGenerator = new Random();
@@ -110,7 +112,7 @@ public class Game {
         gameEnded = false;
         winner = null;
 
-        List<StudentColor> flush = bag.takeRecentlySelected();
+        bag.takeRecentlySelected();
     }
 
     /**
@@ -153,7 +155,7 @@ public class Game {
     /**
      * Method to deserialize a game from a file
      * @param fileName name of the file in the disk
-     * @return the index of the game
+     * @return the index of the game (to be used from now on to indicate the game)
      * @throws Exception if the file can't be found, or the index of the game already exists
      */
     public static Integer deserializeGameFromFile (String fileName) throws Exception {
@@ -164,6 +166,11 @@ public class Game {
         return deserializeGameFromString(in);
     }
 
+    /**
+     * Method to deserialize a game from an input string
+     * @param string serialized string with gson
+     * @return the index of the game (to be used from now on to indicate the game)
+     */
     public static synchronized Integer deserializeGameFromString(String string) {
         if (deserializationGson == null) initializeDeserializationGson();
 
@@ -228,7 +235,7 @@ public class Game {
     }
 
     /**
-     * checks if some island groups need to be united
+     * checks if some island groups need to be united and does so in case
      */
     public void unifyIslands() {
         for (int i=0; i<islandGroupList.size(); i++) {
@@ -241,6 +248,9 @@ public class Game {
         if (islandGroupList.size() <= 3) endGame();
     }
 
+    /**
+     * set the flag and launch winner calculation
+     */
     public void endGame() {
         gameEnded = true;
         calculateWinner();
@@ -268,8 +278,10 @@ public class Game {
         int[] professorNumber = new int[winningTowers.size()];
         List<Tower> finalWinners = new ArrayList<>();
         for (Professor p : professors) {
-            Tower t = p.getMaster(null).getTowerColor();
-            if (winningTowers.contains(t)) professorNumber[winningTowers.indexOf(t)]++;
+            if (p.getMaster() != null) {
+                Tower t = p.getMaster().getTowerColor();
+                if (winningTowers.contains(t)) professorNumber[winningTowers.indexOf(t)]++;
+            }
         }
         int maxValue = -1;
         for (int i=0; i<winningTowers.size(); i++) {
@@ -280,9 +292,14 @@ public class Game {
                 maxValue = professorNumber[i];
             }
         }
-        if (finalWinners.size() == 1) winner = finalWinners.get(0);
+        if (!finalWinners.isEmpty()) winner = finalWinners.get(0);
     }
 
+    /**
+     * clean the spage from the game after it ends
+     * @param toDelete game that can be deleted
+     * @throws Exception if the game is not present in the list
+     */
     public static synchronized void deleteGame(Game toDelete) throws Exception {
         if (!gameEntities.contains(toDelete)) throw new Exception("Error deleting the game");
         gameEntities.remove(toDelete);

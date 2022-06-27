@@ -52,7 +52,7 @@ public abstract class Move implements Message {
     public void applyEffectClient(Game game) throws GameRuleException {
         game.getBag().putRecentlySelected(extracted);
         applyEffect(game);
-        //TODO: flush out queue
+        game.getBag().takeRecentlySelected();  // flush out queue
     }
 
     /**

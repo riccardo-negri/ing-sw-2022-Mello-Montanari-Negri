@@ -3,7 +3,7 @@ package it.polimi.ingsw.networking.moves;
 import it.polimi.ingsw.model.entity.GameRuleException;
 import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Wizard;
-import it.polimi.ingsw.model.entity.gameState.PlanningState;
+import it.polimi.ingsw.model.entity.game_state.PlanningState;
 
 public class CardChoice extends Move{
     private final int card;

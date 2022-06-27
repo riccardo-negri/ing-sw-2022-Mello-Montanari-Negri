@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<StackPane xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+    <AnchorPane id="GradientPane" prefHeight="200.0" prefWidth="200.0" />
+    <BorderPane id="WelcomePageBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleJoin" prefHeight="720.0" prefWidth="1280.0" styleClass="maintitle" StackPane.alignment="CENTER_RIGHT">
+      <top>
+              <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="50.0" prefWidth="500.0" text="OPEN LOBBIES" BorderPane.alignment="CENTER">
+                  <font>
+                      <Font size="50.0" />
+                  </font>
+            <BorderPane.margin>
+               <Insets top="50.0" />
+            </BorderPane.margin>
+              </Label>
+      </top>
+      <center>
+         <ListView fx:id="lobbies" onMouseClicked="#handleJoin" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <BorderPane.margin>
+               <Insets bottom="30.0" left="50.0" right="50.0" top="50.0" />
+            </BorderPane.margin>
+         </ListView>
+      </center>
+      <bottom>
+         <Button mnemonicParsing="false" onAction="#handleRefresh" text="Refresh" BorderPane.alignment="CENTER">
+            <BorderPane.margin>
+               <Insets bottom="30.0" />
+            </BorderPane.margin>
+         </Button>
+      </bottom>
+    </BorderPane>
+</StackPane>

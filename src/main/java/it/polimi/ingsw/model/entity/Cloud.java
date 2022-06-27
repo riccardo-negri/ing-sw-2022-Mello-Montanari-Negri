@@ -29,6 +29,10 @@ public class Cloud {
         return studentColorList;
     }
 
+    /**
+     * sets the bag (to be done after deserialization)
+     * @param bag new bag to be used
+     */
     protected void setBag(Bag bag) { this.bag = bag; }
 
     /**

@@ -11,8 +11,11 @@ public class EndPageCLI extends AbstractEndPage {
         super(client);
     }
 
+    /**
+     * draw the page and handle all expected actions
+     */
     @Override
-    public void draw (Client client) {
+    public void draw () {
         final String YOU_WON = """
                 ██╗   ██╗ ██████╗ ██╗   ██╗    ██╗    ██╗ ██████╗ ███╗   ██╗
                 ╚██╗ ██╔╝██╔═══██╗██║   ██║    ██║    ██║██╔═══██╗████╗  ██║

@@ -4,9 +4,11 @@ import it.polimi.ingsw.client.page.AbstractPage;
 import it.polimi.ingsw.client.page.ClientPage;
 import it.polimi.ingsw.client.ui.UI;
 import it.polimi.ingsw.client.ui.cli.CLI;
+import it.polimi.ingsw.client.ui.gui.GUI;
 import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.networking.*;
 import it.polimi.ingsw.utils.LogFormatter;
+import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,24 +29,42 @@ public class Client {
     private final ArrayList<String> usernamesDisconnected = new ArrayList<>();
     private Game model;
 
-    public Client (boolean hasGUI) {
-        if (hasGUI) {
-            ui = null;
-        }
-        else {
-            ui = new CLI();
-            ((CLI) ui).init();
-        }
+    private AbstractPage currState;
+
+    private String resigned; // the name of the user who resigned
+
+    private boolean justDisconnected; // if the client is coming to the current page due to disconnection
+
+
+    public Client(Stage stage) {
+        ui = new GUI(stage);
+        nextState = ClientPage.WELCOME_PAGE;
+
+        logger = LogFormatter.getLogger("Client");
+    }
+
+    public Client () {
+        ui = new CLI();
+        ((CLI) ui).init();
         nextState = ClientPage.WELCOME_PAGE;
 
         logger = LogFormatter.getLogger("Client");
     }
 
     public void start () {
-        while (nextState != null) {
-            AbstractPage currState = ui.getState(this, nextState);
-            currState.draw(this);   // draw does everything
+        if (ui instanceof GUI) {
+            drawNextPage();
         }
+        else {
+            while (nextState != null) {
+                drawNextPage();   // draw does everything
+            }
+        }
+    }
+
+    public void drawNextPage() {
+        currState = ui.getState(this, nextState);
+        currState.draw();
     }
 
     public ClientPage getNextState () {
@@ -120,7 +140,7 @@ public class Client {
     }
 
     public void setUsernames (List<String> usernames) {
-        this.usernames = (ArrayList<String>) usernames;
+        this.usernames = usernames;
     }
 
     public Logger getLogger () {
@@ -139,4 +159,23 @@ public class Client {
         return usernamesDisconnected;
     }
 
+    public AbstractPage getCurrState() {
+        return currState;
+    }
+
+    public void setResigned(String newValue) {
+        resigned = newValue;
+    }
+
+    public String getResigned() {
+        return resigned;
+    }
+
+    public boolean isJustDisconnected() {
+        return justDisconnected;
+    }
+
+    public void setJustDisconnected(boolean justDisconnected) {
+        this.justDisconnected = justDisconnected;
+    }
 }

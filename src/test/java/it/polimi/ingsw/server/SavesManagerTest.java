@@ -8,9 +8,7 @@ import it.polimi.ingsw.networking.Connection;
 import it.polimi.ingsw.networking.InitialState;
 import it.polimi.ingsw.networking.moves.CardChoice;
 import it.polimi.ingsw.utils.LogFormatter;
-import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +21,6 @@ import java.util.logging.Logger;
 
 import static it.polimi.ingsw.server.Procedures.clearFolder;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class SavesManagerTest {
     Logger logger = LogFormatter.getLogger("Test");
 
@@ -41,8 +38,9 @@ class SavesManagerTest {
         clearFolder(logger);
     }
 
-    void firstRun() throws InterruptedException, IOException {
+    void firstRun() throws InterruptedException {
         Server s = new MatchmakingServer();
+        assert s.socket != null;
         Thread t = new Thread(s::run);
         t.start();
 
@@ -99,8 +97,10 @@ class SavesManagerTest {
                 return newPort;
             }
         };
+        assert s.socket != null;
         Thread t = new Thread(s::run);
         t.start();
+        TimeUnit.MILLISECONDS.sleep(100);
 
         Connection g1 = Procedures.reconnectLogin("riccardo", false, logger, newPort);
         Connection g2 = Procedures.reconnectLogin("tommaso", false, logger, newPort);

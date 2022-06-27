@@ -14,8 +14,11 @@ public class LobbySelectionPageCLI extends AbstractLobbySelectionPages {
         super(client);
     }
 
+    /**
+     * draw the page and handle all expected actions
+     */
     @Override
-    public void draw (Client client) {
+    public void draw () {
         final String LOBBY = """
                  ██████╗ ██████╗ ███████╗███╗   ██╗    ██╗      ██████╗ ██████╗ ██████╗ ██╗███████╗███████╗
                 ██╔═══██╗██╔══██╗██╔════╝████╗  ██║    ██║     ██╔═══██╗██╔══██╗██╔══██╗██║██╔════╝██╔════╝
@@ -27,15 +30,16 @@ public class LobbySelectionPageCLI extends AbstractLobbySelectionPages {
         final int lobbyWidth = 18;
         final int lobbyHeight = 9;
         final int baseRow = 12;
-        final int lobbiesPerRow = Integer.min(client.getLobbies().size(), 8);
-        final int baseCol = (terminal.getWidth() - lobbiesPerRow * (lobbyWidth + 2)) / 2;
 
         String lobbyCode = null;
         do {
+            int lobbiesPerRow = Integer.min(client.getLobbies().size(), 8);
+            int baseCol = (terminal.getWidth() - lobbiesPerRow * (lobbyWidth + 2)) / 2;
+
             // print heading
             clearTerminal(terminal);
             printTerminalCenteredMultilineText(terminal, LOBBY, 40);
-            if (lobbyCode != null) { // not first run
+            if (lobbyCode != null && !lobbyCode.equals("#---")) { // not first run
                 printTopErrorBanner(terminal, "The lobby you selected was either full or not existent!");
             }
 
@@ -50,7 +54,10 @@ public class LobbySelectionPageCLI extends AbstractLobbySelectionPages {
             terminal.writer().print(ansi().cursorDownLine(3));
 
             // select lobby to join
-            lobbyCode = readLobbyCode(terminal, "Insert the code of the lobby you wish to join (for example #N3m):", client.getLobbies());
+            lobbyCode = readLobbyCode(terminal, "Insert the code of the lobby you wish to join (for example #N3m, to refresh the list just type 'r'):", client.getLobbies());
+            if (lobbyCode.equals("r")) {
+                lobbyCode = "#---";
+            }
         } while (!tryToJoinLobby(lobbyCode));
 
         onEnd();

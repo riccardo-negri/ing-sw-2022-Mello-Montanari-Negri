@@ -1,10 +1,7 @@
 package it.polimi.ingsw.model.entity;
 
-import it.polimi.ingsw.model.entity.gameState.ActionState;
+import it.polimi.ingsw.model.entity.game_state.ActionState;
 import it.polimi.ingsw.model.enums.StudentColor;
-import it.polimi.ingsw.model.entity.characters.Character;
-import it.polimi.ingsw.model.entity.characters.CharacterTwo;
-import it.polimi.ingsw.model.enums.Tower;
 
 import java.util.Objects;
 
@@ -23,6 +20,10 @@ public class Professor {
         this.master = null;
     }
 
+    /**
+     * Reset the game id after the deserialization process
+     * @param game the new game object
+     */
     public void refreshGameId(Game game) { this.gameId = game.getId(); }
 
     /**
@@ -39,6 +40,12 @@ public class Professor {
             master = contestant;
     }
 
-    public Wizard getMaster(Character activatedCharacter) { return Game.request(gameId).getWizard(master); }
+    /**
+     * get the wizard owning the professor
+     * @return the wizard owning the professor
+     */
+    public Wizard getMaster() {
+        return Game.request(gameId).getWizard(master);
+    }
 
 }

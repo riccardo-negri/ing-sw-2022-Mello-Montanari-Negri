@@ -14,14 +14,19 @@ public abstract class AbstractLobbySelectionPages extends AbstractPage {
         super(client);
     }
 
+    /**
+     * get LobbyDescriptor from lobby code
+     * @param code lobby code
+     * @return LobbyDescriptor
+     */
     private LobbyDescriptor getLobbyFromCode (String code) {
         for (LobbyDescriptor l : client.getLobbies()) {
             if (l.getCode().equals(code)) return l;
         }
         return null;
     }
+
     /**
-     *
      * @param lobbyCode code of the lobby
      * @return true if joined successfully, false if the lobby was not existent of if it was full
      */
@@ -33,6 +38,7 @@ public abstract class AbstractLobbySelectionPages extends AbstractPage {
         Message lastMessage = client.getConnection().waitMessage(Arrays.asList(Redirect.class, LobbiesList.class));
         if (lastMessage instanceof Redirect redirect) {
             client.setPort(redirect.port());
+            client.getConnection().close();
             client.setConnection(new Connection(client.getIpAddress(), client.getPort(), logger));
 
             Login login = new Login(client.getUsername());
@@ -52,6 +58,9 @@ public abstract class AbstractLobbySelectionPages extends AbstractPage {
         return  false;
     }
 
+    /**
+     * set next state to LOBBY_PAGE
+     */
     public void onEnd () {
         client.setNextState(LOBBY_PAGE);
     }

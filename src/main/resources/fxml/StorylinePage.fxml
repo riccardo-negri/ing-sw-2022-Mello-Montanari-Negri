@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<StackPane xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+    <AnchorPane id="GradientPane" prefHeight="200.0" prefWidth="200.0" />
+    <BorderPane id="WelcomePageBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" styleClass="maintitle" StackPane.alignment="CENTER_RIGHT">
+      <center>
+         <TextArea editable="false" maxHeight="1.7976931348623157E308" prefHeight="600.0" prefWidth="1278.0" text="How many times have you felt like you recognize fantastic shapes drawn by the clouds?&#10;How many times have you dreamed of being able to dive into those giant, fluffy pillows in the sky?&#10;&#10;Hidden by the soft cloud whiteness, there is a world where floating islands are home to great schools for young magical creatures from five realms.&#10;Cute little red dragons, clumsy pink fairies, spiteful yellow gnomes, small blue unicorns, &#10;and green frogs who dream of becoming princes show up at the gates of schools,&#10;with the hope of being admitted to the great hall and being able to admire the&#10;famous professors of their realm.&#10;&#10;Run one of Eriantys' four great schools and compete with other wizards to increase your fame and build new branches inside magical towers.&#10;Invite as many creatures of a realm into your dining room, and the corresponding professor will sit with them: &#10;for as long as you host professors, they will influence all the creatures of the same realm on the islands.&#10;When Mother Nature visits an island, she will reward the school that influences the greatest&#10; number of creatures on that island with a new tower.&#10;Try to build all your towers before the other players, but be careful! &#10;The loyalties of the creatures of the five realms are very fickle, and the professors switch schools easily.&#10;Creatures that until recently were on your side, could change allegiance in a flapping of wings!&#10;Eriantys is a game full of strategy, tactics, and twists and turns. Carefully plan your moves and try to control your opponents' moves.&#10;" BorderPane.alignment="CENTER">
+            <BorderPane.margin>
+               <Insets left="50.0" right="50.0" />
+            </BorderPane.margin></TextArea>
+      </center>
+      <bottom>
+         <Button mnemonicParsing="false" onAction="#handleBack" prefHeight="20.0" prefWidth="100.0" text="Back" BorderPane.alignment="CENTER">
+            <BorderPane.margin>
+               <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+            </BorderPane.margin></Button>
+      </bottom>
+      <top>
+              <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="50.0" prefWidth="500.0" text="STORYLINE" BorderPane.alignment="CENTER">
+                  <font>
+                      <Font size="50.0" />
+                  </font>
+            <BorderPane.margin>
+               <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
+            </BorderPane.margin>
+              </Label>
+      </top>
+      <StackPane.margin>
+         <Insets />
+      </StackPane.margin>
+    </BorderPane>
+</StackPane>

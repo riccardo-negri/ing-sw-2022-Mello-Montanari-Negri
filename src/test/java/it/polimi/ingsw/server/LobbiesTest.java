@@ -4,8 +4,10 @@ import it.polimi.ingsw.model.enums.GameMode;
 import it.polimi.ingsw.model.enums.PlayerNumber;
 import it.polimi.ingsw.networking.*;
 import it.polimi.ingsw.utils.LogFormatter;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -13,9 +15,15 @@ class LobbiesTest {
 
     Logger logger = LogFormatter.getLogger("Test");
 
+    @BeforeEach
+    void clearSaves() throws IOException {
+        Procedures.clearFolder(logger);
+    }
+
     @Test
     void wrongCodeTest() throws InterruptedException {
         Server s = new MatchmakingServer();
+        assert s.socket != null;
         Thread t = new Thread(s::run);
         t.start();
 
@@ -44,6 +52,7 @@ class LobbiesTest {
     void badLobbyCreationFormatTest() throws InterruptedException {
 
         Server s = new MatchmakingServer();
+        assert s.socket != null;
         Thread t = new Thread(s::run);
         t.start();
 

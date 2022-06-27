@@ -29,6 +29,11 @@ public class BoardUtils {
     private BoardUtils () {
     }
 
+    /**
+     * retrieve the round number
+     * @param model model of the game
+     * @return the round number
+     */
     private static int findRoundNumber (Game model) {
         if (model.getGameState().getGameStateName().equals("PS")) {
             return 11 - model.getWizard(model.getGameState().getCurrentPlayer()).getCardDeck().getDeckCards().length;
@@ -36,6 +41,12 @@ public class BoardUtils {
         return 10 - model.getWizard(model.getGameState().getCurrentPlayer()).getCardDeck().getDeckCards().length;
     }
 
+    /**
+     * helper method to get an element from a list given the id (if present)
+     * @param nodes list of nodes
+     * @param idSubstring id to compare
+     * @return node if present, null otherwise
+     */
     public static Object getElementFromNodesAndIdSubstring (List<Node> nodes, String idSubstring) {
         for (Node node : nodes) {
             String id = node.getId();
@@ -46,6 +57,11 @@ public class BoardUtils {
         return null;
     }
 
+    /**
+     * asset retrieve for towers
+     * @param tower type to get image for
+     * @return the Image object
+     */
     private static Image getTowerImageFromColor (Tower tower) {
         return switch (tower) {
             case WHITE -> new Image("assets/pawns/towers/board/white.png");
@@ -54,6 +70,11 @@ public class BoardUtils {
         };
     }
 
+    /**
+     * asset retrieve for students
+     * @param color type to get image for
+     * @return the Image object
+     */
     private static Image getStudentImageFromColor (StudentColor color) {
         return switch (color) {
             case RED -> new Image("assets/pawns/students/3d/red.png");
@@ -64,22 +85,46 @@ public class BoardUtils {
         };
     }
 
+    /**
+     * asset retrieve for wizards
+     * @param id type to get image for
+     * @return the Image object
+     */
     private static Image getWizardImageFromId (int id) {
         return new Image("assets/cards/wizards/" + id + ".png");
     }
 
+    /**
+     * asset retrieve for assistants
+     * @param id type to get image for
+     * @return the Image object
+     */
     private static Image getAssistantImageFromId (int id) {
         return new Image("assets/cards/assistants/" + id + ".png");
     }
 
+    /**
+     * asset retrieve for character cards
+     * @param id type to get image for
+     * @return the Image object
+     */
     private static Image getCharacterImageFromId (int id) {
         return new Image("assets/cards/characters/" + id + ".png");
     }
 
+    /**
+     * asset retrieve for ban cards
+     * @return the Image object
+     */
     private static Image getNoEntryImage () {
         return new Image("assets/ban.png");
     }
 
+    /**
+     * updates the status of the islands
+     * @param board board to update
+     * @param client client to get status from
+     */
     private static void updateIslands (BoardRecord board, Client client) {
         // update islands
         for (IslandGroup group : client.getModel().getIslandGroupList()) {
@@ -123,6 +168,13 @@ public class BoardUtils {
         }
     }
 
+    /**
+     * checks if the islands are part of a common group
+     * @param model model of the game
+     * @param firstIsl first island id
+     * @param secondIsl second island id
+     * @return true if the islands need to be connected with a bridge, false otherwise
+     */
     private static boolean areIslandsConnected (Game model, int firstIsl, int secondIsl) {
         for (IslandGroup g : model.getIslandGroupList()) {
             if (2 == g.getIslandList().stream().map(Island::getId).filter(integer -> integer == firstIsl || integer == secondIsl).count()) {
@@ -132,6 +184,11 @@ public class BoardUtils {
         return false;
     }
 
+    /**
+     * create the bridge between islands if necessary
+     * @param board the board to update
+     * @param client the client to get the status from
+     */
     private static void updateBridges (BoardRecord board, Client client) {
         IntStream.range(0, 12).forEach(i -> {
             int j = i == 11 ? 0 : i + 1;
@@ -139,6 +196,11 @@ public class BoardUtils {
         });
     }
 
+    /**
+     * updates the clouds content
+     * @param board the board to update
+     * @param client the client to get the status from
+     */
     private static void updateClouds (BoardRecord board, Client client) {
         int i = 0;
         for (Cloud cloud : client.getModel().getCloudList()) {
@@ -163,6 +225,12 @@ public class BoardUtils {
         }
     }
 
+    /**
+     * updates the dining room of the player
+     * @param wizard id of the player
+     * @param school record of the board of the player
+     * @param isMyBoard flag to indicate if the board belong to the player
+     */
     private static void updateDining (Wizard wizard, SchoolBoardRecord school, boolean isMyBoard) {
         int[] diningColors = new int[]{
                 wizard.getDiningStudents(StudentColor.YELLOW),
@@ -202,6 +270,12 @@ public class BoardUtils {
         }
     }
 
+    /**
+     * updates the school content
+     * @param board the board to update
+     * @param client the client to get the status from
+     * @param username the username of the player
+     */
     public static void updateSchoolBoard (BoardRecord board, Client client, String username) {
         SchoolBoardRecord school;
         boolean isMyBoard = username.equals(client.getUsername());
@@ -267,6 +341,11 @@ public class BoardUtils {
 
     }
 
+    /**
+     * updates the user area content of the other players
+     * @param board the board to update
+     * @param client the client to get the status from
+     */
     private static void updateUsersArea (BoardRecord board, Client client) {
         int indexOfMyUser = client.getUsernames().indexOf(client.getUsername());
 
@@ -330,6 +409,11 @@ public class BoardUtils {
         }
     }
 
+    /**
+     * updates the assistant card available content
+     * @param board the board to update
+     * @param client the client to get the status from
+     */
     private static void updateDeck (BoardRecord board, Client client) {
         Wizard wizard = client.getModel().getWizard(client.getUsernames().indexOf(client.getUsername()));
         int[] cards = wizard.getCardDeck().getDeckCards();
@@ -350,6 +434,11 @@ public class BoardUtils {
 
     }
 
+    /**
+     * updates the characters content
+     * @param board the board to update
+     * @param client the client to get the status from
+     */
     private static void updateCharacters (BoardRecord board, Client client) {
         if (client.getModel().getGameMode().equals(GameMode.COMPLETE)) {
             for (int i = 0; i < 3; i++) {
@@ -445,6 +534,11 @@ public class BoardUtils {
         }
     }
 
+    /**
+     * updates the info of the match
+     * @param board the board to update
+     * @param client the client to get the status from
+     */
     public static void updateBoard (BoardRecord board, Client client, Integer selectedOtherUser) {
         updateIslands(board, client);
 

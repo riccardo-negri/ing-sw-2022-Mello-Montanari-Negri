@@ -39,6 +39,14 @@ public class BoardPageGUI extends AbstractBoardPage {
 
     public void setStudentPicked(int studentPicked) { this.studentPicked = studentPicked; }
 
+    /**
+     * initialize the information to retrieve for a specific character
+     * @param characterNumber position of the character on the board
+     * @param cardStudentsToPick number of students to pick from the character card
+     * @param diningStudentsToPick number of students to pick from the dining room
+     * @param entranceStudentsToPick number of students to pick from the entrance
+     * @param islandsToPick number of islands to pick
+     */
     public void activateCharacter(int characterNumber, int cardStudentsToPick, int diningStudentsToPick, int entranceStudentsToPick, int islandsToPick) {
         setActivatedCharacter(characterNumber, true);
         this.cardStudentsToPick = cardStudentsToPick;
@@ -73,6 +81,10 @@ public class BoardPageGUI extends AbstractBoardPage {
         return null;
     }
 
+    /**
+     * method to check all the information for the character activation have been collected
+     * @return true if the information is complete, false otherwise
+     */
     public boolean isEverythingNeededSelected() {
         if (cardStudentsToPick == 3) {
             return pickedCardStudents.size() == pickedEntranceStudents.size() && pickedCardStudents.size() > 0;

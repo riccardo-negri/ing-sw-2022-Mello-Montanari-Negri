@@ -477,10 +477,10 @@ public class BoardUtils {
         board.round().setText(String.valueOf(findRoundNumber(client.getModel())));
 
         switch (client.getModel().getGameState().getGameStateName()) {
-            case "PS" -> board.phase().setText("Assistant selection");
-            case "MSS" -> board.phase().setText("Student movement");
-            case "MMNS" -> board.phase().setText("Mother nature movement");
-            case "CCS" -> board.phase().setText("Cloud choice");
+            case "PS" -> board.phase().setText("Select card");
+            case "MSS" -> board.phase().setText("Move student");
+            case "MMNS" -> board.phase().setText("Move nature");
+            case "CCS" -> board.phase().setText("Choose cloud");
         }
 
         updateCharacters(board, client);

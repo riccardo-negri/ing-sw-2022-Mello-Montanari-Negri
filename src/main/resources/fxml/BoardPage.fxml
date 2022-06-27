@@ -137,12 +137,6 @@
                                     <Button mnemonicParsing="false" onAction="#handleResign" prefHeight="29.0"
                                             prefWidth="86.0" text="Resign" GridPane.halignment="CENTER"/>
                                     <GridPane GridPane.columnIndex="1">
-                                        <columnConstraints>
-                                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="126.33332824707031"
-                                                               minWidth="10.0" prefWidth="103.33332824707031"/>
-                                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="80.66667175292969"
-                                                               minWidth="10.0" prefWidth="57.66667175292969"/>
-                                        </columnConstraints>
                                         <rowConstraints>
                                             <RowConstraints maxHeight="61.0" minHeight="10.0"
                                                             prefHeight="59.666656494140625" vgrow="SOMETIMES"/>
@@ -150,16 +144,36 @@
                                                             prefHeight="37.333343505859375" vgrow="SOMETIMES"/>
                                         </rowConstraints>
                                         <children>
-                                            <Label text="Round:" textFill="WHITE" GridPane.halignment="LEFT"
-                                                   GridPane.valignment="BOTTOM">
-                                                <font>
-                                                    <Font size="18.0"/>
-                                                </font>
-                                                <GridPane.margin>
-                                                    <Insets left="30.0"/>
-                                                </GridPane.margin>
-                                            </Label>
-                                            <Label text="Phase:" textFill="WHITE" GridPane.halignment="LEFT"
+                                            <GridPane>
+                                                <rowConstraints>
+                                                    <RowConstraints maxHeight="61.0" minHeight="10.0"
+                                                                    prefHeight="59.666656494140625" vgrow="SOMETIMES"/>
+                                                </rowConstraints>
+                                                <columnConstraints>
+                                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="126.33332824707031"
+                                                                       minWidth="10.0" prefWidth="103.33332824707031"/>
+                                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="80.66667175292969"
+                                                                       minWidth="10.0" prefWidth="57.66667175292969"/>
+                                                </columnConstraints>
+                                                <children>
+                                                    <Label text="Round:" textFill="WHITE" GridPane.halignment="LEFT"
+                                                           GridPane.valignment="BOTTOM">
+                                                        <font>
+                                                            <Font size="18.0"/>
+                                                        </font>
+                                                        <GridPane.margin>
+                                                            <Insets left="30.0"/>
+                                                        </GridPane.margin>
+                                                    </Label>
+                                                    <Label fx:id="roundNumber" text="0" textFill="WHITE"
+                                                           GridPane.columnIndex="1" GridPane.valignment="BOTTOM">
+                                                        <font>
+                                                            <Font size="18.0"/>
+                                                        </font>
+                                                    </Label>
+                                                </children>
+                                            </GridPane>
+                                            <Label fx:id="turnPhaseCode" text="Mother nature movement" textFill="WHITE"
                                                    GridPane.rowIndex="1">
                                                 <font>
                                                     <Font size="18.0"/>
@@ -167,18 +181,6 @@
                                                 <GridPane.margin>
                                                     <Insets left="30.0"/>
                                                 </GridPane.margin>
-                                            </Label>
-                                            <Label fx:id="turnPhaseCode" text="MMNS" textFill="WHITE"
-                                                   GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                                <font>
-                                                    <Font size="18.0"/>
-                                                </font>
-                                            </Label>
-                                            <Label fx:id="roundNumber" text="0" textFill="WHITE"
-                                                   GridPane.columnIndex="1" GridPane.valignment="BOTTOM">
-                                                <font>
-                                                    <Font size="18.0"/>
-                                                </font>
                                             </Label>
                                         </children>
                                     </GridPane>

@@ -605,16 +605,29 @@ public class BoardPageController extends AbstractController {
 
     static private final List<StudentColor> colorPickList = Arrays.asList(StudentColor.fromNumber(0), StudentColor.fromNumber(1), StudentColor.fromNumber(2), StudentColor.fromNumber(3), StudentColor.fromNumber(4), StudentColor.fromNumber(5));
 
+    /**
+     * Check if a character card is currently being selected
+     * @return true if the player is selecting the details of a character, false otherwise
+     */
     boolean characterInputSelectionPhase() {
         Game model = client.getModel();
         BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
         return gui.isAnyCharacterActivated() && (Objects.equals(model.getGameState().getGameStateName(), "MSS") || Objects.equals(model.getGameState().getGameStateName(), "MMNS") || Objects.equals(model.getGameState().getGameStateName(), "CCS"));
     }
 
+    /**
+     * Check if it is the player's turn to play
+     * @return true if it is the player's turn, false otherwise
+     */
     private boolean isRightPlayer() {
         return client.getUsernames().indexOf(client.getUsername()) == client.getModel().getGameState().getCurrentPlayer();
     }
 
+    /**
+     * handles the selection of the student from the entrance of the player board, adding it to the studentPicked list
+     * and properly highlighting the selected students
+     * @param number the index of the student in the entrance students list
+     */
     public void handleStudentPick (int number) {
         Game model = client.getModel();
         BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
@@ -642,6 +655,10 @@ public class BoardPageController extends AbstractController {
         }
     }
 
+    /**
+     * handles the selection of the assistant card in the planning phase of the game
+     * @param card gets the id of the selected card (1 to 10)
+     */
     public void handleAssistantCard(int card) {
         Game model = client.getModel();
         BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
@@ -656,6 +673,10 @@ public class BoardPageController extends AbstractController {
         undoAllSelections();
     }
 
+    /**
+     * handles the selection of students from the dining room, or the row to put the entrance student to
+     * @param color color of the student to select / put in the dining room
+     */
     public void handleDiningTable(StudentColor color) {
         Game model = client.getModel();
         BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
@@ -686,6 +707,10 @@ public class BoardPageController extends AbstractController {
         }
     }
 
+    /**
+     * handles the selection of the island to put students in, or for mother nature to go to
+     * @param islandId the id of the selected island (0 to 11)
+     */
     public void handleIsland(int islandId) {
         Game model = client.getModel();
         BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
@@ -724,6 +749,13 @@ public class BoardPageController extends AbstractController {
         }
     }
 
+    /**
+     * helper method to extract students from a list
+     * @param objects list
+     * @param maximumNumber maximum size of the list
+     * @return the list, the object or null
+     * @param <E> the data type
+     */
     <E> Object extractIfUnique(List<E> objects, int maximumNumber) {
         if (maximumNumber == 1)
             return objects.get(0);
@@ -732,6 +764,10 @@ public class BoardPageController extends AbstractController {
         return objects;
     }
 
+    /**
+     * handles the selection of the character, to confirm the selection of all the parameters or to enter the parameter selection phase
+     * @param characterNumber the position of the character in the board (0 to 2)
+     */
     public void handleCharacter(int characterNumber) {
         Game model = client.getModel();
         BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
@@ -779,6 +815,10 @@ public class BoardPageController extends AbstractController {
         }
     }
 
+    /**
+     * helper method to start the selection of a character parameters
+     * @param characterNumber the position of the character on the board (0 to 2)
+     */
     private void activateNewCharacter (int characterNumber) {
         Game model = client.getModel();
         BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
@@ -793,22 +833,24 @@ public class BoardPageController extends AbstractController {
             switch (model.getCharacters()[characterNumber].getId()) {
                 case 1 -> gui.activateCharacter(characterNumber, 1, 0, 0, 1);
                 case 2 -> doGuiCharacterMove(gui, 2, null);
-                case 3 -> gui.activateCharacter(characterNumber, 0, 0, 0, 1);
+                case 3, 5 -> gui.activateCharacter(characterNumber, 0, 0, 0, 1);
                 case 4 -> doGuiCharacterMove(gui, 4, null);
-                case 5 -> gui.activateCharacter(characterNumber, 0, 0, 0, 1);
                 case 6 -> doGuiCharacterMove(gui, 6, null);
                 case 7 -> gui.activateCharacter(characterNumber, 3, 0, 3, 0);
                 case 8 -> doGuiCharacterMove(gui, 8, null);
-                case 9 -> gui.activateCharacter(characterNumber, 1, 0, 0, 0);
+                case 9, 11, 12 -> gui.activateCharacter(characterNumber, 1, 0, 0, 0);
                 case 10 -> gui.activateCharacter(characterNumber, 0, 2, 2, 0);
-                case 11 -> gui.activateCharacter(characterNumber, 1, 0, 0, 0);
-                case 12 -> gui.activateCharacter(characterNumber, 1, 0, 0, 0);
             }
         } catch (GameRuleException e) {
             client.getLogger().log(Level.INFO, e.getMessage());
         }
     }
 
+    /**
+     * check if the prior conditions to activate a character (price and no character already activated) are met
+     * @param characterNumber the position of the character on the board (0 to 2)
+     * @return true if the character can be activated, false otherwise
+     */
     boolean canActivateCharacter(int characterNumber) {
         Game model = client.getModel();
         BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
@@ -823,12 +865,23 @@ public class BoardPageController extends AbstractController {
         return false;
     }
 
+    /**
+     * helper method to activate the character effect
+     * @param characterID the position of the character on the board (0 to 2)
+     * @param parameters parameters to pass to the controller for the activation
+     * @throws GameRuleException if the move is invalid, and thus can't be done
+     */
     void doGuiCharacterMove(BoardPageGUI gui, int characterID, List<Object> parameters) throws GameRuleException {
         for (int i=0; i<3; i++) gui.setActivatedCharacter(i, false);
         gui.doCharacterMove(characterID, parameters);
         undoAllSelections();
     }
 
+    /**
+     * handles the selection of an item from the character card placeholders
+     * @param character the position of the character on the board (0 to 2)
+     * @param item position of the item in the character (0 to 5)
+     */
     public void handleCharacterItem(int character, int item) {
         Game model = client.getModel();
         BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
@@ -848,7 +901,10 @@ public class BoardPageController extends AbstractController {
         }
     }
 
-    public void undoAllSelections() {
+    /**
+     * helper method to remove the highlight to previous selections and to clear the selection lists
+     */
+    private void undoAllSelections() {
         BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
 
         board.characters().stream()
@@ -872,6 +928,10 @@ public class BoardPageController extends AbstractController {
         removeHighlight(toUnselect);
     }
 
+    /**
+     * handler for the cloud selection during the cloud choice phase
+     * @param cloudId the index of the cloud (0 to 3)
+     */
     public void handleCloud(int cloudId) {
         Game model = client.getModel();
         BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
@@ -885,6 +945,9 @@ public class BoardPageController extends AbstractController {
         }
     }
 
+    /**
+     * handles the initialization of the board
+     */
     @FXML
     void initialize () {
         client.getConnection().bindFunctionAndTestPrevious(this::onNewMessage);
@@ -932,6 +995,11 @@ public class BoardPageController extends AbstractController {
         });
     }
 
+    /**
+     * handles the reception of  a new message from the server
+     * @param source source of the message
+     * @return true if the message is correctly received
+     */
     boolean onNewMessage (Connection source) {
         Message m = source.getFirstMessage();
         if (m instanceof UserResigned ur) {
@@ -967,19 +1035,35 @@ public class BoardPageController extends AbstractController {
         return false;
     }
 
+    /**
+     * helper method to highlight the shadow of an image
+     * @param image the image object
+     */
     void highlight(ImageView image) {
         image.setStyle("-fx-effect : dropshadow(gaussian, yellow, 4, 1, 0, 0);");
     }
 
+    /**
+     * helper method to highlight the shadow of a list of images
+     * @param images the list of images
+     */
     void highlight(List<ImageView> images) {
         for (ImageView i: images)
             highlight(i);
     }
 
+    /**
+     * helper method to remove highlight of an image
+     * @param image the image object
+     */
     void removeHighlight(ImageView image) {
         image.setStyle("");
     }
 
+    /**
+     * helper method to remove highlight of a list of images
+     * @param images the list of images
+     */
     void removeHighlight(List<ImageView> images) {
         for (ImageView i: images)
             removeHighlight(i);

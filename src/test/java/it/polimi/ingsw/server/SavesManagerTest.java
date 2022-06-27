@@ -8,9 +8,7 @@ import it.polimi.ingsw.networking.Connection;
 import it.polimi.ingsw.networking.InitialState;
 import it.polimi.ingsw.networking.moves.CardChoice;
 import it.polimi.ingsw.utils.LogFormatter;
-import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 
 import java.io.File;
 import java.io.IOException;

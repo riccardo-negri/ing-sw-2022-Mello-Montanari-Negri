@@ -42,7 +42,7 @@ public class ConnectionPageController extends AbstractController{
     private void handleConnect(ActionEvent event) {
         AbstractConnectionPage page = (AbstractConnectionPage) client.getCurrState();
         int p = Integer.parseInt(port.getText());
-        boolean usernameAvailable = true;
+        boolean usernameAvailable;
         try {
             page.connectToMatchmakingServer(ip.getText(), p, username.getText());
             usernameAvailable = page.waitForLobbiesListOrRedirect();

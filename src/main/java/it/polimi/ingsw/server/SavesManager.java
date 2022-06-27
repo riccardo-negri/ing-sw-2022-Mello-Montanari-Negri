@@ -18,7 +18,7 @@ public class SavesManager {
     final Logger logger;
 
     /**
-     * creates a saves manager with methods to operate on files and directories
+     * creates a save manager with methods to operate on files and directories
      * @param logger the eventual filesystem errors are sent to log
      */
     public SavesManager(Logger logger) {

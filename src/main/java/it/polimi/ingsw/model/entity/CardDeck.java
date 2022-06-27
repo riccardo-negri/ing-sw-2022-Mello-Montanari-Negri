@@ -24,7 +24,7 @@ public class CardDeck {
     }
 
     /**
-     * to play card during the planning phase, it automatically remove the card from the deck
+     * to play card during the planning phase, it automatically removes the card from the deck
      * @param cardNumber the number of the card to be played
      * @throws GameRuleException if the card does not have an accepted number or is already played
      */

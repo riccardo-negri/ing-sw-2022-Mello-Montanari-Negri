@@ -433,6 +433,10 @@ public class BoardPageController extends AbstractController {
 
     Integer selectedOtherUser = null;
 
+    /**
+     * Send resign message to the server
+     * @param event the button click event
+     */
     @FXML
     private void handleResign (ActionEvent event) {
         client.getConnection().send(new UserResigned(client.getUsername()));
@@ -467,6 +471,11 @@ public class BoardPageController extends AbstractController {
 
     @FXML
     private void handleUserChange3() {  handleUserChange(3); }
+
+    /**
+     * Select or unselect a user, if a user is selected show its board, else show the board of the current player
+     * @param userId the if of the user which is clicked
+     */
 
     private void handleUserChange (int userId) {
         List<String> usersNotMyUser = new ArrayList<>(client.getUsernames());

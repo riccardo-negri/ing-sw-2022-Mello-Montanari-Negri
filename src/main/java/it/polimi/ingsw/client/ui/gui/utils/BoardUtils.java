@@ -514,7 +514,8 @@ public class BoardUtils {
                     }
                 }
                 if ((Objects.equals(client.getModel().getGameState().getGameStateName(), "MSS") || Objects.equals(client.getModel().getGameState().getGameStateName(), "MMNS") || Objects.equals(client.getModel().getGameState().getGameStateName(), "CCS")) &&
-                        ((ActionState) client.getModel().getGameState()).getActivatedCharacter() == currCharacter) {
+                        ((ActionState) client.getModel().getGameState()).getActivatedCharacter() != null &&
+                        Objects.equals(((ActionState) client.getModel().getGameState()).getActivatedCharacter().getId(), currCharacter.getId())) {
                     board.characters().get(i).card().setStyle("-fx-effect : dropshadow(gaussian, red, 4, 1, 0, 0);");
                 } else {
                     board.characters().get(i).card().setStyle("");

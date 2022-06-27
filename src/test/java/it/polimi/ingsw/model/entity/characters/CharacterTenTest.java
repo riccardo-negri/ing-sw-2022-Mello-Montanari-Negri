@@ -11,8 +11,6 @@ import java.io.FileReader;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class CharacterTenTest {
 
     private Game game;

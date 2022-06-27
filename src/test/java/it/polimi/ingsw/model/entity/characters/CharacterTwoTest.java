@@ -1,15 +1,12 @@
 package it.polimi.ingsw.model.entity.characters;
 
 import it.polimi.ingsw.model.entity.Game;
-import it.polimi.ingsw.model.enums.StudentColor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class CharacterTwoTest {
 

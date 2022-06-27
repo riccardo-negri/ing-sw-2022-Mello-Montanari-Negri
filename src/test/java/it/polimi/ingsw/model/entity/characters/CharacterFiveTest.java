@@ -9,8 +9,6 @@ import org.junit.jupiter.api.Test;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class CharacterFiveTest {
 
     private Game game;

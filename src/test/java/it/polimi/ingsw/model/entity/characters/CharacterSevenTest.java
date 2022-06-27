@@ -10,8 +10,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class CharacterSevenTest {
 
     private Game game;

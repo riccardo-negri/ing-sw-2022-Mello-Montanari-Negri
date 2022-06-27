@@ -3,7 +3,7 @@ package it.polimi.ingsw.model.entity;
 import com.google.gson.*;
 import it.polimi.ingsw.model.entity.characters.*;
 import it.polimi.ingsw.model.entity.characters.Character;
-import it.polimi.ingsw.model.entity.gameState.*;
+import it.polimi.ingsw.model.entity.game_state.*;
 
 import java.lang.reflect.Type;
 

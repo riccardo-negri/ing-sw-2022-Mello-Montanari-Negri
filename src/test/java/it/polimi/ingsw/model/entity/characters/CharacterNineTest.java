@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.entity.characters;
 
 import it.polimi.ingsw.model.entity.Game;
-import it.polimi.ingsw.model.entity.gameState.MoveMotherNatureActionState;
+import it.polimi.ingsw.model.entity.game_state.MoveMotherNatureActionState;
 import it.polimi.ingsw.model.enums.StudentColor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

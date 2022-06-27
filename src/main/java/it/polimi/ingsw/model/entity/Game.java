@@ -6,8 +6,8 @@ import it.polimi.ingsw.model.entity.characters.CharacterEleven;
 import it.polimi.ingsw.model.entity.characters.CharacterOne;
 import it.polimi.ingsw.model.enums.*;
 import it.polimi.ingsw.model.entity.characters.Character;
-import it.polimi.ingsw.model.entity.gameState.GameState;
-import it.polimi.ingsw.model.entity.gameState.PlanningState;
+import it.polimi.ingsw.model.entity.game_state.GameState;
+import it.polimi.ingsw.model.entity.game_state.PlanningState;
 
 import java.io.*;
 import java.util.*;

@@ -3,7 +3,7 @@ package it.polimi.ingsw.client.ui.cli.utils;
 import it.polimi.ingsw.model.entity.*;
 import it.polimi.ingsw.model.entity.characters.*;
 import it.polimi.ingsw.model.entity.characters.Character;
-import it.polimi.ingsw.model.entity.gameState.ActionState;
+import it.polimi.ingsw.model.entity.game_state.ActionState;
 import it.polimi.ingsw.model.enums.GameMode;
 import it.polimi.ingsw.model.enums.PlayerNumber;
 import it.polimi.ingsw.model.enums.StudentColor;

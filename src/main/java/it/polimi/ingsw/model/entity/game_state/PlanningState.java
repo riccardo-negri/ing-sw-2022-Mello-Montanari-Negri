@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.entity.gameState;
+package it.polimi.ingsw.model.entity.game_state;
 
 import it.polimi.ingsw.model.entity.GameRuleException;
 import it.polimi.ingsw.model.entity.Cloud;

@@ -3,7 +3,7 @@ package it.polimi.ingsw.networking.moves;
 import it.polimi.ingsw.model.entity.GameRuleException;
 import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Wizard;
-import it.polimi.ingsw.model.entity.gameState.MoveMotherNatureActionState;
+import it.polimi.ingsw.model.entity.game_state.MoveMotherNatureActionState;
 
 public class MotherNatureMovement extends Move{
     private final int steps;

@@ -4,7 +4,7 @@ import it.polimi.ingsw.model.entity.GameRuleException;
 import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.entity.Bag;
-import it.polimi.ingsw.model.entity.gameState.ActionState;
+import it.polimi.ingsw.model.entity.game_state.ActionState;
 
 import java.util.Objects;
 

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.entity.gameState;
+package it.polimi.ingsw.model.entity.game_state;
 
 import it.polimi.ingsw.model.entity.Game;
 import org.junit.jupiter.api.Assertions;

@@ -1,9 +1,8 @@
 package it.polimi.ingsw.model.entity;
 
 import it.polimi.ingsw.model.entity.characters.Character;
-import it.polimi.ingsw.model.entity.gameState.ChooseCloudActionState;
-import it.polimi.ingsw.model.entity.gameState.MoveMotherNatureActionState;
-import it.polimi.ingsw.model.entity.gameState.PlanningState;
+import it.polimi.ingsw.model.entity.game_state.ChooseCloudActionState;
+import it.polimi.ingsw.model.entity.game_state.MoveMotherNatureActionState;
 import it.polimi.ingsw.model.enums.GameMode;
 import it.polimi.ingsw.model.enums.PlayerNumber;
 import it.polimi.ingsw.model.enums.StudentColor;

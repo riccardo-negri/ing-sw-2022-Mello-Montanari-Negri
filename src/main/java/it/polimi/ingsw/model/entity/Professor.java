@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.entity;
 
-import it.polimi.ingsw.model.entity.gameState.ActionState;
+import it.polimi.ingsw.model.entity.game_state.ActionState;
 import it.polimi.ingsw.model.enums.StudentColor;
 
 import java.util.Objects;

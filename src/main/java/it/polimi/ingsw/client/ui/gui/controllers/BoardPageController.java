@@ -612,7 +612,7 @@ public class BoardPageController extends AbstractController {
     @FXML
     private void handleItem5Character2 (Event event) { handleCharacterItem(2,5); }
 
-    static private final List<StudentColor> colorPickList = Arrays.asList(StudentColor.fromNumber(0), StudentColor.fromNumber(1), StudentColor.fromNumber(2), StudentColor.fromNumber(3), StudentColor.fromNumber(4), StudentColor.fromNumber(5));
+    private static final List<StudentColor> colorPickList = Arrays.asList(StudentColor.fromNumber(0), StudentColor.fromNumber(1), StudentColor.fromNumber(2), StudentColor.fromNumber(3), StudentColor.fromNumber(4), StudentColor.fromNumber(5));
 
     /**
      * Check if a character card is currently being selected
@@ -697,11 +697,9 @@ public class BoardPageController extends AbstractController {
                 if(s.equals(color))
                     selectedOfThisColor++;
             }
-            if (model.getWizard(index).getDiningStudents(color) > selectedOfThisColor) {
-                if (gui.getPickedDiningStudents().size() < gui.getDiningStudentsToPick()) {
-                    gui.getPickedDiningStudents().add(color);
-                    highlight((ImageView) board.myBoard().dining().get(color.value).getChildren().get(gui.getPickedDiningStudents().size() - 1));
-                }
+            if (model.getWizard(index).getDiningStudents(color) > selectedOfThisColor && gui.getPickedDiningStudents().size() < gui.getDiningStudentsToPick()) {
+                gui.getPickedDiningStudents().add(color);
+                highlight((ImageView) board.myBoard().dining().get(color.value).getChildren().get(gui.getPickedDiningStudents().size() - 1));
             }
         } else if (Objects.equals(model.getGameState().getGameStateName(), "MSS")) {
             if (gui.getStudentPicked() != -1 && model.getWizard(client.getUsernames().indexOf(client.getUsername()))
@@ -787,7 +785,7 @@ public class BoardPageController extends AbstractController {
                     if (gui.isEverythingNeededSelected()) {
                         try {
                             List<Object> parameters = new ArrayList<>();
-                            if(gui.getPickedCardStudents().size() > 0) {
+                            if(!gui.getPickedCardStudents().isEmpty()) {
                                 Character character = model.getCharacters()[characterNumber];
                                 List<StudentColor> characterStudents = null;
                                 if (character instanceof CharacterOne characterOne)
@@ -849,6 +847,8 @@ public class BoardPageController extends AbstractController {
                 case 8 -> doGuiCharacterMove(gui, 8, null);
                 case 9, 11, 12 -> gui.activateCharacter(characterNumber, 1, 0, 0, 0);
                 case 10 -> gui.activateCharacter(characterNumber, 0, 2, 2, 0);
+                default ->
+                        throw new IllegalStateException("Unexpected value: " + model.getCharacters()[characterNumber].getId());
             }
         } catch (GameRuleException e) {
             client.getLogger().log(Level.INFO, e.getMessage());
@@ -862,7 +862,6 @@ public class BoardPageController extends AbstractController {
      */
     boolean canActivateCharacter(int characterNumber) {
         Game model = client.getModel();
-        BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
         GameState gameState = model.getGameState();
         if (gameState instanceof ActionState actionState) {
             if (actionState.getActivatedCharacter() != null)  // can't activate if another was activated
@@ -892,19 +891,16 @@ public class BoardPageController extends AbstractController {
      * @param item position of the item in the character (0 to 5)
      */
     public void handleCharacterItem(int character, int item) {
-        Game model = client.getModel();
         BoardPageGUI gui = (BoardPageGUI) client.getCurrState();
 
-        if (characterInputSelectionPhase()) {
-            if(gui.isCharacterActivated(character)) {
-                if(gui.getPickedCardStudents().contains(item)) {
-                    gui.getPickedCardStudents().remove(Integer.valueOf(item));
-                    removeHighlight(board.characters().get(character).items().get(item));
-                } else {
-                    if (gui.getPickedCardStudents().size() < gui.getCardStudentsToPick()){
-                        gui.getPickedCardStudents().add(item);
-                        highlight(board.characters().get(character).items().get(item));
-                    }
+        if (characterInputSelectionPhase() && gui.isCharacterActivated(character)) {
+            if(gui.getPickedCardStudents().contains(item)) {
+                gui.getPickedCardStudents().remove(Integer.valueOf(item));
+                removeHighlight(board.characters().get(character).items().get(item));
+            } else {
+                if (gui.getPickedCardStudents().size() < gui.getCardStudentsToPick()){
+                    gui.getPickedCardStudents().add(item);
+                    highlight(board.characters().get(character).items().get(item));
                 }
             }
         }
@@ -933,7 +929,7 @@ public class BoardPageController extends AbstractController {
         toUnselect.addAll(board.characters().get(0).items());
         toUnselect.addAll(board.characters().get(1).items());
         toUnselect.addAll(board.characters().get(2).items());
-        toUnselect.addAll(board.myBoard().dining().stream().flatMap(pane -> pane.getChildren().stream().map(e->(ImageView) e)).toList());
+        toUnselect.addAll(board.myBoard().dining().stream().flatMap(pane -> pane.getChildren().stream().map(ImageView.class::cast)).toList());
         removeHighlight(toUnselect);
     }
 

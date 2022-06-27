@@ -3,7 +3,6 @@ package it.polimi.ingsw.client.ui.gui;
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.page.AbstractBoardPage;
 import it.polimi.ingsw.client.ui.gui.controllers.BoardPageController;
-import it.polimi.ingsw.model.entity.Island;
 import it.polimi.ingsw.model.enums.StudentColor;
 
 import java.util.ArrayList;
@@ -87,9 +86,9 @@ public class BoardPageGUI extends AbstractBoardPage {
      */
     public boolean isEverythingNeededSelected() {
         if (cardStudentsToPick == 3) {
-            return pickedCardStudents.size() == pickedEntranceStudents.size() && pickedCardStudents.size() > 0;
+            return pickedCardStudents.size() == pickedEntranceStudents.size() && !pickedCardStudents.isEmpty();
         } else if (diningStudentsToPick == 2) {
-            return pickedDiningStudents.size() == pickedEntranceStudents.size() && pickedDiningStudents.size() > 0;
+            return pickedDiningStudents.size() == pickedEntranceStudents.size() && !pickedDiningStudents.isEmpty();
         } else {
             return pickedCardStudents.size() == cardStudentsToPick &&
                     pickedDiningStudents.size() == diningStudentsToPick &&

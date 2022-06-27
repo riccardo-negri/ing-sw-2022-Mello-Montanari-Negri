@@ -7,8 +7,6 @@ import javafx.scene.text.Text;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
-import java.util.logging.Level;
-
 import static it.polimi.ingsw.client.page.ClientPage.LOBBY_PAGE;
 
 public class ConnectionPageController extends AbstractController{

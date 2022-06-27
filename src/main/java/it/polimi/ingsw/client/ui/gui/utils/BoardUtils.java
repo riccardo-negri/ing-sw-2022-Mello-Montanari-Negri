@@ -1,7 +1,6 @@
 package it.polimi.ingsw.client.ui.gui.utils;
 
 import it.polimi.ingsw.client.Client;
-import it.polimi.ingsw.client.ui.gui.GUI;
 import it.polimi.ingsw.client.ui.gui.records.*;
 import it.polimi.ingsw.model.entity.*;
 import it.polimi.ingsw.model.entity.characters.*;
@@ -17,8 +16,6 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
-import javafx.stage.Stage;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -512,6 +509,7 @@ public class BoardUtils {
                             items.get(j).setVisible(false);
                         }
                     }
+                    default -> throw new IllegalStateException("Unexpected value: " + currCharacter.getId());
                 }
                 if ((Objects.equals(client.getModel().getGameState().getGameStateName(), "MSS") || Objects.equals(client.getModel().getGameState().getGameStateName(), "MMNS") || Objects.equals(client.getModel().getGameState().getGameStateName(), "CCS")) &&
                         ((ActionState) client.getModel().getGameState()).getActivatedCharacter() != null &&
@@ -576,6 +574,8 @@ public class BoardUtils {
             case "MSS" -> board.phase().setText("Move student");
             case "MMNS" -> board.phase().setText("Move nature");
             case "CCS" -> board.phase().setText("Choose cloud");
+            default ->
+                    throw new IllegalStateException("Unexpected value: " + client.getModel().getGameState().getGameStateName());
         }
 
         updateCharacters(board, client);

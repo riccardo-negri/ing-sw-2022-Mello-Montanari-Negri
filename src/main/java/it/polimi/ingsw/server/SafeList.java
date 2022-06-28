@@ -2,7 +2,10 @@ package it.polimi.ingsw.server;
 
 import java.util.ArrayList;
 
-// Thread-safe list
+/**
+ * a Thread-safe list
+ * @param <E> the type of the objects contained in the list
+ */
 
 public class SafeList<E> extends ArrayList<E> {
 

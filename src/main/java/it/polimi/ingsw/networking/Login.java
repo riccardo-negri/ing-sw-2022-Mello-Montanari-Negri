@@ -1,5 +1,9 @@
 package it.polimi.ingsw.networking;
 
+/**
+ * the first message expected from the server on a new connection, communicates the username of the connecting client
+ * @param username the username of the connecting client
+ */
 public record Login(String username) implements Message {
 
     /**

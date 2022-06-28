@@ -3,6 +3,9 @@ package it.polimi.ingsw.networking;
 import it.polimi.ingsw.model.enums.GameMode;
 import it.polimi.ingsw.model.enums.PlayerNumber;
 
+/**
+ * a message that requests to the server to create a new lobby with the desired parameters
+ */
 public class CreateLobby implements Message {
 
     final PlayerNumber playerNumber;

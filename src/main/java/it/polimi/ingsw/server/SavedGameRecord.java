@@ -5,6 +5,9 @@ import it.polimi.ingsw.model.entity.Game;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * a container for the data retrieved from a game save
+ */
 public class SavedGameRecord {
     private final Game game;
     private final List<String> usernames;
@@ -12,7 +15,7 @@ public class SavedGameRecord {
     private final GameSavesManager savesManager;
 
     /**
-     * create a container for the data retrieved from a game save
+     * converts the text read from the save files to game related data
      * @param gameString content of the snapshot file in the game save folder
      * @param usernamesString content of the username file in the game save folder
      * @param savesManager the game save manager operating on this save folder

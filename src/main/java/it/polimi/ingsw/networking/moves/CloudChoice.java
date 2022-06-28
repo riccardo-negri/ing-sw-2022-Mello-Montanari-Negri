@@ -5,6 +5,10 @@ import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.entity.game_state.ChooseCloudActionState;
 
+/**
+ * represents the move of taking the students from a cloud and putting them in the entrance at the end of the turn
+ * contains the id of the chosen cloud
+ */
 public class CloudChoice extends Move{
     private final int cloudId;
 

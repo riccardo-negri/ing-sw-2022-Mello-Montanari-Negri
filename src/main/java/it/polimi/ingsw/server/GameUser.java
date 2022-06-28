@@ -3,6 +3,9 @@ package it.polimi.ingsw.server;
 import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.networking.Connection;
 
+/**
+ * the special kind of user used from the game server, it is connected to the corresponding wizard object in the model
+ */
 public class GameUser extends User {
 
     private final Wizard wizard;

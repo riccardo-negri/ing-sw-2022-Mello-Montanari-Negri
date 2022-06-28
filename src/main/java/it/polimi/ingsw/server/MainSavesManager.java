@@ -9,6 +9,9 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * offers the methods to manage the main save folder containing alla the individual game folders
+ */
 public class MainSavesManager extends SavesManager{
 
     final List<String> gameCodes = new ArrayList<>();

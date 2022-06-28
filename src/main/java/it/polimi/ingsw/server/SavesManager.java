@@ -10,6 +10,9 @@ import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * base class for the saves managers that offers general filesystems related methods used from all the saves manager
+ */
 public class SavesManager {
     static final String SAVES_ROOT = "game_states";
 

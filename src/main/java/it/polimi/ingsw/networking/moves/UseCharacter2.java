@@ -5,6 +5,9 @@ import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.entity.characters.CharacterTwo;
 
+/**
+ * represents the move of activating the effect of character two
+ */
 public class UseCharacter2 extends UseCharacter {
 
     /**

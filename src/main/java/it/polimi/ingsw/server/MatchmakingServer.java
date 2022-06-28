@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
+/**
+ * the server responsible for redirecting the users to the correct game server and creating a new one when requested
+ */
 public class MatchmakingServer extends Server {
     public static final int WELL_KNOWN_PORT = 50000;
     private final List<GameServer> startedGames = new SafeList<>();

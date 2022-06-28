@@ -14,6 +14,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * the base server class which contains methods shared from the two server and handle user login
+ */
 public abstract class Server {
     protected final List<Connection> connecting;
 

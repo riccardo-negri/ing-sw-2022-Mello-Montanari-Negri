@@ -7,6 +7,9 @@ import java.util.logging.*;
 
 import static org.fusesource.jansi.Ansi.ansi;
 
+/**
+ * offers methods to create a logger and to format the output correctly
+ */
 public class LogFormatter extends Formatter {
 
     /**

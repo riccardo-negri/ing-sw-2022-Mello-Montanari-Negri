@@ -9,6 +9,10 @@ import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * base class used to share common operations among all the Connection class different constructors
+ * also contains the final variables that must be initialized in the constructor
+ */
 public abstract class ConnectionBase {
 
     // these periods are expressed in seconds
@@ -27,8 +31,7 @@ public abstract class ConnectionBase {
     protected final Logger logger;
 
     /**
-     * base class used to share common operations among all the Connection class different constructors
-     * also contains the final variables that must be initialized in the constructor
+     * contains the code necessary for every connection regardless of the specific constructor used
      * @param socket the socket this connection will use to send and receive messages
      * @param acceptMessage the callback function to execute when a message is received
      * @param logger the connection debug info will be sent to logger

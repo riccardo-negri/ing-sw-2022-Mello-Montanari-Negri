@@ -3,6 +3,9 @@ package it.polimi.ingsw.networking;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * is the first message sent from the matchmaking server to the client if it's a user with no ongoing games
+ */
 public class LobbiesList implements Message{
     final ArrayList<LobbyDescriptor> lobbies = new ArrayList<>();
 

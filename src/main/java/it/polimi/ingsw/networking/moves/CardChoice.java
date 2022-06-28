@@ -5,6 +5,10 @@ import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.entity.game_state.PlanningState;
 
+/**
+ * represents the move of playing an assistant card in the planning phase
+ * the number of the assistant card played
+ */
 public class CardChoice extends Move{
     private final int card;
 

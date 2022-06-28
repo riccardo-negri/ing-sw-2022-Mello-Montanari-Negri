@@ -7,6 +7,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * it's a serializable container for lobby information used in the message lobbies list
+ */
 public class LobbyDescriptor implements Serializable {
     final String code;
     final PlayerNumber playerNumber;
@@ -15,7 +18,7 @@ public class LobbyDescriptor implements Serializable {
     final ArrayList<String> connected = new ArrayList<>();
 
     /**
-     * create a serializable container for lobby information
+     * save all values in the container
      * @param code the code that identifies the lobby
      * @param playerNumber the maximum number of players accepted from the lobby
      * @param gameMode the game mode of the game

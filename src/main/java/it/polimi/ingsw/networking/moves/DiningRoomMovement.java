@@ -6,6 +6,10 @@ import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.entity.game_state.MoveStudentActionState;
 import it.polimi.ingsw.model.enums.StudentColor;
 
+/**
+ * represents the move of moving a student from the entrance into the dining room
+ * contains the color of the student to move
+ */
 public class DiningRoomMovement extends Move{
     private final StudentColor student;
 

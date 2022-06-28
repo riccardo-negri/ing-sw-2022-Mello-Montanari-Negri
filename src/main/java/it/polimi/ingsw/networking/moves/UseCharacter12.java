@@ -6,6 +6,9 @@ import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.entity.characters.CharacterTwelve;
 import it.polimi.ingsw.model.enums.StudentColor;
 
+/**
+ * represents the move of activating the effect of character twelve
+ */
 public class UseCharacter12 extends UseCharacter {
     private final StudentColor color;
 

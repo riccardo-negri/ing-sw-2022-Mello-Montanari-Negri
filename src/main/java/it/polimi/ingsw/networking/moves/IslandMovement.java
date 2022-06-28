@@ -6,6 +6,10 @@ import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.entity.game_state.MoveStudentActionState;
 import it.polimi.ingsw.model.enums.StudentColor;
 
+/**
+ * represents the move of taking a student from the entrance and placing it on an island
+ * contains the color of the student and the id of the destination island
+ */
 public class IslandMovement extends Move{
     private final StudentColor student;
     private final int islandId;

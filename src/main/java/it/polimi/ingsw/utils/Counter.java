@@ -2,6 +2,9 @@ package it.polimi.ingsw.utils;
 
 import java.io.Serializable;
 
+/**
+ * permits to read and increment an integer with thread-safe methods
+ */
 public class Counter implements Serializable {
     private int number = 0;
 

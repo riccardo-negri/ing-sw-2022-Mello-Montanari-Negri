@@ -7,8 +7,8 @@ import java.net.Socket;
 import java.net.InetAddress;
 import java.net.SocketException;
 
-/*
-    Thread-safe decorator for Socket class
+/**
+ * Thread-safe decorator for Socket class avoids concurrency problems when using socket methods
  */
 
 public class SafeSocket {

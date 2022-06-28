@@ -1,5 +1,10 @@
 package it.polimi.ingsw.networking;
 
+/**
+ * can be sent from the client to the server to communicate the intention to resign the game
+ * in response the server sends it to all the connected clients to notify that the user resigned the game
+ * this ends the game for all and causes the termination of the game server
+ */
 public class UserResigned implements Message {
     private String username;
 

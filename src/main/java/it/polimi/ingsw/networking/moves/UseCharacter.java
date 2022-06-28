@@ -2,6 +2,9 @@ package it.polimi.ingsw.networking.moves;
 
 import it.polimi.ingsw.model.entity.Wizard;
 
+/**
+ * represents the move of activating the effect of a character
+ */
 public abstract class UseCharacter extends Move {
 
     /**

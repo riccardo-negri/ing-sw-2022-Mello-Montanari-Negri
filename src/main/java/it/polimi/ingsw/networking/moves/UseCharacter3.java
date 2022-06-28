@@ -5,6 +5,9 @@ import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.entity.characters.CharacterThree;
 
+/**
+ * represents the move of activating the effect of character three
+ */
 public class UseCharacter3 extends UseCharacter {
     private final int islandGroupId;
 

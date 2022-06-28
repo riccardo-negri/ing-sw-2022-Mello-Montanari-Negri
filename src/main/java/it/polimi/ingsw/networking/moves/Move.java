@@ -8,6 +8,11 @@ import it.polimi.ingsw.networking.Message;
 
 import java.util.ArrayList;
 
+/**
+ * a message that represents a game move, contains the id of the wizard who does the move
+ * when applied from a client also contains the students to extract from the bag during the move,
+ * on the server they are randomly selected during the move
+ */
 public abstract class Move implements Message {
     // can be empty if no student is extracted for this move
     // must be ArrayList because it is serializable

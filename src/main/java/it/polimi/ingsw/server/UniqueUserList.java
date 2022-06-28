@@ -1,10 +1,9 @@
 package it.polimi.ingsw.server;
 
-/*
-    A thread-safe User List class that forbids multiple users with same username
-    Can call addWithLimit to pass a capacity limit to respect during the add operation, if not respected return false
+/**
+ * A thread-safe User List class that forbids multiple users with same username
+ * Can call addWithLimit to pass a capacity limit to respect during the add operation, if not respected return false
  */
-
 public class UniqueUserList extends SafeList<User> {
 
     /**

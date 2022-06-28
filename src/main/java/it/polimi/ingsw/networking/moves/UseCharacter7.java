@@ -9,6 +9,9 @@ import it.polimi.ingsw.model.enums.StudentColor;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * represents the move of activating the effect of character seven
+ */
 public class UseCharacter7 extends UseCharacter {
     private final ArrayList<StudentColor> taken;
     private final ArrayList<StudentColor> given;

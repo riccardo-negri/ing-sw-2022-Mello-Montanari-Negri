@@ -2,8 +2,9 @@ package it.polimi.ingsw.networking;
 
 import java.util.function.Predicate;
 
-/*
-    A thread-safe class that contains a Connection Predicate
+
+/**
+ * A thread-safe class both on read and write that contains a Connection Predicate
  */
 public class ConnectionPredicate {
     private Predicate<Connection> predicate;

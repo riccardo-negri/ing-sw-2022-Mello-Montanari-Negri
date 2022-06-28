@@ -3,6 +3,10 @@ package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.networking.Connection;
 
+/**
+ * the class that represents the user on the server, can survive the disconnection, a new connection can be assinged
+ * to the same user when reconnecting
+ */
 public class User {
     protected Connection connection;
 

@@ -12,6 +12,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
 
+/**
+ * the server that runs an instance of the game model and permits moves communications between the players
+ */
 public class GameServer extends Server{
     private final CapacityList<String> assignedUsernames;
 

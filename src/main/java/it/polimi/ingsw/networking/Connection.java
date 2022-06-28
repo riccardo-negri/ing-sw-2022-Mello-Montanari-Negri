@@ -12,6 +12,11 @@ import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * manages the socket interaction to expose simpler functions to receive and send messages
+ * the connection is always listening for messages and puts them in a queue
+ * messages from the connection can be waited with blocking functions or read as soon as they arrive from callback functions
+ */
 public class Connection extends ConnectionBase {
     private final Counter movesCount = new Counter();
 

@@ -1,9 +1,5 @@
 package it.polimi.ingsw.networking;
 
-/*
-    A thread-safe queue that makes sure the moves are processed in the correct order
- */
-
 import it.polimi.ingsw.networking.moves.Move;
 import it.polimi.ingsw.utils.Counter;
 
@@ -12,6 +8,12 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
 
+/**
+ *  A thread-safe queue that makes sure the moves are processed in the correct order
+ *  since every client updates the game state independently is crucial that all the moves are applied in the same order
+ *  from everyone, in the unlikely event of two or more moves sent almost together that are received in the wrong order
+ *  this queue reorders them.
+ */
 public class MovesQueue extends PriorityQueue<Move> {
     private final Counter receivedCount = new Counter();
 

@@ -7,6 +7,9 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.logging.Logger;
 
+/**
+ * an instance is bounded to a specific game save folder and offers the methods to manage the saves files
+ */
 public class GameSavesManager extends SavesManager {
     // counter always contains the value of the next snapshot id
     final Counter counter;

@@ -2,10 +2,10 @@ package it.polimi.ingsw.server;
 
 import java.util.Collection;
 
-/*
-    A thread-safe list that also has a limitate capacity and refuses duplicates
+/**
+ * A thread-safe list that also has a limitate capacity and refuses duplicates
+ * @param <E> the type of the objects in the list
  */
-
 public class CapacityList<E> extends SafeList<E> {
     private final int capacity;
 

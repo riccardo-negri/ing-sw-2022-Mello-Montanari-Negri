@@ -5,6 +5,10 @@ import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.entity.game_state.MoveMotherNatureActionState;
 
+/**
+ * represents the move of moving mother nature to another island
+ * contains the number of steps mother nature have to do
+ */
 public class MotherNatureMovement extends Move{
     private final int steps;
 

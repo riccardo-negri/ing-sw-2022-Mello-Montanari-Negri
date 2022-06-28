@@ -5,6 +5,9 @@ import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.entity.Wizard;
 import it.polimi.ingsw.model.entity.characters.CharacterEight;
 
+/**
+ * represents the move of activating the effect of character eight
+ */
 public class UseCharacter8 extends UseCharacter {
     /**
      * create a message requesting to activate character 8

@@ -9,6 +9,9 @@ import javafx.scene.layout.GridPane;
 
 import static it.polimi.ingsw.client.page.ClientPage.LOBBY_PAGE;
 
+/**
+ * controller for CONNECTION state
+ */
 public class ConnectionPageController extends AbstractController{
 
     @FXML

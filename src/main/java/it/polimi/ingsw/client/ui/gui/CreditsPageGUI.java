@@ -4,6 +4,9 @@ import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.page.AbstractCreditsPage;
 import it.polimi.ingsw.client.ui.gui.controllers.CreditsPageController;
 
+/**
+ * CLI implementation of the CreditsPage
+ */
 public class CreditsPageGUI extends AbstractCreditsPage {
 
     /**

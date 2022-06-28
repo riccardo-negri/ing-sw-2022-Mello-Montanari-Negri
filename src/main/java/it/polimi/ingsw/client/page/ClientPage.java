@@ -1,5 +1,8 @@
 package it.polimi.ingsw.client.page;
 
+/**
+ * states that represent the pages of the client
+ */
 public enum ClientPage {
     WELCOME_PAGE,
     MENU_PAGE,

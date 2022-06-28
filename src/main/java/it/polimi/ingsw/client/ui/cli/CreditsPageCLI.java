@@ -5,6 +5,9 @@ import it.polimi.ingsw.client.page.AbstractCreditsPage;
 
 import static it.polimi.ingsw.client.ui.cli.utils.CoreUtilsCLI.*;
 
+/**
+ * CLI implementation of the CreditsPage
+ */
 public class CreditsPageCLI extends AbstractCreditsPage {
 
     public CreditsPageCLI (Client client) {

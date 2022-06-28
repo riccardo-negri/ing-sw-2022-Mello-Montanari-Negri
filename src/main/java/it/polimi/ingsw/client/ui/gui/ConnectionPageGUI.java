@@ -4,6 +4,9 @@ import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.page.AbstractConnectionPage;
 import it.polimi.ingsw.client.ui.gui.controllers.ConnectionPageController;
 
+/**
+ * GUI implementation of the ConnectionPage
+ */
 public class ConnectionPageGUI extends AbstractConnectionPage {
 
     /**

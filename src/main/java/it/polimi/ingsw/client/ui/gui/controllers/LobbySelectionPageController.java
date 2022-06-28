@@ -1,6 +1,6 @@
 package it.polimi.ingsw.client.ui.gui.controllers;
 
-import it.polimi.ingsw.client.page.AbstractLobbySelectionPages;
+import it.polimi.ingsw.client.page.AbstractLobbySelectionPage;
 import it.polimi.ingsw.model.enums.GameMode;
 import it.polimi.ingsw.networking.LobbyDescriptor;
 import javafx.application.Platform;
@@ -8,7 +8,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import java.util.Date;
 
-
+/**
+ * controller for LOBBY_SELECTION state
+ */
 public class LobbySelectionPageController extends AbstractController{
     @FXML
     ListView<String> lobbies;
@@ -51,7 +53,7 @@ public class LobbySelectionPageController extends AbstractController{
         if (currentTime - lastClickTime <= DOUBLE_CLICK_TIME && !row.equals(TITLE_ROW) &&
                 lastClickElement != null && lastClickElement.equals(row)) {
             String code = row.substring(0, 4);
-            AbstractLobbySelectionPages page = (AbstractLobbySelectionPages) client.getCurrState();
+            AbstractLobbySelectionPage page = (AbstractLobbySelectionPage) client.getCurrState();
             if(page.tryToJoinLobby(code)) {
                 page.onEnd();
                 Platform.runLater(()-> client.drawNextPage());
@@ -69,7 +71,7 @@ public class LobbySelectionPageController extends AbstractController{
      */
     @FXML
     void handleRefresh() {
-        AbstractLobbySelectionPages page = (AbstractLobbySelectionPages) client.getCurrState();
+        AbstractLobbySelectionPage page = (AbstractLobbySelectionPage) client.getCurrState();
         page.tryToJoinLobby("#");  // always wrong but the server will send the new list in response
         drawList();
     }

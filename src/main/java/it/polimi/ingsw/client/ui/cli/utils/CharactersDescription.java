@@ -1,5 +1,8 @@
 package it.polimi.ingsw.client.ui.cli.utils;
 
+/**
+ * descriptions of the characters
+ */
 public class CharactersDescription {
     private CharactersDescription () {
 

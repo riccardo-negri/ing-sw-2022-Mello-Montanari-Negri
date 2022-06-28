@@ -2,6 +2,9 @@ package it.polimi.ingsw;
 
 import it.polimi.ingsw.server.MatchmakingServer;
 
+/**
+ * entry point opf the server
+ */
 public class EriantysServer {
     /**
      * run matchmaking server

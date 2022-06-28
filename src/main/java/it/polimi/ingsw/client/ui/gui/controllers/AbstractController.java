@@ -3,6 +3,9 @@ package it.polimi.ingsw.client.ui.gui.controllers;
 import it.polimi.ingsw.client.Client;
 import javafx.stage.Stage;
 
+/**
+ * methods that every controller implementation needs
+ */
 public class AbstractController {
     protected Client client;
     protected Stage stage;

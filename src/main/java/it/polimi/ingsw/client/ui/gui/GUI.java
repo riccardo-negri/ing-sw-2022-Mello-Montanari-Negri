@@ -6,6 +6,9 @@ import it.polimi.ingsw.client.page.ClientPage;
 import it.polimi.ingsw.client.ui.UI;
 import javafx.stage.Stage;
 
+/**
+ * class that represents the GUI
+ */
 public record GUI(Stage stage) implements UI {
 
     /**

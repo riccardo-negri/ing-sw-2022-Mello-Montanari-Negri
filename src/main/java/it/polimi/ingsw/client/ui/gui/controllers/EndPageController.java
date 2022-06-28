@@ -7,6 +7,9 @@ import javafx.fxml.FXML;
 
 import javafx.scene.control.Label;
 
+/**
+ * controller for END state
+ */
 public class EndPageController extends AbstractController{
 
     @FXML

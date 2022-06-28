@@ -4,6 +4,9 @@ import it.polimi.ingsw.client.Client;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+/**
+ * JavaFX Application class
+ */
 public class GUIApplication extends Application {
 
     /**

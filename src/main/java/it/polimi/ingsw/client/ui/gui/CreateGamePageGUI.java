@@ -4,6 +4,9 @@ import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.page.AbstractCreateGamePage;
 import it.polimi.ingsw.client.ui.gui.controllers.CreateGamePageController;
 
+/**
+ * GUI implementation of the CreateGame
+ */
 public class CreateGamePageGUI extends AbstractCreateGamePage {
 
     /**

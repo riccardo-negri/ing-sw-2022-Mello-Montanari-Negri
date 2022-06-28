@@ -4,6 +4,9 @@ import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.page.AbstractWelcomePage;
 import it.polimi.ingsw.client.ui.gui.controllers.WelcomePageController;
 
+/**
+ * GUI implementation of the WelcomePage
+ */
 public class WelcomePageGUI extends AbstractWelcomePage{
 
     /**

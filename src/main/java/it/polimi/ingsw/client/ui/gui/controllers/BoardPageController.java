@@ -30,6 +30,9 @@ import java.util.logging.Level;
 
 import static it.polimi.ingsw.client.ui.gui.utils.BoardUtils.*;
 
+/**
+ * controller for BOARD state
+ */
 public class BoardPageController extends AbstractController {
 
     @FXML

@@ -5,6 +5,9 @@ import it.polimi.ingsw.client.page.AbstractEndPage;
 
 import static it.polimi.ingsw.client.ui.cli.utils.CoreUtilsCLI.*;
 
+/**
+ * CLI implementation of the EndPage
+ */
 public class EndPageCLI extends AbstractEndPage {
 
     public EndPageCLI (Client client) {

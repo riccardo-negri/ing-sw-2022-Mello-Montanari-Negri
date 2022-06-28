@@ -6,6 +6,9 @@ import it.polimi.ingsw.model.enums.GameMode;
 
 import static it.polimi.ingsw.client.ui.cli.utils.CoreUtilsCLI.*;
 
+/**
+ * CLI implementation of the LobbyPage
+ */
 public class LobbyPageCLI extends AbstractLobbyPage {
     public LobbyPageCLI (Client client) {
         super(client);

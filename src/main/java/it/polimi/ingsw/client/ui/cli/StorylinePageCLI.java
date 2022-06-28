@@ -5,6 +5,9 @@ import it.polimi.ingsw.client.page.AbstractStorylinePage;
 
 import static it.polimi.ingsw.client.ui.cli.utils.CoreUtilsCLI.*;
 
+/**
+ * CLI implementation of the StorylinePage
+ */
 public class StorylinePageCLI extends AbstractStorylinePage {
 
     public StorylinePageCLI (Client client) {

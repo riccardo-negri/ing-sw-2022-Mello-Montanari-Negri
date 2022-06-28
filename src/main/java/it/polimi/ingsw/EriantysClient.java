@@ -3,6 +3,9 @@ package it.polimi.ingsw;
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.ui.gui.GUIApplication;
 
+/**
+ * entry point of the client
+ */
 public class EriantysClient {
 
     /**

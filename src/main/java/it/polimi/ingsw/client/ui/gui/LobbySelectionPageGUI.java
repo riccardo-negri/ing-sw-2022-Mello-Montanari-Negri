@@ -1,10 +1,10 @@
 package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.Client;
-import it.polimi.ingsw.client.page.AbstractLobbySelectionPages;
+import it.polimi.ingsw.client.page.AbstractLobbySelectionPage;
 import it.polimi.ingsw.client.ui.gui.controllers.LobbySelectionPageController;
 
-public class LobbySelectionPageGUI extends AbstractLobbySelectionPages {
+public class LobbySelectionPageGUI extends AbstractLobbySelectionPage {
 
     /**
      * pass client to AbstractLobbySelectionPages constructor

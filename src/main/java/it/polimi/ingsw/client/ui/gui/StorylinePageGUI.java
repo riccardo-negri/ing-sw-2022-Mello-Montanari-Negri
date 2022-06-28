@@ -4,6 +4,9 @@ import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.page.AbstractStorylinePage;
 import it.polimi.ingsw.client.ui.gui.controllers.StorylinePageController;
 
+/**
+ * GUI implementation of the StorylinePage
+ */
 public class StorylinePageGUI extends AbstractStorylinePage {
 
     /**

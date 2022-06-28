@@ -4,6 +4,9 @@ import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.page.AbstractMenuPage;
 import it.polimi.ingsw.client.ui.gui.controllers.MenuPageController;
 
+/**
+ * GUI implementation of the MenuPage
+ */
 public class MenuPageGUI extends AbstractMenuPage {
 
     /**

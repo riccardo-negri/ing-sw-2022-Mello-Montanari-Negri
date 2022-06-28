@@ -5,6 +5,9 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
+/**
+ * controller for MENU state
+ */
 public class MenuPageController extends AbstractController {
     /**
      * go to connection page

@@ -5,6 +5,9 @@ import it.polimi.ingsw.client.page.AbstractCreateGamePage;
 
 import static it.polimi.ingsw.client.ui.cli.utils.CoreUtilsCLI.*;
 
+/**
+ * CLI implementation of the CreateGamePage
+ */
 public class CreateGamePageCLI extends AbstractCreateGamePage {
 
     public CreateGamePageCLI (Client client) {

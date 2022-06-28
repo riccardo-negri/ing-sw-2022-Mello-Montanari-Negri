@@ -4,6 +4,9 @@ import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.page.AbstractEndPage;
 import it.polimi.ingsw.client.ui.gui.controllers.EndPageController;
 
+/**
+ * GUI implementation of the EndPage
+ */
 public class EndPageGUI extends AbstractEndPage {
 
     /**

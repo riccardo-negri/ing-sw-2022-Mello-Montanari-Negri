@@ -4,6 +4,9 @@ import it.polimi.ingsw.client.ui.gui.WelcomePageGUI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
+/**
+ * controller for WELCOME state
+ */
 public class WelcomePageController extends AbstractController{
 
     /**

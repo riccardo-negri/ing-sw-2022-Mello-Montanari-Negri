@@ -8,9 +8,12 @@ import java.util.Arrays;
 
 import static it.polimi.ingsw.client.page.ClientPage.LOBBY_PAGE;
 
-public abstract class AbstractLobbySelectionPages extends AbstractPage {
+/**
+ * abstract page for the LOBBY_SELECTION state to be extended in the UI implementation
+ */
+public abstract class AbstractLobbySelectionPage extends AbstractPage {
 
-    protected AbstractLobbySelectionPages (Client client) {
+    protected AbstractLobbySelectionPage (Client client) {
         super(client);
     }
 

@@ -56,20 +56,24 @@ class EndGameTest {
         msm.writeFile(SavesManager.gameFilePath(code, "usernames"), "pietro\nriccardo\ntommaso");
         msm.writeFile(SavesManager.gameFilePath(code, "153"), state);
 
+        TimeUnit.MILLISECONDS.sleep(100);
         MatchmakingServer s = new MatchmakingServer();
         assert s.socket != null;
         Thread t = new Thread(s::run);
         t.start();
 
-        TimeUnit.MILLISECONDS.sleep(100);
+        TimeUnit.MILLISECONDS.sleep(200);
         tom = Procedures.reconnectLogin("tommaso", false, logger);
+        TimeUnit.MILLISECONDS.sleep(100);
         ric = Procedures.reconnectLogin("riccardo", false, logger);
+        TimeUnit.MILLISECONDS.sleep(100);
         pit = Procedures.reconnectLogin("pietro", false, logger);
 
         Wizard wTom = new Wizard(2, new ArrayList<>(), Tower.BLACK, 8);
         Wizard wRic = new Wizard(1, new ArrayList<>(), Tower.WHITE, 8);
         Wizard wPit = new Wizard(0, new ArrayList<>(), Tower.GRAY, 8);
 
+        TimeUnit.MILLISECONDS.sleep(100);
         waitOnAll(InitialState.class);
         waitOnAll(UserConnected.class);
         waitOnAll(UserConnected.class);

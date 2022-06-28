@@ -7,6 +7,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static it.polimi.ingsw.client.ui.cli.utils.CoreUtilsCLI.*;
 
+/**
+ * CLI implementation of the MenuPage
+ */
 public class MenuPageCLI extends AbstractMenuPage {
 
     public MenuPageCLI (Client client) {

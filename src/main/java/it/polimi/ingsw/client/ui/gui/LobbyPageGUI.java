@@ -4,6 +4,9 @@ import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.page.AbstractLobbyPage;
 import it.polimi.ingsw.client.ui.gui.controllers.LobbyPageController;
 
+/**
+ * GUI implementation of the LobbyPage
+ */
 public class LobbyPageGUI extends AbstractLobbyPage {
 
     /**

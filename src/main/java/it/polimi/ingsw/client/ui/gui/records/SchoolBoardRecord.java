@@ -5,6 +5,13 @@ import javafx.scene.layout.FlowPane;
 
 import java.util.List;
 
+/**
+ * references to all the elements of a school
+ * @param entrance
+ * @param dining
+ * @param professors
+ * @param towers
+ */
 public record SchoolBoardRecord(
         List<ImageView> entrance,
         List<FlowPane> dining,

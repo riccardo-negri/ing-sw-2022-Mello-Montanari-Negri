@@ -11,6 +11,9 @@ import org.jline.terminal.TerminalBuilder;
 
 import java.io.IOException;
 
+/**
+ * class that represents the CLI
+ */
 public class CLI implements UI {
     private Terminal terminal;
     private History commandsHistory;

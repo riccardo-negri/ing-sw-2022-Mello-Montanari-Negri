@@ -1,5 +1,8 @@
 package it.polimi.ingsw.client.ui.cli.utils;
 
+/**
+ * REGEX for all the commands
+ */
 public class Regex {
     private Regex () {
         

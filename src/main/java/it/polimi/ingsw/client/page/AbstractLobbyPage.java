@@ -9,6 +9,9 @@ import java.util.logging.Level;
 
 import static it.polimi.ingsw.client.page.ClientPage.BOARD_PAGE;
 
+/**
+ * abstract page for the LOBBY state to be extended in the UI implementation
+ */
 public abstract class AbstractLobbyPage extends AbstractPage {
     protected AbstractLobbyPage (Client client) {
         super(client);

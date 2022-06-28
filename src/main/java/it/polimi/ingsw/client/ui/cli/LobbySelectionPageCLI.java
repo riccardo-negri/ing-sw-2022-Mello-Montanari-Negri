@@ -1,7 +1,7 @@
 package it.polimi.ingsw.client.ui.cli;
 
 import it.polimi.ingsw.client.Client;
-import it.polimi.ingsw.client.page.AbstractLobbySelectionPages;
+import it.polimi.ingsw.client.page.AbstractLobbySelectionPage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -9,7 +9,10 @@ import java.util.List;
 import static it.polimi.ingsw.client.ui.cli.utils.CoreUtilsCLI.*;
 import static org.fusesource.jansi.Ansi.ansi;
 
-public class LobbySelectionPageCLI extends AbstractLobbySelectionPages {
+/**
+ * CLI implementation of the LobbySelectionPage
+ */
+public class LobbySelectionPageCLI extends AbstractLobbySelectionPage {
     public LobbySelectionPageCLI (Client client) {
         super(client);
     }

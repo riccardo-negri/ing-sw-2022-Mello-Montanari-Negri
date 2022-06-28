@@ -7,6 +7,9 @@ import java.util.Arrays;
 
 import static it.polimi.ingsw.client.page.ClientPage.*;
 
+/**
+ * abstract page for the CONNECTION state to be extended in the UI implementation
+ */
 public abstract class AbstractConnectionPage extends AbstractPage {
     protected AbstractConnectionPage (Client client) {
         super(client);

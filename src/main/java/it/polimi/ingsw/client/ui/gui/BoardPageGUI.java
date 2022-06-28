@@ -8,6 +8,9 @@ import it.polimi.ingsw.model.enums.StudentColor;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * GUI implementation of the BoardPage
+ */
 public class BoardPageGUI extends AbstractBoardPage {
     private int studentPicked = -1;
 

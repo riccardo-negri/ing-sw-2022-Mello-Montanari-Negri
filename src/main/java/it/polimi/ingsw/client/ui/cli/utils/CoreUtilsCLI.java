@@ -11,6 +11,9 @@ import java.util.*;
 import java.util.stream.IntStream;
 import java.util.regex.*;
 
+/**
+ * general utils for the terminal
+ */
 public class CoreUtilsCLI {
     private CoreUtilsCLI () {
 

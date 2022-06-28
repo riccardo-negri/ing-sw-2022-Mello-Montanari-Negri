@@ -6,6 +6,9 @@ import it.polimi.ingsw.client.page.AbstractConnectionPage;
 import static it.polimi.ingsw.client.page.ClientPage.*;
 import static it.polimi.ingsw.client.ui.cli.utils.CoreUtilsCLI.*;
 
+/**
+ * CLI implementation of the ConnectionPage
+ */
 public class ConnectionPageCLI extends AbstractConnectionPage {
 
     public ConnectionPageCLI (Client client) {

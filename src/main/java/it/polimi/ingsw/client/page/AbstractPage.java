@@ -16,6 +16,9 @@ import org.jline.terminal.Terminal;
 import java.io.IOException;
 import java.util.logging.Logger;
 
+/**
+ * general abstract page with all the functionalities shared by the different pages
+ */
 public abstract class AbstractPage {
     protected Client client;
     protected CLI cli;

@@ -7,6 +7,9 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 
+/**
+ * controller for CREATE_GAME state
+ */
 public class CreateGamePageController extends AbstractController{
 
     @FXML

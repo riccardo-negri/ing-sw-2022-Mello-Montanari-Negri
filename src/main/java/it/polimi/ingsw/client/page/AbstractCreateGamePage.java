@@ -10,6 +10,9 @@ import it.polimi.ingsw.networking.Redirect;
 
 import static it.polimi.ingsw.client.page.ClientPage.LOBBY_PAGE;
 
+/**
+ * abstract page for the CREATE_GAME state to be extended in the UI implementation
+ */
 public abstract class AbstractCreateGamePage extends AbstractPage {
     protected AbstractCreateGamePage (Client client) {
         super(client);

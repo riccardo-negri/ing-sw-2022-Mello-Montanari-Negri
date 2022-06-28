@@ -4,6 +4,9 @@ import it.polimi.ingsw.client.page.AbstractStorylinePage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
+/**
+ * controller for STORY_LINE state
+ */
 public class StorylinePageController extends AbstractController{
 
     /**

@@ -5,6 +5,9 @@ import it.polimi.ingsw.client.page.AbstractWelcomePage;
 
 import static it.polimi.ingsw.client.ui.cli.utils.CoreUtilsCLI.*;
 
+/**
+ * CLI implementation of the WelcomePage
+ */
 public class WelcomePageCLI extends AbstractWelcomePage {
 
     public WelcomePageCLI (Client client) {

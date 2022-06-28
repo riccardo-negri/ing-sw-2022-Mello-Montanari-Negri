@@ -4,6 +4,9 @@ import it.polimi.ingsw.client.page.AbstractCreditsPage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
+/**
+ * controller for CREDITS state
+ */
 public class CreditsPageController extends AbstractController{
 
     /**

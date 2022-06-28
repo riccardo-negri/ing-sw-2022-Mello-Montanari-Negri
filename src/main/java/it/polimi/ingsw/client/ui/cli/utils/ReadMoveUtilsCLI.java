@@ -23,7 +23,9 @@ import java.util.regex.Pattern;
 
 import static org.fusesource.jansi.Ansi.ansi;
 
-
+/**
+ * class with all the methods to take input from the user with autocompletion and validate it against REGEX
+ */
 public class ReadMoveUtilsCLI {
     private static final String GREEN = "green";
     private static final String RED = "red";

@@ -12,6 +12,9 @@ import java.util.logging.Level;
 
 import static it.polimi.ingsw.client.page.ClientPage.*;
 
+/**
+ * abstract page for the BOARD state
+ */
 public abstract class AbstractBoardPage extends AbstractPage {
 
     protected AbstractBoardPage (Client client) {

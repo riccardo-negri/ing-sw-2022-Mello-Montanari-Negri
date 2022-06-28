@@ -18,6 +18,9 @@ import static it.polimi.ingsw.client.ui.cli.utils.CoreUtilsCLI.*;
 import static it.polimi.ingsw.client.ui.cli.utils.ReadMoveUtilsCLI.*;
 import static org.fusesource.jansi.Ansi.ansi;
 
+/**
+ * CLI implementation of the BoardPage
+ */
 public class BoardPageCLI extends AbstractBoardPage {
     private String lastWarning;
     private Integer lastHelper;

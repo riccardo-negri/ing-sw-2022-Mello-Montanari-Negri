@@ -4,6 +4,9 @@ import it.polimi.ingsw.client.Client;
 
 import static it.polimi.ingsw.client.page.ClientPage.*;
 
+/**
+ * abstract page for the MENU state to be extended in the UI implementation
+ */
 public abstract class AbstractMenuPage extends AbstractPage {
 
     protected AbstractMenuPage (Client client) {

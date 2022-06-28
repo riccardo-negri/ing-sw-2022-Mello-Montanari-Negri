@@ -12,6 +12,9 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.text.Text;
 
+/**
+ * controller for LOBBY state
+ */
 public class LobbyPageController extends AbstractController{
     @FXML
     private Label numPlayersLabel;

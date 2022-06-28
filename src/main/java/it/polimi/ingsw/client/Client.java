@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+/**
+ * the client
+ */
 public class Client {
     private final UI ui;
     private ClientPage nextState;

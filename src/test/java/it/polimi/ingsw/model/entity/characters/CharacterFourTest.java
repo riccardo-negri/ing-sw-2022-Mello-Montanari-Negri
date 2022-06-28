@@ -12,20 +12,23 @@ import java.io.FileReader;
 class CharacterFourTest {
 
     private Game game;
+    private CharacterFour characterFour;
 
     @BeforeEach
     void initializeGame() {
-        try{ game = Game.request(Game.deserializeGameFromFile("./src/test/java/it/polimi/ingsw/model/entity/serialized_tests/character_test/character4TestBefore.json"));
+        try{
+            game = Game.request(Game.deserializeGameFromFile("./src/test/java/it/polimi/ingsw/model/entity/serialized_tests/character_test/character4TestBefore.json"));
+            characterFour = (CharacterFour) game.getCharacter(4);
         } catch (Exception e) { System.err.println("Can't find file in test initialization..."); }
     }
 
     @Test
     void useEffect() {
         Assertions.assertEquals("Wrong player", Assertions.assertThrows(Exception.class, () ->
-                game.getCharacter(4).characterValidator(0)
+                characterFour.characterValidator(0)
         ).getMessage());
         Assertions.assertDoesNotThrow(() -> {
-            ((CharacterFour) game.getCharacter(4)).useEffect(1);
+            characterFour.useEffect(1);
             ((MoveMotherNatureActionState) game.getGameState()).moveMotherNature(1, 7);
             //game.serializeGame("./src/test/java/it/polimi/ingsw/model/entity/serialized_tests/character_test/character4TestAfter.json");
             Assertions.assertEquals( new BufferedReader(new FileReader("./src/test/java/it/polimi/ingsw/model/entity/serialized_tests/character_test/character4TestAfter.json")).readLine(), game.serializeGame());

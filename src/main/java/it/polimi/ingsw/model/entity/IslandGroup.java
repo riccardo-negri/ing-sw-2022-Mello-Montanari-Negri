@@ -37,7 +37,7 @@ public class IslandGroup {
     public void updateTower (Game game, Character activatedCharacter) {
 
         if (getIslandList().stream().anyMatch(Island::hasStopCard))
-            getIslandList().stream().filter(Island::hasStopCard).findFirst().get().removeStopCard();
+            getIslandList().stream().filter(Island::hasStopCard).toList().get(0).removeStopCard();
         else {
             Integer[] values = new Integer[game.getPlayerNumber().getWizardNumber()];
             for (int i = 0; i < game.getPlayerNumber().getWizardNumber(); i++) {

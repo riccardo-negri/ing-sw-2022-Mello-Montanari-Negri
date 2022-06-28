@@ -11,7 +11,6 @@ import it.polimi.ingsw.model.entity.game_state.PlanningState;
 
 import java.io.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 /**
@@ -107,7 +106,7 @@ public class Game {
             wizardList.add(w);
         }
 
-        this.gameState = new PlanningState(id, wizardList.stream().map(Wizard::getId).collect(Collectors.toList()), randomGenerator);
+        this.gameState = new PlanningState(id, wizardList.stream().map(Wizard::getId).toList(), randomGenerator);
 
         gameEnded = false;
         winner = null;
@@ -134,7 +133,7 @@ public class Game {
      * @return string of the serialization
      */
     public String serializeGame() {
-        if (serializationGson == null) serializationGson = new Gson();
+        if (serializationGson == null) initializeSerializer();
         return serializationGson.toJson(this, Game.class);
     }
 
@@ -143,13 +142,17 @@ public class Game {
      * @return string of the serialization
      * @throws Exception if the directory can't be reached
      */
-    public String serializeGame(String filename) throws Exception {
-        if (serializationGson == null) serializationGson = new Gson();
+    public String serializeGame(String filename) throws IOException {
+        if (serializationGson == null) initializeSerializer();
         String out = serializationGson.toJson(this, Game.class);
-        BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
-        writer.write(out);
-        writer.close();
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+            writer.write(out);
+        }
         return out;
+    }
+
+    private static void initializeSerializer() {
+        serializationGson = new Gson();
     }
 
     /**
@@ -158,12 +161,11 @@ public class Game {
      * @return the index of the game (to be used from now on to indicate the game)
      * @throws Exception if the file can't be found, or the index of the game already exists
      */
-    public static Integer deserializeGameFromFile (String fileName) throws Exception {
-        BufferedReader reader = new BufferedReader(new FileReader(fileName));
-        String in = reader.readLine();
-        reader.close();
-
-        return deserializeGameFromString(in);
+    public static Integer deserializeGameFromFile (String fileName) throws IOException {
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))){
+            String in = reader.readLine();
+            return deserializeGameFromString(in);
+        }
     }
 
     /**
@@ -300,12 +302,12 @@ public class Game {
      * @param toDelete game that can be deleted
      * @throws Exception if the game is not present in the list
      */
-    public static synchronized void deleteGame(Game toDelete) throws Exception {
-        if (!gameEntities.contains(toDelete)) throw new Exception("Error deleting the game");
+    public static synchronized void deleteGame(Game toDelete) throws GameRuleException {
+        if (!gameEntities.contains(toDelete)) throw new GameRuleException("Error deleting the game");
         gameEntities.remove(toDelete);
     }
 
-    public void delete() throws Exception {
+    public void delete() throws GameRuleException {
         Game.deleteGame(this);
     }
 
@@ -316,7 +318,7 @@ public class Game {
     }
 
     public List<Wizard> getWizardsFromTower(Tower towerColor) {
-        return wizardList.stream().filter(w -> Objects.equals(w.getTowerColor(), towerColor)).collect(Collectors.toList());
+        return wizardList.stream().filter(w -> Objects.equals(w.getTowerColor(), towerColor)).toList();
     }
 
     public List<Wizard> getAllWizards() { return wizardList; }

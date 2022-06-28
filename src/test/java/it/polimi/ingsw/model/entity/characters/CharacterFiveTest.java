@@ -12,27 +12,33 @@ import java.io.FileReader;
 class CharacterFiveTest {
 
     private Game game;
+    private CharacterFive characterFive;
+    private Game game1;
+    private CharacterFive characterFive1;
 
     @BeforeEach
     void initializeGame() {
-        try{ game = it.polimi.ingsw.model.entity.Game.request(it.polimi.ingsw.model.entity.Game.deserializeGameFromFile("./src/test/java/it/polimi/ingsw/model/entity/serialized_tests/character_test/character5TestBefore.json"));
+        try{
+            game = it.polimi.ingsw.model.entity.Game.request(it.polimi.ingsw.model.entity.Game.deserializeGameFromFile("./src/test/java/it/polimi/ingsw/model/entity/serialized_tests/character_test/character5TestBefore.json"));
+            characterFive = (CharacterFive) game.getCharacter(5);
+            game1 = it.polimi.ingsw.model.entity.Game.request(it.polimi.ingsw.model.entity.Game.deserializeGameFromFile("./src/test/java/it/polimi/ingsw/model/entity/serialized_tests/character_test/character5.1TestBefore.json"));
+            characterFive1 = (CharacterFive) game1.getCharacter(5);
         } catch (Exception e) { System.err.println("Can't find file in test initialization..."); }
     }
 
     @Test
     void useEffect() {
         Assertions.assertEquals("Wrong player", Assertions.assertThrows(Exception.class, () ->
-                game.getCharacter(5).characterValidator(0)
+                characterFive.characterValidator(0)
         ).getMessage());
         Assertions.assertEquals("Island does not exist", Assertions.assertThrows(Exception.class, () ->
-                ((CharacterFive) game.getCharacter(5)).characterFiveValidator(1, 15)
+                characterFive.characterFiveValidator(1, 15)
         ).getMessage());
-        Assertions.assertEquals("No more stop cards available", Assertions.assertThrows(Exception.class, () -> {
-            Game game1 = it.polimi.ingsw.model.entity.Game.request(it.polimi.ingsw.model.entity.Game.deserializeGameFromFile("./src/test/java/it/polimi/ingsw/model/entity/serialized_tests/character_test/character5.1TestBefore.json"));
-            ((CharacterFive) game1.getCharacter(5)).characterFiveValidator(1, 5);
-        }).getMessage());
+        Assertions.assertEquals("No more stop cards available", Assertions.assertThrows(Exception.class, () ->
+            characterFive1.characterFiveValidator(1, 5)
+        ).getMessage());
         Assertions.assertDoesNotThrow(() -> {
-            ((CharacterFive) game.getCharacter(5)).useEffect(1, 1);
+            characterFive.useEffect(1, 1);
             //game.serializeGame("./src/test/java/it/polimi/ingsw/model/entity/serialized_tests/character_test/character5TestAfter1.json");
             Assertions.assertEquals( new BufferedReader(new FileReader("./src/test/java/it/polimi/ingsw/model/entity/serialized_tests/character_test/character5TestAfter1.json")).readLine(), game.serializeGame());
         });

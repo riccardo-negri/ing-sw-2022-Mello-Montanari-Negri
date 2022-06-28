@@ -11,20 +11,23 @@ import java.io.FileReader;
 class CharacterTwoTest {
 
     private Game game;
+    private CharacterTwo characterTwo;
 
     @BeforeEach
     void initializeGame() {
-        try{ game = Game.request(Game.deserializeGameFromFile("./src/test/java/it/polimi/ingsw/model/entity/serialized_tests/character_test/character2TestBefore.json"));
+        try{
+            game = Game.request(Game.deserializeGameFromFile("./src/test/java/it/polimi/ingsw/model/entity/serialized_tests/character_test/character2TestBefore.json"));
+            characterTwo = (CharacterTwo) game.getCharacter(2);
         } catch (Exception e) { System.err.println("Can't find file in test initialization..."); }
     }
 
     @Test
     void useEffect() {
         Assertions.assertEquals("Wrong player", Assertions.assertThrows(Exception.class, () ->
-                game.getCharacter(2).characterValidator(0)
+                characterTwo.characterValidator(0)
         ).getMessage());
         Assertions.assertDoesNotThrow(() -> {
-            ((CharacterTwo) game.getCharacter(2)).useEffect(1);
+            characterTwo.useEffect(1);
             //game.serializeGame("./src/test/java/it/polimi/ingsw/model/entity/serialized_tests/character_test/character2TestAfter.json");
             Assertions.assertEquals( new BufferedReader(new FileReader("./src/test/java/it/polimi/ingsw/model/entity/serialized_tests/character_test/character2TestAfter.json")).readLine(), game.serializeGame());
         });

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.ui.gui.controllers;
 
 import it.polimi.ingsw.client.page.AbstractBoardPage;
+import it.polimi.ingsw.client.page.ClientPage;
 import it.polimi.ingsw.client.ui.gui.BoardPageGUI;
 import it.polimi.ingsw.client.ui.gui.GUI;
 import it.polimi.ingsw.client.ui.gui.records.*;
@@ -1024,7 +1025,13 @@ public class BoardPageController extends AbstractController {
                 String toLog = "Received an invalid move: " + e.getMessage();
                 client.getLogger().log(Level.WARNING, toLog);
             }
-            Platform.runLater(() -> updateBoard(board, client, selectedOtherUser));
+            if (client.getModel().isGameEnded()) {
+                client.getConnection().close();
+                ((AbstractBoardPage) client.getCurrState()).onEnd(false);
+                Platform.runLater(() -> client.drawNextPage());
+            } else {
+                Platform.runLater(() -> updateBoard(board, client, selectedOtherUser));
+            }
         }
         else if (m instanceof Disconnected) {
             ((AbstractBoardPage) client.getCurrState()).onEnd(true);

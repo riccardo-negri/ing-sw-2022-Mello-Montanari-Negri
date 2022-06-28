@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.enums;
 
 /**
- * contains a lot of parameters that depend on the number of players
+ * contains a lot of parameters that depend on the number of players to avoid repetitions around the code
  */
 public enum PlayerNumber {
     TWO(2,3, 7,8),

@@ -8,6 +8,9 @@ import it.polimi.ingsw.model.entity.Wizard;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * state pattern state for selecting assistant cards
+ */
 public class PlanningState extends GameState {
 
     /**

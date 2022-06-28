@@ -6,7 +6,7 @@ import it.polimi.ingsw.model.enums.Tower;
 import java.util.List;
 
 /**
- * class to represent the player
+ * class for representing wizards with logic
  */
 public class Wizard {
     private final Integer wizardId;

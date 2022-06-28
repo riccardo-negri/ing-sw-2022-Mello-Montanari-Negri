@@ -7,6 +7,9 @@ import it.polimi.ingsw.model.entity.game_state.*;
 
 import java.lang.reflect.Type;
 
+/**
+ * class to handle custom deserialization of character and state objects
+ */
 public class JsonDeserializerClass {
     private JsonDeserializerClass(){}
 

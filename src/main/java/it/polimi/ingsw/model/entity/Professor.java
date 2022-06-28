@@ -6,7 +6,7 @@ import it.polimi.ingsw.model.enums.StudentColor;
 import java.util.Objects;
 
 /**
- * contains the wizard owning the professor
+ * class for representing professors with logic
  */
 public class Professor {
 
@@ -33,8 +33,7 @@ public class Professor {
     public void refreshMaster(Integer contestant) {
         Game game = Game.request(gameId);
         ActionState state = (ActionState) game.getGameState();
-        if (master == null) master = contestant;
-        else if ((game.getWizard(contestant).getDiningStudents(color) > game.getWizard(master).getDiningStudents(color)) ||
+        if (master == null || (game.getWizard(contestant).getDiningStudents(color) > game.getWizard(master).getDiningStudents(color)) ||
                 (state.getActivatedCharacter() != null && state.getActivatedCharacter().getId() == 2 &&
                         Objects.equals(game.getWizard(contestant).getDiningStudents(color), game.getWizard(master).getDiningStudents(color))))
             master = contestant;

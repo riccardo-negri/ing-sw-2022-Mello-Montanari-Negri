@@ -4,6 +4,9 @@ import it.polimi.ingsw.model.entity.GameRuleException;
 import it.polimi.ingsw.model.entity.Game;
 import it.polimi.ingsw.model.enums.StudentColor;
 
+/**
+ * character 12 class with logic
+ */
 public class CharacterTwelve extends Character{
 
     public CharacterTwelve (Integer gameId, Integer characterId) {

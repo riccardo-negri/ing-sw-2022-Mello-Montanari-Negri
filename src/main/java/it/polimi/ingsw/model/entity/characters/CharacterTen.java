@@ -7,6 +7,9 @@ import it.polimi.ingsw.model.enums.StudentColor;
 
 import java.util.List;
 
+/**
+ * character 10 class with logic
+ */
 public class CharacterTen extends Character {
 
     public CharacterTen (Integer gameId, Integer characterId) {

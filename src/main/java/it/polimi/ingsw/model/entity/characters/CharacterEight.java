@@ -2,6 +2,9 @@ package it.polimi.ingsw.model.entity.characters;
 
 import it.polimi.ingsw.model.entity.GameRuleException;
 
+/**
+ * character 8 class with logic
+ */
 public class CharacterEight extends Character {
 
     public CharacterEight (Integer gameId, Integer characterId) {

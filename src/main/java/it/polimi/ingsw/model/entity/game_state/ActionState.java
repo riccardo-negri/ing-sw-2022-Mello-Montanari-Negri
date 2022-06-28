@@ -2,6 +2,9 @@ package it.polimi.ingsw.model.entity.game_state;
 
 import it.polimi.ingsw.model.entity.characters.Character;
 
+/**
+ * abstract state superclass for action state classes
+ */
 public abstract class ActionState extends GameState {
     protected Character activatedCharacter;
 

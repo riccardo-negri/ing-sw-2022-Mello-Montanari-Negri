@@ -7,6 +7,9 @@ import it.polimi.ingsw.model.enums.StudentColor;
 
 import java.util.List;
 
+/**
+ * character 1 class with logic
+ */
 public class CharacterOne extends Character{
 
     private transient Bag bag;

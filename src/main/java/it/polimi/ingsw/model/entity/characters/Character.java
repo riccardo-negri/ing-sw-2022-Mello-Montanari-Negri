@@ -8,6 +8,9 @@ import it.polimi.ingsw.model.entity.game_state.ActionState;
 
 import java.util.Objects;
 
+/**
+ * Abstract character superclass
+ */
 public abstract class Character {
 
     protected transient Integer gameId;

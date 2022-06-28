@@ -5,6 +5,9 @@ import it.polimi.ingsw.model.entity.Game;
 
 import java.util.Objects;
 
+/**
+ * state pattern state for moving mother nature
+ */
 public class MoveMotherNatureActionState extends ActionState {
 
     protected MoveMotherNatureActionState(GameState oldState){

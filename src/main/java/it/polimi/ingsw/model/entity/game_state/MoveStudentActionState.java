@@ -6,6 +6,9 @@ import it.polimi.ingsw.model.enums.StudentColor;
 
 import java.util.Objects;
 
+/**
+ * state pattern state for moving students
+ */
 public class MoveStudentActionState extends ActionState {
 
     private Integer studentMoved;

@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model.enums;
 
+/**
+ * representation of different student colors
+ */
 public enum StudentColor {
     YELLOW(0),
     BLUE(1),

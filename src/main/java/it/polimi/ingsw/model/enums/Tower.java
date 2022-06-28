@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model.enums;
 
+/**
+ * representation of different tower colors
+ */
 public enum Tower {
     BLACK(0),
     WHITE(1),

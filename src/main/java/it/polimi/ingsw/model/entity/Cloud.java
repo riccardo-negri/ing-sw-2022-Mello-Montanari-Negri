@@ -6,6 +6,9 @@ import it.polimi.ingsw.model.enums.StudentColor;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * class for representing clouds with logic
+ */
 public class Cloud {
 
     private final Integer cloudId;

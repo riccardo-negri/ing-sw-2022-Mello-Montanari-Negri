@@ -7,6 +7,9 @@ import it.polimi.ingsw.model.enums.StudentColor;
 
 import java.util.List;
 
+/**
+ * character 7 class with logic
+ */
 public class CharacterSeven extends Character{
 
     private final List<StudentColor> studentColorList;

@@ -3,6 +3,9 @@ package it.polimi.ingsw.model.entity.characters;
 import it.polimi.ingsw.model.entity.GameRuleException;
 import it.polimi.ingsw.model.enums.StudentColor;
 
+/**
+ * character 9 class with logic
+ */
 public class CharacterNine extends Character{
 
     private StudentColor studentColor;

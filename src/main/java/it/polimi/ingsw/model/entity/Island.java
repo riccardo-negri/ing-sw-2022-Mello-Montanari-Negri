@@ -6,7 +6,7 @@ import it.polimi.ingsw.model.entity.characters.CharacterFive;
 import java.util.List;
 
 /**
- * contains the students on the map
+ * class for representing islands with logic
  */
 public class Island {
 

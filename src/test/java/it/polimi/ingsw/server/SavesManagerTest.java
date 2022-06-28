@@ -51,6 +51,7 @@ class SavesManagerTest {
         Game g = Game.request(id);
         g2.waitMessage(InitialState.class);
 
+        TimeUnit.MILLISECONDS.sleep(100);
         File[] files = SavesManager.listDirectory(SavesManager.SAVES_ROOT);
         assert files.length == 1;
         code = files[0].getName();

@@ -7,10 +7,10 @@ import java.util.List;
 
 /**
  * references to all the elements of a school
- * @param entrance
- * @param dining
- * @param professors
- * @param towers
+ * @param entrance entrance
+ * @param dining dining
+ * @param professors professors
+ * @param towers towers
  */
 public record SchoolBoardRecord(
         List<ImageView> entrance,

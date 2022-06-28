@@ -540,6 +540,7 @@ public class BoardUtils {
      * updates the info of the match
      * @param board the board to update
      * @param client the client to get the status from
+     * @param selectedOtherUser index of the user selected, if any
      */
     public static void updateBoard (BoardRecord board, Client client, Integer selectedOtherUser) {
         updateIslands(board, client);

@@ -140,7 +140,7 @@ public class Game {
     /**
      * Method to serialize a game, and save it to the disk
      * @return string of the serialization
-     * @throws Exception if the directory can't be reached
+     * @throws IOException if the directory can't be reached
      */
     public String serializeGame(String filename) throws IOException {
         if (serializationGson == null) initializeSerializer();
@@ -159,7 +159,7 @@ public class Game {
      * Method to deserialize a game from a file
      * @param fileName name of the file in the disk
      * @return the index of the game (to be used from now on to indicate the game)
-     * @throws Exception if the file can't be found, or the index of the game already exists
+     * @throws IOException if the file can't be found, or the index of the game already exists
      */
     public static Integer deserializeGameFromFile (String fileName) throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))){
@@ -300,7 +300,7 @@ public class Game {
     /**
      * clean the spage from the game after it ends
      * @param toDelete game that can be deleted
-     * @throws Exception if the game is not present in the list
+     * @throws GameRuleException if the game is not present in the list
      */
     public static synchronized void deleteGame(Game toDelete) throws GameRuleException {
         if (!gameEntities.contains(toDelete)) throw new GameRuleException("Error deleting the game");

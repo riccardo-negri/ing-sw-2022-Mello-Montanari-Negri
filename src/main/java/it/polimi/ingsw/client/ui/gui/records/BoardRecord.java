@@ -8,18 +8,18 @@ import java.util.List;
 
 /**
  * references to all the elements of the board page
- * @param mainGrid
- * @param islands
- * @param bridges
- * @param clouds
- * @param myBoard
- * @param otherBoard
- * @param users
- * @param characters
- * @param myDeck
- * @param arrows
- * @param round
- * @param phase
+ * @param mainGrid main grid
+ * @param islands islands
+ * @param bridges bridges
+ * @param clouds clouds
+ * @param myBoard client board
+ * @param otherBoard other users board
+ * @param users users
+ * @param characters characters
+ * @param myDeck user's deck
+ * @param arrows arrows
+ * @param round round
+ * @param phase phase
  */
 public record BoardRecord(
         GridPane mainGrid,

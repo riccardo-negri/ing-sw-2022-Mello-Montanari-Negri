@@ -7,10 +7,10 @@ import java.util.List;
 
 /**
  * references to all the elements of a character
- * @param card
- * @param moneyImage
- * @param money
- * @param items
+ * @param card card
+ * @param moneyImage money image
+ * @param money money
+ * @param items items
  */
 public record CharacterRecord(
         ImageView card,

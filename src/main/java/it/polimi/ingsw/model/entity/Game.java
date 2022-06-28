@@ -298,7 +298,7 @@ public class Game {
     }
 
     /**
-     * clean the spage from the game after it ends
+     * clean the page from the game after it ends
      * @param toDelete game that can be deleted
      * @throws GameRuleException if the game is not present in the list
      */

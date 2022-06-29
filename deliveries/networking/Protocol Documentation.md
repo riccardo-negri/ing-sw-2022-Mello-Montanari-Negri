@@ -59,20 +59,18 @@ a player can decide to move one of the students from the entrance to the dining 
 
 ![Move student sequence diagram](./assets/moveStudent.png)
 
-\newpage
-
 - **MotherNatureMovement (int steps):** During the second part of the action phase,
  the players needs to move mother nature by a specified amount of steps.
 
 ![Move mother nature sequence diagram](./assets/moveMotherNature.png)
+
+\newpage
 
 - **\*CloudChoice (int cloudId, List\<StudentColor> extracted):** During the third and last part of the action phase, the player 
  needs to choose a cloud to take the students from. If that student is the last student playing in the round, the information about the refill
 of the clouds will be also sent.
 
 ![Choose cloud sequence diagram](./assets/chooseCloud.png)
-
-\newpage
 
 ### Character Activation
 Can be sent at any moment during the action phase.

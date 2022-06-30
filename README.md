@@ -10,7 +10,7 @@ Group: PSP1
 ## Description
 The project consists in the development of a software version of the Eriantys board game.
 
-Full game specs [here](https://github.com/riccardo-negri/ing-sw-2022-Mello-Montanari-Negri/tree/main/.github/assets/specs).
+Full game specs and game rules [here](https://github.com/riccardo-negri/ing-sw-2022-Mello-Montanari-Negri/tree/main/.github/assets/specs).
 
 ## Implemented Functionalities
 
@@ -26,7 +26,12 @@ Full game specs [here](https://github.com/riccardo-negri/ing-sw-2022-Mello-Monta
 | FA - Multiple games                             |   ✅    |
 | FA - Persistence                                |   ✅    |
 | FA - Resilience to disconnections*              |   ✅*   |
- * While a player is not logged in, the game continues until the disconnected player's turn.
+
+
+ \* While a player is not logged in, the game continues until the disconnected player's turn.
+
+## Requirements
+Minimun JRE version: 17.
 
 ## Compile
 To run the tests and compile the software execute
@@ -53,6 +58,12 @@ To execute the client with the terminal interface run
 java -jar EriantysClient.jar --cli
 ```
 To enable the logger add the option `-d` or `--debug` to the command.
+
+To display ANSI codes correctly in your terminal do the following based on your OS:
+- Linux: works by default
+- MacOS: use `xterm` terminal
+- Windows: run in the terminal `chcp 65001` and then run the jar with also the following option `-Dfile.encoding=UTF-8`
+
 
 ### Server
 To execute the client download the EriantysServer.jar from [here](https://github.com/riccardo-negri/ing-sw-2022-Mello-Montanari-Negri/tree/main/deliveries/jar),

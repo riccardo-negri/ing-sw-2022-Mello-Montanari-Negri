@@ -11,27 +11,33 @@ import static org.fusesource.jansi.Ansi.ansi;
  * offers methods to create a logger and to format the output correctly
  */
 public class LogFormatter extends Formatter {
+    static private boolean debugActivated = false;
 
     /**
-     * create a logger with a specific formatter and the given name
+     * if debug mode is active create a logger with a specific formatter and the given name
      * @param name the name of the new logger
      * @return the new logger
      */
     public static Logger getLogger(String name) {
-        Logger logger = Logger.getLogger(name);
-        FileHandler fh;
-        try {
-            logger.setUseParentHandlers(false);
-            fh = new FileHandler("./" + name + ".log");
-            logger.setLevel(Level.ALL);
-            logger.addHandler(fh);
-            LogFormatter formatter = new LogFormatter();
-            fh.setFormatter(formatter);
+        if (debugActivated) {
+            Logger logger = Logger.getLogger(name);
+            FileHandler fh;
+            try {
+                logger.setUseParentHandlers(false);
+                fh = new FileHandler("./" + name + ".log");
+                logger.setLevel(Level.ALL);
+                logger.addHandler(fh);
+                LogFormatter formatter = new LogFormatter();
+                fh.setFormatter(formatter);
 
-        } catch (SecurityException | IOException e) {
-            e.printStackTrace();
+            } catch (SecurityException | IOException e) {
+                e.printStackTrace();
+            }
+            return logger;
         }
-        return logger;
+        else {
+            return new FakeLogger();
+        }
     }
 
     /**
@@ -85,5 +91,13 @@ public class LogFormatter extends Formatter {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date(millisecond);
         return dateFormat.format(date);
+    }
+
+    /**
+     * set debugActivated value
+     * @param debugActivated if all the logger created should be real loggers or fake placeholders that do nothing
+     */
+    public static void setDebugActivated(boolean debugActivated) {
+        LogFormatter.debugActivated = debugActivated;
     }
 }

@@ -1,2 +1,69 @@
 # ing-sw-2022-Mello-Montanari-Negri
 Software Engineering Project - Politecnico di Milano - Academic Year 2021/2022
+
+## Group Members
+Group: PSP1
+- Pietro Mello Rella ([@mellopietro](https://github.com/mellopietro) - matriculation number: 937516)
+- Montanari Tommaso ([@Tommimon](https://github.com/Tommimon) - matriculation number: 932673)
+- Negri Riccardo ([@riccardo-negri](https://github.com/riccardo-negri) - matriculation number: 936820)
+
+## Description
+The project consists in the development of a software version of the Eriantys board game.
+
+Full game specs [here](https://github.com/riccardo-negri/ing-sw-2022-Mello-Montanari-Negri/tree/main/.github/assets/specs).
+
+## Implemented Functionalities
+
+| Functionality (FA = "Additional Functionality") | Status |
+|:------------------------------------------------|:------:|
+| Basic rules                                     |   ✅    |
+| Complete rules                                  |   ✅    |
+| Socket                                          |   ✅    |
+| CLI                                             |   ✅    |
+| GUI                                             |   ✅    |
+| FA - All character cards                        |   ✅    |
+| FA - 4 players                                  |   ✅    |
+| FA - Multiple games                             |   ✅    |
+| FA - Persistence                                |   ✅    |
+| FA - Resilience to disconnections*              |   ✅*   |
+ * While a player is not logged in, the game continues until the disconnected player's turn.
+
+## Compile
+To run the tests and compile the software execute
+```bash
+mvn package
+```
+in the root of the project.
+
+## Execute
+
+### Client
+To execute the client download the EriantysClient.jar from [here](https://github.com/riccardo-negri/ing-sw-2022-Mello-Montanari-Negri/tree/main/deliveries/jar)
+and open a terminal in the same folder.
+#### GUI
+To execute the client with a graphical interface just run 
+```bash
+java -jar EriantysClient.jar
+```
+To enable the logger add the option `-d` or `--debug` to the command.
+
+#### CLI
+To execute the client with the terminal interface run
+```bash
+java -jar EriantysClient.jar --cli
+```
+To enable the logger add the option `-d` or `--debug` to the command.
+
+### Server
+To execute the client download the EriantysServer.jar from [here](https://github.com/riccardo-negri/ing-sw-2022-Mello-Montanari-Negri/tree/main/deliveries/jar),
+open a terminal in the same folder and run
+```bash
+java -jar EriantysServer.jar
+```
+To enable the logger add the option `-d` or `--debug` to the command.
+
+## Screenshots
+### GUI
+![GUI](.github/assets/images/GUI.png?raw=true)
+### CLI
+![CLI](.github/assets/images/CLI.png?raw=true)

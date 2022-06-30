@@ -5,24 +5,31 @@ Pietro Mello Rella, Tommaso Montanari, Riccardo Negri
 Group 1
 
 ## Networking Messages
-- **Login (String username, PlayerNumber playerNumber, GameMode advancedRules):** After
-opening a new connection the first message must be always a login where the client tells
-the server his identity. In the case of the matchmaking server also the information
-about the desired game mode is used.
-- **Redirect (int port):** Matchmaking server response to the login message,
-after the game server has been chosen.
+- **Login (String username):** After opening a new connection the first message must be always
+a login where the client tells the server his identity.
+- **ErrorMessage:** Sent as a response to a Login, means the login was refused and the connection closed,
+is a result of the username being already taken or invalid.
+- **LobbiesList (List\<LobbyDescriptor> lobbies):** If the login is accepted the server replies with the list of lobbies
+waiting for players. If the client fails to join a lobby the server sends the updated list.
+- **CreateLobby (PlayerNumber playerNumber, GameMode advancedRules):** The client asks the server to create a game with
+the specified parameters, after the creation the server redirects the user to the new game server.
+- **LobbyChoice (String code):** The client asks to be assigned to a specific lobby giving the lobby code,
+the user receives a Redirect as a response or the updated LobbiesList if the lobby is not available anymore.
+- **Redirect (int port):** The Matchmaking server sends this message to tell the client
+which game server was assigned to, is sent as a response to a lobby choice, a lobby creation
+or a login if the user has already an ongoing game.
 
-![Login sequence diagram](./assets/login.png)
+![Reconnect to game sequence diagram](./assets/login.png)
 
 - **Disconnect:** Is never sent through the network but is a fake message created when
-the socket lose the connection or when a user connection goes down (achieved by send ping messages every x seconds).
+the socket loses the connection (achieved with periodic ping messages).
 - **UserDisconnect: (String username):** When the server reads a Disconnect message
 from a client sends this message to all the users. 
-- **UserReconnected (String username):** When the game server receives a login from an already existing
-user send this message to all the other clients.
+- **UserConnected (String username):** When a user enters the lobby or reconnects to an ongoing game,
+the game server sends this message to all the other clients.
 - **UserResigned (String username):** The user can send this message to the server to
 communicate he wants to quit the game, the server will broadcast the message to
-everyone else. In case of user disconnected and reconnection time elapsed the server
+everyone. In case of user inactive or disconnected if the timout elapses the server
 will send this message to all the remaining users and communicate the end of the game.
 
 ![User disconnected sequence diagram](./assets/userDisconnected.png)
@@ -31,6 +38,9 @@ will send this message to all the remaining users and communicate the end of the
 - **InitialState (String model):** When the game starts send the model to all the users,
 when a user reconnects send the current model just to him. The model is sent as a json
 string.
+- **Ping:** A message that does nothing but is sent every 20 seconds to reset the socket timeout.
+If the socket doesn't receive any message for 30 seconds that means the connection is lost and a
+Disconnected message is produced.
 
 ## Moves Messages
 All the moves can be sent from the client to the server to communicate the intention to do
@@ -40,7 +50,7 @@ move effect.
 ### Standard Moves
 - **CardChoice (int card):** At the beginning of each round all the players need to select an assistant card.
 
-![Choose cloud sequence diagram](./assets/cardChoice.png)
+![Choose card sequence diagram](./assets/cardChoice.png)
 
 - **DiningRoomMovement (StudentColor student):** During the first part of the action phase, 
 a player can decide to move one of the students from the entrance to the dining room.
@@ -49,20 +59,18 @@ a player can decide to move one of the students from the entrance to the dining 
 
 ![Move student sequence diagram](./assets/moveStudent.png)
 
-\newpage
-
 - **MotherNatureMovement (int steps):** During the second part of the action phase,
- the players needs to move mother nature by X amount of steps.
+ the players needs to move mother nature by a specified amount of steps.
 
 ![Move mother nature sequence diagram](./assets/moveMotherNature.png)
+
+\newpage
 
 - **\*CloudChoice (int cloudId, List\<StudentColor> extracted):** During the third and last part of the action phase, the player 
  needs to choose a cloud to take the students from. If that student is the last student playing in the round, the information about the refill
 of the clouds will be also sent.
 
 ![Choose cloud sequence diagram](./assets/chooseCloud.png)
-
-\newpage
 
 ### Character Activation
 Can be sent at any moment during the action phase.

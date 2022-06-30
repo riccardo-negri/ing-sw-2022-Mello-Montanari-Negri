@@ -276,7 +276,7 @@ public class ReadMoveUtilsCLI {
             }
             return regexBuilder.toString();
         }
-        return "";
+        return Regex.PLAY_ASSISTANT;
     }
 
     /**

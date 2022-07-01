@@ -40,7 +40,7 @@ mvn package
 ```
 in the root of the project.
 
-On Windows sometimes the tests of the server might fail. To avoid to run the tests of the server execute 
+On Windows and MacOS sometimes the tests of the server might fail. To avoid to run the tests of the server execute 
 ```bash
 mvn -Dtest=!ConnectTest,!EndGameTest,!LobbiesTest,!MovesTest,!PortTest,!SavesManagerTest package
 ```

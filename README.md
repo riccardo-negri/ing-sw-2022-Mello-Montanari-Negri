@@ -61,7 +61,7 @@ To enable the logger add the option `-d` or `--debug` to the command.
 
 To display ANSI codes correctly in your terminal do the following based on your OS:
 - Linux: works by default
-- MacOS: use `xterm` terminal
+- MacOS: use `iTerm2` terminal
 - Windows: run in the terminal `chcp 65001` and then run the jar with also the following option `-Dfile.encoding=UTF-8`
 
 

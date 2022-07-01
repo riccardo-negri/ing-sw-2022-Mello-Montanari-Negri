@@ -29,7 +29,7 @@ class LobbiesTest {
 
         Connection creator = Procedures.creatorLogin("tommaso", PlayerNumber.TWO, GameMode.COMPLETE, false, logger);
 
-        Connection alwaysRefused = new Connection("localhost", MatchmakingServer.WELL_KNOWN_PORT, logger);
+        Connection alwaysRefused = new Connection("localhost", MatchmakingServer.wellKnownPort, logger);
         alwaysRefused.send( new Login("riccardo"));
         alwaysRefused.waitMessage(LobbiesList.class);
         alwaysRefused.send(new LobbyChoice("0000")); // wrong code
@@ -56,7 +56,7 @@ class LobbiesTest {
         Thread t = new Thread(s::run);
         t.start();
 
-        Connection creator = new Connection("localhost", MatchmakingServer.WELL_KNOWN_PORT, logger);
+        Connection creator = new Connection("localhost", MatchmakingServer.wellKnownPort, logger);
         creator.send(new Login("tommaso"));
         creator.waitMessage(LobbiesList.class);
         creator.send(new CreateLobby(null, GameMode.COMPLETE));

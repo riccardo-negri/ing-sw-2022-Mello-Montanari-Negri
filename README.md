@@ -77,6 +77,8 @@ java -jar EriantysServer.jar
 ```
 To enable the logger add the option `-d` or `--debug` to the command.
 
+To change matchmaking server port use the option `-p` or `--port` followed by the port number.  
+
 ## Screenshots
 ### GUI
 ![GUI](.github/assets/images/GUI.png?raw=true)

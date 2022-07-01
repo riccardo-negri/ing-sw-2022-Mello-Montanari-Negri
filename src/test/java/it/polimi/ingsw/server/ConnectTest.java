@@ -35,7 +35,7 @@ class ConnectTest {
 
         Connection creator = Procedures.creatorLogin("tommaso", PlayerNumber.TWO, GameMode.COMPLETE, false, logger);
         Connection joiner = Procedures.joinerLogin("riccardo", true, logger);
-        Connection connecting = new Connection("localhost", MatchmakingServer.WELL_KNOWN_PORT, logger);
+        Connection connecting = new Connection("localhost", MatchmakingServer.wellKnownPort, logger);
         creator.close();
         UserDisconnected ud = (UserDisconnected) joiner.waitMessage(UserDisconnected.class);
         assert ud.username().equals("tommaso");  // tommaso just left

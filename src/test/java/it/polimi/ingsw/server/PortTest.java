@@ -37,7 +37,7 @@ class PortTest{
 
         Thread t3 = new Thread(s2::run);
         t3.start();
-        new Connection("localhost", MatchmakingServer.WELL_KNOWN_PORT, logger);
+        new Connection("localhost", MatchmakingServer.wellKnownPort, logger);
         TimeUnit.MILLISECONDS.sleep(100); // wait for server to update connecting list
         assert (1== s2.connecting.size());
         s2.stop();

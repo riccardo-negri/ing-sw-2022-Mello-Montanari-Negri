@@ -9,7 +9,7 @@ import java.util.logging.Level;
  * the server responsible for redirecting the users to the correct game server and creating a new one when requested
  */
 public class MatchmakingServer extends Server {
-    public static final int WELL_KNOWN_PORT = 50000;
+    public static int wellKnownPort = 50000;
     private final List<GameServer> startedGames = new SafeList<>();
 
     private final List<Thread> gameThreads = new SafeList<>();
@@ -22,7 +22,7 @@ public class MatchmakingServer extends Server {
      */
     @Override
     int getPortToBind() {
-        return WELL_KNOWN_PORT;
+        return wellKnownPort;
     }
 
     /**

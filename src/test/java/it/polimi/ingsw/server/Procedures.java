@@ -51,7 +51,7 @@ public class Procedures {
     }
 
     static Connection reconnectLogin(String username, boolean wait, Logger logger) {
-        return reconnectLogin(username, wait, logger, MatchmakingServer.WELL_KNOWN_PORT);
+        return reconnectLogin(username, wait, logger, MatchmakingServer.wellKnownPort);
     }
 
     static Connection reconnectLogin(String username, boolean wait, Logger logger, int port) {

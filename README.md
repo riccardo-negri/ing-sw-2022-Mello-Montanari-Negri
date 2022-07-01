@@ -4,8 +4,8 @@ Software Engineering Project - Politecnico di Milano - Academic Year 2021/2022
 ## Group Members
 Group: PSP1
 - Pietro Mello Rella ([@mellopietro](https://github.com/mellopietro) - matriculation number: 937516)
-- Montanari Tommaso ([@Tommimon](https://github.com/Tommimon) - matriculation number: 932673)
-- Negri Riccardo ([@riccardo-negri](https://github.com/riccardo-negri) - matriculation number: 936820)
+- Tommaso Montanari ([@Tommimon](https://github.com/Tommimon) - matriculation number: 932673)
+- Riccardo Negri ([@riccardo-negri](https://github.com/riccardo-negri) - matriculation number: 936820)
 
 ## Description
 The project consists in the development of a software version of the Eriantys board game.
